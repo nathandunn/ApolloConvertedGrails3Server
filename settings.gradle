@@ -16,4 +16,4 @@ include 'api'
 include 'services:webservice'
 */
 
-rootProject.name = 'nathanApolloMaster'
+rootProject.name = 'ApolloConvertedGrails3Server'
