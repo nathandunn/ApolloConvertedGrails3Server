@@ -2,7 +2,7 @@ package org.bbop.apollo
 
 import grails.converters.JSON
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
-import org.codehaus.groovy.grails.web.json.JSONObject
+import org.grails.web.json.JSONObject
 
 import java.util.zip.CRC32
 

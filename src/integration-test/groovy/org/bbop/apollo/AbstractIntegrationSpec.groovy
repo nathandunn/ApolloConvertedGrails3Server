@@ -9,8 +9,8 @@ import org.apache.shiro.util.ThreadContext
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
 import org.bbop.apollo.gwt.shared.GlobalPermissionEnum
-import org.codehaus.groovy.grails.web.json.JSONArray
-import org.codehaus.groovy.grails.web.json.JSONObject
+import org.grails.web.json.JSONArray
+import org.grails.web.json.JSONObject
 
 /**
  * Created by nathandunn on 11/4/15.

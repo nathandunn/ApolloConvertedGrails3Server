@@ -9,8 +9,8 @@ import htsjdk.variant.vcf.VCFConstants
 import htsjdk.variant.vcf.VCFFileReader
 import htsjdk.variant.vcf.VCFHeader
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
-import org.codehaus.groovy.grails.web.json.JSONArray
-import org.codehaus.groovy.grails.web.json.JSONObject
+import org.grails.web.json.JSONArray
+import org.grails.web.json.JSONObject
 
 import java.text.DecimalFormat
 

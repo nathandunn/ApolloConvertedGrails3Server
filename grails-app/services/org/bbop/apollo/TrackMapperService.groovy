@@ -6,8 +6,8 @@ import org.apache.commons.collections.map.MultiKeyMap
 import org.bbop.apollo.gwt.shared.track.NclistColumnEnum
 import org.bbop.apollo.gwt.shared.track.TrackIndex
 import org.bbop.apollo.sequence.SequenceDTO
-import org.codehaus.groovy.grails.web.json.JSONArray
-import org.codehaus.groovy.grails.web.json.JSONObject
+import org.grails.web.json.JSONArray
+import org.grails.web.json.JSONObject
 
 @Transactional(readOnly = true)
 class TrackMapperService {

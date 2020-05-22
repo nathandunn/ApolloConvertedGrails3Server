@@ -11,8 +11,8 @@ import org.bbop.apollo.sequence.SequenceTranslationHandler
 import org.bbop.apollo.sequence.StandardTranslationTable
 import org.bbop.apollo.sequence.Strand
 import org.bbop.apollo.sequence.TranslationTable
-import org.codehaus.groovy.grails.web.json.JSONArray
-import org.codehaus.groovy.grails.web.json.JSONObject
+import org.grails.web.json.JSONArray
+import org.grails.web.json.JSONObject
 import org.hibernate.sql.JoinType
 
 import java.util.zip.CRC32

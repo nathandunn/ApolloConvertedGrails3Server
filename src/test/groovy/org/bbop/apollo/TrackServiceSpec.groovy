@@ -2,8 +2,8 @@ package org.bbop.apollo
 
 import grails.test.mixin.TestFor
 import org.bbop.apollo.sequence.SequenceDTO
-import org.codehaus.groovy.grails.web.json.JSONArray
-import org.codehaus.groovy.grails.web.json.JSONObject
+import org.grails.web.json.JSONArray
+import org.grails.web.json.JSONObject
 import spock.lang.Ignore
 import spock.lang.Specification
 

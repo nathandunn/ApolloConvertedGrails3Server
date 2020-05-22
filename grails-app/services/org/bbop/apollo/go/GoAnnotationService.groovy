@@ -3,8 +3,8 @@ package org.bbop.apollo.go
 import grails.transaction.Transactional
 import org.bbop.apollo.Feature
 import org.bbop.apollo.Gff3ConstantEnum
-import org.codehaus.groovy.grails.web.json.JSONArray
-import org.codehaus.groovy.grails.web.json.JSONObject
+import org.grails.web.json.JSONArray
+import org.grails.web.json.JSONObject
 
 import java.text.SimpleDateFormat
 

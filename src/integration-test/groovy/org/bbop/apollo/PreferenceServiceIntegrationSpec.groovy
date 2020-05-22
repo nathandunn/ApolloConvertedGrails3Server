@@ -9,7 +9,7 @@ import org.apache.shiro.web.session.mgt.DefaultWebSessionManager
 import org.bbop.apollo.gwt.shared.ClientTokenGenerator
 import org.bbop.apollo.gwt.shared.GlobalPermissionEnum
 import org.bbop.apollo.preference.UserOrganismPreferenceDTO
-import org.codehaus.groovy.grails.web.json.JSONObject
+import org.grails.web.json.JSONObject
 
 class PreferenceServiceIntegrationSpec extends AbstractIntegrationSpec {
 

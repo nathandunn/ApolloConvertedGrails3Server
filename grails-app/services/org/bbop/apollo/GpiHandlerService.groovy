@@ -2,7 +2,7 @@ package org.bbop.apollo
 
 import groovy.json.JsonSlurper
 import org.bbop.apollo.go.GoAnnotation
-import org.codehaus.groovy.grails.web.json.JSONArray
+import org.grails.web.json.JSONArray
 import org.grails.plugins.metrics.groovy.Timed
 
 import java.text.SimpleDateFormat

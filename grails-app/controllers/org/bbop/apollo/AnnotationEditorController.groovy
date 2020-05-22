@@ -9,9 +9,9 @@ import org.bbop.apollo.event.AnnotationListener
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
 import org.bbop.apollo.gwt.shared.PermissionEnum
 import org.bbop.apollo.sequence.TranslationTable
-import org.codehaus.groovy.grails.web.json.JSONArray
+import org.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONException
-import org.codehaus.groovy.grails.web.json.JSONObject
+import org.grails.web.json.JSONObject
 import org.grails.plugins.metrics.groovy.Timed
 import org.restapidoc.annotation.RestApi
 import org.restapidoc.annotation.RestApiMethod

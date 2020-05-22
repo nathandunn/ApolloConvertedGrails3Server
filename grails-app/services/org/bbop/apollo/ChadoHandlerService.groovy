@@ -1,7 +1,7 @@
 package org.bbop.apollo
 
 import grails.transaction.Transactional
-import org.codehaus.groovy.grails.web.json.JSONObject
+import org.grails.web.json.JSONObject
 
 import java.security.MessageDigest
 import java.sql.Timestamp

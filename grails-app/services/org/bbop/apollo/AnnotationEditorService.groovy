@@ -10,7 +10,7 @@ class AnnotationEditorService {
 
 
     @NotTransactional
-    String cleanJSONString(String inputString){
+    String cleanorg.grails.web.json.JSONArrayring(String inputString){
         String outputString = new String(inputString)
         // remove leading string
         outputString = outputString.indexOf("\"")==0 ? outputString.substring(1) : outputString

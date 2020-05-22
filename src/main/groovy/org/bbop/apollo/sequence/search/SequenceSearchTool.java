@@ -3,7 +3,7 @@ package org.bbop.apollo.sequence.search;
 
 import java.util.Collection;
 import org.bbop.apollo.sequence.search.blast.BlastAlignment;
-import org.codehaus.groovy.grails.web.json.JSONObject;
+import org.grails.web.json.JSONObject;
 
 public abstract class SequenceSearchTool {
 

@@ -12,8 +12,8 @@ import org.bbop.apollo.gwt.shared.track.TrackTypeEnum
 import org.bbop.apollo.report.OrganismSummary
 import org.bbop.apollo.track.TrackDefaults
 import org.codehaus.groovy.grails.web.converters.exceptions.ConverterException
-import org.codehaus.groovy.grails.web.json.JSONArray
-import org.codehaus.groovy.grails.web.json.JSONObject
+import org.grails.web.json.JSONArray
+import org.grails.web.json.JSONObject
 import org.restapidoc.annotation.RestApi
 import org.restapidoc.annotation.RestApiMethod
 import org.restapidoc.annotation.RestApiParam

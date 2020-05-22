@@ -1,8 +1,10 @@
 package org.bbop.apollo
 
 import grails.converters.JSON
-import grails.test.spock.IntegrationSpec
-import org.codehaus.groovy.grails.web.json.JSONObject
+
+//import grails.test.spock.IntegrationSpec
+//import org.grails.web.json.JSONObject
+import org.grails.web.json.JSONObject
 
 class VcfHandlerServiceIntegrationSpec extends AbstractIntegrationSpec {
 

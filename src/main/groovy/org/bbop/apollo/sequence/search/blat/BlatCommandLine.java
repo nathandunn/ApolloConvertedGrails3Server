@@ -11,7 +11,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import org.codehaus.groovy.grails.web.json.JSONObject;
+import org.grails.web.json.JSONObject;
 
 public class BlatCommandLine extends SequenceSearchTool {
 
