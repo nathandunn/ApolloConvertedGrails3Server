@@ -24,13 +24,13 @@ class TrackController {
 
   final double OVERLAP_FILTER = 10.0
 
-  def beforeInterceptor = {
-        if (params.action == "featuresByName"
-                || params.action == "featuresByLocation"
-        ) {
-            response.setHeader("Access-Control-Allow-Origin", "*")
-        }
-    }
+//  def beforeInterceptor = {
+//        if (params.action == "featuresByName"
+//                || params.action == "featuresByLocation"
+//        ) {
+//            response.setHeader("Access-Control-Allow-Origin", "*")
+//        }
+//    }
 
     /**
      * Just a convenience method

@@ -12,12 +12,12 @@ class FeatureTypeController {
 
     def permissionService
 
-    def beforeInterceptor = {
-        if(!permissionService.checkPermissions(PermissionEnum.ADMINISTRATE)){
-            forward action: "notAuthorized" ,controller: "annotator"
-            return
-        }
-    }
+//    def beforeInterceptor = {
+//        if(!permissionService.checkPermissions(PermissionEnum.ADMINISTRATE)){
+//            forward action: "notAuthorized" ,controller: "annotator"
+//            return
+//        }
+//    }
 
     def index(Integer max) {
         params.max = Math.min(max ?: 30, 200)

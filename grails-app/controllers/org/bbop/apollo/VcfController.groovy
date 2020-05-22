@@ -21,15 +21,14 @@ import javax.servlet.http.HttpServletResponse
 class VcfController {
 
     def preferenceService
-    def permissionService
     def vcfService
     def trackService
 
-    def beforeInterceptor = {
-        if (params.action == "featuresByLocation") {
-            response.setHeader("Access-Control-Allow-Origin", "*")
-        }
-    }
+//    def beforeInterceptor = {
+//        if (params.action == "featuresByLocation") {
+//            response.setHeader("Access-Control-Allow-Origin", "*")
+//        }
+//    }
 
 
     @RestApiMethod(description = "Get VCF track data for a given range as JSON", path = "/vcf/<organism_name>/<track_name>/<sequence_name>:<fmin>..<fmax>.<type>?includeGenotypes=<includeGenotypes>&ignoreCache=<ignoreCache>", verb = RestApiVerb.GET)

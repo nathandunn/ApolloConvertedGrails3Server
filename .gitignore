@@ -12,7 +12,7 @@ blat_config.xml
 *.ipr
 *.iws
 out
-web-app/jbrowse
+src/main/web-app/jbrowse
 jbrowse
 log4j2.json
 log4j2-test.json
@@ -22,8 +22,8 @@ update_client.sh
 *.log
 apollo-config.groovy
 gwt-unitCache/**
-web-app/WEB-INF/deploy/**
-web-app/annotator/**
+src/main/web-app/WEB-INF/deploy/**
+src/main/web-app/annotator/**
 /extlib/
 setup.log
 /src/perl5/

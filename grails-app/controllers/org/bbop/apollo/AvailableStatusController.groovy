@@ -5,9 +5,7 @@ import grails.converters.JSON
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
 import org.bbop.apollo.gwt.shared.GlobalPermissionEnum
 
-import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
-import org.bbop.apollo.gwt.shared.PermissionEnum
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.restapidoc.annotation.RestApi
 import org.restapidoc.annotation.RestApiMethod
@@ -24,12 +22,12 @@ class AvailableStatusController {
 
     def permissionService
 
-    def beforeInterceptor = {
-        if(!permissionService.checkPermissions(PermissionEnum.ADMINISTRATE)){
-            forward action: "notAuthorized", controller: "annotator"
-            return
-        }
-    }
+//    def beforeInterceptor = {
+//        if(!permissionService.checkPermissions(PermissionEnum.ADMINISTRATE)){
+//            forward action: "notAuthorized", controller: "annotator"
+//            return
+//        }
+//    }
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)

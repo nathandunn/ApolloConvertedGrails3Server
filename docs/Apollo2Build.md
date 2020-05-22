@@ -67,14 +67,14 @@ show you how to configure custom database settings.
 There are several distinct parts of the code.
 
 1. Apollo client plugin (JS: [dojo](https://dojotoolkit.org/documentation/), jquery, etc.) in [client directory](../client)
-1. Server ([Grails 2.5.5](http://docs.grails.org/2.5.5/): Groovy and Java) in [grails-app](../grails-app), [src](../src), [web components](../web-app) and [tests](../test).
-1. Side-panel code / wrapper code ([GWT 2.8](http://www.gwtproject.org/doc/latest/DevGuide.html): Java).  Code is java and/or XML in [src/gwt](../src/gwt).
+1. Server ([Grails 2.5.5](http://docs.grails.org/2.5.5/): Groovy and Java) in [grails-app](../grails-app), [src](../src), [web components](../src/main/web-app) and [tests](../src/test).
+1. Side-panel code / wrapper code ([GWT 2.8](http://www.gwtproject.org/doc/latest/DevGuide.html): Java).  Code is java and/or XML in [src/gwt](../src/main/gwt).
 1. Tools / scripts in the [examples](web_services/examples) and [tools](../tools/data): Groovy, perl, bash
 1. JBrowse (JS: [dojo](https://dojotoolkit.org/documentation/), jquery, etc.)
 
 In general, the command `./apollo run-local` will build and run the client and the server code.  Subsequent runs that do not change the GWT code can use `./apollo run-app`.  Changes to domain objects or adding controller methods may make stopping and restarting the server necessary, but most other changes will compile without having to restart the server.
 
-`./apollo test` runs the grails unit and integration [tests](../test).
+`./apollo test` runs the grails unit and integration [tests](../src/test).
 
 Updating the web-service doc can be done with `./apollo create-rest-doc`
 
@@ -88,7 +88,7 @@ If for some reason this is not working then make sure that your network developm
 
 #### Running the code for GWT changes 
 
-To use the GWT dev server run `gradle devmode` in a separate terminal.   This will bring up a separate [GWT dev-mode code server](http://www.gwtproject.org/doc/latest/DevGuideCompilingAndDebugging.html#dev_mode) that will compile subsequent changes to the [src/gwt](../src/gwt) code after reloading the page.  
+To use the GWT dev server run `gradle devmode` in a separate terminal.   This will bring up a separate [GWT dev-mode code server](http://www.gwtproject.org/doc/latest/DevGuideCompilingAndDebugging.html#dev_mode) that will compile subsequent changes to the [src/gwt](../src/main/gwt) code after reloading the page.  
 
 If errors seem to be a little obtuse using the dev compilation, you might try running `./apollo compile` to get more detail.
 

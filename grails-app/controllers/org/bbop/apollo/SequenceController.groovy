@@ -37,13 +37,13 @@ class SequenceController {
 
     def permissions() {}
 
-    def beforeInterceptor = {
-        if (params.action == "sequenceByName"
-                || params.action == "sequenceByLocation"
-        ) {
-            response.setHeader("Access-Control-Allow-Origin", "*")
-        }
-    }
+//    def beforeInterceptor = {
+//        if (params.action == "sequenceByName"
+//                || params.action == "sequenceByLocation"
+//        ) {
+//            response.setHeader("Access-Control-Allow-Origin", "*")
+//        }
+//    }
 
     @Transactional
     def setCurrentSequenceLocation(String name, Integer start, Integer end) {

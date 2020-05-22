@@ -44,10 +44,10 @@ COPY grails-app /apollo/grails-app
 COPY gwt-sdk /apollo/gwt-sdk
 COPY lib /apollo/lib
 COPY src /apollo/src
-COPY web-app /apollo/web-app
+COPY src/main/web-app /apollo/web-app
 COPY wrapper /apollo/wrapper
-COPY test /apollo/test
-COPY scripts /apollo/scripts
+COPY src/test /apollo/test
+COPY src/main/scripts /apollo/scripts
 ADD gra* /apollo/
 COPY apollo /apollo/apollo
 ADD build* /apollo/
