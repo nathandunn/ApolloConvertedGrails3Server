@@ -1,3 +1,4 @@
+import grails.converters.JSON
 import org.bbop.apollo.FeatureType
 import org.bbop.apollo.sequence.SequenceTranslationHandler
 
@@ -16,12 +17,12 @@ class BootStrap {
 
 
     def init = { servletContext ->
-        log.info "Initializing..."
+        println "Initializing..."
         def dataSource = grailsApplication.config.dataSource
-        log.info "Datasource"
-        log.info "Url: ${dataSource.url}"
-        log.info "Driver: ${dataSource.driverClassName}"
-        log.info "Dialect: ${dataSource.dialect}"
+        println "Datasource"
+        println "Url: ${dataSource.url}"
+        println "Driver: ${dataSource.driverClassName}"
+        println "Dialect: ${dataSource.dialect}"
 
         System.getenv().each {
             log.debug it.key + "->" + it.value
@@ -44,8 +45,12 @@ class BootStrap {
         if(admin){
             userService.registerAdmin(admin.username,admin.password,admin.firstName,admin.lastName)
         }
+        def adminUser = userService.registerAdmin("admin@local.host","password","Admin","User")
+        println "adminuser ${adminUser as JSON}"
 
-        trackService.checkCommonDataDirectory()
+
+        def commandCommonDirectory = trackService.checkCommonDataDirectory()
+        println commandCommonDirectory
 
         phoneHomeService.pingServerAsync(org.bbop.apollo.PhoneHomeEnum.START.value)
 

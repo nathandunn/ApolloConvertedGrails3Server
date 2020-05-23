@@ -94,7 +94,7 @@ class UserService {
         registerAdmin(jsonObj.username,jsonObj.password,jsonObj.firstName,jsonObj.lastName)
     }
     
-    def registerAdmin(String username,String password,String firstName,String lastName) {
+    User registerAdmin(String username,String password,String firstName,String lastName) {
         if(User.countByUsername(username)>0){
             log.warn("User exists ${username} and can not be added again.")
             return ;
@@ -109,5 +109,6 @@ class UserService {
                 ,lastName: lastName
         ).save(failOnError: true,flush:true)
         user.addToRoles(adminRole)
+        return user
     }
 }
