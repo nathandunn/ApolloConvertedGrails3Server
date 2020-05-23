@@ -17,7 +17,7 @@ class UrlMappings {
         }
 
 
-        "/"(redirect: '/annotator/index')
+//        "/"(redirect: '/annotator/index')
         "500"(view: '/error')
         "/menu"(view: '/menu')
         "/${clientToken}/version.jsp"(controller: 'annotator', view: "version")

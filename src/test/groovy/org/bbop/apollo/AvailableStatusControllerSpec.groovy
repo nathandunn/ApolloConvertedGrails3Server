@@ -1,9 +1,7 @@
 package org.bbop.apollo
 
-import grails.testing.gorm.DomainUnitTest
 import grails.testing.web.controllers.ControllerUnitTest
 
-//import org.grails.testing.GrailsUnitTest
 import spock.lang.Specification
 @TestFor(AvailableStatusController)
 @Mock([AvailableStatus,AvailableStatusOrganismFilter])
