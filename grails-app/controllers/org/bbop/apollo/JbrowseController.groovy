@@ -1,7 +1,7 @@
 package org.bbop.apollo
 
 import grails.converters.JSON
-import liquibase.util.file.FilenameUtils
+import grails.core.GrailsApplication
 import org.apache.shiro.SecurityUtils
 import org.bbop.apollo.gwt.shared.ClientTokenGenerator
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
@@ -9,6 +9,7 @@ import org.bbop.apollo.sequence.Range // this line is needed, even if the import
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
 
+import javax.servlet.ServletContext
 import javax.servlet.http.HttpServletResponse
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -19,13 +20,12 @@ class JbrowseController {
 
     private static final int DEFAULT_BUFFER_SIZE = 10240; // ..bytes = 10KB.
 
-    def grailsApplication
+    GrailsApplication grailsApplication
     def sequenceService
     def permissionService
     def preferenceService
     def jbrowseService
-    def servletContext
-    def configWrapperService
+    ServletContext servletContext
     def trackService
 
     def chooseOrganismForJbrowse() {
@@ -217,7 +217,7 @@ class JbrowseController {
 
         // see https://github.com/GMOD/Apollo/issues/1448
         if (!file.exists() && jbrowseService.hasOverlappingDirectory(dataDirectory,params.path)) {
-            prinltn "params.path: ${params.path} directory ${dataDirectory}"
+            println "params.path: ${params.path} directory ${dataDirectory}"
             String newPath = jbrowseService.fixOverlappingPath(dataDirectory,params.path)
             dataFileName = newPath
             dataFileName += params.fileType ? ".${params.fileType}" : ""
@@ -618,4 +618,20 @@ class JbrowseController {
         out.close()
     }
 
+
+    private static int indexOfLastSeparator(String filename) {
+        if (filename == null) {
+            return -1;
+        }
+        return  filename.lastIndexOf('/');
+    }
+
+    private static String getName(String filename) {
+        if (filename == null) {
+            return null;
+        }
+        int index = indexOfLastSeparator(filename);
+        return filename.substring(index + 1);
+    }
 }
+

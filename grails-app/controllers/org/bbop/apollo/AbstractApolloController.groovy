@@ -9,14 +9,9 @@ import org.grails.web.json.JSONObject
 abstract class AbstractApolloController {
 
     public static String REST_OPERATION = "operation"
-    public static String REST_TRACK = "track"
     public static String REST_FEATURES = "features"
     public static REST_USERNAME = "username"
     public static REST_PERMISSION = "permission"
-    public static REST_DATA_ADAPTER = "data_adapter"
-    public static REST_DATA_ADAPTERS = "data_adapters"
-    public static REST_KEY = "key"
-    public static REST_OPTIONS = "options"
     public static REST_TRANSLATION_TABLE = "translation_table"
     public static REST_START_PROTEINS = "start_proteins"
     public static REST_STOP_PROTEINS = "stop_proteins"

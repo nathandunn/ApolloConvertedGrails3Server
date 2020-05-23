@@ -6,16 +6,11 @@ import org.bbop.apollo.gwt.shared.FeatureStringEnum
 import org.bbop.apollo.gwt.shared.GlobalPermissionEnum
 import org.bbop.apollo.gwt.shared.PermissionEnum
 import org.grails.web.json.JSONObject
-import org.restapidoc.annotation.RestApi
-import org.restapidoc.annotation.RestApiMethod
-import org.restapidoc.annotation.RestApiParam
-import org.restapidoc.annotation.RestApiParams
-import org.restapidoc.pojo.RestApiParamType
-import org.restapidoc.pojo.RestApiVerb
+import io.swagger.annotations.*
 
 import static org.springframework.http.HttpStatus.*
 
-@RestApi(name = "Suggested Names Services", description = "Methods for managing suggested names")
+@Api(value = "Suggested Names Services: Methods for managing suggested names")
 @Transactional(readOnly = true)
 class SuggestedNameController {
 
@@ -160,12 +155,12 @@ class SuggestedNameController {
         }
     }
 
-    @RestApiMethod(description = "Create suggested name", path = "/suggestedName/createName", verb = RestApiVerb.POST)
-    @RestApiParams(params = [
-            @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "name", type = "string", paramType = RestApiParamType.QUERY, description = "Suggested name to add")
-            , @RestApiParam(name = "metadata", type = "string", paramType = RestApiParamType.QUERY, description = "Optional additional information")
+    @ApiOperation(value = "Create suggested name", nickname = "/suggestedName/createName", httpMethod = "POST")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+            , @ApiImplicitParam(name = "name", type = "string", paramType = "query", example = "Suggested name to add")
+            , @ApiImplicitParam(name = "metadata", type = "string", paramType = "query", example = "Optional additional information")
     ]
     )
     @Transactional
@@ -202,14 +197,14 @@ class SuggestedNameController {
     }
 
 
-    @RestApiMethod(description = "Update suggested name", path = "/suggestedName/updateName", verb = RestApiVerb.POST)
-    @RestApiParams(params = [
-            @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "id", type = "long", paramType = RestApiParamType.QUERY, description = "Suggested name ID to update (or specify the old_name)")
-            , @RestApiParam(name = "old_name", type = "string", paramType = RestApiParamType.QUERY, description = "Suggested name to update")
-            , @RestApiParam(name = "new_name", type = "string", paramType = RestApiParamType.QUERY, description = "Suggested name to change to (the only editable option)")
-            , @RestApiParam(name = "metadata", type = "string", paramType = RestApiParamType.QUERY, description = "Optional additional information")
+    @ApiOperation(value = "Update suggested name", nickname = "/suggestedName/updateName", httpMethod = "POST")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+            , @ApiImplicitParam(name = "id", type = "long", paramType = "query", example = "Suggested name ID to update (or specify the old_name)")
+            , @ApiImplicitParam(name = "old_name", type = "string", paramType = "query", example = "Suggested name to update")
+            , @ApiImplicitParam(name = "new_name", type = "string", paramType = "query", example = "Suggested name to change to (the only editable option)")
+            , @ApiImplicitParam(name = "metadata", type = "string", paramType = "query", example = "Optional additional information")
     ]
     )
     @Transactional
@@ -252,12 +247,12 @@ class SuggestedNameController {
         }
     }
 
-    @RestApiMethod(description = "Remove a suggested name", path = "/suggestedName/deleteName", verb = RestApiVerb.POST)
-    @RestApiParams(params = [
-            @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "id", type = "long", paramType = RestApiParamType.QUERY, description = "Suggested name ID to remove (or specify the name)")
-            , @RestApiParam(name = "name", type = "string", paramType = RestApiParamType.QUERY, description = "Suggested name to delete")
+    @ApiOperation(value = "Remove a suggested name", nickname = "/suggestedName/deleteName", httpMethod = "POST")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+            , @ApiImplicitParam(name = "id", type = "long", paramType = "query", example = "Suggested name ID to remove (or specify the name)")
+            , @ApiImplicitParam(name = "name", type = "string", paramType = "query", example = "Suggested name to delete")
     ])
     @Transactional
     def deleteName() {
@@ -292,11 +287,11 @@ class SuggestedNameController {
         }
     }
 
-    @RestApiMethod(description = "Returns a JSON array of all suggested names, or optionally, gets information about a specific suggested name", path = "/suggestedName/search", verb = RestApiVerb.GET)
-    @RestApiParams(params = [
-            @RestApiParam(name = "featureType", type = "string", paramType = RestApiParamType.QUERY, description = "Feature type")
-            , @RestApiParam(name = "organism", type = "string", paramType = RestApiParamType.QUERY, description = "Organism name")
-            , @RestApiParam(name = "query", type = "string", paramType = RestApiParamType.QUERY, description = "Query value")
+    @ApiOperation(value = "Returns a JSON array of all suggested names, or optionally, gets information about a specific suggested name", nickname = "/suggestedName/search", httpMethod = "get")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "featureType", type = "string", paramType = "query", example = "Feature type")
+            , @ApiImplicitParam(name = "organism", type = "string", paramType = "query", example = "Organism name")
+            , @ApiImplicitParam(name = "query", type = "string", paramType = "query", example = "Query value")
     ])
     @Transactional
     def search() {
@@ -352,12 +347,12 @@ class SuggestedNameController {
         }
     }
 
-    @RestApiMethod(description = "Returns a JSON array of all suggested names, or optionally, gets information about a specific suggested name", path = "/suggestedName/showName", verb = RestApiVerb.POST)
-    @RestApiParams(params = [
-            @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "id", type = "long", paramType = RestApiParamType.QUERY, description = "Name ID to show (or specify a name)")
-            , @RestApiParam(name = "name", type = "string", paramType = RestApiParamType.QUERY, description = "Name to show")
+    @ApiOperation(value = "Returns a JSON array of all suggested names, or optionally, gets information about a specific suggested name", nickname = "/suggestedName/showName", httpMethod = "POST")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+            , @ApiImplicitParam(name = "id", type = "long", paramType = "query", example = "Name ID to show (or specify a name)")
+            , @ApiImplicitParam(name = "name", type = "string", paramType = "query", example = "Name to show")
     ])
     @Transactional
     def showName() {
@@ -395,12 +390,12 @@ class SuggestedNameController {
         }
     }
 
-    @RestApiMethod(description = "A comma-delimited list of names", path = "/suggestedName/addNames", verb = RestApiVerb.POST)
-    @RestApiParams(params = [
-            @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-//            , @RestApiParam(name = "names", type = "string", paramType = RestApiParamType.QUERY, description = "A comma-delimited list of names to add, with organisms, and types {names:[ {name:'name1':organisms:['bee','cow'],types:['gene','ncRNA']}}")
-            , @RestApiParam(name = "names", type = "string", paramType = RestApiParamType.QUERY, description = "A comma-delimited list of names to add")
+    @ApiOperation(value = "A comma-delimited list of names", nickname = "/suggestedName/addNames", httpMethod = "POST")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+//            , @ApiImplicitParam(name = "names", type = "string", paramType = "query", example = "A comma-delimited list of names to add, with organisms, and types {names:[ {name:'name1':organisms:['bee','cow'],types:['gene','ncRNA']}}")
+            , @ApiImplicitParam(name = "names", type = "string", paramType = "query", example = "A comma-delimited list of names to add")
     ])
     @Transactional
     def addNames() {

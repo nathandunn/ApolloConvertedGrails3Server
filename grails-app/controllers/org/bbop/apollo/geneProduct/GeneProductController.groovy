@@ -8,11 +8,7 @@ import org.bbop.apollo.gwt.shared.PermissionEnum
 import org.bbop.apollo.history.FeatureOperation
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
-import org.restapidoc.annotation.RestApiMethod
-import org.restapidoc.annotation.RestApiParam
-import org.restapidoc.annotation.RestApiParams
-import org.restapidoc.pojo.RestApiParamType
-import org.restapidoc.pojo.RestApiVerb
+import io.swagger.annotations.*
 
 import static org.springframework.http.HttpStatus.NOT_FOUND
 
@@ -25,9 +21,9 @@ class GeneProductController {
     def featureEventService
     def featureService
 
-    @RestApiMethod(description = "Returns a JSON array of all suggested gene product names", path = "/geneProduct/search", verb = RestApiVerb.GET)
-    @RestApiParams(params = [
-            @RestApiParam(name = "query", type = "string", paramType = RestApiParamType.QUERY, description = "Query value")
+    @ApiOperation(value = "Returns a JSON array of all suggested gene product names", nickname = "/geneProduct/search", httpMethod =  "get")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "query", type = "string", paramType = "query", example = "Query value")
     ])
     def search() {
         try {
@@ -45,11 +41,11 @@ class GeneProductController {
         }
     }
 
-    @RestApiMethod(description = "Load gene product for feature", path = "/geneProduct", verb = RestApiVerb.POST)
-    @RestApiParams(params = [
-            @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "uniqueName", type = "Feature uniqueName", paramType = RestApiParamType.QUERY, description = "Gene name to query on")
+    @ApiOperation(value = "Load gene product for feature", nickname = "/geneProduct", httpMethod = "POST")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+            , @ApiImplicitParam(name = "uniqueName", type = "Feature uniqueName", paramType = "query", example = "Gene name to query on")
     ]
     )
     def index() {
@@ -72,19 +68,19 @@ class GeneProductController {
 //        "negate":false,
 //        "withOrFrom":["withprefix:12312321"],
 //        "references":["refprefix:44444444"]}
-    @RestApiMethod(description = "Save New gene product for feature", path = "/geneProduct/save", verb = RestApiVerb.POST)
-    @RestApiParams(params = [
-            @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "feature", type = "string", paramType = RestApiParamType.QUERY, description = "uniqueName of gene feature to query on")
-            , @RestApiParam(name = "productName", type = "string", paramType = RestApiParamType.QUERY, description = "Name of gene product")
-            , @RestApiParam(name = "alternate", type = "boolean", paramType = RestApiParamType.QUERY, description = "Alternate (default false)")
-            , @RestApiParam(name = "evidenceCode", type = "string", paramType = RestApiParamType.QUERY, description = "Evidence (ECO) CURIE")
-            , @RestApiParam(name = "evidenceCodeLAbel", type = "string", paramType = RestApiParamType.QUERY, description = "Evidence (ECO) Label")
-            , @RestApiParam(name = "negate", type = "boolean", paramType = RestApiParamType.QUERY, description = "Negate evidence (default false)")
-            , @RestApiParam(name = "withOrFrom", type = "string", paramType = RestApiParamType.QUERY, description = "JSON Array of with or from CURIE strings, e.g., {[\"UniProtKB:12312]]\"]}")
-            , @RestApiParam(name = "references", type = "string", paramType = RestApiParamType.QUERY, description = "JSON Array of reference CURIE strings, e.g., {[\"PMID:12312]]\"]}")
-            , @RestApiParam(name = "notes", type = "string", paramType = RestApiParamType.QUERY, description = "JSON Array of reference CURIE strings, e.g., {[\"PMID:12312]]\"]}")
+    @ApiOperation(value = "Save New gene product for feature", nickname = "/geneProduct/save", httpMethod = "POST")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+            , @ApiImplicitParam(name = "feature", type = "string", paramType = "query", example = "uniqueName of gene feature to query on")
+            , @ApiImplicitParam(name = "productName", type = "string", paramType = "query", example = "Name of gene product")
+            , @ApiImplicitParam(name = "alternate", type = "boolean", paramType = "query", example = "Alternate (default false)")
+            , @ApiImplicitParam(name = "evidenceCode", type = "string", paramType = "query", example = "Evidence (ECO) CURIE")
+            , @ApiImplicitParam(name = "evidenceCodeLAbel", type = "string", paramType = "query", example = "Evidence (ECO) Label")
+            , @ApiImplicitParam(name = "negate", type = "boolean", paramType = "query", example = "Negate evidence (default false)")
+            , @ApiImplicitParam(name = "withOrFrom", type = "string", paramType = "query", example = "JSON Array of with or from CURIE strings, e.g., {[\"UniProtKB:12312]]\"]}")
+            , @ApiImplicitParam(name = "references", type = "string", paramType = "query", example = "JSON Array of reference CURIE strings, e.g., {[\"PMID:12312]]\"]}")
+            , @ApiImplicitParam(name = "notes", type = "string", paramType = "query", example = "JSON Array of reference CURIE strings, e.g., {[\"PMID:12312]]\"]}")
     ]
     )
     @Transactional
@@ -129,20 +125,20 @@ class GeneProductController {
         render annotations as JSON
     }
 
-    @RestApiMethod(description = "Update existing gene products for feature", path = "/geneProduct/update", verb = RestApiVerb.POST)
-    @RestApiParams(params = [
-            @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "id", type = "string", paramType = RestApiParamType.QUERY, description = "GO Annotation ID to update (required)")
-            , @RestApiParam(name = "feature", type = "string", paramType = RestApiParamType.QUERY, description = "uniqueName of feature to query on")
-            , @RestApiParam(name = "productName", type = "string", paramType = RestApiParamType.QUERY, description = "gene product name")
-            , @RestApiParam(name = "alternate", type = "boolean", paramType = RestApiParamType.QUERY, description = "(default false) alternate")
-            , @RestApiParam(name = "evidenceCode", type = "string", paramType = RestApiParamType.QUERY, description = "Evidence (ECO) CURIE")
-            , @RestApiParam(name = "evidenceCodeLabel", type = "string", paramType = RestApiParamType.QUERY, description = "Evidence (ECO) Label")
-            , @RestApiParam(name = "negate", type = "boolean", paramType = RestApiParamType.QUERY, description = "Negate evidence (default false)")
-            , @RestApiParam(name = "withOrFrom", type = "string", paramType = RestApiParamType.QUERY, description = "JSON Array of with or from CURIE strings, e.g., {[\"UniProtKB:12312\"]}")
-            , @RestApiParam(name = "references", type = "string", paramType = RestApiParamType.QUERY, description = "JSON Array of reference CURIE strings, e.g., {[\"PMID:12312\"]}")
-            , @RestApiParam(name = "notes", type = "string", paramType = RestApiParamType.QUERY, description = "JSON Array of notes strings, e.g., {[\"This is a note\"]}")
+    @ApiOperation(value = "Update existing gene products for feature", nickname = "/geneProduct/update", httpMethod = "POST")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+            , @ApiImplicitParam(name = "id", type = "string", paramType = "query", example = "GO Annotation ID to update (required)")
+            , @ApiImplicitParam(name = "feature", type = "string", paramType = "query", example = "uniqueName of feature to query on")
+            , @ApiImplicitParam(name = "productName", type = "string", paramType = "query", example = "gene product name")
+            , @ApiImplicitParam(name = "alternate", type = "boolean", paramType = "query", example = "(default false) alternate")
+            , @ApiImplicitParam(name = "evidenceCode", type = "string", paramType = "query", example = "Evidence (ECO) CURIE")
+            , @ApiImplicitParam(name = "evidenceCodeLabel", type = "string", paramType = "query", example = "Evidence (ECO) Label")
+            , @ApiImplicitParam(name = "negate", type = "boolean", paramType = "query", example = "Negate evidence (default false)")
+            , @ApiImplicitParam(name = "withOrFrom", type = "string", paramType = "query", example = "JSON Array of with or from CURIE strings, e.g., {[\"UniProtKB:12312\"]}")
+            , @ApiImplicitParam(name = "references", type = "string", paramType = "query", example = "JSON Array of reference CURIE strings, e.g., {[\"PMID:12312\"]}")
+            , @ApiImplicitParam(name = "notes", type = "string", paramType = "query", example = "JSON Array of notes strings, e.g., {[\"This is a note\"]}")
     ]
     )
     @Transactional
@@ -187,12 +183,12 @@ class GeneProductController {
         render annotations as JSON
     }
 
-    @RestApiMethod(description = "Delete existing gene product for feature", path = "/geneProduct/delete", verb = RestApiVerb.POST)
-    @RestApiParams(params = [
-            @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "id", type = "string", paramType = RestApiParamType.QUERY, description = "GO Annotation ID to delete (required)")
-            , @RestApiParam(name = "uniqueName", type = "string", paramType = RestApiParamType.QUERY, description = "Feature uniqueName to remove feature from")
+    @ApiOperation(value = "Delete existing gene product for feature", nickname = "/geneProduct/delete", httpMethod = "POST")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+            , @ApiImplicitParam(name = "id", type = "string", paramType = "query", example = "GO Annotation ID to delete (required)")
+            , @ApiImplicitParam(name = "uniqueName", type = "string", paramType = "query", example = "Feature uniqueName to remove feature from")
     ]
     )
     @Transactional

@@ -7,16 +7,11 @@ import org.bbop.apollo.gwt.shared.FeatureStringEnum
 import org.bbop.apollo.gwt.shared.PermissionEnum
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
-import org.restapidoc.annotation.RestApi
-import org.restapidoc.annotation.RestApiMethod
-import org.restapidoc.annotation.RestApiParam
-import org.restapidoc.annotation.RestApiParams
-import org.restapidoc.pojo.RestApiParamType
-import org.restapidoc.pojo.RestApiVerb
+import io.swagger.annotations.*
 
 import javax.servlet.http.HttpServletResponse
 
-@RestApi(name = "VCF Services", description = "Methods for retrieving VCF track data as JSON")
+@Api(value = "VCF Services: Methods for retrieving VCF track data as JSON")
 @Transactional
 class VcfController {
 
@@ -31,16 +26,16 @@ class VcfController {
 //    }
 
 
-    @RestApiMethod(description = "Get VCF track data for a given range as JSON", path = "/vcf/<organism_name>/<track_name>/<sequence_name>:<fmin>..<fmax>.<type>?includeGenotypes=<includeGenotypes>&ignoreCache=<ignoreCache>", verb = RestApiVerb.GET)
-    @RestApiParams(params = [
-            @RestApiParam(name = "organismString", type = "string", paramType = RestApiParamType.QUERY, description = "Organism common name or ID (required)"),
-            @RestApiParam(name = "trackName", type = "string", paramType = RestApiParamType.QUERY, description = "Track name by label in trackList.json (required)"),
-            @RestApiParam(name = "sequence", type = "string", paramType = RestApiParamType.QUERY, description = "Sequence name (required)"),
-            @RestApiParam(name = "fmin", type = "integer", paramType = RestApiParamType.QUERY, description = "Minimum range (required)"),
-            @RestApiParam(name = "fmax", type = "integer", paramType = RestApiParamType.QUERY, description = "Maximum range (required)"),
-            @RestApiParam(name = "type", type = "string", paramType = RestApiParamType.QUERY, description = ".json (required)"),
-            @RestApiParam(name = "includeGenotypes", type = "boolean", paramType = RestApiParamType.QUERY, description = "(default: false).  If true, will include genotypes associated with variants from VCF."),
-            @RestApiParam(name = "ignoreCache", type = "boolean", paramType = RestApiParamType.QUERY, description = "(default: false).  Use cache for request, if available."),
+    @ApiOperation(value = "Get VCF track data for a given range as JSON", nickname = "/vcf/<organism_name>/<track_name>/<sequence_name>:<fmin>..<fmax>.<type>?includeGenotypes=<includeGenotypes>&ignoreCache=<ignoreCache>", httpMethod = "get")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "organismString", type = "string", paramType = "query", example = "Organism common name or ID (required)"),
+            @ApiImplicitParam(name = "trackName", type = "string", paramType = "query", example = "Track name by label in trackList.json (required)"),
+            @ApiImplicitParam(name = "sequence", type = "string", paramType = "query", example = "Sequence name (required)"),
+            @ApiImplicitParam(name = "fmin", type = "integer", paramType = "query", example = "Minimum range (required)"),
+            @ApiImplicitParam(name = "fmax", type = "integer", paramType = "query", example = "Maximum range (required)"),
+            @ApiImplicitParam(name = "type", type = "string", paramType = "query", example = ".json (required)"),
+            @ApiImplicitParam(name = "includeGenotypes", type = "boolean", paramType = "query", example = "(default: false).  If true, will include genotypes associated with variants from VCF."),
+            @ApiImplicitParam(name = "ignoreCache", type = "boolean", paramType = "query", example = "(default: false).  Use cache for request, if available."),
     ])
     def featuresByLocation(String organismString, String trackName, String sequence, Long fmin, Long fmax, String type, boolean includeGenotypes) {
         if(!trackService.checkPermission(request, response, organismString)) return

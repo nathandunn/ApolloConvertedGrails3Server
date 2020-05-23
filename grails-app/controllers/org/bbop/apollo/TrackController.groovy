@@ -5,15 +5,10 @@ import grails.gorm.transactions.Transactional
 import org.bbop.apollo.sequence.SequenceDTO
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
-import org.restapidoc.annotation.RestApi
-import org.restapidoc.annotation.RestApiMethod
-import org.restapidoc.annotation.RestApiParam
-import org.restapidoc.annotation.RestApiParams
-import org.restapidoc.pojo.RestApiParamType
-import org.restapidoc.pojo.RestApiVerb
+import io.swagger.annotations.*
 
 
-@RestApi(name = "Track Services", description = "Methods for retrieving track data")
+@Api(value = "Track Services: Methods for retrieving track data")
 @Transactional(readOnly = true)
 class TrackController {
 
@@ -44,10 +39,10 @@ class TrackController {
         render jsonObject as JSON
     }
 
-    @RestApiMethod(description = "Remove track cache for an organism and track", path = "/track/cache/clear/<organism name>/<track name>", verb = RestApiVerb.GET)
-    @RestApiParams(params = [
-            @RestApiParam(name = "organismName", type = "string", paramType = RestApiParamType.QUERY, description = "Organism common name (required)")
-            , @RestApiParam(name = "trackName", type = "string", paramType = RestApiParamType.QUERY, description = "Track name (required)")
+    @ApiOperation(value = "Remove track cache for an organism and track", nickname = "/track/cache/clear/<organism name>/<track name>", httpMethod = "get")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "organismName", type = "string", paramType = "query", example = "Organism common name (required)")
+            , @ApiImplicitParam(name = "trackName", type = "string", paramType = "query", example = "Track name (required)")
     ])
     @Transactional
     def clearTrackCache(String organismName, String trackName) {
@@ -56,9 +51,9 @@ class TrackController {
         render new JSONObject(removed: removed) as JSON
     }
 
-    @RestApiMethod(description = "Remove track cache for an organism", path = "/track/cache/clear/<organism name>", verb = RestApiVerb.GET)
-    @RestApiParams(params = [
-            @RestApiParam(name = "organismName", type = "string", paramType = RestApiParamType.QUERY, description = "Organism common name (required) or 'ALL' if admin")
+    @ApiOperation(value = "Remove track cache for an organism", nickname = "/track/cache/clear/<organism name>", httpMethod = "get")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "organismName", type = "string", paramType = "query", example = "Organism common name (required) or 'ALL' if admin")
     ])
     @Transactional
     def clearOrganismCache(String organismName) {
@@ -81,9 +76,9 @@ class TrackController {
 
     }
 
-    @RestApiMethod(description = "List all tracks for an organism", path = "/track/list/<organism name>", verb = RestApiVerb.GET)
-    @RestApiParams(params = [
-            @RestApiParam(name = "organismName", type = "string", paramType = RestApiParamType.QUERY, description = "Organism common name (required)")
+    @ApiOperation(value = "List all tracks for an organism", nickname = "/track/list/<organism name>", httpMethod = "get")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "organismName", type = "string", paramType = "query", example = "Organism common name (required)")
     ])
     @Transactional
     def getTracks(String organismName) {
@@ -92,15 +87,15 @@ class TrackController {
     }
 
 
-    @RestApiMethod(description = "Get track data as an JSON within but only for the selected name", path = "/track/<organism name>/<track name>/<sequence name>/<feature name>.<type>?ignoreCache=<ignoreCache>", verb = RestApiVerb.GET)
-    @RestApiParams(params = [
-            @RestApiParam(name = "organismString", type = "string", paramType = RestApiParamType.QUERY, description = "Organism common name or ID(required)")
-            , @RestApiParam(name = "trackName", type = "string", paramType = RestApiParamType.QUERY, description = "Track name(required)")
-            , @RestApiParam(name = "sequence", type = "string", paramType = RestApiParamType.QUERY, description = "Sequence name(required)")
-            , @RestApiParam(name = "featureName", type = "string", paramType = RestApiParamType.QUERY, description = "If top-level feature 'id' matches, then annotate with 'selected'=1")
-            , @RestApiParam(name = "ignoreCache", type = "boolean", paramType = RestApiParamType.QUERY, description = "(default false).  Use cache for request if available.")
-            , @RestApiParam(name = "flatten", type = "string", paramType = RestApiParamType.QUERY, description = "Brings nested top-level components to the root level.  If not provided or 'false' it will not flatten.  Default is 'gene'." )
-            , @RestApiParam(name = "type", type = "json/svg", paramType = RestApiParamType.QUERY, description = ".json or .svg")
+    @ApiOperation(value = "Get track data as an JSON within but only for the selected name", nickname = "/track/<organism name>/<track name>/<sequence name>/<feature name>.<type>?ignoreCache=<ignoreCache>", httpMethod = "get")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "organismString", type = "string", paramType = "query", example = "Organism common name or ID(required)")
+            , @ApiImplicitParam(name = "trackName", type = "string", paramType = "query", example = "Track name(required)")
+            , @ApiImplicitParam(name = "sequence", type = "string", paramType = "query", example = "Sequence name(required)")
+            , @ApiImplicitParam(name = "featureName", type = "string", paramType = "query", example = "If top-level feature 'id' matches, then annotate with 'selected'=1")
+            , @ApiImplicitParam(name = "ignoreCache", type = "boolean", paramType = "query", example = "(default false).  Use cache for request if available.")
+            , @ApiImplicitParam(name = "flatten", type = "string", paramType = "query", example = "Brings nested top-level components to the root level.  If not provided or 'false' it will not flatten.  Default is 'gene'." )
+            , @ApiImplicitParam(name = "type", type = "json/svg", paramType = "query", example = ".json or .svg")
     ])
     @Transactional
     def featuresByName(String organismString, String trackName, String sequence, String featureName, String type) {
@@ -184,18 +179,18 @@ class TrackController {
         return nameSet
     }
 
-    @RestApiMethod(description = "Get track data as an JSON within an range", path = "/track/<organism name>/<track name>/<sequence name>:<fmin>..<fmax>.<type>?name=<name>&onlySelected=<onlySelected>&ignoreCache=<ignoreCache>", verb = RestApiVerb.GET)
-    @RestApiParams(params = [
-            @RestApiParam(name = "organismString", type = "string", paramType = RestApiParamType.QUERY, description = "Organism common name or ID(required)")
-            , @RestApiParam(name = "trackName", type = "string", paramType = RestApiParamType.QUERY, description = "Track name(required)")
-            , @RestApiParam(name = "sequence", type = "string", paramType = RestApiParamType.QUERY, description = "Sequence name(required)")
-            , @RestApiParam(name = "fmin", type = "integer", paramType = RestApiParamType.QUERY, description = "Minimum range(required)")
-            , @RestApiParam(name = "fmax", type = "integer", paramType = RestApiParamType.QUERY, description = "Maximum range (required)")
-            , @RestApiParam(name = "name", type = "string / string[]", paramType = RestApiParamType.QUERY, description = "If top-level feature 'name' matches, then annotate with 'selected'=true.  Multiple names can be passed in.")
-            , @RestApiParam(name = "onlySelected", type = "string", paramType = RestApiParamType.QUERY, description = "(default false).  If 'selected'!=1 one, then exclude.")
-            , @RestApiParam(name = "ignoreCache", type = "boolean", paramType = RestApiParamType.QUERY, description = "(default false).  Use cache for request if available.")
-            , @RestApiParam(name = "flatten", type = "string", paramType = RestApiParamType.QUERY, description = "Brings nested top-level components to the root level.  If not provided or 'false' it will not flatten.  Default is 'gene'.")
-            , @RestApiParam(name = "type", type = "string", paramType = RestApiParamType.QUERY, description = ".json or .svg")
+    @ApiOperation(value = "Get track data as an JSON within an range", nickname = "/track/<organism name>/<track name>/<sequence name>:<fmin>..<fmax>.<type>?name=<name>&onlySelected=<onlySelected>&ignoreCache=<ignoreCache>", httpMethod = "get")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "organismString", type = "string", paramType = "query", example = "Organism common name or ID(required)")
+            , @ApiImplicitParam(name = "trackName", type = "string", paramType = "query", example = "Track name(required)")
+            , @ApiImplicitParam(name = "sequence", type = "string", paramType = "query", example = "Sequence name(required)")
+            , @ApiImplicitParam(name = "fmin", type = "integer", paramType = "query", example = "Minimum range(required)")
+            , @ApiImplicitParam(name = "fmax", type = "integer", paramType = "query", example = "Maximum range (required)")
+            , @ApiImplicitParam(name = "name", type = "string / string[]", paramType = "query", example = "If top-level feature 'name' matches, then annotate with 'selected'=true.  Multiple names can be passed in.")
+            , @ApiImplicitParam(name = "onlySelected", type = "string", paramType = "query", example = "(default false).  If 'selected'!=1 one, then exclude.")
+            , @ApiImplicitParam(name = "ignoreCache", type = "boolean", paramType = "query", example = "(default false).  Use cache for request if available.")
+            , @ApiImplicitParam(name = "flatten", type = "string", paramType = "query", example = "Brings nested top-level components to the root level.  If not provided or 'false' it will not flatten.  Default is 'gene'.")
+            , @ApiImplicitParam(name = "type", type = "string", paramType = "query", example = ".json or .svg")
     ])
     @Transactional
     def featuresByLocation(String organismString, String trackName, String sequence, Long fmin, Long fmax, String type) {

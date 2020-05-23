@@ -7,27 +7,22 @@ import org.bbop.apollo.gwt.shared.GlobalPermissionEnum
 import org.bbop.apollo.gwt.shared.PermissionEnum
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
-import org.restapidoc.annotation.RestApi
-import org.restapidoc.annotation.RestApiMethod
-import org.restapidoc.annotation.RestApiParam
-import org.restapidoc.annotation.RestApiParams
-import org.restapidoc.pojo.RestApiParamType
-import org.restapidoc.pojo.RestApiVerb
+import io.swagger.annotations.*
 import org.springframework.http.HttpStatus
 
-@RestApi(name = "Group Services", description = "Methods for managing groups")
+@Api(value = "Group Services: Methods for managing groups")
 class GroupController {
 
     def permissionService
     def preferenceService
     def groupService
 
-    @RestApiMethod(description = "Get organism permissions for group", path = "/group/getOrganismPermissionsForGroup", verb = RestApiVerb.POST)
-    @RestApiParams(params = [
-            @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "id", type = "long", paramType = RestApiParamType.QUERY, description = "Group ID (or specify the name)")
-            , @RestApiParam(name = "name", type = "string", paramType = RestApiParamType.QUERY, description = "Group name")
+    @ApiOperation(value = "Get organism permissions for group", nickname = "/group/getOrganismPermissionsForGroup", httpMethod = "POST")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+            , @ApiImplicitParam(name = "id", type = "long", paramType = "query", example = "Group ID (or specify the name)")
+            , @ApiImplicitParam(name = "name", type = "string", paramType = "query", example = "Group name")
     ]
     )
     def getOrganismPermissionsForGroup() {
@@ -47,11 +42,11 @@ class GroupController {
         render groupOrganismPermissions as JSON
     }
 
-    @RestApiMethod(description = "Load all groups", path = "/group/loadGroups", verb = RestApiVerb.POST)
-    @RestApiParams(params = [
-            @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "groupId", type = "long", paramType = RestApiParamType.QUERY, description = "Optional only load a specific groupId")
+    @ApiOperation(value = "Load all groups", nickname = "/group/loadGroups", httpMethod = "POST")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+            , @ApiImplicitParam(name = "groupId", type = "long", paramType = "query", example = "Optional only load a specific groupId")
     ])
     def loadGroups() {
         try {
@@ -168,11 +163,11 @@ class GroupController {
         }
     }
 
-    @RestApiMethod(description = "Create group", path = "/group/createGroup", verb = RestApiVerb.POST)
-    @RestApiParams(params = [
-            @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "name", type = "string", paramType = RestApiParamType.QUERY, description = "Group name to add, or a comma-delimited list of names")
+    @ApiOperation(value = "Create group", nickname = "/group/createGroup", httpMethod = "POST")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+            , @ApiImplicitParam(name = "name", type = "string", paramType = "query", example = "Group name to add, or a comma-delimited list of names")
     ]
     )
     @Transactional
@@ -201,12 +196,12 @@ class GroupController {
         }
     }
 
-    @RestApiMethod(description = "Delete a group", path = "/group/deleteGroup", verb = RestApiVerb.POST)
-    @RestApiParams(params = [
-            @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "id", type = "long", paramType = RestApiParamType.QUERY, description = "Group ID to remove (or specify the name)")
-            , @RestApiParam(name = "name", type = "string", paramType = RestApiParamType.QUERY, description = "Group name or comma-delimited list of names to remove")
+    @ApiOperation(value = "Delete a group", nickname = "/group/deleteGroup", httpMethod = "POST")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+            , @ApiImplicitParam(name = "id", type = "long", paramType = "query", example = "Group ID to remove (or specify the name)")
+            , @ApiImplicitParam(name = "name", type = "string", paramType = "query", example = "Group name or comma-delimited list of names to remove")
     ]
     )
     @Transactional
@@ -245,12 +240,12 @@ class GroupController {
         render new JSONObject() as JSON
     }
 
-    @RestApiMethod(description = "Update group", path = "/group/updateGroup", verb = RestApiVerb.POST)
-    @RestApiParams(params = [
-            @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "id", type = "long", paramType = RestApiParamType.QUERY, description = "Group ID to update")
-            , @RestApiParam(name = "name", type = "string", paramType = RestApiParamType.QUERY, description = "Group name to change to (the only editable optoin)")
+    @ApiOperation(value = "Update group", nickname = "/group/updateGroup", httpMethod = "POST")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+            , @ApiImplicitParam(name = "id", type = "long", paramType = "query", example = "Group ID to update")
+            , @ApiImplicitParam(name = "name", type = "string", paramType = "query", example = "Group name to change to (the only editable optoin)")
     ]
     )
     @Transactional
@@ -288,18 +283,18 @@ class GroupController {
      * Only changing one of the boolean permissions
      * @return
      */
-    @RestApiMethod(description = "Update organism permission", path = "/group/updateOrganismPermission", verb = RestApiVerb.POST)
-    @RestApiParams(params = [
-            @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "groupId", type = "long", paramType = RestApiParamType.QUERY, description = "Group ID to modify permissions for (must provide this or 'name')")
-            , @RestApiParam(name = "name", type = "string", paramType = RestApiParamType.QUERY, description = "Group name to modify permissions for (must provide this or 'groupId')")
-            , @RestApiParam(name = "organism", type = "string", paramType = RestApiParamType.QUERY, description = "Organism common name")
+    @ApiOperation(value = "Update organism permission", nickname = "/group/updateOrganismPermission", httpMethod = "POST")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+            , @ApiImplicitParam(name = "groupId", type = "long", paramType = "query", example = "Group ID to modify permissions for (must provide this or 'name')")
+            , @ApiImplicitParam(name = "name", type = "string", paramType = "query", example = "Group name to modify permissions for (must provide this or 'groupId')")
+            , @ApiImplicitParam(name = "organism", type = "string", paramType = "query", example = "Organism common name")
 
-            , @RestApiParam(name = "ADMINISTRATE", type = "boolean", paramType = RestApiParamType.QUERY, description = "Indicate if user has administrative and all lesser (including user/group) privileges for the organism")
-            , @RestApiParam(name = "WRITE", type = "boolean", paramType = RestApiParamType.QUERY, description = "Indicate if user has write and all lesser privileges for the organism")
-            , @RestApiParam(name = "EXPORT", type = "boolean", paramType = RestApiParamType.QUERY, description = "Indicate if user has export and all lesser privileges for the organism")
-            , @RestApiParam(name = "READ", type = "boolean", paramType = RestApiParamType.QUERY, description = "Indicate if user has read and all lesser privileges for the organism")
+            , @ApiImplicitParam(name = "ADMINISTRATE", type = "boolean", paramType = "query", example = "Indicate if user has administrative and all lesser (including user/group) privileges for the organism")
+            , @ApiImplicitParam(name = "WRITE", type = "boolean", paramType = "query", example = "Indicate if user has write and all lesser privileges for the organism")
+            , @ApiImplicitParam(name = "EXPORT", type = "boolean", paramType = "query", example = "Indicate if user has export and all lesser privileges for the organism")
+            , @ApiImplicitParam(name = "READ", type = "boolean", paramType = "query", example = "Indicate if user has read and all lesser privileges for the organism")
     ]
     )
     @Transactional
@@ -381,13 +376,13 @@ class GroupController {
 
     }
 
-    @RestApiMethod(description = "Update group membership", path = "/group/updateMembership", verb = RestApiVerb.POST)
-    @RestApiParams(params = [
-            @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "groupId", type = "long", paramType = RestApiParamType.QUERY, description = "Group ID to alter membership of")
-            , @RestApiParam(name = "users", type = "JSONArray", paramType = RestApiParamType.QUERY, description = "A JSON array of strings of emails of users the now belong to the group")
-            , @RestApiParam(name = "memberships", type = "JSONArray", paramType = RestApiParamType.QUERY, description = "Bulk memberships (instead of users and groupId) to update of the form: [ {groupId: <groupId>,users: [\"user1\", \"user2\", \"user3\"]}, {groupId:<another-groupId>, users: [\"user2\", \"user8\"]}]")
+    @ApiOperation(value = "Update group membership", nickname = "/group/updateMembership", httpMethod = "POST")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+            , @ApiImplicitParam(name = "groupId", type = "long", paramType = "query", example = "Group ID to alter membership of")
+            , @ApiImplicitParam(name = "users", type = "JSONArray", paramType = "query", example = "A JSON array of strings of emails of users the now belong to the group")
+            , @ApiImplicitParam(name = "memberships", type = "JSONArray", paramType = "query", example = "Bulk memberships (instead of users and groupId) to update of the form: [ {groupId: <groupId>,users: [\"user1\", \"user2\", \"user3\"]}, {groupId:<another-groupId>, users: [\"user2\", \"user8\"]}]")
     ]
     )
     @Transactional
@@ -410,12 +405,12 @@ class GroupController {
         loadGroups()
     }
 
-    @RestApiMethod(description = "Update group admin", path = "/group/updateGroupAdmin", verb = RestApiVerb.POST)
-    @RestApiParams(params = [
-            @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "groupId", type = "long", paramType = RestApiParamType.QUERY, description = "Group ID to alter membership of")
-            , @RestApiParam(name = "users", type = "JSONArray", paramType = RestApiParamType.QUERY, description = "A JSON array of strings of emails of users the now belong to the group")
+    @ApiOperation(value = "Update group admin", nickname = "/group/updateGroupAdmin", httpMethod = "POST")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+            , @ApiImplicitParam(name = "groupId", type = "long", paramType = "query", example = "Group ID to alter membership of")
+            , @ApiImplicitParam(name = "users", type = "JSONArray", paramType = "query", example = "A JSON array of strings of emails of users the now belong to the group")
     ]
     )
     @Transactional
@@ -459,11 +454,11 @@ class GroupController {
         loadGroups()
     }
 
-    @RestApiMethod(description = "Get group admins, returns group admins as JSONArray", path = "/group/getGroupAdmin", verb = RestApiVerb.POST)
-    @RestApiParams(params = [
-            @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "name", type = "string", paramType = RestApiParamType.QUERY, description = "Group name")
+    @ApiOperation(value = "Get group admins, returns group admins as JSONArray", nickname = "/group/getGroupAdmin", httpMethod = "POST")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+            , @ApiImplicitParam(name = "name", type = "string", paramType = "query", example = "Group name")
     ])
     def getGroupAdmin() {
         JSONObject dataObject = permissionService.handleInput(request, params)
@@ -497,11 +492,11 @@ class GroupController {
 
     }
 
-    @RestApiMethod(description = "Get creator metadata for group, returns userId as JSONObject", path = "/group/getGroupCreator", verb = RestApiVerb.POST)
-    @RestApiParams(params = [
-            @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "name", type = "string", paramType = RestApiParamType.QUERY, description = "Group name")
+    @ApiOperation(value = "Get creator metadata for group, returns userId as JSONObject", nickname = "/group/getGroupCreator", httpMethod = "POST")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+            , @ApiImplicitParam(name = "name", type = "string", paramType = "query", example = "Group name")
     ])
     def getGroupCreator() {
         JSONObject dataObject = permissionService.handleInput(request, params)

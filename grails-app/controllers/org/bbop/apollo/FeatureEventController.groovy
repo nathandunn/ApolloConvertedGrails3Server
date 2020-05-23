@@ -6,16 +6,11 @@ import org.bbop.apollo.gwt.shared.FeatureStringEnum
 import org.bbop.apollo.gwt.shared.PermissionEnum
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
-import org.restapidoc.annotation.RestApi
-import org.restapidoc.annotation.RestApiMethod
-import org.restapidoc.annotation.RestApiParam
-import org.restapidoc.annotation.RestApiParams
-import org.restapidoc.pojo.RestApiParamType
-import org.restapidoc.pojo.RestApiVerb
+import io.swagger.annotations.*
 
 import static org.springframework.http.HttpStatus.*
 
-@RestApi(name = "History Services", description = "Methods for querying history")
+@Api(value = "History Services: Methods for querying history")
 @Transactional(readOnly = true)
 class FeatureEventController {
 
@@ -35,16 +30,16 @@ class FeatureEventController {
      * @param beforeDate
      * @return
      */
-    @RestApiMethod(description = "Returns a JSON representation of all current Annotations before or after a given date.", path = "/featureEvent/findChanges", verb = RestApiVerb.POST)
-    @RestApiParams(params = [
-            @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "date", type = "Date", paramType = RestApiParamType.QUERY, description = "Date to query yyyy-MM-dd:HH:mm:ss or yyyy-MM-dd")
-            , @RestApiParam(name = "afterDate", type = "Boolean", paramType = RestApiParamType.QUERY, description = "Search after or on the given date.")
-            , @RestApiParam(name = "beforeDate", type = "Boolean", paramType = RestApiParamType.QUERY, description = "Search before or on the given date.")
-            , @RestApiParam(name = "max", type = "Integer", paramType = RestApiParamType.QUERY, description = "Max to return")
-            , @RestApiParam(name = "sort", type = "String", paramType = RestApiParamType.QUERY, description = "Sort parameter (lastUpdated).  See FeatureEvent object/table.")
-            , @RestApiParam(name = "order", type = "String", paramType = RestApiParamType.QUERY, description = "desc/asc sort order by sort param")
+    @ApiOperation(value = "Returns a JSON representation of all current Annotations before or after a given date.", nickname = "/featureEvent/findChanges", httpMethod = "POST")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+            , @ApiImplicitParam(name = "date", type = "Date", paramType = "query", example = "Date to query yyyy-MM-dd:HH:mm:ss or yyyy-MM-dd")
+            , @ApiImplicitParam(name = "afterDate", type = "Boolean", paramType = "query", example = "Search after or on the given date.")
+            , @ApiImplicitParam(name = "beforeDate", type = "Boolean", paramType = "query", example = "Search before or on the given date.")
+            , @ApiImplicitParam(name = "max", type = "Integer", paramType = "query", example = "Max to return")
+            , @ApiImplicitParam(name = "sort", type = "String", paramType = "query", example = "Sort parameter (lastUpdated).  See FeatureEvent object/table.")
+            , @ApiImplicitParam(name = "order", type = "String", paramType = "query", example = "desc/asc sort order by sort param")
     ])
     def findChanges() {
         JSONObject inputObject = permissionService.handleInput(request, params)

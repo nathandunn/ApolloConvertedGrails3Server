@@ -1,6 +1,7 @@
 package org.bbop.apollo
 
 import grails.converters.JSON
+import grails.core.GrailsApplication
 import grails.gorm.transactions.NotTransactional
 import grails.gorm.transactions.Transactional
 import org.bbop.apollo.event.AnnotationEvent
@@ -13,18 +14,13 @@ import org.bbop.apollo.report.AnnotatorSummary
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
 import org.hibernate.FetchMode
-import org.restapidoc.annotation.RestApi
-import org.restapidoc.annotation.RestApiMethod
-import org.restapidoc.annotation.RestApiParam
-import org.restapidoc.annotation.RestApiParams
-import org.restapidoc.pojo.RestApiParamType
-import org.restapidoc.pojo.RestApiVerb
+import io.swagger.annotations.*
 import org.springframework.http.HttpStatus
 
 /**
  * This is server-side code supporting the high-level functionality of the GWT AnnotatorPanel class.
  */
-@RestApi(name = "Annotator Engine Services", description = "Methods for running the annotation engine")
+@Api(value = "Annotator Engine Services", description = "Methods for running the annotation engine")
 class AnnotatorController {
 
     def featureService
@@ -37,7 +33,7 @@ class AnnotatorController {
     def configWrapperService
     def exportService
     def variantService
-    def grailsApplication
+    GrailsApplication grailsApplication
     def jsonWebUtilityService
     def featureEventService
 
@@ -186,16 +182,16 @@ class AnnotatorController {
  * updates shallow properties of gene / feature
  * @return
  */
-    @RestApiMethod(description = "Update shallow feature properties", path = "/annotator/updateFeature", verb = RestApiVerb.POST)
-    @RestApiParams(params = [
-            @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "uniquename", type = "string", paramType = RestApiParamType.QUERY, description = "Uniquename (UUID) of the feature we are editing")
-            , @RestApiParam(name = "name", type = "string", paramType = RestApiParamType.QUERY, description = "Updated feature name")
-            , @RestApiParam(name = "symbol", type = "string", paramType = RestApiParamType.QUERY, description = "Updated feature symbol")
-            , @RestApiParam(name = "synonyms", type = "string", paramType = RestApiParamType.QUERY, description = "Updated synonyms pipe (|) separated")
-            , @RestApiParam(name = "description", type = "string", paramType = RestApiParamType.QUERY, description = "Updated feature description")
-            , @RestApiParam(name = "status", type = "string", paramType = RestApiParamType.QUERY, description = "Updated status")
+    @ApiOperation(value = "Update shallow feature properties", nickname = "/annotator/updateFeature", httpMethod = "POST")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+            , @ApiImplicitParam(name = "uniquename", type = "string", paramType = "query", example = "Uniquename (UUID) of the feature we are editing")
+            , @ApiImplicitParam(name = "name", type = "string", paramType = "query", example = "Updated feature name")
+            , @ApiImplicitParam(name = "symbol", type = "string", paramType = "query", example = "Updated feature symbol")
+            , @ApiImplicitParam(name = "synonyms", type = "string", paramType = "query", example = "Updated synonyms pipe (|) separated")
+            , @ApiImplicitParam(name = "description", type = "string", paramType = "query", example = "Updated feature description")
+            , @ApiImplicitParam(name = "status", type = "string", paramType = "query", example = "Updated status")
     ]
     )
     @Transactional
@@ -305,14 +301,14 @@ class AnnotatorController {
     }
 
 
-    @RestApiMethod(description = "Update exon boundaries", path = "/annotator/setExonBoundaries", verb = RestApiVerb.POST)
-    @RestApiParams(params = [
-            @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "uniquename", type = "string", paramType = RestApiParamType.QUERY, description = "Uniquename (UUID) of the exon we are editing")
-            , @RestApiParam(name = "fmin", type = "int", paramType = RestApiParamType.QUERY, description = "fmin for Exon Location")
-            , @RestApiParam(name = "fmax", type = "int", paramType = RestApiParamType.QUERY, description = "fmax for Exon Location")
-            , @RestApiParam(name = "strand", type = "int", paramType = RestApiParamType.QUERY, description = "strand for Feature Location 1 or -1")
+    @ApiOperation(value = "Update exon boundaries", nickname = "/annotator/setExonBoundaries", httpMethod = "POST")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+            , @ApiImplicitParam(name = "uniquename", type = "string", paramType = "query", example = "Uniquename (UUID) of the exon we are editing")
+            , @ApiImplicitParam(name = "fmin", type = "int", paramType = "query", example = "fmin for Exon Location")
+            , @ApiImplicitParam(name = "fmax", type = "int", paramType = "query", example = "fmax for Exon Location")
+            , @ApiImplicitParam(name = "strand", type = "int", paramType = "query", example = "strand for Feature Location 1 or -1")
     ]
     )
     def setExonBoundaries() {
@@ -896,12 +892,12 @@ class AnnotatorController {
         exportService.export(params.format, response.outputStream, annotatorGroupList, fields, labels, formatters, parameters)
     }
 
-    @RestApiMethod(description = "Get annotators report for group", path = "/group/getAnnotatorsReportForGroup", verb = RestApiVerb.POST)
-    @RestApiParams(params = [
-            @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "id", type = "long", paramType = RestApiParamType.QUERY, description = "Group ID (or specify the name)")
-            , @RestApiParam(name = "name", type = "string", paramType = RestApiParamType.QUERY, description = "Group name")
+    @ApiOperation(value = "Get annotators report for group", nickname = "/group/getAnnotatorsReportForGroup", httpMethod = "POST")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+            , @ApiImplicitParam(name = "id", type = "long", paramType = "query", example = "Group ID (or specify the name)")
+            , @ApiImplicitParam(name = "name", type = "string", paramType = "query", example = "Group name")
     ]
     )
     def getAnnotatorsReportForGroup() {

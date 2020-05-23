@@ -9,14 +9,9 @@ import static org.springframework.http.HttpStatus.*
 import grails.gorm.transactions.Transactional
 import org.bbop.apollo.gwt.shared.PermissionEnum
 import org.grails.web.json.JSONObject
-import org.restapidoc.annotation.RestApi
-import org.restapidoc.annotation.RestApiMethod
-import org.restapidoc.annotation.RestApiParam
-import org.restapidoc.annotation.RestApiParams
-import org.restapidoc.pojo.RestApiParamType
-import org.restapidoc.pojo.RestApiVerb
+import io.swagger.annotations.*
 
-@RestApi(name = "Canned Values Services", description = "Methods for managing canned values")
+@Api(value = "Canned Values Services: Methods for managing canned values")
 @Transactional(readOnly = true)
 class CannedValueController {
 
@@ -160,12 +155,12 @@ class CannedValueController {
         }
     }
 
-    @RestApiMethod(description = "Create canned value", path = "/cannedValue/createValue", verb = RestApiVerb.POST)
-    @RestApiParams(params = [
-            @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "value", type = "string", paramType = RestApiParamType.QUERY, description = "Canned value to add")
-            , @RestApiParam(name = "metadata", type = "string", paramType = RestApiParamType.QUERY, description = "Optional additional information")
+    @ApiOperation(value = "Create canned value", nickname = "/cannedValue/createValue", httpMethod = "POST")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+            , @ApiImplicitParam(name = "value", type = "string", paramType = "query", example = "Canned value to add")
+            , @ApiImplicitParam(name = "metadata", type = "string", paramType = "query", example = "Optional additional information")
     ]
     )
     @Transactional
@@ -201,14 +196,14 @@ class CannedValueController {
         }
     }
 
-    @RestApiMethod(description = "Update canned value", path = "/cannedValue/updateValue", verb = RestApiVerb.POST)
-    @RestApiParams(params = [
-            @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "id", type = "long", paramType = RestApiParamType.QUERY, description = "Canned value ID to update (or specify the old_value)")
-            , @RestApiParam(name = "old_value", type = "string", paramType = RestApiParamType.QUERY, description = "Canned value to update")
-            , @RestApiParam(name = "new_value", type = "string", paramType = RestApiParamType.QUERY, description = "Canned value to change to (the only editable option)")
-            , @RestApiParam(name = "metadata", type = "string", paramType = RestApiParamType.QUERY, description = "Optional additional information")
+    @ApiOperation(value = "Update canned value", nickname = "/cannedValue/updateValue", httpMethod = "POST")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+            , @ApiImplicitParam(name = "id", type = "long", paramType = "query", example = "Canned value ID to update (or specify the old_value)")
+            , @ApiImplicitParam(name = "old_value", type = "string", paramType = "query", example = "Canned value to update")
+            , @ApiImplicitParam(name = "new_value", type = "string", paramType = "query", example = "Canned value to change to (the only editable option)")
+            , @ApiImplicitParam(name = "metadata", type = "string", paramType = "query", example = "Optional additional information")
     ]
     )
     @Transactional
@@ -251,12 +246,12 @@ class CannedValueController {
         }
     }
 
-    @RestApiMethod(description = "Remove a canned value", path = "/cannedValue/deleteValue", verb = RestApiVerb.POST)
-    @RestApiParams(params = [
-            @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "id", type = "long", paramType = RestApiParamType.QUERY, description = "Canned value ID to remove (or specify the name)")
-            , @RestApiParam(name = "value", type = "string", paramType = RestApiParamType.QUERY, description = "Canned value to delete")
+    @ApiOperation(value = "Remove a canned value", nickname = "/cannedValue/deleteValue", httpMethod = "POST")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+            , @ApiImplicitParam(name = "id", type = "long", paramType = "query", example = "Canned value ID to remove (or specify the name)")
+            , @ApiImplicitParam(name = "value", type = "string", paramType = "query", example = "Canned value to delete")
     ])
     @Transactional
     def deleteValue() {
@@ -291,12 +286,12 @@ class CannedValueController {
         }
     }
 
-    @RestApiMethod(description = "Returns a JSON array of all canned values, or optionally, gets information about a specific canned value", path = "/cannedValue/showValue", verb = RestApiVerb.POST)
-    @RestApiParams(params = [
-            @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "id", type = "long", paramType = RestApiParamType.QUERY, description = "Value ID to show (or specify a value)")
-            , @RestApiParam(name = "value", type = "string", paramType = RestApiParamType.QUERY, description = "Value to show")
+    @ApiOperation(value = "Returns a JSON array of all canned values, or optionally, gets information about a specific canned value", nickname = "/cannedValue/showValue", httpMethod = "POST")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+            , @ApiImplicitParam(name = "id", type = "long", paramType = "query", example = "Value ID to show (or specify a value)")
+            , @ApiImplicitParam(name = "value", type = "string", paramType = "query", example = "Value to show")
     ])
     @Transactional
     def showValue() {

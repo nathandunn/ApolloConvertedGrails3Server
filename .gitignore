@@ -39,3 +39,4 @@ jb_setup.js
 .DS_Store
 yarn.lock
 bin
+build

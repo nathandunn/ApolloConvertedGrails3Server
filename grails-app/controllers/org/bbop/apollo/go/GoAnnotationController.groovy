@@ -8,11 +8,7 @@ import org.bbop.apollo.gwt.shared.PermissionEnum
 import org.bbop.apollo.history.FeatureOperation
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
-import org.restapidoc.annotation.RestApiMethod
-import org.restapidoc.annotation.RestApiParam
-import org.restapidoc.annotation.RestApiParams
-import org.restapidoc.pojo.RestApiParamType
-import org.restapidoc.pojo.RestApiVerb
+import io.swagger.annotations.*
 
 import static org.springframework.http.HttpStatus.NOT_FOUND
 
@@ -25,11 +21,11 @@ class GoAnnotationController {
   def featureEventService
   def featureService
 
-  @RestApiMethod(description = "Load Go Annotations for feature", path = "/goAnnotation", verb = RestApiVerb.POST)
-  @RestApiParams(params = [
-    @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-    , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-    , @RestApiParam(name = "uniqueName", type = "Feature uniqueName", paramType = RestApiParamType.QUERY, description = "Feature name to query on")
+  @ApiOperation(value = "Load Go Annotations for feature", nickname = "/goAnnotation", httpMethod = "POST")
+  @ApiImplicitParams([
+    @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+    , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+    , @ApiImplicitParam(name = "uniqueName", type = "Feature uniqueName", paramType = "query", example = "Feature name to query on")
   ]
   )
   def index() {
@@ -52,20 +48,20 @@ class GoAnnotationController {
 //        "negate":false,
 //        "withOrFrom":["withprefix:12312321"],
 //        "references":["refprefix:44444444"]}
-  @RestApiMethod(description = "Save New Go Annotations for feature", path = "/goAnnotation/save", verb = RestApiVerb.POST)
-  @RestApiParams(params = [
-    @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-    , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-    , @RestApiParam(name = "feature", type = "string", paramType = RestApiParamType.QUERY, description = "uniqueName of feature feature to query on")
-    , @RestApiParam(name = "goTerm", type = "string", paramType = RestApiParamType.QUERY, description = "GO CURIE")
-    , @RestApiParam(name = "goTermLabel", type = "string", paramType = RestApiParamType.QUERY, description = "GO Term Label")
-    , @RestApiParam(name = "aspect", type = "string", paramType = RestApiParamType.QUERY, description = "(required) BP, MF, CC")
-    , @RestApiParam(name = "geneRelationship", type = "string", paramType = RestApiParamType.QUERY, description = "Gene relationship (RO) CURIE")
-    , @RestApiParam(name = "evidenceCode", type = "string", paramType = RestApiParamType.QUERY, description = "Evidence (ECO) CURIE")
-    , @RestApiParam(name = "evidenceCodeLAbel", type = "string", paramType = RestApiParamType.QUERY, description = "Evidence (ECO) Label")
-    , @RestApiParam(name = "negate", type = "boolean", paramType = RestApiParamType.QUERY, description = "Negate evidence (default false)")
-    , @RestApiParam(name = "withOrFrom", type = "string", paramType = RestApiParamType.QUERY, description = "JSON Array of with or from CURIE strings, e.g., {[\"UniProtKB:12312]]\"]}")
-    , @RestApiParam(name = "references", type = "string", paramType = RestApiParamType.QUERY, description = "JSON Array of reference CURIE strings, e.g., {[\"PMID:12312]]\"]}")
+  @ApiOperation(value = "Save New Go Annotations for feature", nickname = "/goAnnotation/save", httpMethod = "POST")
+  @ApiImplicitParams([
+    @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+    , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+    , @ApiImplicitParam(name = "feature", type = "string", paramType = "query", example = "uniqueName of feature feature to query on")
+    , @ApiImplicitParam(name = "goTerm", type = "string", paramType = "query", example = "GO CURIE")
+    , @ApiImplicitParam(name = "goTermLabel", type = "string", paramType = "query", example = "GO Term Label")
+    , @ApiImplicitParam(name = "aspect", type = "string", paramType = "query", example = "(required) BP, MF, CC")
+    , @ApiImplicitParam(name = "geneRelationship", type = "string", paramType = "query", example = "Gene relationship (RO) CURIE")
+    , @ApiImplicitParam(name = "evidenceCode", type = "string", paramType = "query", example = "Evidence (ECO) CURIE")
+    , @ApiImplicitParam(name = "evidenceCodeLAbel", type = "string", paramType = "query", example = "Evidence (ECO) Label")
+    , @ApiImplicitParam(name = "negate", type = "boolean", paramType = "query", example = "Negate evidence (default false)")
+    , @ApiImplicitParam(name = "withOrFrom", type = "string", paramType = "query", example = "JSON Array of with or from CURIE strings, e.g., {[\"UniProtKB:12312]]\"]}")
+    , @ApiImplicitParam(name = "references", type = "string", paramType = "query", example = "JSON Array of reference CURIE strings, e.g., {[\"PMID:12312]]\"]}")
   ]
   )
   @Transactional
@@ -113,21 +109,21 @@ class GoAnnotationController {
     render annotations as JSON
   }
 
-  @RestApiMethod(description = "Update existing Go Annotations for feature", path = "/goAnnotation/update", verb = RestApiVerb.POST)
-  @RestApiParams(params = [
-    @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-    , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-    , @RestApiParam(name = "id", type = "string", paramType = RestApiParamType.QUERY, description = "GO Annotation ID to update (required)")
-    , @RestApiParam(name = "feature", type = "string", paramType = RestApiParamType.QUERY, description = "uniqueName of feature to query on")
-    , @RestApiParam(name = "goTerm", type = "string", paramType = RestApiParamType.QUERY, description = "GO CURIE")
-    , @RestApiParam(name = "goTermLabel", type = "string", paramType = RestApiParamType.QUERY, description = "GO Term Label")
-    , @RestApiParam(name = "aspect", type = "string", paramType = RestApiParamType.QUERY, description = "(required) BP, MF, CC")
-    , @RestApiParam(name = "geneRelationship", type = "string", paramType = RestApiParamType.QUERY, description = "Gene relationship (RO) CURIE")
-    , @RestApiParam(name = "evidenceCode", type = "string", paramType = RestApiParamType.QUERY, description = "Evidence (ECO) CURIE")
-    , @RestApiParam(name = "evidenceCodeLabel", type = "string", paramType = RestApiParamType.QUERY, description = "Evidence (ECO) Label")
-    , @RestApiParam(name = "negate", type = "boolean", paramType = RestApiParamType.QUERY, description = "Negate evidence (default false)")
-    , @RestApiParam(name = "withOrFrom", type = "string", paramType = RestApiParamType.QUERY, description = "JSON Array of with or from CURIE strings, e.g., {[\"UniProtKB:12312]]\"]}")
-    , @RestApiParam(name = "references", type = "string", paramType = RestApiParamType.QUERY, description = "JSON Array of reference CURIE strings, e.g., {[\"PMID:12312]]\"]}")
+  @ApiOperation(value = "Update existing Go Annotations for feature", nickname = "/goAnnotation/update", httpMethod = "POST")
+  @ApiImplicitParams([
+    @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+    , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+    , @ApiImplicitParam(name = "id", type = "string", paramType = "query", example = "GO Annotation ID to update (required)")
+    , @ApiImplicitParam(name = "feature", type = "string", paramType = "query", example = "uniqueName of feature to query on")
+    , @ApiImplicitParam(name = "goTerm", type = "string", paramType = "query", example = "GO CURIE")
+    , @ApiImplicitParam(name = "goTermLabel", type = "string", paramType = "query", example = "GO Term Label")
+    , @ApiImplicitParam(name = "aspect", type = "string", paramType = "query", example = "(required) BP, MF, CC")
+    , @ApiImplicitParam(name = "geneRelationship", type = "string", paramType = "query", example = "Gene relationship (RO) CURIE")
+    , @ApiImplicitParam(name = "evidenceCode", type = "string", paramType = "query", example = "Evidence (ECO) CURIE")
+    , @ApiImplicitParam(name = "evidenceCodeLabel", type = "string", paramType = "query", example = "Evidence (ECO) Label")
+    , @ApiImplicitParam(name = "negate", type = "boolean", paramType = "query", example = "Negate evidence (default false)")
+    , @ApiImplicitParam(name = "withOrFrom", type = "string", paramType = "query", example = "JSON Array of with or from CURIE strings, e.g., {[\"UniProtKB:12312]]\"]}")
+    , @ApiImplicitParam(name = "references", type = "string", paramType = "query", example = "JSON Array of reference CURIE strings, e.g., {[\"PMID:12312]]\"]}")
   ]
   )
   @Transactional
@@ -173,12 +169,12 @@ class GoAnnotationController {
     render annotations as JSON
   }
 
-  @RestApiMethod(description = "Delete existing Go Annotations for feature", path = "/goAnnotation/delete", verb = RestApiVerb.POST)
-  @RestApiParams(params = [
-    @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-    , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-    , @RestApiParam(name = "id", type = "string", paramType = RestApiParamType.QUERY, description = "GO Annotation ID to delete (required)")
-    , @RestApiParam(name = "uniqueName", type = "string", paramType = RestApiParamType.QUERY, description = "Gene uniqueName to remove feature from")
+  @ApiOperation(value = "Delete existing Go Annotations for feature", nickname = "/goAnnotation/delete", httpMethod = "POST")
+  @ApiImplicitParams([
+    @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+    , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+    , @ApiImplicitParam(name = "id", type = "string", paramType = "query", example = "GO Annotation ID to delete (required)")
+    , @ApiImplicitParam(name = "uniqueName", type = "string", paramType = "query", example = "Gene uniqueName to remove feature from")
   ]
   )
   @Transactional

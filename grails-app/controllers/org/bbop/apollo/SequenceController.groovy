@@ -11,18 +11,13 @@ import org.bbop.apollo.report.SequenceSummary
 import org.bbop.apollo.sequence.Strand
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
-import org.restapidoc.annotation.RestApi
-import org.restapidoc.annotation.RestApiMethod
-import org.restapidoc.annotation.RestApiParam
-import org.restapidoc.annotation.RestApiParams
-import org.restapidoc.pojo.RestApiParamType
-import org.restapidoc.pojo.RestApiVerb
+import io.swagger.annotations.*
 
 import javax.servlet.http.HttpServletResponse
 
 import static org.springframework.http.HttpStatus.NOT_FOUND
 
-@RestApi(name = "Sequence Services", description = "Methods for retrieving sequence data")
+@Api(value = "Sequence Services: Methods for retrieving sequence data")
 @Transactional(readOnly = true)
 class SequenceController {
 
@@ -248,13 +243,13 @@ class SequenceController {
         render view: "report", model: [sequenceInstanceList: sequenceInstanceList, organisms: organisms, organism: organism, sequenceInstanceCount: sequenceInstanceCount]
     }
 
-    @RestApiMethod(description = "Get sequence data within a range", path = "/sequence/<organism name>/<sequence name>:<fmin>..<fmax>?ignoreCache=<ignoreCache>", verb = RestApiVerb.GET)
-    @RestApiParams(params = [
-            @RestApiParam(name = "organismString", type = "string", paramType = RestApiParamType.QUERY, description = "Organism common name or ID(required)")
-            , @RestApiParam(name = "sequenceName", type = "string", paramType = RestApiParamType.QUERY, description = "Sequence name(required)")
-            , @RestApiParam(name = "fmin", type = "integer", paramType = RestApiParamType.QUERY, description = "Minimum range(required)")
-            , @RestApiParam(name = "fmax", type = "integer", paramType = RestApiParamType.QUERY, description = "Maximum range (required)")
-            , @RestApiParam(name = "ignoreCache", type = "boolean", paramType = RestApiParamType.QUERY, description = "(default false).  Use cache for request if available.")
+    @ApiOperation(value = "Get sequence data within a range", nickname = "/sequence/<organism name>/<sequence name>:<fmin>..<fmax>?ignoreCache=<ignoreCache>", httpMethod = "get")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "organismString", type = "string", paramType = "query", example = "Organism common name or ID(required)")
+            , @ApiImplicitParam(name = "sequenceName", type = "string", paramType = "query", example = "Sequence name(required)")
+            , @ApiImplicitParam(name = "fmin", type = "integer", paramType = "query", example = "Minimum range(required)")
+            , @ApiImplicitParam(name = "fmax", type = "integer", paramType = "query", example = "Maximum range (required)")
+            , @ApiImplicitParam(name = "ignoreCache", type = "boolean", paramType = "query", example = "(default false).  Use cache for request if available.")
     ])
     @Transactional
     String sequenceByLocation(String organismString, String sequenceName, int fmin, int fmax) {
@@ -280,13 +275,13 @@ class SequenceController {
 
     }
 
-    @RestApiMethod(description = "Get sequence data as for a selected name", path = "/sequence/<organism name>/<sequence name>/<feature name>.<type>?ignoreCache=<ignoreCache>", verb = RestApiVerb.GET)
-    @RestApiParams(params = [
-            @RestApiParam(name = "organismString", type = "string", paramType = RestApiParamType.QUERY, description = "Organism common name or ID (required)")
-            , @RestApiParam(name = "sequenceName", type = "string", paramType = RestApiParamType.QUERY, description = "Sequence name (required)")
-            , @RestApiParam(name = "featureName", type = "string", paramType = RestApiParamType.QUERY, description = "The uniqueName (UUID) or given name of the feature (typically transcript) of the element to retrieve sequence from")
-            , @RestApiParam(name = "type", type = "string", paramType = RestApiParamType.QUERY, description = "(default genomic) Return type: genomic, cds, cdna, peptide")
-            , @RestApiParam(name = "ignoreCache", type = "boolean", paramType = RestApiParamType.QUERY, description = "(default false).  Use cache for request if available.")
+    @ApiOperation(value = "Get sequence data as for a selected name", nickname = "/sequence/<organism name>/<sequence name>/<feature name>.<type>?ignoreCache=<ignoreCache>", httpMethod = "get")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "organismString", type = "string", paramType = "query", example = "Organism common name or ID (required)")
+            , @ApiImplicitParam(name = "sequenceName", type = "string", paramType = "query", example = "Sequence name (required)")
+            , @ApiImplicitParam(name = "featureName", type = "string", paramType = "query", example = "The uniqueName (UUID) or given name of the feature (typically transcript) of the element to retrieve sequence from")
+            , @ApiImplicitParam(name = "type", type = "string", paramType = "query", example = "(default genomic) Return type: genomic, cds, cdna, peptide")
+            , @ApiImplicitParam(name = "ignoreCache", type = "boolean", paramType = "query", example = "(default false).  Use cache for request if available.")
     ])
     @Deprecated
     @Transactional
@@ -331,10 +326,10 @@ class SequenceController {
         response.status = 404
     }
 
-    @RestApiMethod(description = "Remove sequence cache for an organism and sequence", path = "/sequence/cache/clear/<organism name>/<sequence name>", verb = RestApiVerb.GET)
-    @RestApiParams(params = [
-            @RestApiParam(name = "organismName", type = "string", paramType = RestApiParamType.QUERY, description = "Organism common name (required)")
-            , @RestApiParam(name = "sequenceName", type = "string", paramType = RestApiParamType.QUERY, description = "Sequence name (required)")
+    @ApiOperation(value = "Remove sequence cache for an organism and sequence", nickname = "/sequence/cache/clear/<organism name>/<sequence name>", httpMethod = "get")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "organismName", type = "string", paramType = "query", example = "Organism common name (required)")
+            , @ApiImplicitParam(name = "sequenceName", type = "string", paramType = "query", example = "Sequence name (required)")
     ])
     @Transactional
     def clearSequenceCache(String organismName, String sequenceName) {
@@ -344,9 +339,9 @@ class SequenceController {
         render new JSONObject(removed: removed) as JSON
     }
 
-    @RestApiMethod(description = "Remove sequence cache for an organism", path = "/sequence/cache/clear/<organism name>", verb = RestApiVerb.GET)
-    @RestApiParams(params = [
-            @RestApiParam(name = "organismName", type = "string", paramType = RestApiParamType.QUERY, description = "Organism common name (required) or 'ALL' if admin")
+    @ApiOperation(value = "Remove sequence cache for an organism", nickname = "/sequence/cache/clear/<organism name>", httpMethod = "get")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "organismName", type = "string", paramType = "query", example = "Organism common name (required) or 'ALL' if admin")
     ])
     @Transactional
     def clearOrganismCache(String organismName) {

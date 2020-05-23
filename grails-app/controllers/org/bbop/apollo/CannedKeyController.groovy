@@ -9,14 +9,9 @@ import static org.springframework.http.HttpStatus.*
 import grails.gorm.transactions.Transactional
 import org.bbop.apollo.gwt.shared.PermissionEnum
 import org.grails.web.json.JSONObject
-import org.restapidoc.annotation.RestApi
-import org.restapidoc.annotation.RestApiMethod
-import org.restapidoc.annotation.RestApiParam
-import org.restapidoc.annotation.RestApiParams
-import org.restapidoc.pojo.RestApiParamType
-import org.restapidoc.pojo.RestApiVerb
+import io.swagger.annotations.*
 
-@RestApi(name = "Canned Keys Services", description = "Methods for managing canned keys")
+@Api(value = "Canned Keys Services: Methods for managing canned keys")
 @Transactional(readOnly = true)
 class CannedKeyController {
 
@@ -161,12 +156,12 @@ class CannedKeyController {
         }
     }
 
-    @RestApiMethod(description = "Create canned key", path = "/cannedKey/createKey", verb = RestApiVerb.POST)
-    @RestApiParams(params = [
-            @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "key", type = "string", paramType = RestApiParamType.QUERY, description = "Canned key to add")
-            , @RestApiParam(name = "metadata", type = "string", paramType = RestApiParamType.QUERY, description = "Optional additional information")
+    @ApiOperation(value = "Create canned key", nickname = "/cannedKey/createKey", httpMethod = "POST")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+            , @ApiImplicitParam(name = "key", type = "string", paramType = "query", example = "Canned key to add")
+            , @ApiImplicitParam(name = "metadata", type = "string", paramType = "query", example = "Optional additional information")
     ]
     )
     @Transactional
@@ -202,14 +197,14 @@ class CannedKeyController {
         }
     }
 
-    @RestApiMethod(description = "Update canned key", path = "/cannedKey/updateKey", verb = RestApiVerb.POST)
-    @RestApiParams(params = [
-            @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "id", type = "long", paramType = RestApiParamType.QUERY, description = "Canned key ID to update (or specify the old_key)")
-            , @RestApiParam(name = "old_key", type = "string", paramType = RestApiParamType.QUERY, description = "Canned key to update")
-            , @RestApiParam(name = "new_key", type = "string", paramType = RestApiParamType.QUERY, description = "Canned key to change to (the only editable option)")
-            , @RestApiParam(name = "metadata", type = "string", paramType = RestApiParamType.QUERY, description = "Optional additional information")
+    @ApiOperation(value = "Update canned key", nickname = "/cannedKey/updateKey", httpMethod = "POST")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+            , @ApiImplicitParam(name = "id", type = "long", paramType = "query", example = "Canned key ID to update (or specify the old_key)")
+            , @ApiImplicitParam(name = "old_key", type = "string", paramType = "query", example = "Canned key to update")
+            , @ApiImplicitParam(name = "new_key", type = "string", paramType = "query", example = "Canned key to change to (the only editable option)")
+            , @ApiImplicitParam(name = "metadata", type = "string", paramType = "query", example = "Optional additional information")
     ]
     )
     @Transactional
@@ -252,12 +247,12 @@ class CannedKeyController {
         }
     }
 
-    @RestApiMethod(description = "Remove a canned key", path = "/cannedKey/deleteKey", verb = RestApiVerb.POST)
-    @RestApiParams(params = [
-            @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "id", type = "long", paramType = RestApiParamType.QUERY, description = "Canned key ID to remove (or specify the name)")
-            , @RestApiParam(name = "key", type = "string", paramType = RestApiParamType.QUERY, description = "Canned key to delete")
+    @ApiOperation(value = "Remove a canned key", nickname = "/cannedKey/deleteKey", httpMethod = "POST")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+            , @ApiImplicitParam(name = "id", type = "long", paramType = "query", example = "Canned key ID to remove (or specify the name)")
+            , @ApiImplicitParam(name = "key", type = "string", paramType = "query", example = "Canned key to delete")
     ])
     @Transactional
     def deleteKey() {
@@ -292,12 +287,12 @@ class CannedKeyController {
         }
     }
 
-    @RestApiMethod(description = "Returns a JSON array of all canned keys, or optionally, gets information about a specific canned key", path = "/cannedKey/showKey", verb = RestApiVerb.POST)
-    @RestApiParams(params = [
-            @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-            , @RestApiParam(name = "id", type = "long", paramType = RestApiParamType.QUERY, description = "Key ID to show (or specify a key)")
-            , @RestApiParam(name = "key", type = "string", paramType = RestApiParamType.QUERY, description = "Key to show")
+    @ApiOperation(value = "Returns a JSON array of all canned keys, or optionally, gets information about a specific canned key", nickname = "/cannedKey/showKey", httpMethod = "POST")
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+            , @ApiImplicitParam(name = "id", type = "long", paramType = "query", example = "Key ID to show (or specify a key)")
+            , @ApiImplicitParam(name = "key", type = "string", paramType = "query", example = "Key to show")
     ])
     @Transactional
     def showKey() {

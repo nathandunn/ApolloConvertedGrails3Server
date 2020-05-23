@@ -14,12 +14,7 @@ import org.bbop.apollo.track.TrackDefaults
 import org.grails.web.converters.exceptions.ConverterException
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
-import org.restapidoc.annotation.RestApi
-import org.restapidoc.annotation.RestApiMethod
-import org.restapidoc.annotation.RestApiParam
-import org.restapidoc.annotation.RestApiParams
-import org.restapidoc.pojo.RestApiParamType
-import org.restapidoc.pojo.RestApiVerb
+import io.swagger.annotations.*
 import org.springframework.web.multipart.commons.CommonsMultipartFile
 import org.springframework.web.multipart.support.AbstractMultipartHttpServletRequest
 
@@ -29,7 +24,7 @@ import java.nio.file.Path
 
 import static org.springframework.http.HttpStatus.NOT_FOUND
 
-@RestApi(name = "Organism Services", description = "Methods for managing organisms")
+@Api(value = "Organism Services: Methods for managing organisms")
 @Transactional(readOnly = true)
 class OrganismController {
 
@@ -46,12 +41,12 @@ class OrganismController {
   def fileService
 
 
-  @RestApiMethod(description = "Remove an organism", path = "/organism/deleteOrganism", verb = RestApiVerb.POST)
-  @RestApiParams(params = [
-    @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-    , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-    , @RestApiParam(name = "id", type = "string or number", paramType = RestApiParamType.QUERY, description = "Pass an Organism ID or commonName that corresponds to the organism to be removed")
-    , @RestApiParam(name = "organism", type = "string or number", paramType = RestApiParamType.QUERY, description = "Pass an Organism ID or commonName that corresponds to the organism to be removed")
+  @ApiOperation(value = "Remove an organism", nickname = "/organism/deleteOrganism", httpMethod = "POST")
+  @ApiImplicitParams([
+    @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+    , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+    , @ApiImplicitParam(name = "id", type = "string or number", paramType = "query", example = "Pass an Organism ID or commonName that corresponds to the organism to be removed")
+    , @ApiImplicitParam(name = "organism", type = "string or number", paramType = "query", example = "Pass an Organism ID or commonName that corresponds to the organism to be removed")
   ])
   @Transactional
   def deleteOrganism() {
@@ -111,12 +106,12 @@ class OrganismController {
     }
   }
 
-  @RestApiMethod(description = "Delete an organism along with its data directory and returns a JSON object containing properties of the deleted organism", path = "/organism/deleteOrganismWithSequence", verb = RestApiVerb.POST)
-  @RestApiParams(params = [
-    @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-    , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-    , @RestApiParam(name = "organism", type = "string", paramType = RestApiParamType.QUERY, description = "ID or commonName that can be used to uniquely identify an organism")
-    , @RestApiParam(name = "id", type = "string", paramType = RestApiParamType.QUERY, description = "ID or commonName that can be used to uniquely identify an organism")
+  @ApiOperation(value = "Delete an organism along with its data directory and returns a JSON object containing properties of the deleted organism", nickname = "/organism/deleteOrganismWithSequence", httpMethod = "POST")
+  @ApiImplicitParams([
+    @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+    , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+    , @ApiImplicitParam(name = "organism", type = "string", paramType = "query", example = "ID or commonName that can be used to uniquely identify an organism")
+    , @ApiImplicitParam(name = "id", type = "string", paramType = "query", example = "ID or commonName that can be used to uniquely identify an organism")
   ])
   @Transactional
   def deleteOrganismWithSequence() {
@@ -182,12 +177,12 @@ class OrganismController {
     render responseObject as JSON
   }
 
-  @RestApiMethod(description = "Remove features from an organism", path = "/organism/deleteOrganismFeatures", verb = RestApiVerb.POST)
-  @RestApiParams(params = [
-    @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-    , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-    , @RestApiParam(name = "organism", type = "string", paramType = RestApiParamType.QUERY, description = "ID or commonName that can be used to uniquely identify an organism.")
-    , @RestApiParam(name = "sequences", type = "string", paramType = RestApiParamType.QUERY, description = "(optional) Comma-delimited sequence names on that organism if only certain sequences should be deleted.")
+  @ApiOperation(value = "Remove features from an organism", nickname = "/organism/deleteOrganismFeatures", httpMethod = "POST")
+  @ApiImplicitParams([
+    @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+    , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+    , @ApiImplicitParam(name = "organism", type = "string", paramType = "query", example = "ID or commonName that can be used to uniquely identify an organism.")
+    , @ApiImplicitParam(name = "sequences", type = "string", paramType = "query", example = "(optional) Comma-delimited sequence names on that organism if only certain sequences should be deleted.")
   ])
   @NotTransactional
   def deleteOrganismFeatures() {
@@ -235,20 +230,20 @@ class OrganismController {
   }
 
 
-  @RestApiMethod(description = "Adds an organism returning a JSON array of all organisms", path = "/organism/addOrganismWithSequence", verb = RestApiVerb.POST)
-  @RestApiParams(params = [
-    @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-    , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-    , @RestApiParam(name = "species", type = "string", paramType = RestApiParamType.QUERY, description = "species name")
-    , @RestApiParam(name = "genus", type = "string", paramType = RestApiParamType.QUERY, description = "species genus")
-    , @RestApiParam(name = "blatdb", type = "string", paramType = RestApiParamType.QUERY, description = "filesystem path for a BLAT database (e.g. a .2bit file) if not uploaded")
-    , @RestApiParam(name = "publicMode", type = "boolean", paramType = RestApiParamType.QUERY, description = "a flag for whether the organism appears as in the public genomes list")
-    , @RestApiParam(name = "commonName", type = "string", paramType = RestApiParamType.QUERY, description = "commonName for an organism")
-    , @RestApiParam(name = "nonDefaultTranslationTable", type = "string", paramType = RestApiParamType.QUERY, description = "non-default translation table")
-    , @RestApiParam(name = "metadata", type = "string", paramType = RestApiParamType.QUERY, description = "organism metadata")
-    , @RestApiParam(name = "organismData", type = "file", paramType = RestApiParamType.QUERY, description = "zip or tar.gz compressed data directory (if other options not used).  Blat data should include a .2bit suffix and be in a directory 'searchDatabaseData'")
-    , @RestApiParam(name = "sequenceData", type = "file", paramType = RestApiParamType.QUERY, description = "FASTA file (optionally compressed) to automatically upload with")
-    , @RestApiParam(name = "searchDatabaseData", type = "file", paramType = RestApiParamType.QUERY, description = "2bit file for blat search (optional)")
+  @ApiOperation(value = "Adds an organism returning a JSON array of all organisms", nickname = "/organism/addOrganismWithSequence", httpMethod = "POST")
+  @ApiImplicitParams([
+    @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+    , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+    , @ApiImplicitParam(name = "species", type = "string", paramType = "query", example = "species name")
+    , @ApiImplicitParam(name = "genus", type = "string", paramType = "query", example = "species genus")
+    , @ApiImplicitParam(name = "blatdb", type = "string", paramType = "query", example = "filesystem path for a BLAT database (e.g. a .2bit file) if not uploaded")
+    , @ApiImplicitParam(name = "publicMode", type = "boolean", paramType = "query", example = "a flag for whether the organism appears as in the public genomes list")
+    , @ApiImplicitParam(name = "commonName", type = "string", paramType = "query", example = "commonName for an organism")
+    , @ApiImplicitParam(name = "nonDefaultTranslationTable", type = "string", paramType = "query", example = "non-default translation table")
+    , @ApiImplicitParam(name = "metadata", type = "string", paramType = "query", example = "organism metadata")
+    , @ApiImplicitParam(name = "organismData", type = "file", paramType = "query", example = "zip or tar.gz compressed data directory (if other options not used).  Blat data should include a .2bit suffix and be in a directory 'searchDatabaseData'")
+    , @ApiImplicitParam(name = "sequenceData", type = "file", paramType = "query", example = "FASTA file (optionally compressed) to automatically upload with")
+    , @ApiImplicitParam(name = "searchDatabaseData", type = "file", paramType = "query", example = "2bit file for blat search (optional)")
   ])
   @Transactional
   def addOrganismWithSequence() {
@@ -437,12 +432,12 @@ class OrganismController {
     render returnObject as JSON
   }
 
-  @RestApiMethod(description = "Removes an added track from an existing organism returning a JSON object containing all tracks for the current organism.", path = "/organism/removeTrackFromOrganism", verb = RestApiVerb.POST)
-  @RestApiParams(params = [
-    @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-    , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-    , @RestApiParam(name = "organism", type = "string", paramType = RestApiParamType.QUERY, description = "ID or commonName that can be used to uniquely identify an organism")
-    , @RestApiParam(name = "trackLabel", type = "string", paramType = RestApiParamType.QUERY, description = "Name of track")
+  @ApiOperation(value = "Removes an added track from an existing organism returning a JSON object containing all tracks for the current organism.", nickname = "/organism/removeTrackFromOrganism", httpMethod = "POST")
+  @ApiImplicitParams([
+    @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+    , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+    , @ApiImplicitParam(name = "organism", type = "string", paramType = "query", example = "ID or commonName that can be used to uniquely identify an organism")
+    , @ApiImplicitParam(name = "trackLabel", type = "string", paramType = "query", example = "Name of track")
   ])
   @Transactional
   def removeTrackFromOrganism() {
@@ -520,15 +515,15 @@ class OrganismController {
   }
 
 
-  @RestApiMethod(description = "Adds a track to an existing organism returning a JSON object containing all tracks for the current organism.", path = "/organism/addTrackToOrganism", verb = RestApiVerb.POST)
-  @RestApiParams(params = [
-    @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-    , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-    , @RestApiParam(name = "organism", type = "string", paramType = RestApiParamType.QUERY, description = "ID or commonName that can be used to uniquely identify an organism")
-    , @RestApiParam(name = "trackData", type = "string", paramType = RestApiParamType.QUERY, description = "zip or tar.gz compressed track data")
-    , @RestApiParam(name = "trackFile", type = "string", paramType = RestApiParamType.QUERY, description = "track file (*.bam, *.vcf, *.bw, *gff)")
-    , @RestApiParam(name = "trackFileIndex", type = "string", paramType = RestApiParamType.QUERY, description = "index (*.bai, *.tbi)")
-    , @RestApiParam(name = "trackConfig", type = "string", paramType = RestApiParamType.QUERY, description = "Track configuration (JBrowse JSON)")
+  @ApiOperation(value = "Adds a track to an existing organism returning a JSON object containing all tracks for the current organism.", nickname = "/organism/addTrackToOrganism", httpMethod = "POST")
+  @ApiImplicitParams([
+    @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+    , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+    , @ApiImplicitParam(name = "organism", type = "string", paramType = "query", example = "ID or commonName that can be used to uniquely identify an organism")
+    , @ApiImplicitParam(name = "trackData", type = "string", paramType = "query", example = "zip or tar.gz compressed track data")
+    , @ApiImplicitParam(name = "trackFile", type = "string", paramType = "query", example = "track file (*.bam, *.vcf, *.bw, *gff)")
+    , @ApiImplicitParam(name = "trackFileIndex", type = "string", paramType = "query", example = "index (*.bai, *.tbi)")
+    , @ApiImplicitParam(name = "trackConfig", type = "string", paramType = "query", example = "Track configuration (JBrowse JSON)")
   ])
   @Transactional
   def addTrackToOrganism() {
@@ -820,12 +815,12 @@ class OrganismController {
     render returnObject as JSON
   }
 
-  @RestApiMethod(description = "Deletes a track from an existing organism and returns a JSON object of the deleted track's configuration", path = "/organism/deleteTrackFromOrganism", verb = RestApiVerb.POST)
-  @RestApiParams(params = [
-    @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-    , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-    , @RestApiParam(name = "organism", type = "string", paramType = RestApiParamType.QUERY, description = "ID or commonName that can be used to uniquely identify an organism")
-    , @RestApiParam(name = "trackLabel", type = "string", paramType = RestApiParamType.QUERY, description = "Track label corresponding to the track that is to be deleted")
+  @ApiOperation(value = "Deletes a track from an existing organism and returns a JSON object of the deleted track's configuration", nickname = "/organism/deleteTrackFromOrganism", httpMethod = "POST")
+  @ApiImplicitParams([
+    @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+    , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+    , @ApiImplicitParam(name = "organism", type = "string", paramType = "query", example = "ID or commonName that can be used to uniquely identify an organism")
+    , @ApiImplicitParam(name = "trackLabel", type = "string", paramType = "query", example = "Track label corresponding to the track that is to be deleted")
   ])
   @Transactional
   def deleteTrackFromOrganism() {
@@ -944,12 +939,12 @@ class OrganismController {
     render returnObject as JSON
   }
 
-  @RestApiMethod(description = "Update a track in an existing organism returning a JSON object containing old and new track configurations", path = "/organism/updateTrackForOrganism", verb = RestApiVerb.POST)
-  @RestApiParams(params = [
-    @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-    , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-    , @RestApiParam(name = "organism", type = "string", paramType = RestApiParamType.QUERY, description = "ID or commonName that can be used to uniquely identify an organism")
-    , @RestApiParam(name = "trackConfig", type = "string", paramType = RestApiParamType.QUERY, description = "Track configuration (JBrowse JSON)")
+  @ApiOperation(value = "Update a track in an existing organism returning a JSON object containing old and new track configurations", nickname = "/organism/updateTrackForOrganism", httpMethod = "POST")
+  @ApiImplicitParams([
+    @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+    , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+    , @ApiImplicitParam(name = "organism", type = "string", paramType = "query", example = "ID or commonName that can be used to uniquely identify an organism")
+    , @ApiImplicitParam(name = "trackConfig", type = "string", paramType = "query", example = "Track configuration (JBrowse JSON)")
   ])
   @Transactional
   def updateTrackForOrganism() {
@@ -1079,18 +1074,18 @@ class OrganismController {
     render returnObject as JSON
   }
 
-  @RestApiMethod(description = "Adds an organism returning a JSON array of all organisms", path = "/organism/addOrganism", verb = RestApiVerb.POST)
-  @RestApiParams(params = [
-    @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-    , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-    , @RestApiParam(name = "directory", type = "string", paramType = RestApiParamType.QUERY, description = "Filesystem path for the organisms data directory (required)")
-    , @RestApiParam(name = "commonName", type = "string", paramType = RestApiParamType.QUERY, description = "A name used for the organism")
-    , @RestApiParam(name = "species", type = "string", paramType = RestApiParamType.QUERY, description = "(optional) Species name")
-    , @RestApiParam(name = "genus", type = "string", paramType = RestApiParamType.QUERY, description = "(optional) Species genus")
-    , @RestApiParam(name = "blatdb", type = "string", paramType = RestApiParamType.QUERY, description = "(optional) Filesystem path for a BLAT database (e.g. a .2bit file)")
-    , @RestApiParam(name = "publicMode", type = "boolean", paramType = RestApiParamType.QUERY, description = "(optional) A flag for whether the organism appears as in the public genomes list (default false)")
-    , @RestApiParam(name = "metadata", type = "string", paramType = RestApiParamType.QUERY, description = "(optional) Organism metadata")
-    , @RestApiParam(name = "returnAllOrganisms", type = "boolean", paramType = RestApiParamType.QUERY, description = "(optional) Return all organisms (true / false) (default true)")
+  @ApiOperation(value = "Adds an organism returning a JSON array of all organisms", nickname = "/organism/addOrganism", httpMethod = "POST")
+  @ApiImplicitParams([
+    @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+    , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+    , @ApiImplicitParam(name = "directory", type = "string", paramType = "query", example = "Filesystem path for the organisms data directory (required)")
+    , @ApiImplicitParam(name = "commonName", type = "string", paramType = "query", example = "A name used for the organism")
+    , @ApiImplicitParam(name = "species", type = "string", paramType = "query", example = "(optional) Species name")
+    , @ApiImplicitParam(name = "genus", type = "string", paramType = "query", example = "(optional) Species genus")
+    , @ApiImplicitParam(name = "blatdb", type = "string", paramType = "query", example = "(optional) Filesystem path for a BLAT database (e.g. a .2bit file)")
+    , @ApiImplicitParam(name = "publicMode", type = "boolean", paramType = "query", example = "(optional) A flag for whether the organism appears as in the public genomes list (default false)")
+    , @ApiImplicitParam(name = "metadata", type = "string", paramType = "query", example = "(optional) Organism metadata")
+    , @ApiImplicitParam(name = "returnAllOrganisms", type = "boolean", paramType = "query", example = "(optional) Return all organisms (true / false) (default true)")
   ])
   @Transactional
   def addOrganism() {
@@ -1175,11 +1170,11 @@ class OrganismController {
     }
   }
 
-  @RestApiMethod(description = "Finds sequences for a given organism and returns a JSON object including the username, organism and a JSONArray of sequences", path = "/organism/getSequencesForOrganism", verb = RestApiVerb.POST)
-  @RestApiParams(params = [
-    @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-    , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-    , @RestApiParam(name = "organism", type = "string", paramType = RestApiParamType.QUERY, description = "Common name or ID for the organism")
+  @ApiOperation(value = "Finds sequences for a given organism and returns a JSON object including the username, organism and a JSONArray of sequences", nickname = "/organism/getSequencesForOrganism", httpMethod = "POST")
+  @ApiImplicitParams([
+    @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+    , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+    , @ApiImplicitParam(name = "organism", type = "string", paramType = "query", example = "Common name or ID for the organism")
   ])
   def getSequencesForOrganism() {
     JSONObject organismJson = permissionService.handleInput(request, params)
@@ -1260,21 +1255,21 @@ class OrganismController {
   }
 
 
-  @RestApiMethod(description = "Adds an organism returning a JSON array of all organisms", path = "/organism/updateOrganismInfo", verb = RestApiVerb.POST)
-  @RestApiParams(params = [
-    @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-    , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-    , @RestApiParam(name = "id", type = "long", paramType = RestApiParamType.QUERY, description = "unique id of organism to change")
-    , @RestApiParam(name = "directory", type = "string", paramType = RestApiParamType.QUERY, description = "filesystem path for the organisms data directory (required)")
-    , @RestApiParam(name = "species", type = "string", paramType = RestApiParamType.QUERY, description = "species name")
-    , @RestApiParam(name = "genus", type = "string", paramType = RestApiParamType.QUERY, description = "species genus")
-    , @RestApiParam(name = "blatdb", type = "string", paramType = RestApiParamType.QUERY, description = "filesystem path for a BLAT database (e.g. a .2bit file)")
-    , @RestApiParam(name = "publicMode", type = "boolean", paramType = RestApiParamType.QUERY, description = "a flag for whether the organism appears as in the public genomes list")
-    , @RestApiParam(name = "name", type = "string", paramType = RestApiParamType.QUERY, description = "a common name used for the organism")
-    , @RestApiParam(name = "nonDefaultTranslationTable", type = "string", paramType = RestApiParamType.QUERY, description = "non-default translation table")
-    , @RestApiParam(name = "metadata", type = "string", paramType = RestApiParamType.QUERY, description = "organism metadata")
-    , @RestApiParam(name = "organismData", type = "file", paramType = RestApiParamType.QUERY, description = "zip or tar.gz compressed data directory (if other options not used).  Blat data should include a .2bit suffix and be in a directory 'searchDatabaseData'")
-    , @RestApiParam(name = "noReloadSequences", type = "boolean", paramType = RestApiParamType.QUERY, description = "(default false) If set to true, then sequences will not be reloaded if the organism directory changes.")
+  @ApiOperation(value = "Adds an organism returning a JSON array of all organisms", nickname = "/organism/updateOrganismInfo", httpMethod = "POST")
+  @ApiImplicitParams([
+    @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+    , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+    , @ApiImplicitParam(name = "id", type = "long", paramType = "query", example = "unique id of organism to change")
+    , @ApiImplicitParam(name = "directory", type = "string", paramType = "query", example = "filesystem path for the organisms data directory (required)")
+    , @ApiImplicitParam(name = "species", type = "string", paramType = "query", example = "species name")
+    , @ApiImplicitParam(name = "genus", type = "string", paramType = "query", example = "species genus")
+    , @ApiImplicitParam(name = "blatdb", type = "string", paramType = "query", example = "filesystem path for a BLAT database (e.g. a .2bit file)")
+    , @ApiImplicitParam(name = "publicMode", type = "boolean", paramType = "query", example = "a flag for whether the organism appears as in the public genomes list")
+    , @ApiImplicitParam(name = "name", type = "string", paramType = "query", example = "a common name used for the organism")
+    , @ApiImplicitParam(name = "nonDefaultTranslationTable", type = "string", paramType = "query", example = "non-default translation table")
+    , @ApiImplicitParam(name = "metadata", type = "string", paramType = "query", example = "organism metadata")
+    , @ApiImplicitParam(name = "organismData", type = "file", paramType = "query", example = "zip or tar.gz compressed data directory (if other options not used).  Blat data should include a .2bit suffix and be in a directory 'searchDatabaseData'")
+    , @ApiImplicitParam(name = "noReloadSequences", type = "boolean", paramType = "query", example = "(default false) If set to true, then sequences will not be reloaded if the organism directory changes.")
   ])
   @Transactional
   def updateOrganismInfo() {
@@ -1356,13 +1351,13 @@ class OrganismController {
     }
   }
 
-  @RestApiMethod(description = "Set official gene set track name", path = "/organism/setOfficialGeneSetTrack", verb = RestApiVerb.POST)
-  @RestApiParams(params = [
-    @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-    , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-    , @RestApiParam(name = "id", type = "long", paramType = RestApiParamType.QUERY, description = "(required) unique id of organism to change")
-    , @RestApiParam(name = "trackLabel", type = "string", paramType = RestApiParamType.QUERY, description = "(required) Official track name, if empty string or not specified the official track will be removed")
-    , @RestApiParam(name = "trackCommand", type = "string", paramType = RestApiParamType.QUERY, description = "(required) ADD, REMOVE, CLEAR")
+  @ApiOperation(value = "Set official gene set track name", nickname = "/organism/setOfficialGeneSetTrack", httpMethod = "POST")
+  @ApiImplicitParams([
+    @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+    , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+    , @ApiImplicitParam(name = "id", type = "long", paramType = "query", example = "(required) unique id of organism to change")
+    , @ApiImplicitParam(name = "trackLabel", type = "string", paramType = "query", example = "(required) Official track name, if empty string or not specified the official track will be removed")
+    , @ApiImplicitParam(name = "trackCommand", type = "string", paramType = "query", example = "(required) ADD, REMOVE, CLEAR")
   ])
   @Transactional
   def updateOfficialGeneSetTrack() {
@@ -1409,12 +1404,12 @@ class OrganismController {
     }
   }
 
-  @RestApiMethod(description = "Update organism metadata", path = "/organism/updateOrganismMetadata", verb = RestApiVerb.POST)
-  @RestApiParams(params = [
-    @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-    , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-    , @RestApiParam(name = "id", type = "long", paramType = RestApiParamType.QUERY, description = "unique id of organism to change")
-    , @RestApiParam(name = "metadata", type = "string", paramType = RestApiParamType.QUERY, description = "organism metadata")
+  @ApiOperation(value = "Update organism metadata", nickname = "/organism/updateOrganismMetadata", httpMethod = "POST")
+  @ApiImplicitParams([
+    @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+    , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+    , @ApiImplicitParam(name = "id", type = "long", paramType = "query", example = "unique id of organism to change")
+    , @ApiImplicitParam(name = "metadata", type = "string", paramType = "query", example = "organism metadata")
   ])
   @Transactional
   def updateOrganismMetadata() {
@@ -1439,11 +1434,11 @@ class OrganismController {
     }
   }
 
-  @RestApiMethod(description = "Get creator metadata for organism, returns userId as String", path = "/organism/getOrganismCreator", verb = RestApiVerb.POST)
-  @RestApiParams(params = [
-    @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-    , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-    , @RestApiParam(name = "organism", type = "string", paramType = RestApiParamType.QUERY, description = "ID or commonName that can be used to uniquely identify an organism")
+  @ApiOperation(value = "Get creator metadata for organism, returns userId as String", nickname = "/organism/getOrganismCreator", httpMethod = "POST")
+  @ApiImplicitParams([
+    @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+    , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+    , @ApiImplicitParam(name = "organism", type = "string", paramType = "query", example = "ID or commonName that can be used to uniquely identify an organism")
   ])
   def getOrganismCreator() {
     JSONObject organismJson = permissionService.handleInput(request, params)
@@ -1466,11 +1461,11 @@ class OrganismController {
 
   }
 
-  @RestApiMethod(description = "Returns a JSON array of all organisms, or optionally, gets information about a specific organism", path = "/organism/findAllOrganisms", verb = RestApiVerb.POST)
-  @RestApiParams(params = [
-    @RestApiParam(name = "username", type = "email", paramType = RestApiParamType.QUERY)
-    , @RestApiParam(name = "password", type = "password", paramType = RestApiParamType.QUERY)
-    , @RestApiParam(name = "organism", type = "string", paramType = RestApiParamType.QUERY, description = "(optional) ID or commonName that can be used to uniquely identify an organism")
+  @ApiOperation(value = "Returns a JSON array of all organisms, or optionally, gets information about a specific organism", nickname = "/organism/findAllOrganisms", httpMethod = "POST")
+  @ApiImplicitParams([
+    @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+    , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+    , @ApiImplicitParam(name = "organism", type = "string", paramType = "query", example = "(optional) ID or commonName that can be used to uniquely identify an organism")
   ])
   def findAllOrganisms() {
     try {
