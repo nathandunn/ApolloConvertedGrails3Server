@@ -21,7 +21,7 @@ class SequenceTranslationHandler {
      * @param sequence - String for the nucleotide sequence to be reverse complemented
      * @return Reverse complemented nucleotide sequence
      */
-    public static String reverseComplementSequence(String sequence) {
+    static String reverseComplementSequence(String sequence) {
         StringBuilder buffer = new StringBuilder(sequence);
         buffer.reverse();
         for (int i = 0; i < buffer.length(); ++i) {

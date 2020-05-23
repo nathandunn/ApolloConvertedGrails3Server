@@ -1,6 +1,6 @@
 package org.bbop.apollo
 
-import grails.transaction.Transactional
+import grails.gorm.transactions.Transactional
 import org.apache.commons.compress.archivers.ArchiveInputStream
 import org.apache.commons.compress.archivers.ArchiveStreamFactory
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry

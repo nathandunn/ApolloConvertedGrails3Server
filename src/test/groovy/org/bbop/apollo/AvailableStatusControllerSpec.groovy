@@ -1,13 +1,13 @@
 package org.bbop.apollo
 
+import grails.testing.gorm.DomainUnitTest
+import grails.testing.web.controllers.ControllerUnitTest
 
-
-import grails.test.mixin.*
-import spock.lang.*
-
+//import org.grails.testing.GrailsUnitTest
+import spock.lang.Specification
 @TestFor(AvailableStatusController)
 @Mock([AvailableStatus,AvailableStatusOrganismFilter])
-class AvailableStatusControllerSpec extends Specification {
+class AvailableStatusControllerSpec extends Specification implements ControllerUnitTest<AvailableStatusController{
 
     def populateValidParams(params) {
         assert params != null

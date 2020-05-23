@@ -1,7 +1,7 @@
 package org.bbop.apollo
 
 import grails.converters.JSON
-import grails.transaction.Transactional
+import grails.gorm.transactions.Transactional
 import org.bbop.apollo.sequence.SequenceDTO
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject

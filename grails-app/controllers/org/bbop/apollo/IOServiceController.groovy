@@ -8,7 +8,6 @@ import org.bbop.apollo.sequence.DownloadFile
 import org.bbop.apollo.sequence.Strand
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
-import org.grails.plugins.metrics.groovy.Timed
 import org.restapidoc.annotation.RestApi
 import org.restapidoc.annotation.RestApiMethod
 import org.restapidoc.annotation.RestApiParam
@@ -68,7 +67,7 @@ class IOServiceController extends AbstractApolloController {
     , @RestApiParam(name = "region", type = "String", paramType = RestApiParamType.QUERY, description = "Highlighted genomic region to export in form sequence:min..max  e.g., chr3:1001..1034")
     ]
     )
-    @Timed
+
     def write() {
         File outputFile = null
         try {
@@ -295,7 +294,7 @@ class IOServiceController extends AbstractApolloController {
             , @RestApiParam(name = "format", type = "string", paramType = RestApiParamType.QUERY, description = "'gzip' or 'text'")
     ]
     )
-    @Timed
+
     def download() {
         String uuid = params.uuid
         DownloadFile downloadFile = fileMap.remove(uuid)

@@ -1,7 +1,7 @@
 package org.bbop.apollo
 
-import grails.transaction.NotTransactional
-import grails.transaction.Transactional
+import grails.gorm.transactions.NotTransactional
+import grails.gorm.transactions.Transactional
 import groovy.io.FileType
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
 import org.bbop.apollo.sequence.SequenceTranslationHandler

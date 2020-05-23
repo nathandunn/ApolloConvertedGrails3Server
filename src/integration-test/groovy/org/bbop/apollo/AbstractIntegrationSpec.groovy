@@ -1,6 +1,7 @@
 package org.bbop.apollo
 
-import grails.test.spock.IntegrationSpec
+import grails.testing.mixin.integration.Integration
+import grails.transaction.Rollback
 import org.apache.shiro.SecurityUtils
 import org.apache.shiro.authc.UsernamePasswordToken
 import org.apache.shiro.crypto.hash.Sha256Hash
@@ -11,11 +12,14 @@ import org.bbop.apollo.gwt.shared.FeatureStringEnum
 import org.bbop.apollo.gwt.shared.GlobalPermissionEnum
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
+import spock.lang.Specification
 
 /**
  * Created by nathandunn on 11/4/15.
  */
-class AbstractIntegrationSpec extends IntegrationSpec{
+@Integration
+@Rollback
+class AbstractIntegrationSpec extends Specification{
 
     def shiroSecurityManager
 

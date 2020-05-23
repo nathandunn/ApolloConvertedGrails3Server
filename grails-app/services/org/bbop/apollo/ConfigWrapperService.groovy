@@ -1,6 +1,6 @@
 package org.bbop.apollo
 
-import grails.transaction.Transactional
+import grails.gorm.transactions.Transactional
 import org.bbop.apollo.sequence.Overlapper
 import org.bbop.apollo.sequence.SequenceTranslationHandler
 import org.bbop.apollo.sequence.TranslationTable

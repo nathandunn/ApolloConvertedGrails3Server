@@ -1,7 +1,7 @@
 package org.bbop.apollo
 
-import grails.transaction.NotTransactional
-import grails.transaction.Transactional
+import grails.gorm.transactions.NotTransactional
+import grails.gorm.transactions.Transactional
 import org.apache.commons.collections.map.MultiKeyMap
 import org.bbop.apollo.gwt.shared.track.NclistColumnEnum
 import org.bbop.apollo.gwt.shared.track.TrackIndex

@@ -1,7 +1,7 @@
 package org.bbop.apollo
 
 
-import grails.transaction.Transactional
+import grails.gorm.transactions.Transactional
 
 //import grails.compiler.GrailsCompileStatic
 import org.bbop.apollo.sequence.SequenceTranslationHandler

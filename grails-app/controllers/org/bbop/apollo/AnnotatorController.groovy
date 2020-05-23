@@ -1,8 +1,8 @@
 package org.bbop.apollo
 
 import grails.converters.JSON
-import grails.transaction.NotTransactional
-import grails.transaction.Transactional
+import grails.gorm.transactions.NotTransactional
+import grails.gorm.transactions.Transactional
 import org.bbop.apollo.event.AnnotationEvent
 import org.bbop.apollo.gwt.shared.ClientTokenGenerator
 import org.bbop.apollo.gwt.shared.FeatureStringEnum

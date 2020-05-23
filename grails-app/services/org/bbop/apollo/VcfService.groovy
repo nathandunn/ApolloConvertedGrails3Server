@@ -1,6 +1,6 @@
 package org.bbop.apollo
 
-import grails.transaction.Transactional
+import grails.gorm.transactions.Transactional
 import htsjdk.variant.variantcontext.Genotype
 import htsjdk.variant.variantcontext.VariantContext
 import htsjdk.variant.variantcontext.VariantContextUtils

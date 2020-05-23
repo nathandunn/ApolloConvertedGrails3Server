@@ -1,7 +1,7 @@
 package org.bbop.apollo.go
 
 import grails.converters.JSON
-import grails.transaction.Transactional
+import grails.gorm.transactions.Transactional
 import org.bbop.apollo.Feature
 import org.bbop.apollo.User
 import org.bbop.apollo.gwt.shared.PermissionEnum

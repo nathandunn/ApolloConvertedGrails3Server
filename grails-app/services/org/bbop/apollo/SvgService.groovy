@@ -1,6 +1,6 @@
 package org.bbop.apollo
 
-import grails.transaction.Transactional
+import grails.gorm.transactions.Transactional
 import org.apache.batik.dom.GenericDOMImplementation
 import org.apache.batik.ext.awt.geom.Polygon2D
 import org.apache.batik.svggen.SVGGraphics2D

@@ -1,6 +1,6 @@
 package org.bbop.apollo.provenance
 
-import grails.transaction.Transactional
+import grails.gorm.transactions.Transactional
 import org.bbop.apollo.Feature
 import org.bbop.apollo.Gff3ConstantEnum
 import org.bbop.apollo.Provenance

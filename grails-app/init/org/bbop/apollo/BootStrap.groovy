@@ -35,7 +35,7 @@ class BootStrap {
         SequenceTranslationHandler.spliceAcceptorSites.addAll(configWrapperService.spliceAcceptorSites)
 
         if(FeatureType.count==0){
-            featureTypeService.stubDefaultFeatureTypes(
+            featureTypeService.stubDefaultFeatureTypes()
         }
 
         roleService.initRoles()

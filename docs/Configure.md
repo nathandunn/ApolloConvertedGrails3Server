@@ -166,9 +166,9 @@ To over-ride the default logging, you can look at the logging configurations fro
 
 ``` 
 log4j.main = {
-    error 'org.codehaus.groovy.grails.web.servlet',  // controllers
-          'org.codehaus.groovy.grails.web.pages',    // GSP
-          'org.codehaus.groovy.grails.web.sitemesh', // layouts
+    error 'org.grails.web.servlet',  // controllers
+          'org.grails.web.pages',    // GSP
+          'org.grails.web.sitemesh', // layouts
            ...
     warn 'grails.app'
 }

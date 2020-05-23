@@ -1,7 +1,7 @@
 package org.bbop.apollo
 
 
-import grails.transaction.Transactional
+import grails.gorm.transactions.Transactional
 import org.bbop.apollo.gwt.shared.GlobalPermissionEnum
 
 @Transactional

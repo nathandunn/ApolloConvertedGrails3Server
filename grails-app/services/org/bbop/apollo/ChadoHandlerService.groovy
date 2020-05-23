@@ -1,6 +1,6 @@
 package org.bbop.apollo
 
-import grails.transaction.Transactional
+import grails.gorm.transactions.Transactional
 import org.grails.web.json.JSONObject
 
 import java.security.MessageDigest

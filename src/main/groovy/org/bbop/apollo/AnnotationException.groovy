@@ -3,8 +3,8 @@ package org.bbop.apollo
 /**
  * Created by ndunn on 10/28/14.
  */
-class PermissionException extends Exception{
-    def PermissionException(String gString) {
+class AnnotationException extends Exception{
+    AnnotationException(String gString) {
         super(gString)
     }
 }

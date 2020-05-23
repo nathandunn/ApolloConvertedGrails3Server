@@ -1,7 +1,7 @@
 package org.bbop.apollo
 
 import grails.converters.JSON
-import grails.transaction.Transactional
+import grails.gorm.transactions.Transactional
 import org.bbop.apollo.alteration.SequenceAlterationInContext
 import org.bbop.apollo.geneProduct.GeneProduct
 import org.bbop.apollo.go.GoAnnotation
@@ -10,9 +10,8 @@ import org.bbop.apollo.sequence.SequenceTranslationHandler
 import org.bbop.apollo.sequence.Strand
 import org.bbop.apollo.sequence.TranslationTable
 import org.grails.web.json.JSONArray
-import org.codehaus.groovy.grails.web.json.JSONException
+import org.grails.web.json.JSONException
 import org.grails.web.json.JSONObject
-import org.grails.plugins.metrics.groovy.Timed
 import org.hibernate.FlushMode
 
 @Transactional(readOnly = true)
@@ -52,7 +51,7 @@ class FeatureService {
   public static final PSEUDOGENIC_FEATURE_TYPES = [Pseudogene.cvTerm, PseudogenicRegion.cvTerm, ProcessedPseudogene.cvTerm]
 
 
-  @Timed
+
   @Transactional
   FeatureLocation convertJSONToFeatureLocation(JSONObject jsonLocation, Sequence sequence, int defaultStrand = Strand.POSITIVE.value) throws JSONException {
     FeatureLocation gsolLocation = new FeatureLocation();
@@ -188,7 +187,7 @@ class FeatureService {
    * @return
    */
 
-  @Timed
+
   @Transactional
   def generateTranscript(JSONObject jsonTranscript, Sequence sequence, boolean suppressHistory, boolean useCDS = configWrapperService.useCDS(), boolean useName = false) {
     log.debug "jsonTranscript: ${jsonTranscript.toString()}"
@@ -481,7 +480,7 @@ class FeatureService {
    * @param feature
    * @return
    */
-  @Timed
+
   Feature getTopLevelFeature(Feature feature) {
     Collection<Feature> parents = feature?.childFeatureRelationships*.parentFeature
     if (parents) {
@@ -492,7 +491,7 @@ class FeatureService {
   }
 
 
-  @Timed
+
   @Transactional
   def removeExonOverlapsAndAdjacenciesForFeature(Feature feature) {
     if (feature instanceof Gene) {
@@ -618,7 +617,7 @@ class FeatureService {
 //        }
   }
 
-  @Timed
+
   @Transactional
   def calculateCDS(Transcript transcript, boolean readThroughStopCodon) {
     CDS cds = transcriptService.getCDS(transcript);
@@ -1179,7 +1178,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
  *
  */
 
-  @Timed
+
   @Transactional
   void setLongestORF(Transcript transcript, boolean readThroughStopCodon) {
     Organism organism = transcript.featureLocation.sequence.organism
@@ -1299,7 +1298,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
   }
 
 
-  @Timed
+
   @Transactional
   Feature convertJSONToFeature(JSONObject jsonFeature, Sequence sequence) {
     Feature gsolFeature
@@ -1940,7 +1939,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
    * @param includeSequence
    * @return
    */
-  @Timed
+
   JSONObject convertFeatureToJSONLite(Feature gsolFeature, boolean includeSequence = false, int depth) {
     JSONObject jsonFeature = new JSONObject();
     if (gsolFeature.id) {
@@ -2074,7 +2073,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
    * @param includeSequence
    * @return
    */
-  @Timed
+
   JSONObject convertFeatureToJSON(Feature gsolFeature, boolean includeSequence = false) {
     log.debug "converting features to json ${gsolFeature}"
     JSONObject jsonFeature = new JSONObject()
@@ -2342,7 +2341,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
     return jsonObject
   }
 
-  @Timed
+
   JSONObject convertFeatureLocationToJSON(FeatureLocation gsolFeatureLocation) throws JSONException {
     JSONObject jsonFeatureLocation = new JSONObject();
     if (gsolFeatureLocation.id) {

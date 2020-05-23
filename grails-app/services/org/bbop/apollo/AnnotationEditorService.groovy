@@ -1,8 +1,7 @@
 package org.bbop.apollo
 
-import grails.transaction.NotTransactional
-import grails.transaction.Transactional
-import static java.util.Calendar.YEAR
+import grails.gorm.transactions.NotTransactional
+import grails.gorm.transactions.Transactional
 import groovy.json.JsonBuilder
 
 @Transactional
@@ -10,7 +9,7 @@ class AnnotationEditorService {
 
 
     @NotTransactional
-    String cleanorg.grails.web.json.JSONArrayring(String inputString){
+    String cleanJSONString(String inputString){
         String outputString = new String(inputString)
         // remove leading string
         outputString = outputString.indexOf("\"")==0 ? outputString.substring(1) : outputString

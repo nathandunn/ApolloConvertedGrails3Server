@@ -1,8 +1,9 @@
 package org.bbop.apollo
 
 import grails.converters.JSON
-import grails.transaction.NotTransactional
-import grails.transaction.Transactional
+import grails.gorm.transactions.NotTransactional
+import grails.gorm.transactions.Transactional
+import grails.web.servlet.mvc.GrailsParameterMap
 import org.apache.shiro.SecurityUtils
 import org.apache.shiro.authc.UsernamePasswordToken
 import org.apache.shiro.session.Session
@@ -13,7 +14,6 @@ import org.bbop.apollo.gwt.shared.PermissionEnum
 import org.bbop.apollo.preference.UserOrganismPreferenceDTO
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
-import org.codehaus.groovy.grails.web.servlet.mvc.GrailsParameterMap
 
 import javax.servlet.http.HttpServletRequest
 
@@ -22,7 +22,6 @@ class PermissionService {
 
     def preferenceService
     def configWrapperService
-    def grailsApplication
 
 
     def remoteUserAuthenticatorService

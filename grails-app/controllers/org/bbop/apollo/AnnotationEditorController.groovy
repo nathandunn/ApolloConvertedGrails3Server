@@ -10,9 +10,8 @@ import org.bbop.apollo.gwt.shared.FeatureStringEnum
 import org.bbop.apollo.gwt.shared.PermissionEnum
 import org.bbop.apollo.sequence.TranslationTable
 import org.grails.web.json.JSONArray
-import org.codehaus.groovy.grails.web.json.JSONException
+import org.grails.web.json.JSONException
 import org.grails.web.json.JSONObject
-import org.grails.plugins.metrics.groovy.Timed
 import org.restapidoc.annotation.RestApi
 import org.restapidoc.annotation.RestApiMethod
 import org.restapidoc.annotation.RestApiParam
@@ -75,7 +74,7 @@ class AnnotationEditorController extends AbstractApolloController implements Ann
     /**
      * @return
      */
-    @Timed
+
     def getUserPermission() {
         log.debug "getUserPermission ${params.data}"
         JSONObject returnObject = permissionService.handleInput(request, params)
@@ -131,7 +130,7 @@ class AnnotationEditorController extends AbstractApolloController implements Ann
             , @RestApiParam(name = "sequence", type = "string", paramType = RestApiParamType.QUERY, description = "Sequence name")
             , @RestApiParam(name = "features", type = "JSONArray", paramType = RestApiParamType.QUERY, description = "JSONArray of JSON feature objects unique names.")
     ])
-    @Timed
+
     def getHistoryForFeatures() {
         log.debug "getHistoryForFeatures ${params}"
         JSONObject inputObject = permissionService.handleInput(request, params)
@@ -467,7 +466,7 @@ class AnnotationEditorController extends AbstractApolloController implements Ann
             , @RestApiParam(name = "sequence", type = "string", paramType = RestApiParamType.QUERY, description = "(optional) Sequence name")
             , @RestApiParam(name = "organism", type = "string", paramType = RestApiParamType.QUERY, description = "(optional) Organism ID or common name")
     ])
-    @Timed
+
     def getSequenceAlterations() {
         JSONObject returnObject = permissionService.handleInput(request, params)
         Sequence sequence = permissionService.checkPermissions(returnObject, PermissionEnum.READ)
@@ -1231,7 +1230,7 @@ class AnnotationEditorController extends AbstractApolloController implements Ann
 
     @MessageMapping("/AnnotationNotification")
     @SendTo("/topic/AnnotationNotification")
-    @Timed
+
     protected String annotationEditor(String inputString, Principal principal) {
         inputString = annotationEditorService.cleanJSONString(inputString)
         JSONObject rootElement = (JSONObject) JSON.parse(inputString)

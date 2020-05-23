@@ -1,13 +1,12 @@
 package org.bbop.apollo
 
 import grails.converters.JSON
-import grails.transaction.Transactional
+import grails.gorm.transactions.Transactional
 import org.bbop.apollo.event.AnnotationEvent
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
 import org.bbop.apollo.history.FeatureOperation
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
-import org.grails.plugins.metrics.groovy.Timed
 
 import java.text.DateFormat
 
@@ -56,7 +55,7 @@ class FeatureEventService {
      * @param user
      * @return
      */
-    @Timed
+
     List<FeatureEvent> addSplitFeatureEvent(String name1, String uniqueName1, String name2, String uniqueName2
                                             , JSONObject commandObject, JSONObject oldFeatureObject
                                             , JSONArray newFeatureArray
@@ -142,7 +141,7 @@ class FeatureEventService {
      * @param user
      * @return
      */
-    @Timed
+
     List<FeatureEvent> addMergeFeatureEvent(String geneName1, String uniqueName1, String geneName2, String uniqueName2, JSONObject commandObject, JSONArray oldFeatureArray, JSONObject newFeatureObject,
                                             User user) {
         List<FeatureEvent> featureEventList = new ArrayList<>()
@@ -207,7 +206,7 @@ class FeatureEventService {
     /**
      * For non-split , non-merge operations
      */
-    @Timed
+
     def addNewFeatureEvent(FeatureOperation featureOperation, String name, String uniqueName, JSONObject inputCommand, JSONArray oldFeatureArray, JSONArray newFeatureArray, User user) {
 
         Map<String, Map<Long, FeatureEvent>> featureEventMap = extractFeatureEventGroup(uniqueName)
@@ -332,7 +331,7 @@ class FeatureEventService {
      * @param featureEventMap
      * @return
      */
-    @Timed
+
     List<List<FeatureEvent>> findPreviousFeatureEvents(FeatureEvent featureEvent) {
         Map<Integer, Set<FeatureEvent>> map = new TreeMap<Integer, Set<FeatureEvent>>()
         buildMap(featureEvent, map, 0, true, false)
@@ -377,7 +376,7 @@ class FeatureEventService {
  * @param featureEvent
  * @return
  */
-    @Timed
+
     List<List<FeatureEvent>> findFutureFeatureEvents(FeatureEvent featureEvent) {
         Map<Integer, Set<FeatureEvent>> map = new TreeMap<Integer, Set<FeatureEvent>>()
         buildMap(featureEvent, map, 0, false, true)
@@ -390,7 +389,7 @@ class FeatureEventService {
     }
 
 
-    @Timed
+
     def addNewFeatureEvent(FeatureOperation featureOperation, String name, String uniqueName, JSONObject inputCommand, JSONObject oldJsonObject, JSONObject newJsonObject, User user) {
         JSONArray newFeatureArray = new JSONArray()
         newFeatureArray.add(newJsonObject)
@@ -733,7 +732,7 @@ class FeatureEventService {
      * @param uniqueName
      * @return
      */
-    @Timed
+
     List<FeatureEvent> findCurrentFeatureEvent(String uniqueName, Map<String, Map<Long, FeatureEvent>> featureEventMap = null) {
         featureEventMap = featureEventMap ?: extractFeatureEventGroup(uniqueName)
 

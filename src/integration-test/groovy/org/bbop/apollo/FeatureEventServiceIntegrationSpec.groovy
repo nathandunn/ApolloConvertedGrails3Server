@@ -4,7 +4,7 @@ import grails.converters.JSON
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
 import org.bbop.apollo.history.FeatureOperation
 import org.grails.web.json.JSONArray
-import org.codehaus.groovy.grails.web.json.JSONException
+import org.grails.web.json.JSONException
 import org.grails.web.json.JSONObject
 
 class FeatureEventServiceIntegrationSpec extends AbstractIntegrationSpec {

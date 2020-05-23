@@ -1,7 +1,7 @@
 package org.bbop.apollo
 
-import grails.transaction.NotTransactional
-import grails.transaction.Transactional
+import grails.gorm.transactions.NotTransactional
+import grails.gorm.transactions.Transactional
 
 @Transactional
 class JbrowseService {

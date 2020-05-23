@@ -1,6 +1,6 @@
 package org.bbop.apollo.authenticator
 
-import grails.transaction.Transactional
+import grails.gorm.transactions.Transactional
 import org.apache.shiro.SecurityUtils
 import org.apache.shiro.authc.AuthenticationException
 import org.apache.shiro.authc.UsernamePasswordToken
