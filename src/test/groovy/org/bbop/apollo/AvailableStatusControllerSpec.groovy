@@ -7,7 +7,7 @@ import grails.testing.web.controllers.ControllerUnitTest
 import spock.lang.Specification
 @TestFor(AvailableStatusController)
 @Mock([AvailableStatus,AvailableStatusOrganismFilter])
-class AvailableStatusControllerSpec extends Specification implements ControllerUnitTest<AvailableStatusController{
+class AvailableStatusControllerSpec extends Specification implements ControllerUnitTest<AvailableStatusController>{
 
     def populateValidParams(params) {
         assert params != null
