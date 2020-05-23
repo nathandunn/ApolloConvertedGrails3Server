@@ -46,6 +46,8 @@ dependencies {
     runtime 'org.postgresql:postgresql:9.4.1212'
     compile 'commons-codec:commons-codec:1.2'
     compile 'commons-collections:commons-collections:3.2.1'
+    compile group: 'commons-fileupload', name: 'commons-fileupload', version: '1.2'
+
 
     // HTSJDK
     compile group: 'com.github.samtools', name: 'htsjdk', version: '2.21.2'

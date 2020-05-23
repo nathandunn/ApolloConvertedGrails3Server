@@ -189,7 +189,7 @@ class FeatureService {
 
 
   @Transactional
-  def generateTranscript(JSONObject jsonTranscript, Sequence sequence, boolean suppressHistory, boolean useCDS = configWrapperService.useCDS(), boolean useName = false) {
+  def generateTranscript(JSONObject jsonTranscript, Sequence sequence, boolean suppressHistory, boolean useCDS , boolean useName = false) {
     log.debug "jsonTranscript: ${jsonTranscript.toString()}"
     Gene gene = jsonTranscript.has(FeatureStringEnum.PARENT_ID.value) ? (Gene) Feature.findByUniqueName(jsonTranscript.getString(FeatureStringEnum.PARENT_ID.value)) : null;
     Transcript transcript = null
@@ -3315,7 +3315,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
       Transcript transcript = null
       if (type == MRNA.cvTerm) {
         // *RNA to mRNA
-        transcript = generateTranscript(currentFeatureJsonObject, sequence, true)
+        transcript = generateTranscript(currentFeatureJsonObject, sequence, true,configWrapperService.useCDS())
         setLongestORF(transcript)
       } else {
         // *RNA to *RNA
