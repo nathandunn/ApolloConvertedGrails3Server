@@ -2,6 +2,8 @@ package org.bbop.apollo
 
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
+import grails.testing.gorm.DomainUnitTest
+import grails.testing.services.ServiceUnitTest
 import org.bbop.apollo.history.FeatureOperation
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
@@ -11,9 +13,9 @@ import spock.lang.Specification
 /**
  * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
  */
-@TestFor(FeatureEventService)
-@Mock([FeatureEvent])
-class FeatureEventServiceSpec extends Specification {
+//@TestFor(FeatureEventService)
+//@Mock([FeatureEvent])
+class FeatureEventServiceSpec extends Specification implements ServiceUnitTest<FeatureEventService>, DomainUnitTest<FeatureEvent>{
 
     Date today = new Date()
     String classUniqueName = "uniqueName"

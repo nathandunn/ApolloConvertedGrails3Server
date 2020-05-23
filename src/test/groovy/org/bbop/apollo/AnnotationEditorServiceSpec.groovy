@@ -1,12 +1,13 @@
 package org.bbop.apollo
 
 import grails.test.mixin.TestFor
+import grails.testing.services.ServiceUnitTest
 import spock.lang.Specification
 
 /**
  */
-@TestFor(AnnotationEditorService)
-class AnnotationEditorServiceSpec extends Specification {
+//@TestFor(AnnotationEditorService)
+class AnnotationEditorServiceSpec extends Specification implements  ServiceUnitTest<AnnotationEditorService>{
 
     def setup() {
     }

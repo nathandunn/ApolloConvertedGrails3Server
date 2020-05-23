@@ -1,11 +1,14 @@
 package org.bbop.apollo
 
+//import grails.test.mixin.Mock
+//import grails.test.mixin.TestFor
+import grails.testing.gorm.DomainUnitTest
 import grails.testing.web.controllers.ControllerUnitTest
 
 import spock.lang.Specification
-@TestFor(AvailableStatusController)
-@Mock([AvailableStatus,AvailableStatusOrganismFilter])
-class AvailableStatusControllerSpec extends Specification implements ControllerUnitTest<AvailableStatusController>{
+//@TestFor(AvailableStatusController)
+//@Mock([AvailableStatus,AvailableStatusOrganismFilter])
+class AvailableStatusControllerSpec extends Specification implements ControllerUnitTest<AvailableStatusController>,DomainUnitTest<AvailableStatus>{
 
     def populateValidParams(params) {
         assert params != null
@@ -13,6 +16,10 @@ class AvailableStatusControllerSpec extends Specification implements ControllerU
     }
 
     void "Test the index action returns the correct model"() {
+        given:
+//        Mock(AvailableStatusOrganismFilter)
+//        controller.
+
 
         when:"The index action is executed"
             controller.index()

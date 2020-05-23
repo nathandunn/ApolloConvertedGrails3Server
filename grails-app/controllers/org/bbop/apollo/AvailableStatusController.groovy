@@ -29,11 +29,12 @@ class AvailableStatusController {
         params.max = Math.min(max ?: 10, 100)
         def availableStatuss = AvailableStatus.list(params)
         def organismFilterMap = [:]
-        AvailableStatusOrganismFilter.findAllByAvailableStatusInList(availableStatuss).each() {
-            List filterList = organismFilterMap.containsKey(it.availableStatus) ? organismFilterMap.get(it.availableStatus) : []
-            filterList.add(it)
-            organismFilterMap[it.availableStatus] = filterList
-        }
+        // TODO: re-enable by moving ot a service
+//        AvailableStatusOrganismFilter.findAllByAvailableStatusInList(availableStatuss).each() {
+//            List filterList = organismFilterMap.containsKey(it.availableStatus) ? organismFilterMap.get(it.availableStatus) : []
+//            filterList.add(it)
+//            organismFilterMap[it.availableStatus] = filterList
+//        }
         respond availableStatuss, model: [availableStatusInstanceCount: AvailableStatus.count(), organismFilters: organismFilterMap]
     }
 

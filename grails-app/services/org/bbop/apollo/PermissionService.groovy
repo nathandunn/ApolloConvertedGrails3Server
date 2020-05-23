@@ -402,6 +402,7 @@ class PermissionService {
     }
 
     Boolean checkPermissions(PermissionEnum requiredPermissionEnum) {
+        // TODO: remove this line
         return true
         try {
             Session session = SecurityUtils.subject.getSession(false)
@@ -545,6 +546,7 @@ class PermissionService {
      * @return
      */
     Boolean hasGlobalPermissions(JSONObject jsonObject, GlobalPermissionEnum permissionEnum) {
+        // TODO: remove this line
         return true
         // check the authentication
         // we need to validate the session before we check for the username
