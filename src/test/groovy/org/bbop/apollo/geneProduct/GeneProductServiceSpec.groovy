@@ -1,7 +1,7 @@
 package org.bbop.apollo.geneProduct
 
-import grails.test.mixin.Mock
-import grails.test.mixin.TestFor
+import grails.testing.gorm.DataTest
+import grails.testing.services.ServiceUnitTest
 import org.bbop.apollo.Feature
 import org.bbop.apollo.FeatureLocation
 import org.bbop.apollo.FeatureRelationship
@@ -11,12 +11,12 @@ import spock.lang.Specification
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
-@TestFor(GeneProductService)
-@Mock([Feature, GeneProduct])
-class GeneProductServiceSpec extends Specification {
+class GeneProductServiceSpec extends Specification implements ServiceUnitTest<GeneProductService>, DataTest{
 
 
-    def setup() {
+    def setupSpec() {
+        mockDomain GeneProduct
+        mockDomain Feature
     }
 
     def cleanup() {
