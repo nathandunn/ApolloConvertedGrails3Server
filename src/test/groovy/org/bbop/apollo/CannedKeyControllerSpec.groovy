@@ -9,7 +9,7 @@ import spock.lang.*
 
 //@TestFor(CannedKeyController)
 //@Mock([CannedKey,CannedKeyOrganismFilter])
-class CannedKeyControllerSpec extends Specification implements ControllerUnitTest<CannedKey>, DataTest{
+class CannedKeyControllerSpec extends Specification implements ControllerUnitTest<CannedKeyController>, DataTest{
 
 
     def setup(){
