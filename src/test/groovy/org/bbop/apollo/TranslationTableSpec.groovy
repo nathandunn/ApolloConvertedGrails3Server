@@ -1,7 +1,5 @@
 package org.bbop.apollo
 
-import grails.test.mixin.TestFor
-import org.bbop.apollo.sequence.SequenceTranslationHandler
 import org.bbop.apollo.sequence.TranslationTable
 import org.bbop.apollo.sequence.SequenceTranslationHandler
 import spock.lang.Specification
@@ -41,7 +39,7 @@ class TranslationTableSpec extends Specification {
     void "can I read in translation tables"() {
 
         given:
-        File file = new File("web-app/translation_tables/ncbi_11_translation_table.txt")
+        File file = new File("src/main/webapp/translation_tables/ncbi_11_translation_table.txt")
 
         when: "we read a translation table"
         TranslationTable translationTable = SequenceTranslationHandler.readTable(file)
