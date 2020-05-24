@@ -28,7 +28,7 @@ class GeneProductServiceSpec extends Specification implements ServiceUnitTest<Ge
 
 
     void "test parsing input"(){
-        given: "given an inputt string"
+        given: "given an input string"
         String inputString = "rank=1;term=trans prod 1;db_xref=transprodref1:1111;evidence=ECO:0000318;alternate=true;note=[];based_on=['transprod1wtih2:2222','transprod1with1:1111'];last_updated=2020-03-12 12:01:01.382;date_created=2020-03-12 12:01:01.38,rank=2;term=trans prod 2;db_xref=transref2:2222;evidence=ECO:0000315;alternate=false;note=[];based_on=['trandprod2:33333'];last_updated=2020-03-12 12:01:28.469;date_created=2020-03-12 12:01:28.469"
 
         when: "we format the string"
