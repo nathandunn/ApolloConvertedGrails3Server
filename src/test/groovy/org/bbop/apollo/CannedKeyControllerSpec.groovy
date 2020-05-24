@@ -3,11 +3,19 @@ package org.bbop.apollo
 
 
 import grails.test.mixin.*
+import grails.testing.gorm.DataTest
+import grails.testing.web.controllers.ControllerUnitTest
 import spock.lang.*
 
-@TestFor(CannedKeyController)
-@Mock([CannedKey,CannedKeyOrganismFilter])
-class CannedKeyControllerSpec extends Specification {
+//@TestFor(CannedKeyController)
+//@Mock([CannedKey,CannedKeyOrganismFilter])
+class CannedKeyControllerSpec extends Specification implements ControllerUnitTest<CannedKey>, DataTest{
+
+
+    def setup(){
+        mockDomain CannedKey
+        mockDomain CannedKeyOrganismFilter
+    }
 
     def populateValidParams(params) {
         assert params != null

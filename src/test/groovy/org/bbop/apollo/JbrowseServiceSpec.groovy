@@ -1,13 +1,14 @@
 package org.bbop.apollo
 
 import grails.test.mixin.TestFor
+import grails.testing.services.ServiceUnitTest
 import spock.lang.Specification
 
 /**
  * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
  */
-@TestFor(JbrowseService)
-class JbrowseServiceSpec extends Specification {
+//@TestFor(JbrowseService)
+class JbrowseServiceSpec extends Specification implements ServiceUnitTest<JbrowseService>{
 
     String path1 = "yeast/include/myTrackMetaData.csv"
     String path2 = "/opt/apollo/yeast/"

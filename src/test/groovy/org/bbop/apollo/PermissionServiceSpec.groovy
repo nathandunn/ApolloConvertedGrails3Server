@@ -38,7 +38,7 @@ class PermissionServiceSpec extends Specification {
         
         Organism organism = new Organism(
                 commonName: "Honeybee"
-                ,directory:  "test/integration/resources/sequences/honeybee-Group1.10/"
+                ,directory:  "src/integration-test/groovy/resources/sequences/honeybee-Group1.10/"
         ).save()
     }
 

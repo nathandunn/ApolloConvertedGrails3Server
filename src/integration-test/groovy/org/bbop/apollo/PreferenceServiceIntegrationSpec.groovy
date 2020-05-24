@@ -42,7 +42,7 @@ class PreferenceServiceIntegrationSpec extends AbstractIntegrationSpec {
         subject.login(authToken)
 
         Organism organism1 = new Organism(
-                directory: "test/integration/resources/sequences/honeybee-tracks/"
+                directory: "src/integration-test/groovy/resources/sequences/honeybee-tracks/"
                 , commonName: "honeybee"
                 , genus: "Honey"
                 , species: "bee"
@@ -72,7 +72,7 @@ class PreferenceServiceIntegrationSpec extends AbstractIntegrationSpec {
         organism1.save(flush: true, failOnError: true)
 
         Organism organism2 = new Organism(
-                directory: "test/integration/resources/sequences/yeast/"
+                directory: "src/integration-test/groovy/resources/sequences/yeast/"
                 , commonName: "yeast"
                 , genus: "Sample"
                 , species: "animal"

@@ -1,6 +1,9 @@
 package org.bbop.apollo
 
 import grails.test.mixin.TestFor
+import grails.testing.gorm.DataTest
+import grails.testing.gorm.DomainUnitTest
+import grails.testing.services.ServiceUnitTest
 import org.bbop.apollo.sequence.SequenceDTO
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
@@ -10,8 +13,8 @@ import spock.lang.Specification
 /**
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */
-@TestFor(TrackService)
-class TrackServiceSpec extends Specification {
+//@TestFor(TrackService)
+class TrackServiceSpec extends Specification implements ServiceUnitTest<TrackService>, DataTest{
 
     def setup() {
         service.trackMapperService = new TrackMapperService()
@@ -25,8 +28,8 @@ class TrackServiceSpec extends Specification {
         given: "an NCList object for the C. elegans gene flp-1"
         // http://jbrowse.alliancegenome.org/jbrowse/index.html?data=data%2FMus%20musculus&tracks=All%20Genes&highlight=&lookupSymbol=Msx2&loc=13%3A53463164..53476782
 //        http://localhost:8080/apollo/track/Mus%20musculus/All%20Genes/13:53466884..53473074.json?name=Msx2&ignoreCache=true
-        String ncListString = new File("test/integration/resources/track-data/inputNcList.json").text
-        String classesForTrackString = new File("test/integration/resources/track-data/trackClasses.json").text
+        String ncListString = new File("src/integration-test/groovy/resources/track-data/inputNcList.json").text
+        String classesForTrackString = new File("src/integration-test/groovy/resources/track-data/trackClasses.json").text
 
 
         JSONArray ncListArray = new JSONArray(ncListString)
@@ -78,7 +81,7 @@ class TrackServiceSpec extends Specification {
     void "flatten nested mouse"() {
 
         given: "a nested JSON object"
-        JSONArray inputArray = new JSONArray(new File("test/integration/resources/track-data/mouseMsx2.json").text)
+        JSONArray inputArray = new JSONArray(new File("src/integration-test/groovy/resources/track-data/mouseMsx2.json").text)
 
 
         when: "we flatten it"
@@ -110,7 +113,7 @@ class TrackServiceSpec extends Specification {
     void "flatten nested worm"() {
 
         given: "a nested JSON object"
-        JSONArray inputArray = new JSONArray(new File("test/integration/resources/track-data/wormGeneflp-1.json").text)
+        JSONArray inputArray = new JSONArray(new File("src/integration-test/groovy/resources/track-data/wormGeneflp-1.json").text)
 
 
         when: "we flatten it"

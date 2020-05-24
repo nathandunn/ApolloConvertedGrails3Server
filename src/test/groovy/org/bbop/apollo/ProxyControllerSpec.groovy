@@ -3,11 +3,13 @@ package org.bbop.apollo
 
 
 import grails.test.mixin.*
+import grails.testing.gorm.DomainUnitTest
+import grails.testing.web.controllers.ControllerUnitTest
 import spock.lang.*
 
-@TestFor(ProxyController)
-@Mock(Proxy)
-class ProxyControllerSpec extends Specification {
+//@TestFor(ProxyController)
+//@Mock(Proxy)
+class ProxyControllerSpec extends Specification implements ControllerUnitTest<ProxyController>, DomainUnitTest<Proxy>{
 
     def populateValidParams(params) {
         assert params != null

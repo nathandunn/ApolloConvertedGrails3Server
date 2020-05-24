@@ -1,14 +1,21 @@
 package org.bbop.apollo
 
+import grails.testing.gorm.DataTest
+
 //import grails.test.mixin.Mock
 //import grails.test.mixin.TestFor
 import grails.testing.gorm.DomainUnitTest
 import grails.testing.web.controllers.ControllerUnitTest
-
+import org.bbop.apollo.geneProduct.GeneProduct
 import spock.lang.Specification
 //@TestFor(AvailableStatusController)
 //@Mock([AvailableStatus,AvailableStatusOrganismFilter])
-class AvailableStatusControllerSpec extends Specification implements ControllerUnitTest<AvailableStatusController>,DomainUnitTest<AvailableStatus>{
+class AvailableStatusControllerSpec extends Specification implements ControllerUnitTest<AvailableStatusController>, DataTest{
+
+    def setup() {
+        mockDomain AvailableStatus
+        mockDomain AvailableStatusOrganismFilter
+    }
 
     def populateValidParams(params) {
         assert params != null

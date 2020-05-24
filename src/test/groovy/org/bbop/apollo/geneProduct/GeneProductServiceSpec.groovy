@@ -14,7 +14,7 @@ import spock.lang.Specification
 class GeneProductServiceSpec extends Specification implements ServiceUnitTest<GeneProductService>, DataTest{
 
 
-    def setupSpec() {
+    def setup() {
         mockDomain GeneProduct
         mockDomain Feature
     }

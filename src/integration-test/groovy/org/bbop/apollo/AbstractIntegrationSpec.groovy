@@ -56,7 +56,7 @@ class AbstractIntegrationSpec extends Specification{
         subject.login(authToken)
 
         Organism organism = new Organism(
-                directory: "test/integration/resources/sequences/honeybee-Group1.10/"
+                directory: "src/integration-test/groovy/resources/sequences/honeybee-Group1.10/"
                 ,commonName: "sampleAnimal"
                 ,genus: "Sample"
                 ,species: "animal"

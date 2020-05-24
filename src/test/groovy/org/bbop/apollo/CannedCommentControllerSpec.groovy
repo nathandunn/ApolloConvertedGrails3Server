@@ -3,11 +3,18 @@ package org.bbop.apollo
 
 
 import grails.test.mixin.*
+import grails.testing.gorm.DataTest
+import grails.testing.web.controllers.ControllerUnitTest
 import spock.lang.*
 
-@TestFor(CannedCommentController)
-@Mock([CannedComment,CannedCommentOrganismFilter])
-class CannedCommentControllerSpec extends Specification {
+//@TestFor(CannedCommentController)
+//@Mock([CannedComment,CannedCommentOrganismFilter])
+class CannedCommentControllerSpec extends Specification implements ControllerUnitTest<CannedCommentController> , DataTest{
+
+    def setup(){
+        mockDomain CannedComment
+        mockDomain CannedCommentOrganismFilter
+    }
 
     def populateValidParams(params) {
         assert params != null

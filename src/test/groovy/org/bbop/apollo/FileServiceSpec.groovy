@@ -12,7 +12,7 @@ import java.nio.file.Paths
 @TestFor(FileService)
 class FileServiceSpec extends Specification {
 
-    private final String FINAL_DIRECTORY = "test/unit/resources/archive_tests/"
+    private final String FINAL_DIRECTORY = "src/test/groovy/resources/archive_tests/"
 
     File parentDir = new File(FINAL_DIRECTORY+"data")
     File fileA = new File(FINAL_DIRECTORY+"data/a.txt")

@@ -3,12 +3,18 @@ package org.bbop.apollo
 
 
 import grails.test.mixin.*
+import grails.testing.gorm.DataTest
+import grails.testing.web.controllers.ControllerUnitTest
 import org.bbop.apollo.history.FeatureOperation
 import spock.lang.*
 
-@TestFor(FeatureEventController)
-@Mock(FeatureEvent)
-class FeatureEventControllerSpec extends Specification {
+//@TestFor(FeatureEventController)
+//@Mock(FeatureEvent)
+class FeatureEventControllerSpec extends Specification implements ControllerUnitTest<FeatureEventController>, DataTest{
+
+    def setup(){
+        mockDomain FeatureEvent
+    }
 
     def populateValidParams(params) {
         assert params != null
