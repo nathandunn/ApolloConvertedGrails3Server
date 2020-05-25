@@ -1,8 +1,12 @@
 package org.bbop.apollo
 
 import grails.converters.JSON
+import grails.testing.mixin.integration.Integration
+import grails.transaction.Rollback
 import org.grails.web.json.JSONObject
 
+@Integration
+@Rollback
 class ChadoHandlerServiceIntegrationSpec extends AbstractIntegrationSpec{
 
     // NOTE: This is set to prevent rollback at the end of the integration test

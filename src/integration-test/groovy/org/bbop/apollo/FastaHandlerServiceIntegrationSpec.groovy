@@ -1,8 +1,12 @@
 package org.bbop.apollo
 
 import grails.converters.JSON
+import grails.testing.mixin.integration.Integration
+import grails.transaction.Rollback
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
 
+@Integration
+@Rollback
 class FastaHandlerServiceIntegrationSpec extends AbstractIntegrationSpec{
 
     def requestHandlingService 

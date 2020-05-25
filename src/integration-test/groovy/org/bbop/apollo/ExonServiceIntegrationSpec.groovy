@@ -1,7 +1,11 @@
 package org.bbop.apollo
 
+import grails.testing.mixin.integration.Integration
+import grails.transaction.Rollback
 import org.bbop.apollo.sequence.Strand
 
+@Integration
+@Rollback
 class ExonServiceIntegrationSpec extends AbstractIntegrationSpec{
     
     def exonService

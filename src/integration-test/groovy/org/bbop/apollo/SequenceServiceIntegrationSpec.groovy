@@ -1,13 +1,17 @@
 package org.bbop.apollo
 
 import grails.converters.JSON
+import grails.testing.mixin.integration.Integration
+import grails.transaction.Rollback
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
 import org.grails.web.json.JSONObject
 
 import java.util.zip.CRC32
 
+@Integration
+@Rollback
 class SequenceServiceIntegrationSpec extends AbstractIntegrationSpec{
-    
+
     def requestHandlingService
     def sequenceService
     def transcriptService

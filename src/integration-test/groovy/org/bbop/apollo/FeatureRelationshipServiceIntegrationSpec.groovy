@@ -1,5 +1,10 @@
 package org.bbop.apollo
 
+import grails.testing.mixin.integration.Integration
+import grails.transaction.Rollback
+
+@Integration
+@Rollback
 class FeatureRelationshipServiceIntegrationSpec extends AbstractIntegrationSpec{
     
     def featureRelationshipService

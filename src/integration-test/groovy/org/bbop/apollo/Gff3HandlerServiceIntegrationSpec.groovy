@@ -1,7 +1,11 @@
 package org.bbop.apollo
 
 import grails.converters.JSON
+import grails.testing.mixin.integration.Integration
+import grails.transaction.Rollback
 
+@Integration
+@Rollback
 class Gff3HandlerServiceIntegrationSpec extends AbstractIntegrationSpec{
    
     def gff3HandlerService

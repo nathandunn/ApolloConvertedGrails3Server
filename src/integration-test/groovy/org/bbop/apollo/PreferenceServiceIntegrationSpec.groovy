@@ -1,6 +1,8 @@
 package org.bbop.apollo
 
 import grails.converters.JSON
+import grails.testing.mixin.integration.Integration
+import grails.transaction.Rollback
 import org.apache.shiro.SecurityUtils
 import org.apache.shiro.authc.UsernamePasswordToken
 import org.apache.shiro.subject.Subject
@@ -11,6 +13,8 @@ import org.bbop.apollo.gwt.shared.GlobalPermissionEnum
 import org.bbop.apollo.preference.UserOrganismPreferenceDTO
 import org.grails.web.json.JSONObject
 
+@Integration
+@Rollback
 class PreferenceServiceIntegrationSpec extends AbstractIntegrationSpec {
 
 

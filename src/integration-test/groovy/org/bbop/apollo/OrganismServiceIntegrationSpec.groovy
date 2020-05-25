@@ -1,9 +1,13 @@
 package org.bbop.apollo
 
 import grails.converters.JSON
+import grails.testing.mixin.integration.Integration
+import grails.transaction.Rollback
 import org.grails.web.json.JSONObject
 import spock.lang.Ignore
 
+@Integration
+@Rollback
 class OrganismServiceIntegrationSpec extends AbstractIntegrationSpec{
 
     def organismService
