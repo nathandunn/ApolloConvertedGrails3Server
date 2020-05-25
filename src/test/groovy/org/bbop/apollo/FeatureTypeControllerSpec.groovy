@@ -24,7 +24,7 @@ class FeatureTypeControllerSpec extends Specification {
             controller.index()
 
         then:"The model is correct"
-            !model.featureTypeInstanceList
+            !model.featureTypeList
             model.featureTypeInstanceCount == 0
     }
 
@@ -33,7 +33,7 @@ class FeatureTypeControllerSpec extends Specification {
             controller.create()
 
         then:"The model is correctly created"
-            model.featureTypeInstance!= null
+            model.featureType!= null
     }
 
     void "Test the save action correctly persists an instance"() {
@@ -46,7 +46,7 @@ class FeatureTypeControllerSpec extends Specification {
             controller.save(featureType)
 
         then:"The create view is rendered again with the correct model"
-            model.featureTypeInstance!= null
+            model.featureType!= null
             view == 'create'
 
         when:"The save action is executed with a valid instance"
@@ -75,7 +75,7 @@ class FeatureTypeControllerSpec extends Specification {
             controller.show(featureType)
 
         then:"A model is populated containing the domain instance"
-            model.featureTypeInstance == featureType
+            model.featureType == featureType
     }
 
     void "Test that the edit action returns the correct model"() {
@@ -91,7 +91,7 @@ class FeatureTypeControllerSpec extends Specification {
             controller.edit(featureType)
 
         then:"A model is populated containing the domain instance"
-            model.featureTypeInstance == featureType
+            model.featureType == featureType
     }
 
     void "Test the update action performs an update on a valid domain instance"() {
@@ -113,7 +113,7 @@ class FeatureTypeControllerSpec extends Specification {
 
         then:"The edit view is rendered again with the invalid instance"
             view == 'edit'
-            model.featureTypeInstance == featureType
+            model.featureType == featureType
 
         when:"A valid domain instance is passed to the update action"
             response.reset()

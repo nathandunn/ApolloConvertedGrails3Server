@@ -36,7 +36,7 @@ class CannedCommentControllerSpec extends Specification implements ControllerUni
             controller.create()
 
         then:"The model is correctly created"
-            model.cannedCommentInstance!= null
+            model.cannedComment!= null
     }
 
     void "Test the save action correctly persists an instance"() {
@@ -49,7 +49,7 @@ class CannedCommentControllerSpec extends Specification implements ControllerUni
             controller.save(cannedComment)
 
         then:"The create view is rendered again with the correct model"
-            model.cannedCommentInstance!= null
+            model.cannedComment!= null
             view == 'create'
 
         when:"The save action is executed with a valid instance"
@@ -78,7 +78,7 @@ class CannedCommentControllerSpec extends Specification implements ControllerUni
             controller.show(cannedComment)
 
         then:"A model is populated containing the domain instance"
-            model.cannedCommentInstance == cannedComment
+            model.cannedComment == cannedComment
     }
 
     void "Test that the edit action returns the correct model"() {
@@ -94,7 +94,7 @@ class CannedCommentControllerSpec extends Specification implements ControllerUni
             controller.edit(cannedComment)
 
         then:"A model is populated containing the domain instance"
-            model.cannedCommentInstance == cannedComment
+            model.cannedComment == cannedComment
     }
 
     void "Test the update action performs an update on a valid domain instance"() {
@@ -116,7 +116,7 @@ class CannedCommentControllerSpec extends Specification implements ControllerUni
 
         then:"The edit view is rendered again with the invalid instance"
             view == 'edit'
-            model.cannedCommentInstance == cannedComment
+            model.cannedComment == cannedComment
 
         when:"A valid domain instance is passed to the update action"
             response.reset()

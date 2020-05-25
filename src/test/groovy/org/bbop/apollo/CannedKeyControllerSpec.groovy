@@ -29,7 +29,7 @@ class CannedKeyControllerSpec extends Specification implements ControllerUnitTes
             controller.index()
 
         then:"The model is correct"
-            !model.cannedKeyInstanceList
+            !model.cannedKeyList
             model.cannedKeyInstanceCount == 0
     }
 
@@ -38,7 +38,7 @@ class CannedKeyControllerSpec extends Specification implements ControllerUnitTes
             controller.create()
 
         then:"The model is correctly created"
-            model.cannedKeyInstance!= null
+            model.cannedKey!= null
     }
 
     void "Test the save action correctly persists an instance"() {
@@ -51,7 +51,7 @@ class CannedKeyControllerSpec extends Specification implements ControllerUnitTes
             controller.save(cannedKey)
 
         then:"The create view is rendered again with the correct model"
-            model.cannedKeyInstance!= null
+            model.cannedKey!= null
             view == 'create'
 
         when:"The save action is executed with a valid instance"
@@ -80,7 +80,7 @@ class CannedKeyControllerSpec extends Specification implements ControllerUnitTes
             controller.show(cannedKey)
 
         then:"A model is populated containing the domain instance"
-            model.cannedKeyInstance == cannedKey
+            model.cannedKey == cannedKey
     }
 
     void "Test that the edit action returns the correct model"() {
@@ -96,7 +96,7 @@ class CannedKeyControllerSpec extends Specification implements ControllerUnitTes
             controller.edit(cannedKey)
 
         then:"A model is populated containing the domain instance"
-            model.cannedKeyInstance == cannedKey
+            model.cannedKey == cannedKey
     }
 
     void "Test the update action performs an update on a valid domain instance"() {
@@ -118,7 +118,7 @@ class CannedKeyControllerSpec extends Specification implements ControllerUnitTes
 
         then:"The edit view is rendered again with the invalid instance"
             view == 'edit'
-            model.cannedKeyInstance == cannedKey
+            model.cannedKey == cannedKey
 
         when:"A valid domain instance is passed to the update action"
             response.reset()

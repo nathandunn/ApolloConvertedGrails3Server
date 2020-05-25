@@ -1,7 +1,6 @@
 package org.bbop.apollo
 
-
-
+import grails.converters.JSON
 import grails.test.mixin.*
 import grails.testing.gorm.DomainUnitTest
 import grails.testing.web.controllers.ControllerUnitTest
@@ -25,7 +24,7 @@ class ProxyControllerSpec extends Specification implements ControllerUnitTest<Pr
             controller.index()
 
         then:"The model is correct"
-            !model.proxyInstanceList
+            !model.proxyList
             model.proxyInstanceCount == 0
     }
 
@@ -34,7 +33,7 @@ class ProxyControllerSpec extends Specification implements ControllerUnitTest<Pr
             controller.create()
 
         then:"The model is correctly created"
-            model.proxyInstance!= null
+            model.proxy != null
     }
 
     void "Test the save action correctly persists an instance"() {
@@ -47,7 +46,7 @@ class ProxyControllerSpec extends Specification implements ControllerUnitTest<Pr
             controller.save(proxy)
 
         then:"The create view is rendered again with the correct model"
-            model.proxyInstance!= null
+            model.proxy!= null
             view == 'create'
 
         when:"The save action is executed with a valid instance"
@@ -76,7 +75,7 @@ class ProxyControllerSpec extends Specification implements ControllerUnitTest<Pr
             controller.show(proxy)
 
         then:"A model is populated containing the domain instance"
-            model.proxyInstance == proxy
+            model.proxy == proxy
     }
 
     void "Test that the edit action returns the correct model"() {
@@ -92,7 +91,7 @@ class ProxyControllerSpec extends Specification implements ControllerUnitTest<Pr
             controller.edit(proxy)
 
         then:"A model is populated containing the domain instance"
-            model.proxyInstance == proxy
+            model.proxy == proxy
     }
 
     void "Test the update action performs an update on a valid domain instance"() {
@@ -114,7 +113,7 @@ class ProxyControllerSpec extends Specification implements ControllerUnitTest<Pr
 
         then:"The edit view is rendered again with the invalid instance"
             view == 'edit'
-            model.proxyInstance == proxy
+            model.proxy == proxy
 
         when:"A valid domain instance is passed to the update action"
             response.reset()

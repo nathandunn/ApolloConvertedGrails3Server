@@ -32,7 +32,7 @@ class AvailableStatusControllerSpec extends Specification implements ControllerU
             controller.index()
 
         then:"The model is correct"
-            !model.availableStatusInstanceList
+            !model.availableStatusList
             model.availableStatusInstanceCount == 0
     }
 
@@ -41,7 +41,7 @@ class AvailableStatusControllerSpec extends Specification implements ControllerU
             controller.create()
 
         then:"The model is correctly created"
-            model.availableStatusInstance!= null
+            model.availableStatus!= null
     }
 
     void "Test the save action correctly persists an instance"() {
@@ -54,7 +54,7 @@ class AvailableStatusControllerSpec extends Specification implements ControllerU
             controller.save(availableStatus)
 
         then:"The create view is rendered again with the correct model"
-            model.availableStatusInstance!= null
+            model.availableStatus!= null
             view == 'create'
 
         when:"The save action is executed with a valid instance"
@@ -83,7 +83,7 @@ class AvailableStatusControllerSpec extends Specification implements ControllerU
             controller.show(availableStatus)
 
         then:"A model is populated containing the domain instance"
-            model.availableStatusInstance == availableStatus
+            model.availableStatus == availableStatus
     }
 
     void "Test that the edit action returns the correct model"() {
@@ -99,7 +99,7 @@ class AvailableStatusControllerSpec extends Specification implements ControllerU
             controller.edit(availableStatus)
 
         then:"A model is populated containing the domain instance"
-            model.availableStatusInstance == availableStatus
+            model.availableStatus == availableStatus
     }
 
     void "Test the update action performs an update on a valid domain instance"() {
@@ -121,7 +121,7 @@ class AvailableStatusControllerSpec extends Specification implements ControllerU
 
         then:"The edit view is rendered again with the invalid instance"
             view == 'edit'
-            model.availableStatusInstance == availableStatus
+            model.availableStatus == availableStatus
 
         when:"A valid domain instance is passed to the update action"
             response.reset()
