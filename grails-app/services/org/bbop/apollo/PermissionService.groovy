@@ -11,6 +11,9 @@ import org.apache.shiro.subject.Subject
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
 import org.bbop.apollo.gwt.shared.GlobalPermissionEnum
 import org.bbop.apollo.gwt.shared.PermissionEnum
+import org.bbop.apollo.preference.OrganismDTO
+import org.bbop.apollo.preference.SequenceDTO
+import org.bbop.apollo.preference.UserDTO
 import org.bbop.apollo.preference.UserOrganismPreferenceDTO
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
@@ -361,23 +364,6 @@ class PermissionService {
             // if an organism named Orgam exist. findByCommonNameIlike ignores the case.
             return Organism.findByCommonName(token)
         }
-    }
-
-    JSONObject getSessionPreferenceObject(String clientToken) {
-        try {
-            Session session = SecurityUtils.subject.getSession(false)
-            if (session) {
-//                printKeys(session)
-                String preferenceString = session.getAttribute(FeatureStringEnum.PREFERENCE.getValue() + "::" + clientToken)?.toString()
-                if (!preferenceString) return null
-                return JSON.parse(preferenceString) as JSONObject
-            } else {
-                log.debug "No session found"
-            }
-        } catch (e) {
-            log.debug "faild to get the gession preference objec5 ${e}"
-        }
-        return null
     }
 
     Organism getSessionOrganism(String clientToken) {
@@ -840,5 +826,137 @@ class PermissionService {
         return payloadJson
     }
 
+    SequenceDTO getDTOFromSequence(Sequence sequence) {
+//        if(!sequence) return null
+        OrganismDTO organismDTO = getDTOFromOrganism(sequence.organism)
+        SequenceDTO sequenceDTO = new SequenceDTO(
+            id: sequence.id
+            , organism: organismDTO
+            , name: sequence.name
+            , start: sequence.start
+            , end: sequence.end
+            , length: sequence.length
+        )
+        return sequenceDTO
+    }
+
+    OrganismDTO getDTOFromOrganism(Organism organism) {
+        OrganismDTO organismDTO = new OrganismDTO(
+            id: organism.id
+            , commonName: organism.commonName
+            , directory: organism.directory
+        )
+        return organismDTO
+    }
+
+    UserDTO getDTOFromUser(User user) {
+        UserDTO userDTO = new UserDTO(
+            id: user.id
+            , username: user.username
+        )
+        return userDTO
+    }
+
+
+    UserOrganismPreferenceDTO getSessionPreference(String clientToken) {
+        JSONObject preferenceObject = getSessionPreferenceObject(clientToken)
+        return preferenceObject ? getDTOPreferenceFromObject(preferenceObject) : null
+    }
+
+    UserOrganismPreferenceDTO getDTOPreferenceFromObject(JSONObject userOrganismPreferenceObject) {
+        OrganismDTO organismDTO = getDTOFromOrganismFromObject(userOrganismPreferenceObject.getJSONObject(FeatureStringEnum.ORGANISM.value))
+        SequenceDTO sequenceDTO = getDTOSequenceFromObject(userOrganismPreferenceObject.getJSONObject(FeatureStringEnum.SEQUENCE.value))
+        UserDTO userDTO = getDTOUserFromObject(userOrganismPreferenceObject.getJSONObject("user"))
+        UserOrganismPreferenceDTO userOrganismPreferenceDTO = new UserOrganismPreferenceDTO(
+            organism: organismDTO
+            , sequence: sequenceDTO
+            , id: userOrganismPreferenceObject.id
+            , user: userDTO
+            , currentOrganism: userOrganismPreferenceObject.currentOrganism
+            , nativeTrackList: userOrganismPreferenceObject.nativeTrackList
+            , startbp: userOrganismPreferenceObject.startbp
+            , endbp: userOrganismPreferenceObject.endbp
+            , clientToken: userOrganismPreferenceObject.clientToken
+        )
+        return userOrganismPreferenceDTO
+    }
+
+    UserDTO getDTOUserFromObject(JSONObject user) {
+        UserDTO userDTO = new UserDTO(
+            id: user.id
+            , username: user.username
+        )
+        return userDTO
+    }
+
+    SequenceDTO getDTOSequenceFromObject(JSONObject sequence) {
+        if (!sequence) return null
+        OrganismDTO organismDTO = getDTOFromOrganismFromObject(sequence.getJSONObject(FeatureStringEnum.ORGANISM.value))
+        SequenceDTO sequenceDTO = new SequenceDTO(
+            id: sequence.id
+            , organism: organismDTO
+            , name: sequence.name
+            , start: sequence.start
+            , end: sequence.end
+            , length: sequence.length
+        )
+        return sequenceDTO
+    }
+
+    OrganismDTO getDTOFromOrganismFromObject(JSONObject organism) {
+        OrganismDTO organismDTO = new OrganismDTO(
+            id: organism.id
+            , commonName: organism.commonName
+            , directory: organism.directory
+        )
+        return organismDTO
+    }
+
+
+    JSONObject getSessionPreferenceObject(String clientToken) {
+        try {
+            Session session = SecurityUtils.subject.getSession(false)
+            if (session) {
+//                printKeys(session)
+                String preferenceString = session.getAttribute(FeatureStringEnum.PREFERENCE.getValue() + "::" + clientToken)?.toString()
+                if (!preferenceString) return null
+                return JSON.parse(preferenceString) as JSONObject
+            } else {
+                log.debug "No session found"
+            }
+        } catch (e) {
+            log.debug "faild to get the gession preference objec5 ${e}"
+        }
+        return null
+    }
+
+    UserOrganismPreferenceDTO setSessionPreference(String clientToken, UserOrganismPreferenceDTO userOrganismPreferenceDTO) {
+        Session session = SecurityUtils.subject.getSession(false)
+        if (session) {
+            // should be client_token , JSONObject
+            String preferenceString = (userOrganismPreferenceDTO as JSON).toString()
+            session.setAttribute(FeatureStringEnum.PREFERENCE.getValue() + "::" + clientToken, preferenceString)
+        } else {
+            log.warn "No session found"
+        }
+        return userOrganismPreferenceDTO
+    }
+
+
+    Organism getCurrentOrganismForCurrentUser(String clientToken) {
+        log.debug "PS: getCurrentOrganismForCurrentUser ${clientToken}"
+        Organism organism = getSessionOrganism(clientToken)
+        log.debug "found organism in session ${organism} so returning"
+        if (organism) return organism
+        if (permissionService.currentUser == null) {
+            log.warn "No user present, so using the client token"
+            organism = getOrganismForTokenInDB(clientToken)
+            return organism
+        } else {
+            UserOrganismPreferenceDTO userOrganismPreference = getCurrentOrganismPreference(permissionService.currentUser, null, clientToken)
+            OrganismDTO organismDTO = setSessionPreference(clientToken, userOrganismPreference)?.organism
+            return Organism.findById(organismDTO.id)
+        }
+    }
 
 }
