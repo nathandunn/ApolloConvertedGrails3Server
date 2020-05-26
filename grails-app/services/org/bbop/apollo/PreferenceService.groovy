@@ -627,6 +627,7 @@ class PreferenceService {
     }
 
     UserOrganismPreference getCurrentOrganismPreferenceInDB(User user, String sequenceName, String clientToken) {
+        println "UOP: ${user} .. ${sequenceName} -- ${clientToken}"
         if (!user && !clientToken) {
             log.warn("No organism preference if no user ${user} or client token ${clientToken}")
             return null
@@ -688,7 +689,11 @@ class PreferenceService {
         if (!userOrganismPreference) {
             // find a random organism based on sequence
             Sequence sequence = sequenceName ? Sequence.findByName(sequenceName) : null
+            println "organism count ${Organism.count}"
+            println "sequence count ${Sequence.count}"
+            println " sequence found ${sequence}"
             Set<Organism> organisms = permissionService.getOrganisms(user)
+            println " get organisms ${organisms}"
             Organism organism = null
             if (sequence) {
                 organism = sequence.organism

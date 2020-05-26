@@ -27,7 +27,9 @@ class AbstractIntegrationSpec extends Specification{
     String passwordHash = new Sha256Hash(password).toHex()
 
     def setup() {
+        println "in setup"
         setupDefaultUserOrg()
+        println "out setup"
     }
 
     String getTestCredentials(String clientToken = "1231232"){
@@ -35,6 +37,7 @@ class AbstractIntegrationSpec extends Specification{
     }
 
     def setupDefaultUserOrg(){
+        println "setup default user org"
         if(User.findByUsername('test@test.com')){
             return
         }
@@ -51,9 +54,9 @@ class AbstractIntegrationSpec extends Specification{
 
         shiroSecurityManager.sessionManager = new DefaultWebSessionManager()
         ThreadContext.bind(shiroSecurityManager)
-        def authToken = new UsernamePasswordToken(testUser.username,password as String)
-        Subject subject = SecurityUtils.getSubject();
-        subject.login(authToken)
+//        def authToken = new UsernamePasswordToken(testUser.username,password as String)
+//        Subject subject = SecurityUtils.getSubject();
+//        subject.login(authToken)
 
         Organism organism = new Organism(
                 directory: "src/integration-test/groovy/resources/sequences/honeybee-Group1.10/"
@@ -73,6 +76,10 @@ class AbstractIntegrationSpec extends Specification{
 
         organism.addToSequences(sequence)
         organism.save(flush: true, failOnError: true)
+
+        println "added organissm ${Organism.count}"
+        println "added sequence ${Sequence.count}"
+        println "added user ${User.count}"
     }
 
     JSONArray getCodingArray(JSONObject jsonObject) {

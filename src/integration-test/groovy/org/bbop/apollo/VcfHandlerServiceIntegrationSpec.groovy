@@ -23,6 +23,8 @@ class VcfHandlerServiceIntegrationSpec extends AbstractIntegrationSpec {
         String addVariant3String = "{ ${testCredentials} \"features\":[{\"reference_allele\":\"AAATT\",\"variant_info\":[{\"tag\":\"dbSNP_150\",\"value\":true},{\"tag\":\"TSA\",\"value\":\"deletion\"},{\"tag\":\"E_Freq\",\"value\":true},{\"tag\":\"E_1000G\",\"value\":true},{\"tag\":\"MA\",\"value\":\"-\"},{\"tag\":\"MAF\",\"value\":\"0.000599042\"},{\"tag\":\"MAC\",\"value\":\"3\"}],\"name\":\"rs533528979\",\"alternate_alleles\":[{\"bases\":\"A\",\"allele_info\":[{\"tag\":\"EAS_AF\",\"value\":\"0\"},{\"tag\":\"EUR_AF\",\"value\":\"0\"},{\"tag\":\"AMR_AF\",\"value\":\"0\"},{\"tag\":\"SAS_AF\",\"value\":\"0\"},{\"tag\":\"AFR_AF\",\"value\":\"0.0023\"}]}],\"description\":\"deletion CAAAG -> C\",\"location\":{\"strand\":1,\"fmin\":91868,\"fmax\":91873},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"deletion\"}}],\"track\":\"Group1.10\",\"operation\":\"add_variant\"}"
 
         when: "we add all the variants"
+        println "adding Organism ${Organism.count}"
+        println "adding Sequence ${Sequence.count}"
         requestHandlingService.addVariant(JSON.parse(addVariant1String) as JSONObject)
         requestHandlingService.addVariant(JSON.parse(addVariant2String) as JSONObject)
         requestHandlingService.addVariant(JSON.parse(addVariant3String) as JSONObject)
