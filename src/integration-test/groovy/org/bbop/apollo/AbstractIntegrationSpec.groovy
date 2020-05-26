@@ -26,14 +26,18 @@ class AbstractIntegrationSpec extends Specification{
     String password = "testPass"
     String passwordHash = new Sha256Hash(password).toHex()
 
-    def setup() {
-        println "in setup"
-        setupDefaultUserOrg()
-        println "out setup"
-    }
+//    def setup() {
+//        println "in setup"
+//        setupDefaultUserOrg()
+//        println "out setup"
+//    }
 
     String getTestCredentials(String clientToken = "1231232"){
-        "\"${FeatureStringEnum.CLIENT_TOKEN.value}\":\"${clientToken}\",\"${FeatureStringEnum.USERNAME.value}\":\"test@test.com\","
+        String returnString = "\"${FeatureStringEnum.CLIENT_TOKEN.value}\":\"${clientToken}\",\"${FeatureStringEnum.USERNAME.value}\":\"test@test.com\","
+        if(Organism.count==1){
+            returnString += "\"${FeatureStringEnum.ORGANISM.value}\":\"${Organism.all.first().id}\","
+        }
+        return returnString
     }
 
     def setupDefaultUserOrg(){

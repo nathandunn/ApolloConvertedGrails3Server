@@ -350,12 +350,50 @@ class PermissionService {
 
     }
 
+    Organism getOrganismForTokenInDB(String token) {
+        log.debug "token for org ${token}"
+        if (token.isLong()) {
+            log.debug "is long "
+            return Organism.findById(Long.parseLong(token))
+        } else {
+            log.debug "is NOT long "
+            // Cannot use findByCommonNameIlike, because it will fail to update the permission of an organism named orgam
+            // if an organism named Orgam exist. findByCommonNameIlike ignores the case.
+            return Organism.findByCommonName(token)
+        }
+    }
+
+//    JSONObject getSessionPreferenceObject(String clientToken) {
+//        try {
+//            Session session = SecurityUtils.subject.getSession(false)
+//            if (session) {
+////                printKeys(session)
+//                String preferenceString = session.getAttribute(FeatureStringEnum.PREFERENCE.getValue() + "::" + clientToken)?.toString()
+//                if (!preferenceString) return null
+//                return JSON.parse(preferenceString) as JSONObject
+//            } else {
+//                log.debug "No session found"
+//            }
+//        } catch (e) {
+//            log.debug "faild to get the gession preference objec5 ${e}"
+//        }
+//        return null
+//    }
+
+//    Organism getOrganismForToken(String token) {
+//        Organism organism = getSessionOrganism(token)
+//        if (organism) {
+//            return organism
+//        } else {
+//            return getOrganismForTokenInDB(token)
+//        }
+//    }
 
     Organism getOrganismFromInput(JSONObject inputObject) {
 
         if (inputObject.has(FeatureStringEnum.ORGANISM.value)) {
             String organismString = inputObject.getString(FeatureStringEnum.ORGANISM.value)
-            return preferenceService.getOrganismForTokenInDB(organismString)
+            return getOrganismForTokenInDB(organismString)
         }
         return null
     }
@@ -374,28 +412,29 @@ class PermissionService {
         User user = getCurrentUser(inputObject)
         organism = getOrganismFromInput(inputObject)
 
-        if (!organism) {
-            String clientToken = inputObject.getString(FeatureStringEnum.CLIENT_TOKEN.value)
-            UserOrganismPreferenceDTO preferenceDTO = preferenceService.getCurrentOrganismPreference(user, sequenceName, clientToken)
-            log.debug "Permission service found DTO: ${preferenceDTO as JSON}"
-            if (preferenceDTO) {
-                organism = Organism.findById(preferenceDTO.organism.id)
-            }
-        }
+//        if (!organism) {
+//            String clientToken = inputObject.getString(FeatureStringEnum.CLIENT_TOKEN.value)
+//            UserOrganismPreferenceDTO preferenceDTO = preferenceService.getCurrentOrganismPreference(user, sequenceName, clientToken)
+//            log.debug "Permission service found DTO: ${preferenceDTO as JSON}"
+//            if (preferenceDTO) {
+//                organism = Organism.findById(preferenceDTO.organism.id)
+//            }
+//        }
 
-        Sequence sequence
-        if (!sequenceName) {
-            sequence = UserOrganismPreference.findByClientTokenAndOrganism(sequenceName, organism, [max: 1, sort: "lastUpdated", order: "desc"])?.sequence
-        } else {
-            sequence = Sequence.findByNameAndOrganism(sequenceName, organism)
-            if (!sequence) {
-                throw new AnnotationException("No sequence found for name '${sequenceName}' and organism '${organism?.commonName}'")
-            }
-        }
+//        Sequence sequence
+//        if (!sequenceName) {
+//            sequence = UserOrganismPreference.findByClientTokenAndOrganism(sequenceName, organism, [max: 1, sort: "lastUpdated", order: "desc"])?.sequence
+//        } else {
+          Sequence sequence = Sequence.findByNameAndOrganism(sequenceName, organism)
+        println "seq ${sequence} org ${organism} input ${inputObject as JSON}"
+//            if (!sequence) {
+//                throw new AnnotationException("No sequence found for name '${sequenceName}' and organism '${organism?.commonName}'")
+//            }
+//        }
 
-        if (!sequence && organism) {
-            sequence = Sequence.findByOrganism(organism, [max: 1, sort: "end", order: "desc"])
-        }
+//        if (!sequence && organism) {
+//            sequence = Sequence.findByOrganism(organism, [max: 1, sort: "end", order: "desc"])
+//        }
 
         List<PermissionEnum> permissionEnums = getOrganismPermissionsForUser(organism, user)
         PermissionEnum highestValue = isUserGlobalAdmin(user) ? PermissionEnum.ADMINISTRATE : findHighestEnum(permissionEnums)

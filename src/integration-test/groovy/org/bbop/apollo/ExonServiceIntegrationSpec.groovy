@@ -10,20 +10,19 @@ class ExonServiceIntegrationSpec extends AbstractIntegrationSpec{
     
     def exonService
 
-    def setup() {
-        setupDefaultUserOrg()
-        Sequence sequence = new Sequence(
-                length: 300000
-                ,seqChunkSize: 3
-                ,start: 5
-                ,end: 8
-                ,name: "Group1.10"
-        ).save()
-    }
-
     void "merge to exons for a transcript"() {
 
         given: "we have 2 exons attached to the same transcript"
+        setupDefaultUserOrg()
+        Sequence sequence = new Sequence(
+            length: 300000
+            ,seqChunkSize: 3
+            ,start: 5
+            ,end: 8
+            ,name: "Group1.10"
+        ).save()
+        println "organisms ${Organism.count}"
+        println "sequences ${Sequence.count}"
         Exon leftExon = new Exon(name: "left",uniqueName: "left").save()
         FeatureLocation leftFeatureLocation = new FeatureLocation(
                 fmin: 5

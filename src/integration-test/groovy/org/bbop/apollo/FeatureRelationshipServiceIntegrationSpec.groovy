@@ -12,6 +12,7 @@ class FeatureRelationshipServiceIntegrationSpec extends AbstractIntegrationSpec{
     void "delete all parents and features"(){
 
         given: "a gene and a transcript"
+        setupDefaultUserOrg()
         Gene gene = new Gene(name: "asdf",uniqueName: "asdf").save()
         MRNA mrna = new MRNA(name: "rman",uniqueName: "mrna").save()
 
@@ -35,6 +36,7 @@ class FeatureRelationshipServiceIntegrationSpec extends AbstractIntegrationSpec{
     void "delete all parents and features on multiple levels"(){
 
         given: "a gene and a transcript"
+        setupDefaultUserOrg()
         Gene gene = new Gene(name: "asdf",uniqueName: "asdf").save()
         MRNA mrna = new MRNA(name: "rman",uniqueName: "mrna").save()
         Exon exon = new Exon(name: "exonname",uniqueName: "exon-unique").save()
@@ -64,6 +66,7 @@ class FeatureRelationshipServiceIntegrationSpec extends AbstractIntegrationSpec{
     void "delete all parents and features for multiple children"(){
 
         given: "a gene and a transcript"
+        setupDefaultUserOrg()
         Gene gene = new Gene(name: "asdf",uniqueName: "asdf").save()
         MRNA mrna = new MRNA(name: "rman",uniqueName: "mrna").save()
         MRNA mrna2 = new MRNA(name: "rman2",uniqueName: "mrna2").save()

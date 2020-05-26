@@ -11,6 +11,7 @@ import org.bbop.apollo.preference.UserDTO
 import org.bbop.apollo.preference.UserOrganismPreferenceDTO
 import org.grails.web.json.JSONObject
 
+@Deprecated
 @Transactional
 class PreferenceService {
 
