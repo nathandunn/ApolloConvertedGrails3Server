@@ -20,7 +20,7 @@ class IOServiceController extends AbstractApolloController {
     def gff3HandlerService
     def fastaHandlerService
     def chadoHandlerService
-    def preferenceService
+//    def preferenceService
     def permissionService
     def configWrapperService
     def requestHandlingService
@@ -92,7 +92,7 @@ class IOServiceController extends AbstractApolloController {
             }
 
             def sequences = dataObject.sequences // can be array or string
-            Organism organism = dataObject.organism ? preferenceService.getOrganismForTokenInDB(dataObject.organism) : preferenceService.getCurrentOrganismForCurrentUser(dataObject.getString(FeatureStringEnum.CLIENT_TOKEN.value))
+            Organism organism = dataObject.organism ? permissionService.getOrganismForToken(dataObject.organism) : permissionService.getOrganismsForCurrentUser(dataObject.getString(FeatureStringEnum.CLIENT_TOKEN.value))
 
             def st = System.currentTimeMillis()
             def queryParams = [organism: organism]

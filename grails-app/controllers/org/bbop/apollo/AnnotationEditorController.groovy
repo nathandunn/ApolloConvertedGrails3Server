@@ -40,7 +40,7 @@ class AnnotationEditorController extends AbstractApolloController implements Ann
     def featurePropertyService
     def requestHandlingService
     def permissionService
-    def preferenceService
+//    def preferenceService
     def sequenceSearchService
     def featureEventService
     def annotationEditorService
@@ -80,7 +80,8 @@ class AnnotationEditorController extends AbstractApolloController implements Ann
             User user = User.findByUsername(username)
             log.debug "getting user permission for ${user}, returnObject"
 //            Organism organism = preferenceService.getOrganismFromPreferences(user,null,returnObject.getString(FeatureStringEnum.CLIENT_TOKEN.value))
-            Organism organism = preferenceService.getCurrentOrganismForCurrentUser(returnObject.getString(FeatureStringEnum.CLIENT_TOKEN.value))
+//            Organism organism = preferenceService.getCurrentOrganismForCurrentUser(returnObject.getString(FeatureStringEnum.CLIENT_TOKEN.value))
+            Organism organism = permissionService.getOrganismForToken(returnObject.getString(FeatureStringEnum.CLIENT_TOKEN.value))
             if (!organism) {
                 log.error "somehow no organism shown, getting for all"
             }
@@ -148,7 +149,8 @@ class AnnotationEditorController extends AbstractApolloController implements Ann
         log.debug "getTranslationTable"
         JSONObject returnObject = permissionService.handleInput(request, params)
         log.debug "return object ${returnObject as JSON}"
-        Organism organism = preferenceService.getCurrentOrganismForCurrentUser(returnObject.getString(FeatureStringEnum.CLIENT_TOKEN.value))
+//        Organism organism = preferenceService.getCurrentOrganismForCurrentUser(returnObject.getString(FeatureStringEnum.CLIENT_TOKEN.value))
+        Organism organism = permissionService.getOrganismForToken(returnObject.getString(FeatureStringEnum.CLIENT_TOKEN.value))
         log.debug "has organism ${organism}"
         // use the over-wridden one
         TranslationTable translationTable = organismService.getTranslationTable(organism)
@@ -1156,7 +1158,8 @@ class AnnotationEditorController extends AbstractApolloController implements Ann
         JSONObject inputObject = permissionService.handleInput(request, params)
         try{
             permissionService.hasPermissions(inputObject, PermissionEnum.READ)
-            Organism organism = preferenceService.getCurrentOrganismForCurrentUser(inputObject.getString(FeatureStringEnum.CLIENT_TOKEN.value))
+//            Organism organism = preferenceService.getCurrentOrganismForCurrentUser(inputObject.getString(FeatureStringEnum.CLIENT_TOKEN.value))
+            Organism organism = permissionService.getOrganismForToken(inputObject.getString(FeatureStringEnum.CLIENT_TOKEN.value))
             log.debug "Organism to string:  ${organism as JSON}"
             render sequenceSearchService.searchSequence(inputObject, organism.getBlatdb())
         }

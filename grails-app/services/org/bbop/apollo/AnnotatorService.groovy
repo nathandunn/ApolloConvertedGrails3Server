@@ -13,20 +13,20 @@ import org.grails.web.json.JSONObject
 class AnnotatorService {
 
     def permissionService
-    def preferenceService
+//    def preferenceService
     def requestHandlingService
     def configWrapperService
     def trackService
-    def variantService
+//    def variantService
 
-    Integer getAnnotationCount(Organism organism) {
-        if(configWrapperService.getCountAnnotations()){
-            def viewableTypes = requestHandlingService.viewableAnnotationList + requestHandlingService.viewableSequenceAlterationList
-            def results = Feature.executeQuery(" select count(f) from Feature f join f.featureLocations fl join fl.sequence s join s.organism o where o = :organism and f.class in :viewableTypes ",[organism:organism,viewableTypes: viewableTypes])
-            return results[0] as Integer
-        }
-        return 0
-    }
+//    Integer getAnnotationCount(Organism organism) {
+//        if(configWrapperService.getCountAnnotations()){
+//            def viewableTypes = requestHandlingService.viewableAnnotationList + requestHandlingService.viewableSequenceAlterationList
+//            def results = Feature.executeQuery(" select count(f) from Feature f join f.featureLocations fl join fl.sequence s join s.organism o where o = :organism and f.class in :viewableTypes ",[organism:organism,viewableTypes: viewableTypes])
+//            return results[0] as Integer
+//        }
+//        return 0
+//    }
 
     def getAppState(String token) {
         JSONObject appStateObject = new JSONObject()
@@ -79,32 +79,32 @@ class AnnotatorService {
             organismArray.add(jsonObject)
         }
         appStateObject.put("organismList", organismArray)
-        UserOrganismPreferenceDTO currentUserOrganismPreferenceDTO = preferenceService.getCurrentOrganismPreference(permissionService.currentUser, null, token)
-        if (currentUserOrganismPreferenceDTO) {
-            OrganismDTO currentOrganism = currentUserOrganismPreferenceDTO?.organism
-
-            if (userOrganismPreference?.organism) {
-                currentOrganism.annotationCount = getAnnotationCount(userOrganismPreference.organism)
-                currentOrganism.variantEffectCount = variantService.getSequenceAlterationEffectsCountForOrgansim(userOrganismPreference.organism)
-            }
-            Organism organism = Organism.findById(currentOrganism.id)
-            currentOrganism.officialGeneSetTrack = organism?.officialGeneSetTrack
-            appStateObject.put("currentOrganism", currentOrganism)
-
-
-            if (!currentUserOrganismPreferenceDTO.sequence) {
-                Sequence sequence = Sequence.findByOrganism(organism, [sort: "name", order: "asc", max: 1])
-                // often the case when creating it
-                currentUserOrganismPreferenceDTO.sequence = preferenceService.getDTOFromSequence(sequence)
-            }
-            appStateObject.put("currentSequence", currentUserOrganismPreferenceDTO.sequence)
-
-
-            if (currentUserOrganismPreferenceDTO.startbp && currentUserOrganismPreferenceDTO.endbp) {
-                appStateObject.put("currentStartBp", currentUserOrganismPreferenceDTO.startbp)
-                appStateObject.put("currentEndBp", currentUserOrganismPreferenceDTO.endbp)
-            }
-        }
+//        UserOrganismPreferenceDTO currentUserOrganismPreferenceDTO = preferenceService.getCurrentOrganismPreference(permissionService.currentUser, null, token)
+//        if (currentUserOrganismPreferenceDTO) {
+//            OrganismDTO currentOrganism = currentUserOrganismPreferenceDTO?.organism
+//
+//            if (userOrganismPreference?.organism) {
+//                currentOrganism.annotationCount = getAnnotationCount(userOrganismPreference.organism)
+//                currentOrganism.variantEffectCount = variantService.getSequenceAlterationEffectsCountForOrgansim(userOrganismPreference.organism)
+//            }
+//            Organism organism = Organism.findById(currentOrganism.id)
+//            currentOrganism.officialGeneSetTrack = organism?.officialGeneSetTrack
+//            appStateObject.put("currentOrganism", currentOrganism)
+//
+//
+//            if (!currentUserOrganismPreferenceDTO.sequence) {
+//                Sequence sequence = Sequence.findByOrganism(organism, [sort: "name", order: "asc", max: 1])
+//                // often the case when creating it
+//                currentUserOrganismPreferenceDTO.sequence = preferenceService.getDTOFromSequence(sequence)
+//            }
+//            appStateObject.put("currentSequence", currentUserOrganismPreferenceDTO.sequence)
+//
+//
+//            if (currentUserOrganismPreferenceDTO.startbp && currentUserOrganismPreferenceDTO.endbp) {
+//                appStateObject.put("currentStartBp", currentUserOrganismPreferenceDTO.startbp)
+//                appStateObject.put("currentEndBp", currentUserOrganismPreferenceDTO.endbp)
+//            }
+//        }
         appStateObject.put(FeatureStringEnum.COMMON_DATA_DIRECTORY.value, trackService.commonDataDirectory)
     }
 

@@ -28,7 +28,7 @@ class AnnotatorController {
     def permissionService
     def annotatorService
     def trackService
-    def preferenceService
+//    def preferenceService
     def reportService
     def configWrapperService
     def exportService
@@ -66,9 +66,10 @@ class AnnotatorController {
             // check organism first
             if (params.containsKey(FeatureStringEnum.ORGANISM.value)) {
                 String organismString = params[FeatureStringEnum.ORGANISM.value]
-                organism = preferenceService.getOrganismForTokenInDB(organismString)
+                organism = permissionService.getOrganismForToken(organismString)
             }
-            organism = organism ?: preferenceService.getCurrentOrganismForCurrentUser(clientToken)
+//            organism = organism ?: preferenceService.getCurrentOrganismForCurrentUser(clientToken)
+            organism = organism ?: permissionService.getOrganismForToken(clientToken)
             def allowedOrganisms = permissionService.getOrganisms(permissionService.currentUser)
             if (!allowedOrganisms) {
                 throw new RuntimeException("User does have permissions to access any organisms.")
@@ -88,7 +89,7 @@ class AnnotatorController {
             }
 
             log.debug "loading organism: ${organism}"
-            preferenceService.setCurrentOrganism(permissionService.currentUser, organism, clientToken)
+//            preferenceService.setCurrentOrganism(permissionService.currentUser, organism, clientToken)
             String location = params.loc
             // assume that the lookup is a symbol lookup value and not a location
             if (location) {
@@ -110,7 +111,7 @@ class AnnotatorController {
                         fmax = sequence.end
                     }
                     log.debug "fmin ${fmin} . . fmax ${fmax} . . ${sequence}"
-                    preferenceService.setCurrentSequenceLocation(sequence.name, fmin, fmax, clientToken)
+//                    preferenceService.setCurrentSequenceLocation(sequence.name, fmin, fmax, clientToken)
                 }
                 else{
                     searchName = location
@@ -714,7 +715,7 @@ class AnnotatorController {
  */
     @Transactional
     def getAppState() {
-        preferenceService.evaluateSaves(true)
+//        preferenceService.evaluateSaves(true)
         render annotatorService.getAppState(params.get(FeatureStringEnum.CLIENT_TOKEN.value).toString()) as JSON
     }
 
@@ -740,7 +741,7 @@ class AnnotatorController {
     @Transactional
     def setCurrentOrganism(Organism organismInstance) {
         // set the current organism
-        preferenceService.setCurrentOrganism(permissionService.currentUser, organismInstance, params[FeatureStringEnum.CLIENT_TOKEN.value] as String)
+//        preferenceService.setCurrentOrganism(permissionService.currentUser, organismInstance, params[FeatureStringEnum.CLIENT_TOKEN.value] as String)
         session.setAttribute(FeatureStringEnum.ORGANISM_JBROWSE_DIRECTORY.value, organismInstance.directory)
 
         if (!permissionService.checkPermissions(PermissionEnum.READ)) {
@@ -762,7 +763,7 @@ class AnnotatorController {
             return
         }
         // set the current organism and sequence Id (if both)
-        preferenceService.setCurrentSequence(permissionService.currentUser, sequenceInstance, params[FeatureStringEnum.CLIENT_TOKEN.value] as String)
+//        preferenceService.setCurrentSequence(permissionService.currentUser, sequenceInstance, params[FeatureStringEnum.CLIENT_TOKEN.value] as String)
         session.setAttribute(FeatureStringEnum.ORGANISM_JBROWSE_DIRECTORY.value, sequenceInstance.organism.directory)
 
         render annotatorService.getAppState(params[FeatureStringEnum.CLIENT_TOKEN.value] as String) as JSON
@@ -841,7 +842,7 @@ class AnnotatorController {
 
     def ping() {
         log.debug "Ping: Evaluating Saves"
-        preferenceService.evaluateSaves()
+//        preferenceService.evaluateSaves()
         if (permissionService.checkPermissions(PermissionEnum.READ)) {
             log.debug("permissions checked and alive")
             render new JSONObject() as JSON

@@ -23,7 +23,7 @@ class JbrowseController {
     GrailsApplication grailsApplication
     def sequenceService
     def permissionService
-    def preferenceService
+//    def preferenceService
     def jbrowseService
     ServletContext servletContext
     def trackService
@@ -63,14 +63,14 @@ class JbrowseController {
         // case 3 - validated login (just read from preferences, then
         if (permissionService.currentUser && clientToken) {
 //            Organism organism = preferenceService.getOrganismForToken(clientToken)
-            Organism organism = preferenceService.getOrganismForTokenInDB(clientToken)
+            Organism organism = permissionService.getOrganismForToken(clientToken)
             if(organism){
                 // we need to generate a client_token and do a redirection
                 paramList = paramList.findAll(){
                     !it.startsWith(FeatureStringEnum.CLIENT_TOKEN.value)
                 }
                 clientToken = ClientTokenGenerator.generateRandomString()
-                preferenceService.setCurrentOrganism(permissionService.currentUser, organism, clientToken)
+//                preferenceService.setCurrentOrganism(permissionService.currentUser, organism, clientToken)
                 String uriString
                 if (JBrowseUrlHandler.hasProtocol(paramString)) {
                     uriString = createLink(url: "${request.contextPath}/${clientToken}/jbrowse/index.html?${paramString}")
@@ -82,7 +82,7 @@ class JbrowseController {
                 return
             }
             else{
-                organism = preferenceService.getCurrentOrganismForCurrentUser(clientToken)
+                organism = permissionService.getOrganismForToken(clientToken)
             }
             def availableOrganisms = permissionService.getOrganisms(permissionService.currentUser)
             if(!availableOrganisms){
@@ -96,9 +96,9 @@ class JbrowseController {
                 log.warn "Organism '${organism?.commonName}' is not viewable by this user so viewing ${availableOrganisms.first().commonName} instead."
                 organism = availableOrganisms.first()
             }
-            if(organism && clientToken){
-                preferenceService.setCurrentOrganism(permissionService.currentUser, organism, clientToken)
-            }
+//            if(organism && clientToken){
+//                preferenceService.setCurrentOrganism(permissionService.currentUser, organism, clientToken)
+//            }
             File file = new File(servletContext.getRealPath("/jbrowse/index.html"))
             render file.text
             return
@@ -108,7 +108,7 @@ class JbrowseController {
             log.debug "organism ID specified: ${clientToken}"
 
             if (clientToken) {
-                Organism organism = preferenceService.getOrganismForToken(clientToken)
+                Organism organism = permissionService.getOrganismForToken(clientToken)
                 if (!organism) {
                     String urlString = "/jbrowse/index.html?${paramList.join("&")}"
                     forward(controller: "jbrowse", action: "chooseOrganismForJbrowse", params: [urlString: urlString, error: "Unable to find organism for '${clientToken}'"])
@@ -139,7 +139,7 @@ class JbrowseController {
     private String getDirectoryFromSession(String clientToken) {
         String directory = request.session.getAttribute(FeatureStringEnum.ORGANISM_JBROWSE_DIRECTORY.value)
         if (!directory) {
-            Organism organism = preferenceService.getOrganismForToken(clientToken)
+            Organism organism = permissionService.getOrganismForToken(clientToken)
             if (organism) {
                 def session = request.getSession(true)
                 session.setAttribute(FeatureStringEnum.ORGANISM_JBROWSE_DIRECTORY.value, organism.directory)
@@ -166,7 +166,7 @@ class JbrowseController {
         request.session.setAttribute(FeatureStringEnum.CLIENT_TOKEN.value, clientToken)
 
         log.debug "getting organism for client token ${clientToken}"
-        Organism currentOrganism = preferenceService.getCurrentOrganismForCurrentUser(clientToken)
+        Organism currentOrganism = permissionService.getOrganismForToken(clientToken)
         log.debug "got organism ${currentOrganism} for client token ${clientToken}"
         String organismJBrowseDirectory = currentOrganism.directory
         if (!organismJBrowseDirectory) {
@@ -226,7 +226,8 @@ class JbrowseController {
 
 
         if (!file.exists()) {
-            Organism currentOrganism = preferenceService.getCurrentOrganismForCurrentUser(params.get(FeatureStringEnum.CLIENT_TOKEN.value).toString())
+//            Organism currentOrganism = preferenceService.getCurrentOrganismForCurrentUser(params.get(FeatureStringEnum.CLIENT_TOKEN.value).toString())
+            Organism currentOrganism = permissionService.getOrganismForToken(params.get(FeatureStringEnum.CLIENT_TOKEN.value).toString())
             File extendedOrganismDataDirectory = trackService.getExtendedDataDirectory(currentOrganism)
 
             if (extendedOrganismDataDirectory.exists()) {
@@ -433,7 +434,8 @@ class JbrowseController {
         }
 
 
-        Organism currentOrganism = preferenceService.getCurrentOrganismForCurrentUser(clientToken)
+//        Organism currentOrganism = preferenceService.getCurrentOrganismForCurrentUser(clientToken)
+        Organism currentOrganism = permissionService.getOrganismForToken(clientToken)
         if (currentOrganism != null) {
             jsonObject.put("dataset_id", currentOrganism.id)
         } else {
@@ -572,7 +574,8 @@ class JbrowseController {
         File file = new File(servletContext.getRealPath(dataFileName))
 
         if (!file.exists()) {
-            Organism currentOrganism = preferenceService.getCurrentOrganismForCurrentUser(params.get(FeatureStringEnum.CLIENT_TOKEN.value).toString())
+//            Organism currentOrganism = preferenceService.getCurrentOrganismForCurrentUser(params.get(FeatureStringEnum.CLIENT_TOKEN.value).toString())
+            Organism currentOrganism = permissionService.getOrganismForToken(params.get(FeatureStringEnum.CLIENT_TOKEN.value).toString())
             File extendedOrganismDataDirectory = trackService.getExtendedDataDirectory(currentOrganism)
             if (extendedOrganismDataDirectory.exists()) {
                 log.debug "track found in common data directory ${extendedOrganismDataDirectory.absolutePath}"

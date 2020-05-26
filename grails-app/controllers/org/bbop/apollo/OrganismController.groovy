@@ -33,7 +33,7 @@ class OrganismController {
   def sequenceService
   def permissionService
   def requestHandlingService
-  def preferenceService
+//  def preferenceService
   def organismService
   def reportService
   def configWrapperService
@@ -123,9 +123,9 @@ class OrganismController {
     try {
       //if (permissionService.isUserGlobalAdmin(permissionService.getCurrentUser(requestObject))) {
       if (permissionService.hasGlobalPermissions(requestObject, GlobalPermissionEnum.ADMIN)) {
-        Organism organism = preferenceService.getOrganismForTokenInDB(requestObject.organism as String)
+        Organism organism = permissionService.getOrganismForToken(requestObject.organism as String)
         if (!organism) {
-          organism = preferenceService.getOrganismForTokenInDB(requestObject.id as String)
+          organism = permissionService.getOrganismForToken(requestObject.id as String)
         }
         if (organism) {
           boolean dataAddedViaWebServices = organism.dataAddedViaWebServices == null ? false : organism.dataAddedViaWebServices
@@ -324,7 +324,7 @@ class OrganismController {
               }
               organism.save()
               sequenceService.loadRefSeqs(organism)
-              preferenceService.setCurrentOrganism(permissionService.getCurrentUser(requestObject), organism, clientToken)
+//              preferenceService.setCurrentOrganism(permissionService.getCurrentUser(requestObject), organism, clientToken)
               findAllOrganisms()
             }
             catch (IOException e) {
@@ -402,7 +402,7 @@ class OrganismController {
               FastaSequenceIndexCreator.create(path, true)
 
               sequenceService.loadRefSeqs(organism)
-              preferenceService.setCurrentOrganism(permissionService.getCurrentUser(requestObject), organism, clientToken)
+//              preferenceService.setCurrentOrganism(permissionService.getCurrentUser(requestObject), organism, clientToken)
               findAllOrganisms()
             }
             catch (IOException e) {
@@ -461,7 +461,7 @@ class OrganismController {
 
     try {
       permissionService.checkPermissions(requestObject, PermissionEnum.ADMINISTRATE)
-      Organism organism = preferenceService.getOrganismForTokenInDB(requestObject.get(FeatureStringEnum.ORGANISM.value)?.id)
+      Organism organism = permissionService.getOrganismForToken(requestObject.get(FeatureStringEnum.ORGANISM.value)?.id)
       // find in the extended track list and remove
       File extendedDirectory = trackService.getExtendedDataDirectory(organism)
       if (!extendedDirectory.exists()) {
@@ -582,7 +582,7 @@ class OrganismController {
     try {
       permissionService.checkPermissions(requestObject, PermissionEnum.ADMINISTRATE)
 //            log.debug "user ${requestObject.get(FeatureStringEnum.USERNAME.value)} is admin"
-      Organism organism = preferenceService.getOrganismForTokenInDB(requestObject.get(FeatureStringEnum.ORGANISM.value))
+      Organism organism = permissionService.getOrganismForToken(requestObject.get(FeatureStringEnum.ORGANISM.value))
 
       if (organism) {
         log.info "Adding track to organism: ${organism.commonName}"
@@ -846,7 +846,7 @@ class OrganismController {
       String trackLabel = requestObject.get(FeatureStringEnum.TRACK_LABEL.value)
       permissionService.checkPermissions(requestObject, PermissionEnum.ADMINISTRATE)
       log.debug "user ${requestObject.get(FeatureStringEnum.USERNAME.value)} is admin"
-      Organism organism = preferenceService.getOrganismForTokenInDB(requestObject.get(FeatureStringEnum.ORGANISM.value))
+      Organism organism = permissionService.getOrganismForToken(requestObject.get(FeatureStringEnum.ORGANISM.value))
 
       if (organism) {
         log.debug "organism ${organism}"
@@ -987,7 +987,7 @@ class OrganismController {
     try {
       permissionService.checkPermissions(requestObject, PermissionEnum.ADMINISTRATE)
       log.debug "user ${requestObject.get(FeatureStringEnum.USERNAME.value)} is admin"
-      Organism organism = preferenceService.getOrganismForTokenInDB(requestObject.get(FeatureStringEnum.ORGANISM.value))
+      Organism organism = permissionService.getOrganismForToken(requestObject.get(FeatureStringEnum.ORGANISM.value))
 
       if (organism) {
         String organismDirectoryName = organism.directory
@@ -1156,7 +1156,7 @@ class OrganismController {
 //                }W
       sequenceService.loadRefSeqs(organism)
 
-      preferenceService.setCurrentOrganism(permissionService.getCurrentUser(organismJson), organism, clientToken)
+//      preferenceService.setCurrentOrganism(permissionService.getCurrentUser(organismJson), organism, clientToken)
       Boolean returnAllOrganisms = organismJson.returnAllOrganisms ? Boolean.valueOf(organismJson.returnAllOrganisms) : true
 
       render returnAllOrganisms ? findAllOrganisms() : new JSONArray()
@@ -1448,7 +1448,7 @@ class OrganismController {
       render error as JSON
       return
     }
-    Organism organism = preferenceService.getOrganismForTokenInDB(organismJson.organism)
+    Organism organism = permissionService.getOrganismForToken(organismJson.organism)
     if (!organism) {
       def error = [error: 'The organism does not exist']
       log.error(error.error)

@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest
 @Transactional
 class PermissionService {
 
-    def preferenceService
+//    def preferenceService
     def configWrapperService
 
 
@@ -363,31 +363,40 @@ class PermissionService {
         }
     }
 
-//    JSONObject getSessionPreferenceObject(String clientToken) {
-//        try {
-//            Session session = SecurityUtils.subject.getSession(false)
-//            if (session) {
-////                printKeys(session)
-//                String preferenceString = session.getAttribute(FeatureStringEnum.PREFERENCE.getValue() + "::" + clientToken)?.toString()
-//                if (!preferenceString) return null
-//                return JSON.parse(preferenceString) as JSONObject
-//            } else {
-//                log.debug "No session found"
-//            }
-//        } catch (e) {
-//            log.debug "faild to get the gession preference objec5 ${e}"
-//        }
-//        return null
-//    }
+    JSONObject getSessionPreferenceObject(String clientToken) {
+        try {
+            Session session = SecurityUtils.subject.getSession(false)
+            if (session) {
+//                printKeys(session)
+                String preferenceString = session.getAttribute(FeatureStringEnum.PREFERENCE.getValue() + "::" + clientToken)?.toString()
+                if (!preferenceString) return null
+                return JSON.parse(preferenceString) as JSONObject
+            } else {
+                log.debug "No session found"
+            }
+        } catch (e) {
+            log.debug "faild to get the gession preference objec5 ${e}"
+        }
+        return null
+    }
 
-//    Organism getOrganismForToken(String token) {
-//        Organism organism = getSessionOrganism(token)
-//        if (organism) {
-//            return organism
-//        } else {
-//            return getOrganismForTokenInDB(token)
-//        }
-//    }
+    Organism getSessionOrganism(String clientToken) {
+        JSONObject preferenceObject = getSessionPreferenceObject(clientToken)
+        if (preferenceObject) {
+            def organismId = preferenceObject.organism.id as Long
+            return Organism.get(organismId) ?: Organism.findById(organismId)
+        }
+        return null
+    }
+
+    Organism getOrganismForToken(String token) {
+        Organism organism = getSessionOrganism(token)
+        if (organism) {
+            return organism
+        } else {
+            return getOrganismForTokenInDB(token)
+        }
+    }
 
     Organism getOrganismFromInput(JSONObject inputObject) {
 
@@ -633,11 +642,11 @@ class PermissionService {
         jsonObject = validateSessionForJsonObject(jsonObject)
         Organism organism = getOrganismFromInput(jsonObject)
 
-        organism = organism ?: preferenceService.getCurrentOrganismPreferenceInDB(clientToken)?.organism
+        organism = organism ?: getOrganismForToken(clientToken)
         // don't set the preferences if it is coming off a script
-        if (clientToken != FeatureStringEnum.IGNORE.value) {
-            preferenceService.setCurrentOrganism(getCurrentUser(), organism, clientToken)
-        }
+//        if (clientToken != FeatureStringEnum.IGNORE.value) {
+//            preferenceService.setCurrentOrganism(getCurrentUser(), organism, clientToken)
+//        }
 
         return checkPermissions(jsonObject, organism, permissionEnum)
 

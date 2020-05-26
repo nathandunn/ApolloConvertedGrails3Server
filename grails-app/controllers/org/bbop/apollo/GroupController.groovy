@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus
 class GroupController {
 
     def permissionService
-    def preferenceService
     def groupService
 
     @ApiOperation(value = "Get organism permissions for group", nickname = "/group/getOrganismPermissionsForGroup", httpMethod = "POST")
@@ -321,7 +320,7 @@ class GroupController {
         }
 
         log.debug "Finding organism by ${dataObject.organism}"
-        Organism organism = preferenceService.getOrganismForTokenInDB(dataObject.organism)
+        Organism organism = permissionService.getOrganismForToken(dataObject.organism)
         if (!organism) {
             render([(FeatureStringEnum.ERROR.value): "Failed to find organism for ${dataObject.organism}"] as JSON)
             return

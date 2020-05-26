@@ -17,7 +17,7 @@ import org.springframework.http.HttpStatus
 class UserController {
 
     def permissionService
-    def preferenceService
+//    def preferenceService
     def userService
     def trackService
 
@@ -228,7 +228,7 @@ class UserController {
     @Transactional
     def checkLogin() {
         def currentUser = permissionService.currentUser
-        preferenceService.evaluateSaves(true)
+//        preferenceService.evaluateSaves(true)
 
         // grab from session
         if (!currentUser) {
@@ -238,21 +238,22 @@ class UserController {
         }
 
         if (currentUser) {
-            UserOrganismPreference userOrganismPreference
-            try {
-                // sets it by default
-                userOrganismPreference = preferenceService.getCurrentOrganismPreferenceInDB(params[FeatureStringEnum.CLIENT_TOKEN.value])
-            } catch (e) {
-                log.error(e)
-            }
+//            UserOrganismPreference userOrganismPreference
+//            try {
+//                // sets it by default
+//                userOrganismPreference = preferenceService.getCurrentOrganismPreferenceInDB(params[FeatureStringEnum.CLIENT_TOKEN.value])
+//            } catch (e) {
+//                log.error(e)
+//            }
 
             def userObject = userService.convertUserToJson(currentUser)
 
-            if ((!userOrganismPreference || !permissionService.hasAnyPermissions(currentUser)) && !permissionService.isUserBetterOrEqualRank(currentUser, GlobalPermissionEnum.INSTRUCTOR)) {
+            if (!permissionService.hasAnyPermissions(currentUser) && !permissionService.isUserBetterOrEqualRank(currentUser, GlobalPermissionEnum.INSTRUCTOR)) {
                 userObject.put(FeatureStringEnum.ERROR.value, "You do not have access to any organism on this server.  Please contact your administrator.")
-            } else if (userOrganismPreference) {
-                userObject.put("tracklist", userOrganismPreference.nativeTrackList)
             }
+//            else if (userOrganismPreference) {
+//                userObject.put("tracklist", userOrganismPreference.nativeTrackList)
+//            }
 
             if(permissionService.isUserGlobalAdmin(currentUser)){
                 String badCommonPath = trackService.checkCommonDataDirectory()
@@ -281,11 +282,11 @@ class UserController {
             }
             log.info "updateTrackListPreference"
 
-            UserOrganismPreference uop = preferenceService.getCurrentOrganismPreferenceInDB(dataObject.getString(FeatureStringEnum.CLIENT_TOKEN.value))
-
-            uop.nativeTrackList = dataObject.get("tracklist")
-            uop.save(flush: true)
-            log.info "Added userOrganismPreference ${uop.nativeTrackList}"
+//            UserOrganismPreference uop = preferenceService.getCurrentOrganismPreferenceInDB(dataObject.getString(FeatureStringEnum.CLIENT_TOKEN.value))
+//
+//            uop.nativeTrackList = dataObject.get("tracklist")
+//            uop.save(flush: true)
+//            log.info "Added userOrganismPreference ${uop.nativeTrackList}"
             render new JSONObject() as JSON
         }
         catch (Exception e) {
@@ -717,7 +718,7 @@ class UserController {
         User user = dataObject.userId ? User.findById(dataObject.userId as Long) : User.findByUsername(dataObject.user)
 
         log.debug "Finding organism by ${dataObject.organism}"
-        Organism organism = preferenceService.getOrganismForTokenInDB(dataObject.organism)
+        Organism organism = permissionService.getOrganismForToken(dataObject.organism)
         if (!organism) {
             render([(FeatureStringEnum.ERROR.value): "Failed to find organism with ${dataObject.organism}"] as JSON)
             return

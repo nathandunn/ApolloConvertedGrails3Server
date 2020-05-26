@@ -17,7 +17,6 @@ import java.util.zip.GZIPInputStream
 @Transactional
 class TrackService {
 
-    def preferenceService
     def trackMapperService
     def permissionService
     def configWrapperService
@@ -81,13 +80,13 @@ class TrackService {
     }
 
     JSONObject getAllTracks(String organism) throws FileNotFoundException {
-        String jbrowseDirectory = preferenceService.getOrganismForToken(organism)?.directory
+        String jbrowseDirectory = permissionService.getOrganismForToken(organism)?.directory
         JSONObject trackObject = getTrackList(jbrowseDirectory)
         return trackObject
     }
 
     JSONObject getTrackData(String trackName, String organism, String sequence) throws FileNotFoundException {
-        String jbrowseDirectory = preferenceService.getOrganismForToken(organism)?.directory
+        String jbrowseDirectory = permissionService.getOrganismForToken(organism)?.directory
         String trackDataFilePath = getTrackDataFile(jbrowseDirectory, trackName, sequence)
         return retrieveFileObject(jbrowseDirectory, trackDataFilePath) as JSONObject
     }
@@ -107,7 +106,7 @@ class TrackService {
 
         // TODO: refactor into a common method
         JSONArray classesForTrack = getClassesForTrack(trackName, organismString, sequence)
-        Organism organism = preferenceService.getOrganismForToken(organismString)
+        Organism organism = permissionService.getOrganismForToken(organismString)
         SequenceDTO sequenceDTO = new SequenceDTO(
                 organismCommonName: organism.commonName
                 , trackName: trackName
@@ -152,7 +151,7 @@ class TrackService {
      * @return
      */
     JSONArray getChunkData(SequenceDTO sequenceDTO, int chunk) throws FileNotFoundException {
-        String jbrowseDirectory = preferenceService.getOrganismForToken(sequenceDTO.organismCommonName)?.directory
+        String jbrowseDirectory = permissionService.getOrganismForToken(sequenceDTO.organismCommonName)?.directory
 
         String trackName = sequenceDTO.trackName
         String sequence = sequenceDTO.sequenceName
@@ -652,8 +651,8 @@ class TrackService {
         return geneChildren
     }
 
-    def checkPermission(def request, def response, String organismString) {
-        Organism organism = preferenceService.getOrganismForToken(organismString)
+    def checkPermission(def response, String organismString) {
+        Organism organism = permissionService.getOrganismForToken(organismString)
         if (organism && (organism.publicMode || permissionService.checkPermissions(PermissionEnum.READ))) {
             return true
         } else {

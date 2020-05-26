@@ -1,6 +1,7 @@
 package org.bbop.apollo
 
 import grails.converters.JSON
+import grails.gorm.transactions.NotTransactional
 import grails.gorm.transactions.Transactional
 import org.apache.shiro.SecurityUtils
 import org.apache.shiro.session.Session
@@ -27,7 +28,7 @@ class SequenceController {
     def sequenceService
     def requestHandlingService
     def permissionService
-    def preferenceService
+//    def preferenceService
     def reportService
 
     def permissions() {}
@@ -40,24 +41,24 @@ class SequenceController {
 //        }
 //    }
 
-    @Transactional
+    @NotTransactional
     def setCurrentSequenceLocation(String name, Integer start, Integer end) {
-
-        try {
-            UserOrganismPreferenceDTO userOrganismPreference = preferenceService.setCurrentSequenceLocation(name, start, end, params[FeatureStringEnum.CLIENT_TOKEN.value].toString())
-            if (params.suppressOutput) {
-                render new JSONObject() as JSON
-            } else {
-                render userOrganismPreference.sequence as JSON
-            }
-        } catch (NumberFormatException e) {
-            //  we can ignore this specific exception as null is an acceptable value for start / end
-        }
-        catch (Exception e) {
-            def error = [error: e.message]
-            log.error e.message
-            render error as JSON
-        }
+        render new JSONObject() as JSON
+//        try {
+//            UserOrganismPreferenceDTO userOrganismPreference = preferenceService.setCurrentSequenceLocation(name, start, end, params[FeatureStringEnum.CLIENT_TOKEN.value].toString())
+//            if (params.suppressOutput) {
+//                render new JSONObject() as JSON
+//            } else {
+//                render userOrganismPreference.sequence as JSON
+//            }
+//        } catch (NumberFormatException e) {
+//            //  we can ignore this specific exception as null is an acceptable value for start / end
+//        }
+//        catch (Exception e) {
+//            def error = [error: e.message]
+//            log.error e.message
+//            render error as JSON
+//        }
     }
 
     @Transactional
@@ -80,11 +81,11 @@ class SequenceController {
     @Transactional
     def setCurrentSequence(Sequence sequenceInstance) {
         JSONObject inputObject = permissionService.handleInput(request, params)
-        String token = inputObject.getString(FeatureStringEnum.CLIENT_TOKEN.value)
+//        String token = inputObject.getString(FeatureStringEnum.CLIENT_TOKEN.value)
         Organism organism = sequenceInstance.organism
 
-        User currentUser = permissionService.currentUser
-        UserOrganismPreferenceDTO userOrganismPreference = preferenceService.setCurrentSequence(currentUser, sequenceInstance, token)
+//        User currentUser = permissionService.currentUser
+//        UserOrganismPreferenceDTO userOrganismPreference = preferenceService.setCurrentSequence(currentUser, sequenceInstance, token)
 
         Session session = SecurityUtils.subject.getSession(false)
         session.setAttribute(FeatureStringEnum.DEFAULT_SEQUENCE_NAME.value, sequenceInstance.name)
@@ -98,8 +99,8 @@ class SequenceController {
         sequenceObject.put("length", sequenceInstance.length)
         sequenceObject.put("start", sequenceInstance.start)
         sequenceObject.put("end", sequenceInstance.end)
-        sequenceObject.startBp = userOrganismPreference.startbp
-        sequenceObject.endBp = userOrganismPreference.endbp
+//        sequenceObject.startBp = userOrganismPreference.startbp
+//        sequenceObject.endBp = userOrganismPreference.endbp
 
         render sequenceObject as JSON
     }
@@ -140,7 +141,8 @@ class SequenceController {
     @Transactional
     def lookupSequenceByName(String q, String clientToken) {
         try {
-          Organism organism = preferenceService.getCurrentOrganismForCurrentUser(clientToken)
+//          Organism organism = preferenceService.getCurrentOrganismForCurrentUser(clientToken)
+            Organism organism = permissionService.getOrganismForToken(clientToken)
           def sequences = Sequence.findAllByNameIlikeAndOrganism(q + "%", organism, ["sort": "name", "order": "asc", "max": 20]).collect() {
               it.name
           }
@@ -163,7 +165,8 @@ class SequenceController {
         }
         def organism
         if (!j.name || !j.organism) {
-            organism = preferenceService.getCurrentOrganismForCurrentUser(clientToken)
+//            organism = preferenceService.getCurrentOrganismForCurrentUser(clientToken)
+            organism = permissionService.getOrganismForToken(clientToken)
         } else {
             organism = Organism.findById(j.organism)
         }
@@ -178,7 +181,8 @@ class SequenceController {
     @Transactional
     def getSequences(String name, Integer start, Integer length, String sort, Boolean asc, Integer minFeatureLength, Integer maxFeatureLength, String clientToken) {
         try {
-            Organism organism = preferenceService.getCurrentOrganismForCurrentUser(clientToken)
+//            Organism organism = preferenceService.getCurrentOrganismForCurrentUser(clientToken)
+            Organism organism = permissionService.getOrganismForToken(clientToken)
 
             if (!organism) {
                 render([] as JSON)
@@ -367,7 +371,8 @@ class SequenceController {
     }
 
     def checkPermission(String organismString) {
-        Organism organism = preferenceService.getOrganismForToken(organismString)
+//        Organism organism = preferenceService.getOrganismForToken(organismString)
+        Organism organism = permissionService.getOrganismForToken(organismString)
         if (organism.publicMode || permissionService.checkPermissions(PermissionEnum.READ)) {
             return true
         } else {

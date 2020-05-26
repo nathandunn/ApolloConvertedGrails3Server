@@ -4,18 +4,15 @@ import grails.converters.JSON
 import grails.gorm.transactions.Transactional
 import htsjdk.variant.vcf.VCFFileReader
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
-import org.bbop.apollo.gwt.shared.PermissionEnum
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
 import io.swagger.annotations.*
-
-import javax.servlet.http.HttpServletResponse
 
 @Api(value = "VCF Services: Methods for retrieving VCF track data as JSON")
 @Transactional
 class VcfController {
 
-    def preferenceService
+    def permissionService
     def vcfService
     def trackService
 
@@ -38,10 +35,10 @@ class VcfController {
             @ApiImplicitParam(name = "ignoreCache", type = "boolean", paramType = "query", example = "(default: false).  Use cache for request, if available."),
     ])
     def featuresByLocation(String organismString, String trackName, String sequence, Long fmin, Long fmax, String type, boolean includeGenotypes) {
-        if(!trackService.checkPermission(request, response, organismString)) return
+        if(!trackService.checkPermission(response, organismString)) return
 
         JSONArray featuresArray = new JSONArray()
-        Organism organism = preferenceService.getOrganismForToken(organismString)
+        Organism organism = permissionService.getOrganismForToken(organismString)
         JSONObject trackListObject = trackService.getTrackList(organism.directory)
 
         Boolean ignoreCache = params.ignoreCache != null ? Boolean.valueOf(params.ignoreCache) : false

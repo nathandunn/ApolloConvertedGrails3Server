@@ -34,7 +34,7 @@ class RequestHandlingService {
     def configWrapperService
     def nameService
     def permissionService
-    def preferenceService
+//    def preferenceService
     def featurePropertyService
     def featureEventService
     def goAnnotationService
@@ -663,7 +663,7 @@ class RequestHandlingService {
         Sequence sequence = permissionService.checkPermissions(inputObject, PermissionEnum.READ)
         if (sequenceName != sequence.name) {
             sequence = Sequence.findByNameAndOrganism(sequenceName, sequence.organism)
-            preferenceService.setCurrentSequence(permissionService.getCurrentUser(inputObject), sequence, inputObject.getString(FeatureStringEnum.CLIENT_TOKEN.value))
+//            preferenceService.setCurrentSequence(permissionService.getCurrentUser(inputObject), sequence, inputObject.getString(FeatureStringEnum.CLIENT_TOKEN.value))
         }
         println "getFeatures for organism -> ${sequence.organism.commonName} and ${sequence.name}"
 
