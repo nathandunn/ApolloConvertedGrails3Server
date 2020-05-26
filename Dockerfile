@@ -32,27 +32,20 @@ RUN apt-get -qq update --fix-missing && \
 RUN curl -s "http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/blat/blat" -o /usr/local/bin/blat && \
  		chmod +x /usr/local/bin/blat && \
  		curl -s "http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/faToTwoBit" -o /usr/local/bin/faToTwoBit && \
- 		chmod +x /usr/local/bin/faToTwoBit && \
-		wget --quiet https://github.com/erasche/chado-schema-builder/releases/download/1.31-jenkins26/chado-1.31.sql.gz -O /chado.sql.gz && \
-		gunzip /chado.sql.gz
+ 		chmod +x /usr/local/bin/faToTwoBit
 
 #NOTE, we had problems with the build the archive-file coming in from github so using a clone instead
-RUN npm i -g yarn &&  useradd -ms /bin/bash -d /apollo apollo
-COPY client /apollo/client
+RUN useradd -ms /bin/bash -d /apollo apollo
 COPY gradlew /apollo
 COPY grails-app /apollo/grails-app
 COPY gwt-sdk /apollo/gwt-sdk
 COPY lib /apollo/lib
 COPY src /apollo/src
-COPY src/main/web-app /apollo/web-app
-COPY wrapper /apollo/wrapper
-COPY src/test /apollo/test
 COPY src/main/scripts /apollo/scripts
 ADD gra* /apollo/
 COPY apollo /apollo/apollo
 ADD build* /apollo/
 ADD settings.gradle /apollo
-ADD application.properties /apollo
 RUN ls /apollo
 
 COPY docker-files/build.sh /bin/build.sh
