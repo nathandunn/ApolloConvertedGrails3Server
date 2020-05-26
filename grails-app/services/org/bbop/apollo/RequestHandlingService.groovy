@@ -45,54 +45,54 @@ class RequestHandlingService {
 
 
     public static final List<String> viewableAnnotationFeatureList = [
-            RepeatRegion.class.name,
-            Terminator.class.name,
-            TransposableElement.class.name
+        RepeatRegion.class.name,
+        Terminator.class.name,
+        TransposableElement.class.name
     ]
     public static final List<String> viewableAnnotationTranscriptParentList = [
-            Gene.class.name,
-            Pseudogene.class.name,
-            PseudogenicRegion.class.name,
-            ProcessedPseudogene.class.name,
+        Gene.class.name,
+        Pseudogene.class.name,
+        PseudogenicRegion.class.name,
+        ProcessedPseudogene.class.name,
     ]
 
     public static final List<String> nonCodingAnnotationTranscriptList = [
-            Transcript.class.name,
-            TRNA.class.name,
-            SnRNA.class.name,
-            SnoRNA.class.name,
-            NcRNA.class.name,
-            RRNA.class.name,
-            MiRNA.class.name,
-            GuideRNA.class.name,
-            RNaseMRPRNA.class.name,
-            TelomeraseRNA.class.name,
-            SrpRNA.class.name,
-            LncRNA.class.name,
-            RNaseMRPRNA.class.name,
-            ScRNA.class.name,
-            PiRNA.class.name,
-            TmRNA.class.name,
-            EnzymaticRNA.class.name,
+        Transcript.class.name,
+        TRNA.class.name,
+        SnRNA.class.name,
+        SnoRNA.class.name,
+        NcRNA.class.name,
+        RRNA.class.name,
+        MiRNA.class.name,
+        GuideRNA.class.name,
+        RNaseMRPRNA.class.name,
+        TelomeraseRNA.class.name,
+        SrpRNA.class.name,
+        LncRNA.class.name,
+        RNaseMRPRNA.class.name,
+        ScRNA.class.name,
+        PiRNA.class.name,
+        TmRNA.class.name,
+        EnzymaticRNA.class.name,
     ]
 
     public static final List<String> viewableAnnotationTranscriptList = [MRNA.class.name] + nonCodingAnnotationTranscriptList
 
     public static final List<String> viewableAlterations = [
-            DeletionArtifact.class.name,
-            InsertionArtifact.class.name,
-            SubstitutionArtifact.class.name
+        DeletionArtifact.class.name,
+        InsertionArtifact.class.name,
+        SubstitutionArtifact.class.name
     ]
 
     public static final List<String> viewableSequenceAlterationList = [
-            Deletion.class.name,
-            Insertion.class.name,
-            Substitution.class.name,
-            SNV.class.name,
-            SNP.class.name,
-            MNV.class.name,
-            MNP.class.name,
-            Indel.class.name
+        Deletion.class.name,
+        Insertion.class.name,
+        Substitution.class.name,
+        SNV.class.name,
+        SNP.class.name,
+        MNV.class.name,
+        MNP.class.name,
+        Indel.class.name
     ]
 
     public static
@@ -122,27 +122,27 @@ class RequestHandlingService {
 
             updateFeatureContainer = wrapFeature(updateFeatureContainer, feature)
 
-          JSONObject currentFeatureJsonObject = featureService.convertFeatureToJSON(feature)
-          JSONArray oldFeaturesJsonArray = new JSONArray()
+            JSONObject currentFeatureJsonObject = featureService.convertFeatureToJSON(feature)
+            JSONArray oldFeaturesJsonArray = new JSONArray()
             oldFeaturesJsonArray.add(originalFeatureJsonObject)
             JSONArray newFeaturesJsonArray = new JSONArray()
             newFeaturesJsonArray.add(currentFeatureJsonObject)
             User user = permissionService.getCurrentUser(inputObject)
             featureEventService.addNewFeatureEvent(FeatureOperation.SET_SYMBOL,
-                     feature.name,
-                     uniqueName,
-                     inputObject,
-                     oldFeaturesJsonArray,
-                     newFeaturesJsonArray,
-                     user)
+                feature.name,
+                uniqueName,
+                inputObject,
+                oldFeaturesJsonArray,
+                newFeaturesJsonArray,
+                user)
         }
 
 
-      if (sequence) {
-        AnnotationEvent annotationEvent = new AnnotationEvent(
-          features: updateFeatureContainer
-                    , sequence: sequence
-                    , operation: AnnotationEvent.Operation.UPDATE
+        if (sequence) {
+            AnnotationEvent annotationEvent = new AnnotationEvent(
+                features: updateFeatureContainer
+                , sequence: sequence
+                , operation: AnnotationEvent.Operation.UPDATE
             )
             fireAnnotationEvent(annotationEvent)
         }
@@ -179,19 +179,19 @@ class RequestHandlingService {
             newFeaturesJsonArray.add(currentFeatureJsonObject)
             User user = permissionService.getCurrentUser(inputObject)
             featureEventService.addNewFeatureEvent(FeatureOperation.SET_DESCRIPTION,
-            feature.name,
-            uniqueName,
-            inputObject,
-            oldFeaturesJsonArray,
-            newFeaturesJsonArray,
-            user)
+                feature.name,
+                uniqueName,
+                inputObject,
+                oldFeaturesJsonArray,
+                newFeaturesJsonArray,
+                user)
         }
 
         if (sequence) {
             AnnotationEvent annotationEvent = new AnnotationEvent(
-                    features: updateFeatureContainer,
-                    sequence: sequence,
-                    operation: AnnotationEvent.Operation.UPDATE
+                features: updateFeatureContainer,
+                sequence: sequence,
+                operation: AnnotationEvent.Operation.UPDATE
             )
             fireAnnotationEvent(annotationEvent)
         }
@@ -251,12 +251,12 @@ class RequestHandlingService {
             newFeaturesJsonArray.add(currentFeatureJsonObject)
             User user = permissionService.getCurrentUser(inputObject)
             featureEventService.addNewFeatureEvent(FeatureOperation.DELETE_DBXREF,
-            feature.name,
-            uniqueName,
-            inputObject,
-            oldFeaturesJsonArray,
-            newFeaturesJsonArray,
-            user)
+                feature.name,
+                uniqueName,
+                inputObject,
+                oldFeaturesJsonArray,
+                newFeaturesJsonArray,
+                user)
         }
 
         return updateFeatureContainer
@@ -275,8 +275,8 @@ class RequestHandlingService {
             JSONObject jsonFeature = featuresArray.getJSONObject(i);
             String uniqueName = jsonFeature.get(FeatureStringEnum.UNIQUENAME.value)
             Feature feature = Feature.findByUniqueName(uniqueName)
-          JSONObject originalFeatureJsonObject = featureService.convertFeatureToJSON(feature)
-          log.debug "feature: ${jsonFeature.getJSONArray(FeatureStringEnum.OLD_DBXREFS.value)}"
+            JSONObject originalFeatureJsonObject = featureService.convertFeatureToJSON(feature)
+            log.debug "feature: ${jsonFeature.getJSONArray(FeatureStringEnum.OLD_DBXREFS.value)}"
             JSONObject oldDbXrefJSONObject = jsonFeature.getJSONArray(FeatureStringEnum.OLD_DBXREFS.value).getJSONObject(0)
             JSONObject newDbXrefJSONObject = jsonFeature.getJSONArray(FeatureStringEnum.NEW_DBXREFS.value).getJSONObject(0)
 
@@ -301,21 +301,21 @@ class RequestHandlingService {
 
             featureService.addOwnersByString(inputObject.username, feature)
             updateFeatureContainer = wrapFeature(updateFeatureContainer, feature)
-          JSONObject currentFeatureJsonObject = featureService.convertFeatureToJSON(feature)
+            JSONObject currentFeatureJsonObject = featureService.convertFeatureToJSON(feature)
 
 
-          JSONArray oldFeaturesJsonArray = new JSONArray()
-          oldFeaturesJsonArray.add(originalFeatureJsonObject)
-          JSONArray newFeaturesJsonArray = new JSONArray()
-          newFeaturesJsonArray.add(currentFeatureJsonObject)
-          User user = permissionService.getCurrentUser(inputObject)
-          featureEventService.addNewFeatureEvent(FeatureOperation.SET_DBXREF,
-            feature.name,
-            uniqueName,
-            inputObject,
-            oldFeaturesJsonArray,
-            newFeaturesJsonArray,
-            user)
+            JSONArray oldFeaturesJsonArray = new JSONArray()
+            oldFeaturesJsonArray.add(originalFeatureJsonObject)
+            JSONArray newFeaturesJsonArray = new JSONArray()
+            newFeaturesJsonArray.add(currentFeatureJsonObject)
+            User user = permissionService.getCurrentUser(inputObject)
+            featureEventService.addNewFeatureEvent(FeatureOperation.SET_DBXREF,
+                feature.name,
+                uniqueName,
+                inputObject,
+                oldFeaturesJsonArray,
+                newFeaturesJsonArray,
+                user)
         }
 
         return updateFeatureContainer
@@ -337,29 +337,29 @@ class RequestHandlingService {
             JSONArray commentsArray = jsonFeature.getJSONArray(FeatureStringEnum.COMMENTS.value)
             String uniqueName = jsonFeature.get(FeatureStringEnum.UNIQUENAME.value)
             Feature feature = Feature.findByUniqueName(uniqueName)
-          JSONObject originalFeatureJsonObject = featureService.convertFeatureToJSON(feature)
+            JSONObject originalFeatureJsonObject = featureService.convertFeatureToJSON(feature)
 
-          for (int commentIndex = 0; commentIndex < commentsArray.size(); commentIndex++) {
+            for (int commentIndex = 0; commentIndex < commentsArray.size(); commentIndex++) {
                 String commentString = commentsArray.getString(commentIndex);
                 Comment comment = new Comment(value: commentString, feature: feature).save()
                 featurePropertyService.addComment(feature, comment)
             }
             featureService.addOwnersByString(inputObject.username, feature)
             updateFeatureContainer = wrapFeature(updateFeatureContainer, feature)
-          JSONObject currentFeatureJsonObject = featureService.convertFeatureToJSON(feature)
+            JSONObject currentFeatureJsonObject = featureService.convertFeatureToJSON(feature)
 
-          JSONArray oldFeaturesJsonArray = new JSONArray()
-          oldFeaturesJsonArray.add(originalFeatureJsonObject)
-          JSONArray newFeaturesJsonArray = new JSONArray()
-          newFeaturesJsonArray.add(currentFeatureJsonObject)
-          User user = permissionService.getCurrentUser(inputObject)
-          featureEventService.addNewFeatureEvent(FeatureOperation.ADD_COMMENT,
-            feature.name,
-            uniqueName,
-            inputObject,
-            oldFeaturesJsonArray,
-            newFeaturesJsonArray,
-            user)
+            JSONArray oldFeaturesJsonArray = new JSONArray()
+            oldFeaturesJsonArray.add(originalFeatureJsonObject)
+            JSONArray newFeaturesJsonArray = new JSONArray()
+            newFeaturesJsonArray.add(currentFeatureJsonObject)
+            User user = permissionService.getCurrentUser(inputObject)
+            featureEventService.addNewFeatureEvent(FeatureOperation.ADD_COMMENT,
+                feature.name,
+                uniqueName,
+                inputObject,
+                oldFeaturesJsonArray,
+                newFeaturesJsonArray,
+                user)
         }
 
         return updateFeatureContainer
@@ -384,19 +384,19 @@ class RequestHandlingService {
             featureService.addOwnersByString(inputObject.username, feature)
             updateFeatureContainer = wrapFeature(updateFeatureContainer, feature)
 
-          JSONObject currentFeatureJsonObject = featureService.convertFeatureToJSON(feature)
-          JSONArray oldFeaturesJsonArray = new JSONArray()
-          oldFeaturesJsonArray.add(originalFeatureJsonObject)
-          JSONArray newFeaturesJsonArray = new JSONArray()
-          newFeaturesJsonArray.add(currentFeatureJsonObject)
-          User user = permissionService.getCurrentUser(inputObject)
-          featureEventService.addNewFeatureEvent(FeatureOperation.DELETE_COMMENT,
-            feature.name,
-            uniqueName,
-            inputObject,
-            oldFeaturesJsonArray,
-            newFeaturesJsonArray,
-            user)
+            JSONObject currentFeatureJsonObject = featureService.convertFeatureToJSON(feature)
+            JSONArray oldFeaturesJsonArray = new JSONArray()
+            oldFeaturesJsonArray.add(originalFeatureJsonObject)
+            JSONArray newFeaturesJsonArray = new JSONArray()
+            newFeaturesJsonArray.add(currentFeatureJsonObject)
+            User user = permissionService.getCurrentUser(inputObject)
+            featureEventService.addNewFeatureEvent(FeatureOperation.DELETE_COMMENT,
+                feature.name,
+                uniqueName,
+                inputObject,
+                oldFeaturesJsonArray,
+                newFeaturesJsonArray,
+                user)
 
         }
 
@@ -414,9 +414,9 @@ class RequestHandlingService {
             JSONArray newComments = jsonFeature.getJSONArray(FeatureStringEnum.NEW_COMMENTS.value)
             String uniqueName = jsonFeature.get(FeatureStringEnum.UNIQUENAME.value)
             Feature feature = Feature.findByUniqueName(uniqueName)
-          JSONObject originalFeatureJsonObject = featureService.convertFeatureToJSON(feature)
+            JSONObject originalFeatureJsonObject = featureService.convertFeatureToJSON(feature)
 
-          for (int commentIndex = 0; commentIndex < oldComments.size(); commentIndex++) {
+            for (int commentIndex = 0; commentIndex < oldComments.size(); commentIndex++) {
                 String oldCommentString = oldComments.getString(commentIndex)
                 String newCommentString = newComments.getString(commentIndex)
 
@@ -427,19 +427,19 @@ class RequestHandlingService {
             featureService.addOwnersByString(inputObject.username, feature)
             updateFeatureContainer = wrapFeature(updateFeatureContainer, feature)
 
-          JSONObject currentFeatureJsonObject = featureService.convertFeatureToJSON(feature)
-          JSONArray oldFeaturesJsonArray = new JSONArray()
-          oldFeaturesJsonArray.add(originalFeatureJsonObject)
-          JSONArray newFeaturesJsonArray = new JSONArray()
-          newFeaturesJsonArray.add(currentFeatureJsonObject)
-          User user = permissionService.getCurrentUser(inputObject)
-          featureEventService.addNewFeatureEvent(FeatureOperation.SET_COMMENT,
-            feature.name,
-            uniqueName,
-            inputObject,
-            oldFeaturesJsonArray,
-            newFeaturesJsonArray,
-            user)
+            JSONObject currentFeatureJsonObject = featureService.convertFeatureToJSON(feature)
+            JSONArray oldFeaturesJsonArray = new JSONArray()
+            oldFeaturesJsonArray.add(originalFeatureJsonObject)
+            JSONArray newFeaturesJsonArray = new JSONArray()
+            newFeaturesJsonArray.add(currentFeatureJsonObject)
+            User user = permissionService.getCurrentUser(inputObject)
+            featureEventService.addNewFeatureEvent(FeatureOperation.SET_COMMENT,
+                feature.name,
+                uniqueName,
+                inputObject,
+                oldFeaturesJsonArray,
+                newFeaturesJsonArray,
+                user)
 
         }
         return updateFeatureContainer
@@ -457,11 +457,11 @@ class RequestHandlingService {
             String statusString = jsonFeature.getString(FeatureStringEnum.STATUS.value)
             AvailableStatus availableStatus = AvailableStatus.findByValue(statusString)
             Feature feature = Feature.findByUniqueName(uniqueName)
-          JSONObject originalFeatureJsonObject = featureService.convertFeatureToJSON(feature)
-          if (availableStatus) {
+            JSONObject originalFeatureJsonObject = featureService.convertFeatureToJSON(feature)
+            if (availableStatus) {
                 Status status = new Status(
-                        value: availableStatus.value
-                        , feature: feature
+                    value: availableStatus.value
+                    , feature: feature
                 ).save()
                 feature.status = status
                 feature.save()
@@ -469,25 +469,25 @@ class RequestHandlingService {
             featureService.addOwnersByString(inputObject.username, feature)
             updateFeatureContainer = wrapFeature(updateFeatureContainer, feature)
 
-          JSONObject currentFeatureJsonObject = featureService.convertFeatureToJSON(feature)
-          JSONArray oldFeaturesJsonArray = new JSONArray()
-          oldFeaturesJsonArray.add(originalFeatureJsonObject)
-          JSONArray newFeaturesJsonArray = new JSONArray()
-          newFeaturesJsonArray.add(currentFeatureJsonObject)
-          User user = permissionService.getCurrentUser(inputObject)
-          featureEventService.addNewFeatureEvent(FeatureOperation.SET_STATUS,
-            feature.name,
-            uniqueName,
-            inputObject,
-            oldFeaturesJsonArray,
-            newFeaturesJsonArray,
-            user)
+            JSONObject currentFeatureJsonObject = featureService.convertFeatureToJSON(feature)
+            JSONArray oldFeaturesJsonArray = new JSONArray()
+            oldFeaturesJsonArray.add(originalFeatureJsonObject)
+            JSONArray newFeaturesJsonArray = new JSONArray()
+            newFeaturesJsonArray.add(currentFeatureJsonObject)
+            User user = permissionService.getCurrentUser(inputObject)
+            featureEventService.addNewFeatureEvent(FeatureOperation.SET_STATUS,
+                feature.name,
+                uniqueName,
+                inputObject,
+                oldFeaturesJsonArray,
+                newFeaturesJsonArray,
+                user)
         }
-      if (sequence) {
-        AnnotationEvent annotationEvent = new AnnotationEvent(
-                    features: updateFeatureContainer
-                    , sequence: sequence
-                    , operation: AnnotationEvent.Operation.UPDATE
+        if (sequence) {
+            AnnotationEvent annotationEvent = new AnnotationEvent(
+                features: updateFeatureContainer
+                , sequence: sequence
+                , operation: AnnotationEvent.Operation.UPDATE
             )
             fireAnnotationEvent(annotationEvent)
         }
@@ -508,30 +508,30 @@ class RequestHandlingService {
             String uniqueName = jsonFeature.get(FeatureStringEnum.UNIQUENAME.value)
             String statusString = jsonFeature.getString(FeatureStringEnum.STATUS.value)
             Feature feature = Feature.findByUniqueName(uniqueName)
-          JSONObject originalFeatureJsonObject = featureService.convertFeatureToJSON(feature)
-          feature.status = null
+            JSONObject originalFeatureJsonObject = featureService.convertFeatureToJSON(feature)
+            feature.status = null
             feature.save()
             updateFeatureContainer = wrapFeature(updateFeatureContainer, feature)
 
-          JSONObject currentFeatureJsonObject = featureService.convertFeatureToJSON(feature)
-          JSONArray oldFeaturesJsonArray = new JSONArray()
-          oldFeaturesJsonArray.add(originalFeatureJsonObject)
-          JSONArray newFeaturesJsonArray = new JSONArray()
-          newFeaturesJsonArray.add(currentFeatureJsonObject)
-          User user = permissionService.getCurrentUser(inputObject)
-          featureEventService.addNewFeatureEvent(FeatureOperation.DELETE_COMMENT,
-            feature.name,
-            uniqueName,
-            inputObject,
-            oldFeaturesJsonArray,
-            newFeaturesJsonArray,
-            user)
+            JSONObject currentFeatureJsonObject = featureService.convertFeatureToJSON(feature)
+            JSONArray oldFeaturesJsonArray = new JSONArray()
+            oldFeaturesJsonArray.add(originalFeatureJsonObject)
+            JSONArray newFeaturesJsonArray = new JSONArray()
+            newFeaturesJsonArray.add(currentFeatureJsonObject)
+            User user = permissionService.getCurrentUser(inputObject)
+            featureEventService.addNewFeatureEvent(FeatureOperation.DELETE_COMMENT,
+                feature.name,
+                uniqueName,
+                inputObject,
+                oldFeaturesJsonArray,
+                newFeaturesJsonArray,
+                user)
         }
-      if (sequence) {
-        AnnotationEvent annotationEvent = new AnnotationEvent(
-                    features: updateFeatureContainer
-                    , sequence: sequence
-                    , operation: AnnotationEvent.Operation.UPDATE
+        if (sequence) {
+            AnnotationEvent annotationEvent = new AnnotationEvent(
+                features: updateFeatureContainer
+                , sequence: sequence
+                , operation: AnnotationEvent.Operation.UPDATE
             )
             fireAnnotationEvent(annotationEvent)
         }
@@ -555,7 +555,7 @@ class RequestHandlingService {
                 commentsArray.add(commentString)
             }
         }
-        featureContainer.put(FeatureStringEnum.COMMENTS.value,commentsArray )
+        featureContainer.put(FeatureStringEnum.COMMENTS.value, commentsArray)
         return featureContainer
 
     }
@@ -570,8 +570,8 @@ class RequestHandlingService {
             JSONObject jsonFeature = featuresArray.getJSONObject(i);
             String uniqueName = jsonFeature.get(FeatureStringEnum.UNIQUENAME.value)
             Feature feature = Feature.findByUniqueName(uniqueName)
-          JSONObject originalFeatureJsonObject = featureService.convertFeatureToJSON(feature)
-          log.debug "feature: ${jsonFeature.getJSONArray(FeatureStringEnum.DBXREFS.value)}"
+            JSONObject originalFeatureJsonObject = featureService.convertFeatureToJSON(feature)
+            log.debug "feature: ${jsonFeature.getJSONArray(FeatureStringEnum.DBXREFS.value)}"
             JSONArray dbXrefJSONArray = jsonFeature.getJSONArray(FeatureStringEnum.DBXREFS.value)
 
             for (int j = 0; j < dbXrefJSONArray.size(); j++) {
@@ -589,19 +589,19 @@ class RequestHandlingService {
             updateFeatureContainer = wrapFeature(updateFeatureContainer, feature)
 
 
-          JSONObject currentFeatureJsonObject = featureService.convertFeatureToJSON(feature)
-          JSONArray oldFeaturesJsonArray = new JSONArray()
-          oldFeaturesJsonArray.add(originalFeatureJsonObject)
-          JSONArray newFeaturesJsonArray = new JSONArray()
-          newFeaturesJsonArray.add(currentFeatureJsonObject)
-          User user = permissionService.getCurrentUser(inputObject)
-          featureEventService.addNewFeatureEvent(FeatureOperation.ADD_DBXREF,
-            feature.name,
-            uniqueName,
-            inputObject,
-            oldFeaturesJsonArray,
-            newFeaturesJsonArray,
-            user)
+            JSONObject currentFeatureJsonObject = featureService.convertFeatureToJSON(feature)
+            JSONArray oldFeaturesJsonArray = new JSONArray()
+            oldFeaturesJsonArray.add(originalFeatureJsonObject)
+            JSONArray newFeaturesJsonArray = new JSONArray()
+            newFeaturesJsonArray.add(currentFeatureJsonObject)
+            User user = permissionService.getCurrentUser(inputObject)
+            featureEventService.addNewFeatureEvent(FeatureOperation.ADD_DBXREF,
+                feature.name,
+                uniqueName,
+                inputObject,
+                oldFeaturesJsonArray,
+                newFeaturesJsonArray,
+                user)
         }
 
         return updateFeatureContainer
@@ -629,25 +629,25 @@ class RequestHandlingService {
 
             updateFeatureContainer = wrapFeature(updateFeatureContainer, feature)
 
-          JSONArray oldFeaturesJsonArray = new JSONArray()
-          oldFeaturesJsonArray.add(originalFeatureJsonObject)
-          JSONArray newFeaturesJsonArray = new JSONArray()
-          newFeaturesJsonArray.add(currentFeatureJsonObject)
-          User user = permissionService.getCurrentUser(inputObject)
-          featureEventService.addNewFeatureEvent(FeatureOperation.SET_NAME,
-            feature.name,
-            uniqueName,
-            inputObject,
-            oldFeaturesJsonArray,
-            newFeaturesJsonArray,
-            user)
+            JSONArray oldFeaturesJsonArray = new JSONArray()
+            oldFeaturesJsonArray.add(originalFeatureJsonObject)
+            JSONArray newFeaturesJsonArray = new JSONArray()
+            newFeaturesJsonArray.add(currentFeatureJsonObject)
+            User user = permissionService.getCurrentUser(inputObject)
+            featureEventService.addNewFeatureEvent(FeatureOperation.SET_NAME,
+                feature.name,
+                uniqueName,
+                inputObject,
+                oldFeaturesJsonArray,
+                newFeaturesJsonArray,
+                user)
         }
 
-      if (sequence) {
-        AnnotationEvent annotationEvent = new AnnotationEvent(
-                    features: updateFeatureContainer
-                    , sequence: sequence
-                    , operation: AnnotationEvent.Operation.UPDATE
+        if (sequence) {
+            AnnotationEvent annotationEvent = new AnnotationEvent(
+                features: updateFeatureContainer
+                , sequence: sequence
+                , operation: AnnotationEvent.Operation.UPDATE
             )
             fireAnnotationEvent(annotationEvent)
         }
@@ -655,7 +655,7 @@ class RequestHandlingService {
         return updateFeatureContainer
     }
 
-        @Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     JSONObject getFeatures(JSONObject inputObject) {
         long start = System.currentTimeMillis()
 
@@ -714,7 +714,7 @@ class RequestHandlingService {
      * @param inputObject
      * @return
      */
-        JSONObject addExon(JSONObject inputObject) {
+    JSONObject addExon(JSONObject inputObject) {
         JSONArray features = inputObject.getJSONArray(FeatureStringEnum.FEATURES.value)
         String uniqueName = features.getJSONObject(0).getString(FeatureStringEnum.UNIQUENAME.value)
         Transcript transcript = Transcript.findByUniqueName(uniqueName)
@@ -756,9 +756,9 @@ class RequestHandlingService {
         featureEventService.addNewFeatureEvent(FeatureOperation.ADD_EXON, gene.name, transcript.uniqueName, inputObject, oldJsonObject, newJsonObject, permissionService.getCurrentUser(inputObject))
 
         AnnotationEvent annotationEvent = new AnnotationEvent(
-                features: returnObject
-                , sequence: sequence
-                , operation: AnnotationEvent.Operation.UPDATE
+            features: returnObject
+            , sequence: sequence
+            , operation: AnnotationEvent.Operation.UPDATE
         )
 
         fireAnnotationEvent(annotationEvent)
@@ -767,7 +767,7 @@ class RequestHandlingService {
 
     }
 
-        JSONObject addTranscript(JSONObject inputObject) throws Exception {
+    JSONObject addTranscript(JSONObject inputObject) throws Exception {
         JSONArray featuresArray = inputObject.getJSONArray(FeatureStringEnum.FEATURES.value)
         JSONObject returnObject = jsonWebUtilityService.createJSONFeatureContainer()
 
@@ -820,9 +820,9 @@ class RequestHandlingService {
 
         if (!suppressEvents) {
             AnnotationEvent annotationEvent = new AnnotationEvent(
-                    features: returnObject
-                    , sequence: sequence
-                    , operation: AnnotationEvent.Operation.ADD
+                features: returnObject
+                , sequence: sequence
+                , operation: AnnotationEvent.Operation.ADD
             )
 
             fireAnnotationEvent(annotationEvent)
@@ -835,7 +835,7 @@ class RequestHandlingService {
      * Transcript is the first object
      * @param inputObject
      */
-        JSONObject setTranslationStart(JSONObject inputObject) throws AnnotationException {
+    JSONObject setTranslationStart(JSONObject inputObject) throws AnnotationException {
         JSONArray features = inputObject.getJSONArray(FeatureStringEnum.FEATURES.value)
         JSONObject transcriptJSONObject = features.getJSONObject(0);
 
@@ -864,9 +864,9 @@ class RequestHandlingService {
             }
             if (sequence) {
                 AnnotationEvent annotationEvent = new AnnotationEvent(
-                        features: updateFeatureContainer,
-                        sequence: sequence,
-                        operation: AnnotationEvent.Operation.UPDATE
+                    features: updateFeatureContainer,
+                    sequence: sequence,
+                    operation: AnnotationEvent.Operation.UPDATE
                 )
                 fireAnnotationEvent(annotationEvent)
             }
@@ -880,9 +880,9 @@ class RequestHandlingService {
 
         if (sequence) {
             AnnotationEvent annotationEvent = new AnnotationEvent(
-                    features: featureContainer
-                    , sequence: sequence
-                    , operation: AnnotationEvent.Operation.UPDATE
+                features: featureContainer
+                , sequence: sequence
+                , operation: AnnotationEvent.Operation.UPDATE
             )
             fireAnnotationEvent(annotationEvent)
         }
@@ -894,7 +894,7 @@ class RequestHandlingService {
      * Transcript is the first object
      * @param inputObject
      */
-        JSONObject setTranslationEnd(JSONObject inputObject) {
+    JSONObject setTranslationEnd(JSONObject inputObject) {
         JSONArray features = inputObject.getJSONArray(FeatureStringEnum.FEATURES.value)
         JSONObject transcriptJSONObject = features.getJSONObject(0);
 
@@ -922,9 +922,9 @@ class RequestHandlingService {
             }
             if (sequence) {
                 AnnotationEvent annotationEvent = new AnnotationEvent(
-                        features: updateFeatureContainer,
-                        sequence: sequence,
-                        operation: AnnotationEvent.Operation.UPDATE
+                    features: updateFeatureContainer,
+                    sequence: sequence,
+                    operation: AnnotationEvent.Operation.UPDATE
                 )
                 fireAnnotationEvent(annotationEvent)
             }
@@ -937,9 +937,9 @@ class RequestHandlingService {
 
         if (sequence) {
             AnnotationEvent annotationEvent = new AnnotationEvent(
-                    features: featureContainer
-                    , sequence: sequence
-                    , operation: AnnotationEvent.Operation.UPDATE
+                features: featureContainer
+                , sequence: sequence
+                , operation: AnnotationEvent.Operation.UPDATE
             )
             fireAnnotationEvent(annotationEvent)
         }
@@ -947,7 +947,7 @@ class RequestHandlingService {
         return featureContainer
     }
 
-        def setReadthroughStopCodon(JSONObject inputObject) {
+    def setReadthroughStopCodon(JSONObject inputObject) {
         JSONArray features = inputObject.getJSONArray(FeatureStringEnum.FEATURES.value)
         JSONObject transcriptJSONObject = features.getJSONObject(0)
 
@@ -968,9 +968,9 @@ class RequestHandlingService {
             }
             if (sequence) {
                 AnnotationEvent annotationEvent = new AnnotationEvent(
-                        features: updateFeatureContainer,
-                        sequence: sequence,
-                        operation: AnnotationEvent.Operation.UPDATE
+                    features: updateFeatureContainer,
+                    sequence: sequence,
+                    operation: AnnotationEvent.Operation.UPDATE
                 )
                 fireAnnotationEvent(annotationEvent)
             }
@@ -980,9 +980,9 @@ class RequestHandlingService {
 
         if (sequence) {
             AnnotationEvent annotationEvent = new AnnotationEvent(
-                    features: featureContainer
-                    , sequence: sequence
-                    , operation: AnnotationEvent.Operation.UPDATE
+                features: featureContainer
+                , sequence: sequence
+                , operation: AnnotationEvent.Operation.UPDATE
             )
             fireAnnotationEvent(annotationEvent)
         }
@@ -994,7 +994,7 @@ class RequestHandlingService {
         return returnObject
     }
 
-        def setAcceptor(JSONObject inputObject, boolean upstreamDonor) {
+    def setAcceptor(JSONObject inputObject, boolean upstreamDonor) {
         JSONArray features = inputObject.getJSONArray(FeatureStringEnum.FEATURES.value)
         Sequence sequence = permissionService.checkPermissions(inputObject, PermissionEnum.WRITE)
 
@@ -1026,9 +1026,9 @@ class RequestHandlingService {
                 }
                 if (sequence) {
                     AnnotationEvent annotationEvent = new AnnotationEvent(
-                            features: updateFeatureContainer,
-                            sequence: sequence,
-                            operation: AnnotationEvent.Operation.UPDATE
+                        features: updateFeatureContainer,
+                        sequence: sequence,
+                        operation: AnnotationEvent.Operation.UPDATE
                     )
                     fireAnnotationEvent(annotationEvent)
                 }
@@ -1042,9 +1042,9 @@ class RequestHandlingService {
 
         if (sequence) {
             AnnotationEvent annotationEvent = new AnnotationEvent(
-                    features: featureContainer
-                    , sequence: sequence
-                    , operation: AnnotationEvent.Operation.UPDATE
+                features: featureContainer
+                , sequence: sequence
+                , operation: AnnotationEvent.Operation.UPDATE
             )
             fireAnnotationEvent(annotationEvent)
         }
@@ -1053,7 +1053,7 @@ class RequestHandlingService {
     }
 
 
-        def setDonor(JSONObject inputObject, boolean upstreamDonor) {
+    def setDonor(JSONObject inputObject, boolean upstreamDonor) {
         JSONArray features = inputObject.getJSONArray(FeatureStringEnum.FEATURES.value)
         Sequence sequence = permissionService.checkPermissions(inputObject, PermissionEnum.WRITE)
 
@@ -1085,9 +1085,9 @@ class RequestHandlingService {
                 }
                 if (sequence) {
                     AnnotationEvent annotationEvent = new AnnotationEvent(
-                            features: updateFeatureContainer,
-                            sequence: sequence,
-                            operation: AnnotationEvent.Operation.UPDATE
+                        features: updateFeatureContainer,
+                        sequence: sequence,
+                        operation: AnnotationEvent.Operation.UPDATE
                     )
                     fireAnnotationEvent(annotationEvent)
                 }
@@ -1101,9 +1101,9 @@ class RequestHandlingService {
 
         if (sequence) {
             AnnotationEvent annotationEvent = new AnnotationEvent(
-                    features: featureContainer
-                    , sequence: sequence
-                    , operation: AnnotationEvent.Operation.UPDATE
+                features: featureContainer
+                , sequence: sequence
+                , operation: AnnotationEvent.Operation.UPDATE
             )
             fireAnnotationEvent(annotationEvent)
         }
@@ -1111,7 +1111,7 @@ class RequestHandlingService {
         return featureContainer
     }
 
-        JSONObject setLongestOrf(JSONObject inputObject) {
+    JSONObject setLongestOrf(JSONObject inputObject) {
         JSONArray features = inputObject.getJSONArray(FeatureStringEnum.FEATURES.value)
         JSONObject transcriptJSONObject = features.getJSONObject(0);
 
@@ -1130,9 +1130,9 @@ class RequestHandlingService {
             }
             if (sequence) {
                 AnnotationEvent annotationEvent = new AnnotationEvent(
-                        features: updateFeatureContainer,
-                        sequence: sequence,
-                        operation: AnnotationEvent.Operation.UPDATE
+                    features: updateFeatureContainer,
+                    sequence: sequence,
+                    operation: AnnotationEvent.Operation.UPDATE
                 )
                 fireAnnotationEvent(annotationEvent)
             }
@@ -1142,9 +1142,9 @@ class RequestHandlingService {
 
         if (sequence) {
             AnnotationEvent annotationEvent = new AnnotationEvent(
-                    features: featureContainer
-                    , sequence: sequence
-                    , operation: AnnotationEvent.Operation.UPDATE
+                features: featureContainer
+                , sequence: sequence
+                , operation: AnnotationEvent.Operation.UPDATE
             )
             fireAnnotationEvent(annotationEvent)
         }
@@ -1157,7 +1157,7 @@ class RequestHandlingService {
      * @param inputObject
      * @return
      */
-        JSONObject setExonBoundaries(JSONObject inputObject) {
+    JSONObject setExonBoundaries(JSONObject inputObject) {
         JSONArray features = inputObject.getJSONArray(FeatureStringEnum.FEATURES.value)
 
         Sequence sequence = permissionService.checkPermissions(inputObject, PermissionEnum.WRITE)
@@ -1209,9 +1209,9 @@ class RequestHandlingService {
                 }
                 if (sequence) {
                     AnnotationEvent annotationEvent = new AnnotationEvent(
-                            features: updateFeatureContainer,
-                            sequence: sequence,
-                            operation: AnnotationEvent.Operation.UPDATE
+                        features: updateFeatureContainer,
+                        sequence: sequence,
+                        operation: AnnotationEvent.Operation.UPDATE
                     )
                     fireAnnotationEvent(annotationEvent)
                 }
@@ -1224,9 +1224,9 @@ class RequestHandlingService {
         }
 
         AnnotationEvent annotationEvent = new AnnotationEvent(
-                features: returnObject
-                , sequence: sequence
-                , operation: AnnotationEvent.Operation.UPDATE
+            features: returnObject
+            , sequence: sequence
+            , operation: AnnotationEvent.Operation.UPDATE
         )
 
         fireAnnotationEvent(annotationEvent)
@@ -1235,7 +1235,7 @@ class RequestHandlingService {
         return returnObject
     }
 
-        JSONObject setBoundaries(JSONObject inputObject) {
+    JSONObject setBoundaries(JSONObject inputObject) {
         JSONArray features = inputObject.getJSONArray(FeatureStringEnum.FEATURES.value)
 
         Sequence sequence = permissionService.checkPermissions(inputObject, PermissionEnum.WRITE)
@@ -1272,9 +1272,9 @@ class RequestHandlingService {
         }
 
         AnnotationEvent annotationEvent = new AnnotationEvent(
-                features: returnObject
-                , sequence: sequence
-                , operation: AnnotationEvent.Operation.UPDATE
+            features: returnObject
+            , sequence: sequence
+            , operation: AnnotationEvent.Operation.UPDATE
         )
 
         fireAnnotationEvent(annotationEvent)
@@ -1323,8 +1323,7 @@ class RequestHandlingService {
     }
 
 
-
-        JSONObject deleteSequenceAlteration(JSONObject inputObject) {
+    JSONObject deleteSequenceAlteration(JSONObject inputObject) {
         JSONObject updateFeatureContainer = jsonWebUtilityService.createJSONFeatureContainer();
         JSONObject deleteFeatureContainer = jsonWebUtilityService.createJSONFeatureContainer();
         JSONArray features = inputObject.getJSONArray(FeatureStringEnum.FEATURES.value)
@@ -1352,15 +1351,15 @@ class RequestHandlingService {
         }
 
         AnnotationEvent deleteAnnotationEvent = new AnnotationEvent(
-                features: deleteFeatureContainer
-                , sequence: sequence
-                , operation: AnnotationEvent.Operation.DELETE
-                , sequenceAlterationEvent: true
+            features: deleteFeatureContainer
+            , sequence: sequence
+            , operation: AnnotationEvent.Operation.DELETE
+            , sequenceAlterationEvent: true
         )
         AnnotationEvent updateAnnotationEvent = new AnnotationEvent(
-                features: updateFeatureContainer
-                , sequence: sequence
-                , operation: AnnotationEvent.Operation.UPDATE
+            features: updateFeatureContainer
+            , sequence: sequence
+            , operation: AnnotationEvent.Operation.UPDATE
         )
         fireAnnotationEvent(deleteAnnotationEvent)
         fireAnnotationEvent(updateAnnotationEvent)
@@ -1369,7 +1368,7 @@ class RequestHandlingService {
     }
 
 //    { "track": "GroupUn4157", "features": [ { "location": { "fmin": 1284, "fmax": 1284, "strand": 1 }, "type": {"name": "insertion", "cv": { "name":"sequence" } }, "residues": "ATATATA" } ], "operation": "add_sequence_alteration" }
-        def addSequenceAlteration(JSONObject inputObject) {
+    def addSequenceAlteration(JSONObject inputObject) {
         JSONObject updateFeatureContainer = jsonWebUtilityService.createJSONFeatureContainer();
         JSONObject addFeatureContainer = jsonWebUtilityService.createJSONFeatureContainer();
         JSONArray features = inputObject.getJSONArray(FeatureStringEnum.FEATURES.value)
@@ -1414,9 +1413,9 @@ class RequestHandlingService {
                     String tag = property.getString(FeatureStringEnum.TAG.value)
                     String value = property.getString(FeatureStringEnum.VALUE.value)
                     FeatureProperty featureProperty = new FeatureProperty(
-                            feature: sequenceAlteration,
-                            value: value,
-                            tag: tag
+                        feature: sequenceAlteration,
+                        value: value,
+                        tag: tag
                     ).save()
                     featurePropertyService.addProperty(sequenceAlteration, featureProperty)
                     sequenceAlteration.save(flush: true)
@@ -1438,15 +1437,15 @@ class RequestHandlingService {
         }
 
         AnnotationEvent addAnnotationEvent = new AnnotationEvent(
-                features: addFeatureContainer
-                , sequence: sequence
-                , operation: AnnotationEvent.Operation.ADD
-                , sequenceAlterationEvent: true
+            features: addFeatureContainer
+            , sequence: sequence
+            , operation: AnnotationEvent.Operation.ADD
+            , sequenceAlterationEvent: true
         )
         AnnotationEvent updateAnnotationEvent = new AnnotationEvent(
-                features: updateFeatureContainer
-                , sequence: sequence
-                , operation: AnnotationEvent.Operation.UPDATE
+            features: updateFeatureContainer
+            , sequence: sequence
+            , operation: AnnotationEvent.Operation.UPDATE
         )
         fireAnnotationEvent(addAnnotationEvent)
         fireAnnotationEvent(updateAnnotationEvent)
@@ -1474,19 +1473,19 @@ class RequestHandlingService {
             updateFeatureContainer.getJSONArray(FeatureStringEnum.FEATURES.value).put(featureService.convertFeatureToJSON(feature));
 
 
-          JSONObject currentFeatureJsonObject = featureService.convertFeatureToJSON(feature)
-          JSONArray oldFeaturesJsonArray = new JSONArray()
-          oldFeaturesJsonArray.add(originalFeatureJsonObject)
-          JSONArray newFeaturesJsonArray = new JSONArray()
-          newFeaturesJsonArray.add(currentFeatureJsonObject)
-          User user = permissionService.getCurrentUser(inputObject)
-          featureEventService.addNewFeatureEvent(FeatureOperation.ADD_ATTRIBUTE,
-            feature.name,
-            feature.uniqueName,
-            inputObject,
-            oldFeaturesJsonArray,
-            newFeaturesJsonArray,
-            user)
+            JSONObject currentFeatureJsonObject = featureService.convertFeatureToJSON(feature)
+            JSONArray oldFeaturesJsonArray = new JSONArray()
+            oldFeaturesJsonArray.add(originalFeatureJsonObject)
+            JSONArray newFeaturesJsonArray = new JSONArray()
+            newFeaturesJsonArray.add(currentFeatureJsonObject)
+            User user = permissionService.getCurrentUser(inputObject)
+            featureEventService.addNewFeatureEvent(FeatureOperation.ADD_ATTRIBUTE,
+                feature.name,
+                feature.uniqueName,
+                inputObject,
+                oldFeaturesJsonArray,
+                newFeaturesJsonArray,
+                user)
         }
 
         return updateFeatureContainer
@@ -1500,8 +1499,8 @@ class RequestHandlingService {
         for (int i = 0; i < features.length(); ++i) {
             JSONObject jsonFeature = features.getJSONObject(i);
             Feature feature = Feature.findByUniqueName(jsonFeature.getString(FeatureStringEnum.UNIQUENAME.value))
-          JSONObject originalFeatureJsonObject = featureService.convertFeatureToJSON(feature)
-          JSONArray properties = jsonFeature.getJSONArray(FeatureStringEnum.NON_RESERVED_PROPERTIES.value);
+            JSONObject originalFeatureJsonObject = featureService.convertFeatureToJSON(feature)
+            JSONArray properties = jsonFeature.getJSONArray(FeatureStringEnum.NON_RESERVED_PROPERTIES.value);
             for (int j = 0; j < properties.length(); ++j) {
                 JSONObject property = properties.getJSONObject(j);
                 String tagString = property.getString(FeatureStringEnum.TAG.value)
@@ -1527,18 +1526,18 @@ class RequestHandlingService {
             newFeaturesJsonArray.add(currentFeatureJsonObject)
             User user = permissionService.getCurrentUser(inputObject)
             featureEventService.addNewFeatureEvent(FeatureOperation.DELETE_ATTRIBUTE,
-              feature.name,
-              feature.uniqueName,
-              inputObject,
-              oldFeaturesJsonArray,
-              newFeaturesJsonArray,
-              user)
+                feature.name,
+                feature.uniqueName,
+                inputObject,
+                oldFeaturesJsonArray,
+                newFeaturesJsonArray,
+                user)
         }
 
-      return updateFeatureContainer
+        return updateFeatureContainer
     }
 
-  def updateNonReservedProperties(JSONObject inputObject) {
+    def updateNonReservedProperties(JSONObject inputObject) {
         JSONObject updateFeatureContainer = jsonWebUtilityService.createJSONFeatureContainer();
         JSONArray features = inputObject.getJSONArray(FeatureStringEnum.FEATURES.value)
         Sequence sequence = permissionService.checkPermissions(inputObject, PermissionEnum.WRITE)
@@ -1575,12 +1574,12 @@ class RequestHandlingService {
             newFeaturesJsonArray.add(currentFeatureJsonObject)
             User user = permissionService.getCurrentUser(inputObject)
             featureEventService.addNewFeatureEvent(FeatureOperation.SET_ATTRIBUTE,
-              feature.name,
-              feature.uniqueName,
-              inputObject,
-              oldFeaturesJsonArray,
-              newFeaturesJsonArray,
-              user)
+                feature.name,
+                feature.uniqueName,
+                inputObject,
+                oldFeaturesJsonArray,
+                newFeaturesJsonArray,
+                user)
         }
 //        fireDataStoreChange(updateFeatureContainer, track, Operation.UPDATE);
     }
@@ -1597,8 +1596,8 @@ class RequestHandlingService {
                 log.error("Feature ${feature.name} already locked")
             } else {
                 FeatureProperty featureProperty = new FeatureProperty(
-                        value: FeatureStringEnum.LOCKED.value
-                        , feature: feature
+                    value: FeatureStringEnum.LOCKED.value
+                    , feature: feature
                 ).save()
                 feature.addToFeatureProperties(featureProperty)
                 feature.save()
@@ -1608,9 +1607,9 @@ class RequestHandlingService {
 
 
         AnnotationEvent annotationEvent = new AnnotationEvent(
-                features: featureContainer
-                , sequence: sequence
-                , operation: AnnotationEvent.Operation.UPDATE
+            features: featureContainer
+            , sequence: sequence
+            , operation: AnnotationEvent.Operation.UPDATE
         )
 
         fireAnnotationEvent(annotationEvent)
@@ -1640,9 +1639,9 @@ class RequestHandlingService {
 
 
         AnnotationEvent annotationEvent = new AnnotationEvent(
-                features: featureContainer
-                , sequence: sequence
-                , operation: AnnotationEvent.Operation.UPDATE
+            features: featureContainer
+            , sequence: sequence
+            , operation: AnnotationEvent.Operation.UPDATE
         )
 
         fireAnnotationEvent(annotationEvent)
@@ -1650,7 +1649,7 @@ class RequestHandlingService {
         return featureContainer
     }
 
-        def removeCds(JSONObject inputObject) {
+    def removeCds(JSONObject inputObject) {
         Sequence sequence = permissionService.checkPermissions(inputObject, PermissionEnum.WRITE)
         JSONObject featureContainer = jsonWebUtilityService.createJSONFeatureContainer()
         JSONArray features = inputObject.getJSONArray(FeatureStringEnum.FEATURES.value)
@@ -1671,9 +1670,9 @@ class RequestHandlingService {
                         }
                         if (sequence) {
                             AnnotationEvent annotationEvent = new AnnotationEvent(
-                                    features: updateFeatureContainer,
-                                    sequence: sequence,
-                                    operation: AnnotationEvent.Operation.UPDATE
+                                features: updateFeatureContainer,
+                                sequence: sequence,
+                                operation: AnnotationEvent.Operation.UPDATE
                             )
                             fireAnnotationEvent(annotationEvent)
                         }
@@ -1687,15 +1686,15 @@ class RequestHandlingService {
             featureContainer.getJSONArray(FeatureStringEnum.FEATURES.value).put(featureService.convertFeatureToJSON(feature, false));
         }
         AnnotationEvent annotationEvent = new AnnotationEvent(
-                features: featureContainer
-                , sequence: sequence
-                , operation: AnnotationEvent.Operation.UPDATE
+            features: featureContainer
+            , sequence: sequence
+            , operation: AnnotationEvent.Operation.UPDATE
         )
         fireAnnotationEvent(annotationEvent)
         return featureContainer
     }
 
-        def flipStrand(JSONObject inputObject) {
+    def flipStrand(JSONObject inputObject) {
         Sequence sequence = permissionService.checkPermissions(inputObject, PermissionEnum.WRITE)
         JSONObject featureContainer = jsonWebUtilityService.createJSONFeatureContainer()
         JSONArray features = inputObject.getJSONArray(FeatureStringEnum.FEATURES.value)
@@ -1718,9 +1717,9 @@ class RequestHandlingService {
                         }
                         if (sequence) {
                             AnnotationEvent annotationEvent = new AnnotationEvent(
-                                    features: updateFeatureContainer,
-                                    sequence: sequence,
-                                    operation: AnnotationEvent.Operation.UPDATE
+                                features: updateFeatureContainer,
+                                sequence: sequence,
+                                operation: AnnotationEvent.Operation.UPDATE
                             )
                             fireAnnotationEvent(annotationEvent)
                         }
@@ -1737,9 +1736,9 @@ class RequestHandlingService {
 
 
         AnnotationEvent annotationEvent = new AnnotationEvent(
-                features: featureContainer
-                , sequence: sequence
-                , operation: AnnotationEvent.Operation.UPDATE
+            features: featureContainer
+            , sequence: sequence
+            , operation: AnnotationEvent.Operation.UPDATE
         )
 
         fireAnnotationEvent(annotationEvent)
@@ -1747,7 +1746,7 @@ class RequestHandlingService {
         return featureContainer
     }
 
-        def mergeExons(JSONObject inputObject) {
+    def mergeExons(JSONObject inputObject) {
         Sequence sequence = permissionService.checkPermissions(inputObject, PermissionEnum.WRITE)
 
         JSONArray features = inputObject.getJSONArray(FeatureStringEnum.FEATURES.value)
@@ -1771,9 +1770,9 @@ class RequestHandlingService {
             }
             if (sequence) {
                 AnnotationEvent annotationEvent = new AnnotationEvent(
-                        features: updateFeatureContainer,
-                        sequence: sequence,
-                        operation: AnnotationEvent.Operation.UPDATE
+                    features: updateFeatureContainer,
+                    sequence: sequence,
+                    operation: AnnotationEvent.Operation.UPDATE
                 )
                 fireAnnotationEvent(annotationEvent)
             }
@@ -1786,9 +1785,9 @@ class RequestHandlingService {
 
 
         AnnotationEvent annotationEvent = new AnnotationEvent(
-                features: featureContainer
-                , sequence: sequence
-                , operation: AnnotationEvent.Operation.UPDATE
+            features: featureContainer
+            , sequence: sequence
+            , operation: AnnotationEvent.Operation.UPDATE
         )
 
         fireAnnotationEvent(annotationEvent)
@@ -1796,7 +1795,7 @@ class RequestHandlingService {
         return featureContainer
     }
 
-        def splitExon(JSONObject inputObject) {
+    def splitExon(JSONObject inputObject) {
         Sequence sequence = permissionService.checkPermissions(inputObject, PermissionEnum.WRITE)
 
         JSONArray features = inputObject.getJSONArray(FeatureStringEnum.FEATURES.value)
@@ -1823,9 +1822,9 @@ class RequestHandlingService {
             }
             if (sequence) {
                 AnnotationEvent annotationEvent = new AnnotationEvent(
-                        features: updateFeatureContainer,
-                        sequence: sequence,
-                        operation: AnnotationEvent.Operation.UPDATE
+                    features: updateFeatureContainer,
+                    sequence: sequence,
+                    operation: AnnotationEvent.Operation.UPDATE
                 )
                 fireAnnotationEvent(annotationEvent)
             }
@@ -1838,9 +1837,9 @@ class RequestHandlingService {
 
 
         AnnotationEvent annotationEvent = new AnnotationEvent(
-                features: featureContainer
-                , sequence: sequence
-                , operation: AnnotationEvent.Operation.UPDATE
+            features: featureContainer
+            , sequence: sequence
+            , operation: AnnotationEvent.Operation.UPDATE
         )
 
         fireAnnotationEvent(annotationEvent)
@@ -1853,7 +1852,7 @@ class RequestHandlingService {
      * Subsequence objects are exons
      * @param inputObject
      */
-        def deleteExon(JSONObject inputObject) {
+    def deleteExon(JSONObject inputObject) {
         Sequence sequence = permissionService.checkPermissions(inputObject, PermissionEnum.WRITE)
 
         JSONArray features = inputObject.getJSONArray(FeatureStringEnum.FEATURES.value)
@@ -1877,9 +1876,9 @@ class RequestHandlingService {
             }
             if (sequence) {
                 AnnotationEvent annotationEvent = new AnnotationEvent(
-                        features: updateFeatureContainer,
-                        sequence: sequence,
-                        operation: AnnotationEvent.Operation.UPDATE
+                    features: updateFeatureContainer,
+                    sequence: sequence,
+                    operation: AnnotationEvent.Operation.UPDATE
                 )
                 fireAnnotationEvent(annotationEvent)
             }
@@ -1889,9 +1888,9 @@ class RequestHandlingService {
         JSONObject featureContainer = jsonWebUtilityService.createJSONFeatureContainer(featureService.convertFeatureToJSON(topLevelFeature))
 
         AnnotationEvent annotationEvent = new AnnotationEvent(
-                features: featureContainer
-                , sequence: sequence
-                , operation: AnnotationEvent.Operation.DELETE
+            features: featureContainer
+            , sequence: sequence
+            , operation: AnnotationEvent.Operation.DELETE
         )
 
         fireAnnotationEvent(annotationEvent)
@@ -1899,7 +1898,7 @@ class RequestHandlingService {
         return featureContainer
     }
 
-        def addFeature(JSONObject inputObject) {
+    def addFeature(JSONObject inputObject) {
         Sequence sequence = permissionService.checkPermissions(inputObject, PermissionEnum.WRITE)
         log.debug "adding sequence with found sequence ${sequence}"
         User user = permissionService.getCurrentUser(inputObject)
@@ -1921,7 +1920,7 @@ class RequestHandlingService {
             JSONObject jsonFeature = featuresArray.getJSONObject(i)
             useName = jsonFeature.has(FeatureStringEnum.USE_NAME.value) ? jsonFeature.get(FeatureStringEnum.USE_NAME.value) : false
             if (jsonFeature.get(FeatureStringEnum.TYPE.value).name == Gene.cvTerm ||
-                   FeatureService.PSEUDOGENIC_FEATURE_TYPES.contains(jsonFeature.get(FeatureStringEnum.TYPE.value).name)) {
+                FeatureService.PSEUDOGENIC_FEATURE_TYPES.contains(jsonFeature.get(FeatureStringEnum.TYPE.value).name)) {
                 // if jsonFeature is of type gene or pseudogene
                 JSONObject jsonGene = JSON.parse(jsonFeature.toString())
                 jsonGene.remove(FeatureStringEnum.CHILDREN.value)
@@ -1957,9 +1956,9 @@ class RequestHandlingService {
 
         if (!suppressEvents) {
             AnnotationEvent annotationEvent = new AnnotationEvent(
-                    features: returnObject
-                    , sequence: sequence
-                    , operation: AnnotationEvent.Operation.ADD
+                features: returnObject
+                , sequence: sequence
+                , operation: AnnotationEvent.Operation.ADD
             )
 
             fireAnnotationEvent(annotationEvent)
@@ -1971,7 +1970,7 @@ class RequestHandlingService {
      *  From AnnotationEditorService
      */
 //    { "track": "Group1.3", "features": [ { "uniquename": "179e77b9-9329-4633-9f9e-888e3cf9b76a" } ], "operation": "delete_feature" }:
-        def deleteFeature(JSONObject inputObject) {
+    def deleteFeature(JSONObject inputObject) {
         log.debug "in delete feature ${inputObject as JSON}"
         Sequence sequence = permissionService.checkPermissions(inputObject, PermissionEnum.WRITE)
 
@@ -2062,18 +2061,18 @@ class RequestHandlingService {
                         gene = transcriptService.getPseudogene(transcript)
                     }
                     int numberTranscripts = transcriptService.getTranscripts(gene).size()
-                  // if the # of transcripts is 1, then delete the gene as well
-                  goAnnotationService.deleteAnnotationFromFeature(transcript)
-                  provenanceService.deleteAnnotationFromFeature(transcript)
-                  geneProductService.deleteAnnotationFromFeature(transcript)
+                    // if the # of transcripts is 1, then delete the gene as well
+                    goAnnotationService.deleteAnnotationFromFeature(transcript)
+                    provenanceService.deleteAnnotationFromFeature(transcript)
+                    geneProductService.deleteAnnotationFromFeature(transcript)
 
-                  goAnnotationService.removeGoAnnotationsFromFeature(transcript)
-                  provenanceService.removeProvenancesFromFeature(transcript)
-                  geneProductService.removeGeneProductsFromFeature(transcript)
+                    goAnnotationService.removeGoAnnotationsFromFeature(transcript)
+                    provenanceService.removeProvenancesFromFeature(transcript)
+                    geneProductService.removeGeneProductsFromFeature(transcript)
 
-                  featureRelationshipService.removeFeatureRelationship(gene, transcript)
-                  featureRelationshipService.deleteFeatureAndChildren(transcript)
-                  if (numberTranscripts == 1) {
+                    featureRelationshipService.removeFeatureRelationship(gene, transcript)
+                    featureRelationshipService.deleteFeatureAndChildren(transcript)
+                    if (numberTranscripts == 1) {
 //                        Feature topLevelFeature = featureService.getTopLevelFeature(gene)
                         goAnnotationService.deleteAnnotationFromFeature(gene)
                         provenanceService.deleteAnnotationFromFeature(gene)
@@ -2082,9 +2081,9 @@ class RequestHandlingService {
 
                         if (!suppressEvents) {
                             AnnotationEvent annotationEvent = new AnnotationEvent(
-                                    features: featureContainer
-                                    , sequence: sequence
-                                    , operation: AnnotationEvent.Operation.DELETE
+                                features: featureContainer
+                                , sequence: sequence
+                                , operation: AnnotationEvent.Operation.DELETE
                             )
 
                             fireAnnotationEvent(annotationEvent)
@@ -2095,9 +2094,9 @@ class RequestHandlingService {
 
                         if (!suppressEvents) {
                             AnnotationEvent annotationEvent = new AnnotationEvent(
-                                    features: featureContainer
-                                    , sequence: sequence
-                                    , operation: AnnotationEvent.Operation.UPDATE
+                                features: featureContainer
+                                , sequence: sequence
+                                , operation: AnnotationEvent.Operation.UPDATE
                             )
                             fireAnnotationEvent(annotationEvent)
                         }
@@ -2128,9 +2127,9 @@ class RequestHandlingService {
 
                     if (!suppressEvents) {
                         AnnotationEvent annotationEvent = new AnnotationEvent(
-                                features: featureContainer
-                                , sequence: sequence
-                                , operation: AnnotationEvent.Operation.DELETE
+                            features: featureContainer
+                            , sequence: sequence
+                            , operation: AnnotationEvent.Operation.DELETE
                         )
 
                         fireAnnotationEvent(annotationEvent)
@@ -2158,9 +2157,9 @@ class RequestHandlingService {
                         }
                         if (sequence) {
                             AnnotationEvent annotationEvent = new AnnotationEvent(
-                                    features: updateFeatureContainer,
-                                    sequence: sequence,
-                                    operation: AnnotationEvent.Operation.UPDATE
+                                features: updateFeatureContainer,
+                                sequence: sequence,
+                                operation: AnnotationEvent.Operation.UPDATE
                             )
                             fireAnnotationEvent(annotationEvent)
                         }
@@ -2187,8 +2186,8 @@ class RequestHandlingService {
 
         if (!suppressEvents) {
             AnnotationEvent finalAnnotationEvent = new AnnotationEvent(
-                    features: featureContainer
-                    , sequence: sequence
+                features: featureContainer
+                , sequence: sequence
             )
 
             finalAnnotationEvent.operation = isUpdateOperation ? AnnotationEvent.Operation.UPDATE : AnnotationEvent.Operation.DELETE
@@ -2217,7 +2216,7 @@ class RequestHandlingService {
         return findOwners(featureRelationshipService.getParentForFeature(feature))
     }
 
-        def makeIntron(JSONObject inputObject) {
+    def makeIntron(JSONObject inputObject) {
         Sequence sequence = permissionService.checkPermissions(inputObject, PermissionEnum.WRITE)
 
         JSONArray featuresArray = inputObject.getJSONArray(FeatureStringEnum.FEATURES.value)
@@ -2228,19 +2227,19 @@ class RequestHandlingService {
         JSONObject exonLocation = jsonExon.getJSONObject(FeatureStringEnum.LOCATION.value)
 
         Exon splitExon = exonService.makeIntron(
-                exon
-                , exonLocation.getInt(FeatureStringEnum.FMIN.value)
-                , configWrapperService.getDefaultMinimumIntronSize()
+            exon
+            , exonLocation.getInt(FeatureStringEnum.FMIN.value)
+            , configWrapperService.getDefaultMinimumIntronSize()
         )
         if (splitExon == null) {
             def returnContainer = jsonWebUtilityService.createJSONFeatureContainer()
             returnContainer.put(FeatureStringEnum.ERROR_MESSAGE.value, "Unable to find canonical splice sites.")
             String username = permissionService.getCurrentUser(inputObject)?.username
             AnnotationEvent annotationEvent = new AnnotationEvent(
-                    features: returnContainer
-                    , sequence: sequence
-                    , operation: AnnotationEvent.Operation.ERROR
-                    , username: username
+                features: returnContainer
+                , sequence: sequence
+                , operation: AnnotationEvent.Operation.ERROR
+                , username: username
             )
 
             fireAnnotationEvent(annotationEvent)
@@ -2264,9 +2263,9 @@ class RequestHandlingService {
             }
             if (sequence) {
                 AnnotationEvent annotationEvent = new AnnotationEvent(
-                        features: updateFeatureContainer,
-                        sequence: sequence,
-                        operation: AnnotationEvent.Operation.UPDATE
+                    features: updateFeatureContainer,
+                    sequence: sequence,
+                    operation: AnnotationEvent.Operation.UPDATE
                 )
                 fireAnnotationEvent(annotationEvent)
             }
@@ -2278,9 +2277,9 @@ class RequestHandlingService {
         featureEventService.addNewFeatureEvent(FeatureOperation.SPLIT_EXON, transcriptService.getGene(transcript).name, transcript.uniqueName, inputObject, oldJsonTranscript, newJsonObject, permissionService.getCurrentUser(inputObject))
 
         AnnotationEvent annotationEvent = new AnnotationEvent(
-                features: featureContainer
-                , sequence: sequence
-                , operation: AnnotationEvent.Operation.UPDATE
+            features: featureContainer
+            , sequence: sequence
+            , operation: AnnotationEvent.Operation.UPDATE
         )
 
         fireAnnotationEvent(annotationEvent)
@@ -2288,7 +2287,7 @@ class RequestHandlingService {
         return featureContainer
     }
 
-        def splitTranscript(JSONObject inputObject) {
+    def splitTranscript(JSONObject inputObject) {
         JSONArray featuresArray = inputObject.getJSONArray(FeatureStringEnum.FEATURES.value)
         Sequence sequence = permissionService.checkPermissions(inputObject, PermissionEnum.WRITE)
         Exon exon1 = Exon.findByUniqueName(featuresArray.getJSONObject(0).getString(FeatureStringEnum.UNIQUENAME.value))
@@ -2347,11 +2346,11 @@ class RequestHandlingService {
             featureService.addOwnersByString(inputObject.username, updatedGene1, updatedGene2, transcript1, transcript2, exon1, exon2)
             try {
                 featureEventService.addSplitFeatureEvent(updatedGene1.name, transcript1.uniqueName
-                        , updatedGene2.name, transcript2.uniqueName
-                        , inputObject
-                        , featureService.convertFeatureToJSON(transcript1)
-                        , featureForHistory.getJSONArray(FeatureStringEnum.FEATURES.value)
-                        , permissionService.getCurrentUser(inputObject)
+                    , updatedGene2.name, transcript2.uniqueName
+                    , inputObject
+                    , featureService.convertFeatureToJSON(transcript1)
+                    , featureForHistory.getJSONArray(FeatureStringEnum.FEATURES.value)
+                    , permissionService.getCurrentUser(inputObject)
                 )
             } catch (e) {
                 log.error "There was an error adding history ${e}"
@@ -2360,16 +2359,16 @@ class RequestHandlingService {
 
         // firing annotation update event
         AnnotationEvent updateAnnotationEvent = new AnnotationEvent(
-                features: updateContainer,
-                sequence: sequence,
-                operation: AnnotationEvent.Operation.UPDATE
+            features: updateContainer,
+            sequence: sequence,
+            operation: AnnotationEvent.Operation.UPDATE
         )
         fireAnnotationEvent(updateAnnotationEvent)
 
         return returnContainer
     }
 
-        def mergeTranscripts(JSONObject inputObject) {
+    def mergeTranscripts(JSONObject inputObject) {
         Sequence sequence = permissionService.checkPermissions(inputObject, PermissionEnum.WRITE)
         JSONArray featuresArray = inputObject.getJSONArray(FeatureStringEnum.FEATURES.value)
         JSONObject jsonTranscript1 = featuresArray.getJSONObject(0)
@@ -2422,9 +2421,9 @@ class RequestHandlingService {
             }
             if (sequence) {
                 AnnotationEvent annotationEvent = new AnnotationEvent(
-                        features: updateFeatureContainer,
-                        sequence: sequence,
-                        operation: AnnotationEvent.Operation.UPDATE
+                    features: updateFeatureContainer,
+                    sequence: sequence,
+                    operation: AnnotationEvent.Operation.UPDATE
                 )
                 fireAnnotationEvent(annotationEvent)
             }
@@ -2462,10 +2461,10 @@ class RequestHandlingService {
             try {
                 log.debug "trying to add history"
                 featureEventService.addMergeFeatureEvent(gene1Name, transcript1UniqueName
-                        , gene2Name, transcript2UniqueName
-                        , inputObject, oldJsonArray
-                        , featureForHistory.getJSONArray(FeatureStringEnum.FEATURES.value).getJSONObject(0)
-                        , permissionService.getCurrentUser(inputObject)
+                    , gene2Name, transcript2UniqueName
+                    , inputObject, oldJsonArray
+                    , featureForHistory.getJSONArray(FeatureStringEnum.FEATURES.value).getJSONObject(0)
+                    , permissionService.getCurrentUser(inputObject)
                 )
                 log.debug "ADDED history"
             } catch (e) {
@@ -2474,15 +2473,15 @@ class RequestHandlingService {
         }
 
         AnnotationEvent deleteAnnotationEvent = new AnnotationEvent(
-                features: deleteFeatureContainer
-                , sequence: sequence
-                , operation: AnnotationEvent.Operation.DELETE
+            features: deleteFeatureContainer
+            , sequence: sequence
+            , operation: AnnotationEvent.Operation.DELETE
         )
 
         AnnotationEvent updateAnnotationEvent = new AnnotationEvent(
-                features: updateFeatureContainer
-                , sequence: sequence
-                , operation: AnnotationEvent.Operation.UPDATE
+            features: updateFeatureContainer
+            , sequence: sequence
+            , operation: AnnotationEvent.Operation.UPDATE
         )
 
         // firing update and delete annotation event
@@ -2491,7 +2490,7 @@ class RequestHandlingService {
         return returnObject
     }
 
-        def duplicateTranscript(JSONObject inputObject) {
+    def duplicateTranscript(JSONObject inputObject) {
         Sequence sequence = permissionService.checkPermissions(inputObject, PermissionEnum.WRITE)
 
         Transcript transcript = Transcript.findByUniqueName(inputObject.getJSONArray(FeatureStringEnum.FEATURES.value).getJSONObject(0).getString(FeatureStringEnum.UNIQUENAME.value))
@@ -2504,9 +2503,9 @@ class RequestHandlingService {
         JSONObject featureContainer = jsonWebUtilityService.createJSONFeatureContainer(featureService.convertFeatureToJSON(topFeature))
 
         AnnotationEvent annotationEvent = new AnnotationEvent(
-                features: featureContainer
-                , sequence: sequence
-                , operation: AnnotationEvent.Operation.ADD
+            features: featureContainer
+            , sequence: sequence
+            , operation: AnnotationEvent.Operation.ADD
         )
 
         fireAnnotationEvent(annotationEvent)
@@ -2514,7 +2513,7 @@ class RequestHandlingService {
         return featureContainer
     }
 
-        def undo(JSONObject inputObject) {
+    def undo(JSONObject inputObject) {
         JSONArray featuresArray = inputObject.getJSONArray(FeatureStringEnum.FEATURES.value)
         permissionService.checkPermissions(inputObject, PermissionEnum.WRITE)
         permissionService.getCurrentUser(inputObject)
@@ -2528,7 +2527,7 @@ class RequestHandlingService {
         return new JSONObject()
     }
 
-        def redo(JSONObject inputObject) {
+    def redo(JSONObject inputObject) {
         JSONArray featuresArray = inputObject.getJSONArray(FeatureStringEnum.FEATURES.value)
         permissionService.checkPermissions(inputObject, PermissionEnum.WRITE)
         permissionService.getCurrentUser(inputObject)
@@ -2571,24 +2570,24 @@ class RequestHandlingService {
                 oldFeatureJsonArray.add(originalFeatureJsonObject)
                 newFeatureJsonArray.add(newFeatureJsonObject)
                 featureEventService.addNewFeatureEvent(FeatureOperation.CHANGE_ANNOTATION_TYPE, feature.name,
-                        uniqueName, inputObject, oldFeatureJsonArray, newFeatureJsonArray, user)
+                    uniqueName, inputObject, oldFeatureJsonArray, newFeatureJsonArray, user)
 
                 featureService.addOwnersByString(inputObject.username, newFeature)
                 JSONObject deleteFeatureContainer = jsonWebUtilityService.createJSONFeatureContainer()
                 deleteFeatureContainer.getJSONArray(FeatureStringEnum.FEATURES.value).put(currentFeatureJsonObject)
                 AnnotationEvent deleteAnnotationEvent = new AnnotationEvent(
-                        features: deleteFeatureContainer,
-                        sequence: sequence,
-                        operation: AnnotationEvent.Operation.DELETE
+                    features: deleteFeatureContainer,
+                    sequence: sequence,
+                    operation: AnnotationEvent.Operation.DELETE
                 )
                 fireAnnotationEvent(deleteAnnotationEvent)
 
                 JSONObject addFeatureContainer = jsonWebUtilityService.createJSONFeatureContainer()
                 addFeatureContainer.getJSONArray(FeatureStringEnum.FEATURES.value).put(newFeatureJsonObject)
                 AnnotationEvent addAnnotationEvent = new AnnotationEvent(
-                        features: addFeatureContainer,
-                        sequence: sequence,
-                        operation: AnnotationEvent.Operation.ADD
+                    features: addFeatureContainer,
+                    sequence: sequence,
+                    operation: AnnotationEvent.Operation.ADD
                 )
                 fireAnnotationEvent(addAnnotationEvent)
                 featureContainer.getJSONArray(FeatureStringEnum.FEATURES.value).put(newFeatureJsonObject)
@@ -2624,14 +2623,14 @@ class RequestHandlingService {
         newFeaturesJsonArray.add(currentFeatureJsonObject)
         featureService.addOwnersByString(inputObject.username, feature)
         featureEventService.addNewFeatureEvent(FeatureOperation.ASSOCIATE_FEATURE_TO_GENE, feature.name,
-                featureUniqueName, inputObject, oldFeaturesJsonArray, newFeaturesJsonArray, user)
+            featureUniqueName, inputObject, oldFeaturesJsonArray, newFeaturesJsonArray, user)
         updateFeatureContainer.getJSONArray(FeatureStringEnum.FEATURES.value).put(currentFeatureJsonObject)
 
         if (sequence) {
             AnnotationEvent annotationEvent = new AnnotationEvent(
-                    features: updateFeatureContainer,
-                    sequence: sequence,
-                    operation: AnnotationEvent.Operation.UPDATE
+                features: updateFeatureContainer,
+                sequence: sequence,
+                operation: AnnotationEvent.Operation.UPDATE
             )
             fireAnnotationEvent(annotationEvent)
         }
@@ -2676,15 +2675,15 @@ class RequestHandlingService {
 
         featureService.addOwnersByString(inputObject.username, feature)
         featureEventService.addNewFeatureEvent(FeatureOperation.DISSOCIATE_FEATURE_FROM_GENE, feature.name,
-                featureUniqueName, inputObject, oldFeaturesJsonArray, newFeaturesJsonArray, user)
+            featureUniqueName, inputObject, oldFeaturesJsonArray, newFeaturesJsonArray, user)
 
         updateFeatureContainer.getJSONArray(FeatureStringEnum.FEATURES.value).put(currentFeatureJsonObject)
 
         if (sequence) {
             AnnotationEvent annotationEvent = new AnnotationEvent(
-                    features: updateFeatureContainer,
-                    sequence: sequence,
-                    operation: AnnotationEvent.Operation.UPDATE
+                features: updateFeatureContainer,
+                sequence: sequence,
+                operation: AnnotationEvent.Operation.UPDATE
             )
             fireAnnotationEvent(annotationEvent)
         }
@@ -2717,14 +2716,14 @@ class RequestHandlingService {
         newFeaturesJsonArray.add(currentFeatureJsonObject)
         featureService.addOwnersByString(inputObject.username, transcript)
         featureEventService.addNewFeatureEvent(FeatureOperation.ASSOCIATE_TRANSCRIPT_TO_GENE, transcript.name,
-                transcriptUniqueName, inputObject, oldFeaturesJsonArray, newFeaturesJsonArray, user)
+            transcriptUniqueName, inputObject, oldFeaturesJsonArray, newFeaturesJsonArray, user)
         updateFeatureContainer.getJSONArray(FeatureStringEnum.FEATURES.value).put(currentFeatureJsonObject)
 
         if (sequence) {
             AnnotationEvent annotationEvent = new AnnotationEvent(
-                    features: updateFeatureContainer,
-                    sequence: sequence,
-                    operation: AnnotationEvent.Operation.UPDATE
+                features: updateFeatureContainer,
+                sequence: sequence,
+                operation: AnnotationEvent.Operation.UPDATE
             )
             fireAnnotationEvent(annotationEvent)
         }
@@ -2764,15 +2763,15 @@ class RequestHandlingService {
         newFeaturesJsonArray.add(mrnaObject)
         featureService.addOwnersByString(inputObject.username, transcript)
         featureEventService.addNewFeatureEvent(FeatureOperation.DISSOCIATE_TRANSCRIPT_FROM_GENE, transcript.name,
-                uniqueName, inputObject, oldFeaturesJsonArray, newFeaturesJsonArray, user)
+            uniqueName, inputObject, oldFeaturesJsonArray, newFeaturesJsonArray, user)
 
         updateFeatureContainer.getJSONArray(FeatureStringEnum.FEATURES.value).put(currentFeatureJsonObject)
 
         if (sequence) {
             AnnotationEvent annotationEvent = new AnnotationEvent(
-                    features: updateFeatureContainer,
-                    sequence: sequence,
-                    operation: AnnotationEvent.Operation.UPDATE
+                features: updateFeatureContainer,
+                sequence: sequence,
+                operation: AnnotationEvent.Operation.UPDATE
             )
             fireAnnotationEvent(annotationEvent)
         }
@@ -2814,15 +2813,15 @@ class RequestHandlingService {
                 }
             }
             AnnotationEvent deleteAnnotationEvent = new AnnotationEvent(
-                    features: deleteFeatureContainer
-                    , sequence: sequence
-                    , operation: AnnotationEvent.Operation.DELETE
-                    , sequenceAlterationEvent: true
+                features: deleteFeatureContainer
+                , sequence: sequence
+                , operation: AnnotationEvent.Operation.DELETE
+                , sequenceAlterationEvent: true
             )
             AnnotationEvent updateAnnotationEvent = new AnnotationEvent(
-                    features: updateFeatureContainer
-                    , sequence: sequence
-                    , operation: AnnotationEvent.Operation.UPDATE
+                features: updateFeatureContainer
+                , sequence: sequence
+                , operation: AnnotationEvent.Operation.UPDATE
             )
             fireAnnotationEvent(deleteAnnotationEvent)
             fireAnnotationEvent(updateAnnotationEvent)
@@ -2849,15 +2848,15 @@ class RequestHandlingService {
                     }
                 }
                 AnnotationEvent deleteAnnotationEvent = new AnnotationEvent(
-                        features: deleteFeatureContainer
-                        , sequence: sequence
-                        , operation: AnnotationEvent.Operation.DELETE
-                        , sequenceAlterationEvent: true
+                    features: deleteFeatureContainer
+                    , sequence: sequence
+                    , operation: AnnotationEvent.Operation.DELETE
+                    , sequenceAlterationEvent: true
                 )
                 AnnotationEvent updateAnnotationEvent = new AnnotationEvent(
-                        features: updateFeatureContainer
-                        , sequence: sequence
-                        , operation: AnnotationEvent.Operation.UPDATE
+                    features: updateFeatureContainer
+                    , sequence: sequence
+                    , operation: AnnotationEvent.Operation.UPDATE
                 )
                 fireAnnotationEvent(deleteAnnotationEvent)
                 fireAnnotationEvent(updateAnnotationEvent)
@@ -2900,10 +2899,10 @@ class RequestHandlingService {
 
         if (!suppressEvents) {
             AnnotationEvent addAnnotationEvent = new AnnotationEvent(
-                    features: returnObject,
-                    sequence: sequence,
-                    operation: AnnotationEvent.Operation.ADD,
-                    sequenceAlterationEvent: false
+                features: returnObject,
+                sequence: sequence,
+                operation: AnnotationEvent.Operation.ADD,
+                sequenceAlterationEvent: false
             )
             fireAnnotationEvent(addAnnotationEvent)
         }
@@ -2924,9 +2923,9 @@ class RequestHandlingService {
 
         if (sequence) {
             AnnotationEvent annotationEvent = new AnnotationEvent(
-                    features: updateFeatureContainer,
-                    sequence: sequence,
-                    operation: AnnotationEvent.Operation.ADD
+                features: updateFeatureContainer,
+                sequence: sequence,
+                operation: AnnotationEvent.Operation.ADD
             )
             fireAnnotationEvent(annotationEvent)
         }
@@ -2948,9 +2947,9 @@ class RequestHandlingService {
 
         if (sequence) {
             AnnotationEvent annotationEvent = new AnnotationEvent(
-                    features: updateFeatureContainer,
-                    sequence: sequence,
-                    operation: AnnotationEvent.Operation.UPDATE
+                features: updateFeatureContainer,
+                sequence: sequence,
+                operation: AnnotationEvent.Operation.UPDATE
             )
             fireAnnotationEvent(annotationEvent)
         }
@@ -2972,9 +2971,9 @@ class RequestHandlingService {
 
         if (sequence) {
             AnnotationEvent annotationEvent = new AnnotationEvent(
-                    features: updateFeatureContainer,
-                    sequence: sequence,
-                    operation: AnnotationEvent.Operation.UPDATE
+                features: updateFeatureContainer,
+                sequence: sequence,
+                operation: AnnotationEvent.Operation.UPDATE
             )
             fireAnnotationEvent(annotationEvent)
         }
@@ -2997,9 +2996,9 @@ class RequestHandlingService {
 
         if (sequence) {
             AnnotationEvent annotationEvent = new AnnotationEvent(
-                    features: updateFeatureContainer,
-                    sequence: sequence,
-                    operation: AnnotationEvent.Operation.UPDATE
+                features: updateFeatureContainer,
+                sequence: sequence,
+                operation: AnnotationEvent.Operation.UPDATE
             )
             fireAnnotationEvent(annotationEvent)
         }
@@ -3022,9 +3021,9 @@ class RequestHandlingService {
 
         if (sequence) {
             AnnotationEvent annotationEvent = new AnnotationEvent(
-                    features: updateFeatureContainer,
-                    sequence: sequence,
-                    operation: AnnotationEvent.Operation.UPDATE
+                features: updateFeatureContainer,
+                sequence: sequence,
+                operation: AnnotationEvent.Operation.UPDATE
             )
             fireAnnotationEvent(annotationEvent)
         }
@@ -3047,9 +3046,9 @@ class RequestHandlingService {
 
         if (sequence) {
             AnnotationEvent annotationEvent = new AnnotationEvent(
-                    features: updateFeatureContainer,
-                    sequence: sequence,
-                    operation: AnnotationEvent.Operation.UPDATE
+                features: updateFeatureContainer,
+                sequence: sequence,
+                operation: AnnotationEvent.Operation.UPDATE
             )
             fireAnnotationEvent(annotationEvent)
         }
@@ -3072,9 +3071,9 @@ class RequestHandlingService {
 
         if (sequence) {
             AnnotationEvent annotationEvent = new AnnotationEvent(
-                    features: updateFeatureContainer,
-                    sequence: sequence,
-                    operation: AnnotationEvent.Operation.UPDATE
+                features: updateFeatureContainer,
+                sequence: sequence,
+                operation: AnnotationEvent.Operation.UPDATE
             )
             fireAnnotationEvent(annotationEvent)
         }
@@ -3097,9 +3096,9 @@ class RequestHandlingService {
 
         if (sequence) {
             AnnotationEvent annotationEvent = new AnnotationEvent(
-                    features: updateFeatureContainer,
-                    sequence: sequence,
-                    operation: AnnotationEvent.Operation.UPDATE
+                features: updateFeatureContainer,
+                sequence: sequence,
+                operation: AnnotationEvent.Operation.UPDATE
             )
             fireAnnotationEvent(annotationEvent)
         }
@@ -3122,9 +3121,9 @@ class RequestHandlingService {
 
         if (sequence) {
             AnnotationEvent annotationEvent = new AnnotationEvent(
-                    features: updateFeatureContainer,
-                    sequence: sequence,
-                    operation: AnnotationEvent.Operation.UPDATE
+                features: updateFeatureContainer,
+                sequence: sequence,
+                operation: AnnotationEvent.Operation.UPDATE
             )
             fireAnnotationEvent(annotationEvent)
         }
