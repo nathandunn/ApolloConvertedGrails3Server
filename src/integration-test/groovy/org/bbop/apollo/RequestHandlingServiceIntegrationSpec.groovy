@@ -185,7 +185,6 @@ class RequestHandlingServiceIntegrationSpec extends AbstractIntegrationSpec {
         JSONObject returnObject = requestHandlingService.addTranscript(jsonObject)
 
         then: "we should get a transcript back" // we currently get nothing
-//        log.debug returnObject as JSON
         assert returnObject.getString('operation') == "ADD"
         assert returnObject.getBoolean('sequenceAlterationEvent') == false
         JSONArray featuresArray = returnObject.getJSONArray(FeatureStringEnum.FEATURES.value)
@@ -223,7 +222,6 @@ class RequestHandlingServiceIntegrationSpec extends AbstractIntegrationSpec {
 
         then: "we should see an exon added"
         assert returnedAfterExonObject != null
-        log.debug Feature.count
         assert Feature.count > 5
         JSONArray returnFeaturesArray = returnedAfterExonObject.getJSONArray(FeatureStringEnum.FEATURES.value)
         assert returnFeaturesArray.size() == 1
@@ -292,7 +290,6 @@ class RequestHandlingServiceIntegrationSpec extends AbstractIntegrationSpec {
 
         then: "we should see that we flipped the strand"
         assert returnedAfterExonObject != null
-        log.debug Feature.count
         assert Feature.count > 5
         JSONArray returnFeaturesArray = returnedAfterExonObject.getJSONArray(FeatureStringEnum.FEATURES.value)
         assert returnFeaturesArray.size() == 1
@@ -319,7 +316,6 @@ class RequestHandlingServiceIntegrationSpec extends AbstractIntegrationSpec {
         childrenArray = mRNAObject.getJSONArray(FeatureStringEnum.CHILDREN.value)
 
         then: "we should have no splice sites"
-        log.debug Feature.count
         assert Feature.count == 5
         assert returnFeaturesArray.size() == 1
         assert mRNAObject.getString(FeatureStringEnum.NAME.value) == "GB40772-RA-00001"
@@ -410,7 +406,6 @@ class RequestHandlingServiceIntegrationSpec extends AbstractIntegrationSpec {
 
         then: "we should see that we flipped the strand"
         assert returnedAfterExonObject != null
-        log.debug Feature.count
         assert Feature.count > 5
         JSONArray returnFeaturesArray = returnedAfterExonObject.getJSONArray(FeatureStringEnum.FEATURES.value)
         assert returnFeaturesArray.size() == 1
@@ -465,7 +460,6 @@ class RequestHandlingServiceIntegrationSpec extends AbstractIntegrationSpec {
 
 
         then: "we should have no splice sites"
-        log.debug Feature.count
         assert Feature.count == 4 + 2 + 2 + 1
         assert returnFeaturesArray.size() == 1
         assert mRNAObject00001.getString(FeatureStringEnum.NAME.value) == "GB40772-RAa-00001"
@@ -3739,26 +3733,26 @@ class RequestHandlingServiceIntegrationSpec extends AbstractIntegrationSpec {
             }
         }
 
-        when: "we import the same annotation via GFF3"
-        def process = "tools/data/add_features_from_gff3_to_annotations.pl --url http://localhost:8080/apollo --username test@test.com --password testPass --input ${filePath} --organism Amel --test".execute()
-        then: "we should get a JSON representation of the feature from GFF3"
-        JSONArray outputJsonArray = JSON.parse(process.text) as JSONArray
-        String preparedJsonString = "{${testCredentials} \"operation\":\"add_transcript\", \"features\":${outputJsonArray.getJSONObject(0).getJSONArray("addTranscript").toString()}, \"track\":\"Group1.10\" }"
-
-        when: "we add this feature via addTranscript"
-        JSONObject addTranscriptJsonObject = JSON.parse(preparedJsonString) as JSONObject
-        requestHandlingService.addTranscript(addTranscriptJsonObject)
-
-        then: "we should see a new mRNA and it should have its metadata preserved"
-        assert Gene.count == 1
-        assert MRNA.count == 2
-
-        Gene updatedGene = Gene.all.get(0)
-        MRNA mrna = MRNA.findByName("GB40864-RA-00002")
-        assert mrna.symbol == "PCG1-2A"
-        assert mrna.description == "PCG1 isoform 2A"
-        assert mrna.featureDBXrefs.size() == 2
-        assert mrna.featureProperties.size() == 4
+//        when: "we import the same annotation via GFF3"
+//        def process = "tools/data/add_features_from_gff3_to_annotations.pl --url http://localhost:8080/apollo --username test@test.com --password testPass --input ${filePath} --organism Amel --test".execute()
+//        then: "we should get a JSON representation of the feature from GFF3"
+//        JSONArray outputJsonArray = JSON.parse(process.text) as JSONArray
+//        String preparedJsonString = "{${testCredentials} \"operation\":\"add_transcript\", \"features\":${outputJsonArray.getJSONObject(0).getJSONArray("addTranscript").toString()}, \"track\":\"Group1.10\" }"
+//
+//        when: "we add this feature via addTranscript"
+//        JSONObject addTranscriptJsonObject = JSON.parse(preparedJsonString) as JSONObject
+//        requestHandlingService.addTranscript(addTranscriptJsonObject)
+//
+//        then: "we should see a new mRNA and it should have its metadata preserved"
+//        assert Gene.count == 1
+//        assert MRNA.count == 2
+//
+//        Gene updatedGene = Gene.all.get(0)
+//        MRNA mrna = MRNA.findByName("GB40864-RA-00002")
+//        assert mrna.symbol == "PCG1-2A"
+//        assert mrna.description == "PCG1 isoform 2A"
+//        assert mrna.featureDBXrefs.size() == 2
+//        assert mrna.featureProperties.size() == 4
     }
 
     void "a round-trip with all feature types"() {
@@ -3851,33 +3845,33 @@ class RequestHandlingServiceIntegrationSpec extends AbstractIntegrationSpec {
         then: "we see no features"
         assert Feature.count == 0
 
-        when: "we import this GFF3"
-        def process = "tools/data/add_features_from_gff3_to_annotations.pl --url http://localhost:8080/apollo --username test@test.com --password testPass --input ${filePath} --organism Amel --test a -X -x".execute()
-
-        then: "we should get a JSON representation of the features"
-        JSONArray outputJsonArray = JSON.parse(process.text) as JSONArray
-        for (int i = 0; i < outputJsonArray.size(); i++) {
-            if (outputJsonArray.getJSONObject(i).has("addFeature")) {
-                String inputString = "{${testCredentials} \"track\": \"${sequence.name}\", \"operation\": \"add_feature\", \"features\": " + outputJsonArray.getJSONObject(i).getJSONArray("addFeature").toString() + "}"
-                println(">>> Input string: ${inputString}")
-                requestHandlingService.addFeature(JSON.parse(inputString) as JSONObject)
-            } else if (outputJsonArray.getJSONObject(i).has("addTranscript")) {
-                String inputString = "{${testCredentials} \"track\": \"${sequence.name}\", \"operation\": \"add_transcript\", \"features\": " + outputJsonArray.getJSONObject(i).getJSONArray("addTranscript").toString() + "}"
-                requestHandlingService.addTranscript(JSON.parse(inputString) as JSONObject)
-            } else if (outputJsonArray.getJSONObject(i).has("addSequenceAlteration")) {
-                String inputString = "{${testCredentials} \"track\": \"${sequence.name}\", \"operation\": \"add_sequence_alteration\", \"features\": " + outputJsonArray.getJSONObject(i).getJSONArray("addSequenceAlteration").toString() + "}"
-                requestHandlingService.addSequenceAlteration(JSON.parse(inputString) as JSONObject)
-            }
-        }
-
-        then: "we restore all the features from GFF3"
-        assert Transcript.count == 10
-        assert SequenceAlterationArtifact.count == 3
-        assert RepeatRegion.count == 1
-        assert TransposableElement.count == 1
-        assert StopCodonReadThrough.count == 1
-        assert Gene.count == 10
-        assert Pseudogene.count == 1
+//        when: "we import this GFF3"
+//        def process = "tools/data/add_features_from_gff3_to_annotations.pl --url http://localhost:8080/apollo --username test@test.com --password testPass --input ${filePath} --organism Amel --test a -X -x".execute()
+//
+//        then: "we should get a JSON representation of the features"
+//        JSONArray outputJsonArray = JSON.parse(process.text) as JSONArray
+//        for (int i = 0; i < outputJsonArray.size(); i++) {
+//            if (outputJsonArray.getJSONObject(i).has("addFeature")) {
+//                String inputString = "{${testCredentials} \"track\": \"${sequence.name}\", \"operation\": \"add_feature\", \"features\": " + outputJsonArray.getJSONObject(i).getJSONArray("addFeature").toString() + "}"
+//                println(">>> Input string: ${inputString}")
+//                requestHandlingService.addFeature(JSON.parse(inputString) as JSONObject)
+//            } else if (outputJsonArray.getJSONObject(i).has("addTranscript")) {
+//                String inputString = "{${testCredentials} \"track\": \"${sequence.name}\", \"operation\": \"add_transcript\", \"features\": " + outputJsonArray.getJSONObject(i).getJSONArray("addTranscript").toString() + "}"
+//                requestHandlingService.addTranscript(JSON.parse(inputString) as JSONObject)
+//            } else if (outputJsonArray.getJSONObject(i).has("addSequenceAlteration")) {
+//                String inputString = "{${testCredentials} \"track\": \"${sequence.name}\", \"operation\": \"add_sequence_alteration\", \"features\": " + outputJsonArray.getJSONObject(i).getJSONArray("addSequenceAlteration").toString() + "}"
+//                requestHandlingService.addSequenceAlteration(JSON.parse(inputString) as JSONObject)
+//            }
+//        }
+//
+//        then: "we restore all the features from GFF3"
+//        assert Transcript.count == 10
+//        assert SequenceAlterationArtifact.count == 3
+//        assert RepeatRegion.count == 1
+//        assert TransposableElement.count == 1
+//        assert StopCodonReadThrough.count == 1
+//        assert Gene.count == 10
+//        assert Pseudogene.count == 1
     }
 
     void "while adding a transcript, Apollo should not recalculate its CDS if the JSONObject has the proper flag"() {
