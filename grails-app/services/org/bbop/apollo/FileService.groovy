@@ -10,7 +10,7 @@ import org.apache.commons.compress.archivers.zip.ZipArchiveEntry
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream
 import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream
 import org.apache.commons.io.IOUtils
-import org.springframework.web.multipart.commons.CommonsMultipartFile
+//import org.springframework.web.multipart.commons.CommonsMultipartFile
 
 import java.nio.file.FileSystemException
 import java.nio.file.Files
@@ -326,7 +326,7 @@ class FileService {
         return fileNames
     }
 
-    def storeWithNewName(CommonsMultipartFile file, String path, String directoryName, String newName) {
+    def storeWithNewName(def file, String path, String directoryName, String newName) {
         File pathFile = new File(path)
         if (!pathFile.exists()) {
             pathFile.mkdirs()
@@ -351,7 +351,7 @@ class FileService {
     }
 
 
-    def store(CommonsMultipartFile file, String path, String directoryName = null, boolean tempDir = false) {
+    def store(def file, String path, String directoryName = null, boolean tempDir = false) {
         File pathFile = new File(path)
         if (!pathFile.exists()) {
             pathFile.mkdirs()

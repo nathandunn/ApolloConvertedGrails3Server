@@ -15,7 +15,7 @@ import org.grails.web.converters.exceptions.ConverterException
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
 import io.swagger.annotations.*
-import org.springframework.web.multipart.commons.CommonsMultipartFile
+//import org.springframework.web.multipart.commons.CommonsMultipartFile
 import org.springframework.web.multipart.support.AbstractMultipartHttpServletRequest
 
 import javax.servlet.http.HttpServletResponse
@@ -253,9 +253,9 @@ class OrganismController {
     JSONObject requestObject = permissionService.handleInput(request, params)
     println "Adding organism with SEQUENCE ${requestObject as String}"
     String clientToken = requestObject.getString(FeatureStringEnum.CLIENT_TOKEN.value)
-    CommonsMultipartFile organismDataFile = request.getFile(FeatureStringEnum.ORGANISM_DATA.value)
-    CommonsMultipartFile sequenceDataFile = request.getFile(FeatureStringEnum.SEQUENCE_DATA.value)
-    CommonsMultipartFile searchDatabaseDataFile = request.getFile(FeatureStringEnum.SEARCH_DATABASE_DATA.value)
+    def organismDataFile = request.getFile(FeatureStringEnum.ORGANISM_DATA.value)
+    def sequenceDataFile = request.getFile(FeatureStringEnum.SEQUENCE_DATA.value)
+    def searchDatabaseDataFile = request.getFile(FeatureStringEnum.SEARCH_DATABASE_DATA.value)
 
     if (!requestObject.containsKey(FeatureStringEnum.ORGANISM_NAME.value)) {
       returnObject.put("error", "/addOrganismWithSequence requires '${FeatureStringEnum.ORGANISM_NAME.value}'.")
@@ -590,9 +590,9 @@ class OrganismController {
         File organismDirectory = new File(organismDirectoryName)
         File commonDataDirectory = new File(trackService.commonDataDirectory)
 
-        CommonsMultipartFile trackDataFile = request.getFile(FeatureStringEnum.TRACK_DATA.value)
-        CommonsMultipartFile trackFile = request.getFile(FeatureStringEnum.TRACK_FILE.value)
-        CommonsMultipartFile trackFileIndex = request.getFile(FeatureStringEnum.TRACK_FILE_INDEX.value)
+        def trackDataFile = request.getFile(FeatureStringEnum.TRACK_DATA.value)
+        def trackFile = request.getFile(FeatureStringEnum.TRACK_FILE.value)
+        def trackFileIndex = request.getFile(FeatureStringEnum.TRACK_FILE_INDEX.value)
 
         // if this is an uploaded organism
         if (organismDirectory.getParentFile().getCanonicalPath() == commonDataDirectory.getCanonicalPath()) {
@@ -1305,7 +1305,7 @@ class OrganismController {
         }
 
 //        CommonsMultipartFile organismDataFile = request.getFile(FeatureStringEnum.ORGANISM_DATA.value)
-        CommonsMultipartFile organismDataFile = null
+        def organismDataFile = null
         if (request instanceof AbstractMultipartHttpServletRequest) {
           organismDataFile = request.getFile(FeatureStringEnum.ORGANISM_DATA.value)
         }
@@ -1475,14 +1475,11 @@ class OrganismController {
   ])
   def findAllOrganisms() {
     try {
-      println "finding all organisms "
       JSONObject requestObject = permissionService.handleInput(request, params)
-      println "with request ojbect ${requestObject as JSON}"
       Boolean showPublicOnly = requestObject.showPublicOnly ? Boolean.valueOf(requestObject.showPublicOnly) : false
       Boolean showObsolete = requestObject.showObsolete ? Boolean.valueOf(requestObject.showObsolete) : false
       List<Organism> organismList = []
       if (requestObject.organism) {
-        println "finding info for specific organism"
         Organism organism = null
         try {
           organism = Organism.findByCommonName(requestObject.organism)
@@ -1500,7 +1497,6 @@ class OrganismController {
           organismList.add(organism)
         }
       } else {
-        println "finding all info"
         //if (permissionService.isAdmin()) {
         if (permissionService.hasGlobalPermissions(requestObject, GlobalPermissionEnum.ADMIN)) {
           organismList = showObsolete ? Organism.all : Organism.findAllByObsolete(false)
@@ -1508,8 +1504,6 @@ class OrganismController {
           organismList = permissionService.getOrganismsForCurrentUser(requestObject).filter() { o -> !o.obsolete }
         }
       }
-
-      println "organism list ${organismList as JSON}"
 
       if (!organismList) {
         def error = [error: 'Not authorized for any organisms']
@@ -1523,8 +1517,6 @@ class OrganismController {
       JSONArray jsonArray = new JSONArray()
       for (Organism organism in organismList) {
 
-        println "showing organism ${organism}"
-
         def c = Feature.createCriteria()
 
         def list = c.list {
@@ -1536,7 +1528,6 @@ class OrganismController {
           }
           'in'('class', requestHandlingService.viewableAnnotationList)
         }
-        println "${list}"
         Integer annotationCount = list.size()
         Integer sequenceCount = Sequence.countByOrganism(organism)
 
@@ -1556,10 +1547,8 @@ class OrganismController {
           metadata                  : organism.metadata,
 //          currentOrganism           : defaultOrganismId != null ? organism.id == defaultOrganismId : false
         ] as JSONObject
-        println "output json object ${jsonObject as JSON}"
         jsonArray.add(jsonObject)
       }
-      println "2 - json array output ${jsonArray}"
       render jsonArray as JSON
       return jsonArray
     }
@@ -1570,7 +1559,7 @@ class OrganismController {
     }
   }
 
-  private def decompressFileToRawDirectory(CommonsMultipartFile trackFile, String path, JSONObject trackConfigObject, String newFileName) {
+  private def decompressFileToRawDirectory(def trackFile, String path, JSONObject trackConfigObject, String newFileName) {
     File archiveFile = new File(trackFile.getOriginalFilename())
     trackFile.transferTo(archiveFile)
     List<String> fileNames = fileService.decompress(archiveFile, path, trackConfigObject.get(FeatureStringEnum.LABEL.value), false)
