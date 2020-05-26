@@ -177,21 +177,21 @@ class JbrowseController {
                 }
 
                 if (organism.sequences) {
-                    User user = permissionService.currentUser
-                    UserOrganismPreference userOrganismPreference = UserOrganismPreference.findByUserAndOrganism(user, organism, [max: 1, sort: "lastUpdated", order: "desc"])
+//                    User user = permissionService.currentUser
+//                    UserOrganismPreference userOrganismPreference = UserOrganismPreference.findByUserAndOrganism(user, organism, [max: 1, sort: "lastUpdated", order: "desc"])
                     Sequence sequence =  Sequence.findAllByOrganism(organism,[sort:"end",order:"desc",max: 1]).first()
-                    if (userOrganismPreference == null) {
-                        userOrganismPreference = new UserOrganismPreference(
-                                user: user
-                                , organism: organism
-                                , sequence: sequence
-                                , currentOrganism: true
-                        ).save(insert: true, flush: true)
-                    } else {
-                        userOrganismPreference.sequence = sequence
-                        userOrganismPreference.currentOrganism = true
-                        userOrganismPreference.save()
-                    }
+//                    if (userOrganismPreference == null) {
+//                        userOrganismPreference = new UserOrganismPreference(
+//                                user: user
+//                                , organism: organism
+//                                , sequence: sequence
+//                                , currentOrganism: true
+//                        ).save(insert: true, flush: true)
+//                    } else {
+//                        userOrganismPreference.sequence = sequence
+//                        userOrganismPreference.currentOrganism = true
+//                        userOrganismPreference.save()
+//                    }
 
                     organismJBrowseDirectory = organism.directory
                     session.setAttribute(FeatureStringEnum.ORGANISM_JBROWSE_DIRECTORY.value, organismJBrowseDirectory)

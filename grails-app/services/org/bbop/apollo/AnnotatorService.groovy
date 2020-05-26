@@ -32,9 +32,10 @@ class AnnotatorService {
         JSONObject appStateObject = new JSONObject()
         try {
             List<Organism> organismList = permissionService.getOrganismsForCurrentUser()
-            UserOrganismPreference userOrganismPreference = UserOrganismPreference.findByUserAndCurrentOrganismAndClientToken(permissionService.currentUser, true, token, [max: 1, sort: "lastUpdated", order: "desc"])
-            log.debug "found organism preference: ${userOrganismPreference} for token ${token}"
-            Long defaultOrganismId = userOrganismPreference ? userOrganismPreference.organism.id : null
+//            UserOrganismPreference userOrganismPreference = UserOrganismPreference.findByUserAndCurrentOrganismAndClientToken(permissionService.currentUser, true, token, [max: 1, sort: "lastUpdated", order: "desc"])
+//            log.debug "found organism preference: ${userOrganismPreference} for token ${token}"
+//            Long defaultOrganismId = userOrganismPreference ? userOrganismPreference.organism.id : null
+            Long defaultOrganismId = null
 
             Map<Organism, Boolean> organismBooleanMap = permissionService.userHasOrganismPermissions(PermissionEnum.ADMINISTRATE)
             Map<Sequence, Integer> sequenceIntegerMap = [:]

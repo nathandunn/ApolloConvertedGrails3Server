@@ -85,7 +85,7 @@ class OrganismController {
         return
       }
 
-      UserOrganismPreference.deleteAll(UserOrganismPreference.findAllByOrganism(organism))
+//      UserOrganismPreference.deleteAll(UserOrganismPreference.findAllByOrganism(organism))
       OrganismFilter.deleteAll(OrganismFilter.findAllByOrganism(organism))
       organism.delete()
       log.info "Success deleting organism: ${organismJson.organism}"
@@ -131,7 +131,7 @@ class OrganismController {
           boolean dataAddedViaWebServices = organism.dataAddedViaWebServices == null ? false : organism.dataAddedViaWebServices
           String organismDirectory = organism.directory
           def organismAsJSON = organism as JSON
-          UserOrganismPreference.deleteAll(UserOrganismPreference.findAllByOrganism(organism))
+//          UserOrganismPreference.deleteAll(UserOrganismPreference.findAllByOrganism(organism))
           OrganismFilter.deleteAll(OrganismFilter.findAllByOrganism(organism))
           organism.delete()
 
@@ -1507,8 +1507,8 @@ class OrganismController {
         return
       }
 
-      UserOrganismPreference userOrganismPreference = UserOrganismPreference.findByUserAndCurrentOrganism(permissionService.getCurrentUser(requestObject), true, [max: 1, sort: "lastUpdated", order: "desc"])
-      Long defaultOrganismId = userOrganismPreference ? userOrganismPreference.organism.id : null
+//      UserOrganismPreference userOrganismPreference = UserOrganismPreference.findByUserAndCurrentOrganism(permissionService.getCurrentUser(requestObject), true, [max: 1, sort: "lastUpdated", order: "desc"])
+//      Long defaultOrganismId = userOrganismPreference ? userOrganismPreference.organism.id : null
 
       JSONArray jsonArray = new JSONArray()
       for (Organism organism in organismList) {
@@ -1543,7 +1543,7 @@ class OrganismController {
           obsolete                  : organism.obsolete,
           nonDefaultTranslationTable: organism.nonDefaultTranslationTable,
           metadata                  : organism.metadata,
-          currentOrganism           : defaultOrganismId != null ? organism.id == defaultOrganismId : false
+//          currentOrganism           : defaultOrganismId != null ? organism.id == defaultOrganismId : false
         ] as JSONObject
         jsonArray.add(jsonObject)
       }
