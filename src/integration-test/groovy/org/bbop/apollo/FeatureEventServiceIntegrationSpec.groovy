@@ -18,21 +18,21 @@ class FeatureEventServiceIntegrationSpec extends AbstractIntegrationSpec {
     def featureEventService
     def jsonWebUtilityService
 
-    def setup() {
-        FeatureEvent.deleteAll(FeatureEvent.all)
-        Feature.deleteAll(Feature.all)
-        setupDefaultUserOrg()
-    }
-
-    def cleanup() {
-        FeatureEvent.deleteAll(FeatureEvent.all)
-        Feature.deleteAll(Feature.all)
-    }
+//    def setupDefaultUserOrg() {
+//        FeatureEvent.deleteAll(FeatureEvent.all)
+//        Feature.deleteAll(Feature.all)
+//        setupDefaultUserOrg()
+//    }
+//
+//    def cleanup() {
+//        FeatureEvent.deleteAll(FeatureEvent.all)
+//        Feature.deleteAll(Feature.all)
+//    }
 
     void "we can undo and redo a transcript split"() {
 
         given: "transcript data"
-        setup()
+        setupDefaultUserOrg()
         String jsonString = "{${testCredentials} \"track\":\"Group1.10\",\"features\":[{\"location\":{\"fmin\":938708,\"fmax\":939601,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"mRNA\"},\"name\":\"GB40736-RA\",\"children\":[{\"location\":{\"fmin\":938708,\"fmax\":938770,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"exon\"}},{\"location\":{\"fmin\":939570,\"fmax\":939601,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"exon\"}},{\"location\":{\"fmin\":938708,\"fmax\":939601,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"CDS\"}}]}],\"operation\":\"add_transcript\"}"
         String splitString = "{ ${testCredentials} \"track\": \"Group1.10\", \"features\": [ { \"uniquename\": \"@EXON_1@\" }, { \"uniquename\": \"@EXON_2@\" } ], \"operation\": \"split_transcript\" }"
         String undoString1 = "{ ${testCredentials} \"track\": \"Group1.10\", \"features\": [ { \"uniquename\": \"@TRANSCRIPT_1@\" } ], \"operation\": \"undo\", \"count\": 1}"
@@ -40,6 +40,7 @@ class FeatureEventServiceIntegrationSpec extends AbstractIntegrationSpec {
         String redoString1 = "{ ${testCredentials} \"track\": \"Group1.10\", \"features\": [ { \"uniquename\": \"@TRANSCRIPT_1@\" } ], \"operation\": \"redo\", \"count\": 1}"
 
         when: "we insert a transcript"
+        println "org count ${Organism.count} and credentials ${getTestCredentials()}"
         JSONObject returnObject = requestHandlingService.addTranscript(JSON.parse(jsonString) as JSONObject)
 
         then: "we have a transcript"
@@ -112,7 +113,7 @@ class FeatureEventServiceIntegrationSpec extends AbstractIntegrationSpec {
     void "we can undo a split twice"() {
 
         given: "transcript data"
-        setup()
+        setupDefaultUserOrg()
         String jsonString = "{${testCredentials} \"track\":\"Group1.10\",\"features\":[{\"location\":{\"fmin\":938708,\"fmax\":939601,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"mRNA\"},\"name\":\"GB40736-RA\",\"children\":[{\"location\":{\"fmin\":938708,\"fmax\":938770,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"exon\"}},{\"location\":{\"fmin\":939570,\"fmax\":939601,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"exon\"}},{\"location\":{\"fmin\":938708,\"fmax\":939601,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"CDS\"}}]}],\"operation\":\"add_transcript\"}"
         String splitString = "{ ${testCredentials} \"track\": \"Group1.10\", \"features\": [ { \"uniquename\": \"@EXON_1@\" }, { \"uniquename\": \"@EXON_2@\" } ], \"operation\": \"split_transcript\" }"
         String undoString1 = "{ ${testCredentials} \"track\": \"Group1.10\", \"features\": [ { \"uniquename\": \"@TRANSCRIPT_1@\" } ], \"operation\": \"undo\", \"count\": 1}"
@@ -169,7 +170,7 @@ class FeatureEventServiceIntegrationSpec extends AbstractIntegrationSpec {
     void "we can undo and redo a split"() {
 
         given: "transcript data"
-        setup()
+        setupDefaultUserOrg()
         String jsonString = "{${testCredentials} \"track\":\"Group1.10\",\"features\":[{\"location\":{\"fmin\":938708,\"fmax\":939601,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"mRNA\"},\"name\":\"GB40736-RA\",\"children\":[{\"location\":{\"fmin\":938708,\"fmax\":938770,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"exon\"}},{\"location\":{\"fmin\":939570,\"fmax\":939601,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"exon\"}},{\"location\":{\"fmin\":938708,\"fmax\":939601,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"CDS\"}}]}],\"operation\":\"add_transcript\"}"
         String splitString = "{ ${testCredentials} \"track\": \"Group1.10\", \"features\": [ { \"uniquename\": \"@EXON_1@\" }, { \"uniquename\": \"@EXON_2@\" } ], \"operation\": \"split_transcript\" }"
         String undoString1 = "{ ${testCredentials} \"track\": \"Group1.10\", \"features\": [ { \"uniquename\": \"@TRANSCRIPT_1@\" } ], \"operation\": \"undo\", \"count\": 1}"
@@ -228,7 +229,7 @@ class FeatureEventServiceIntegrationSpec extends AbstractIntegrationSpec {
     void "we can undo and redo and redo other side"() {
 
         given: "transcript data"
-        setup()
+        setupDefaultUserOrg()
         String jsonString = "{${testCredentials} \"track\":\"Group1.10\",\"features\":[{\"location\":{\"fmin\":938708,\"fmax\":939601,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"mRNA\"},\"name\":\"GB40736-RA\",\"children\":[{\"location\":{\"fmin\":938708,\"fmax\":938770,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"exon\"}},{\"location\":{\"fmin\":939570,\"fmax\":939601,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"exon\"}},{\"location\":{\"fmin\":938708,\"fmax\":939601,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"CDS\"}}]}],\"operation\":\"add_transcript\"}"
         String splitString = "{ ${testCredentials} \"track\": \"Group1.10\", \"features\": [ { \"uniquename\": \"@EXON_1@\" }, { \"uniquename\": \"@EXON_2@\" } ], \"operation\": \"split_transcript\" }"
         String undoString1 = "{ ${testCredentials} \"track\": \"Group1.10\", \"features\": [ { \"uniquename\": \"@TRANSCRIPT_1@\" } ], \"operation\": \"undo\", \"count\": 1}"
@@ -307,7 +308,7 @@ class FeatureEventServiceIntegrationSpec extends AbstractIntegrationSpec {
     void "we can undo and redo a merge transcript"() {
 
         given: "transcript data"
-        setup()
+        setupDefaultUserOrg()
         String addTranscriptString1 = "{${testCredentials} \"track\":\"Group1.10\",\"features\":[{\"location\":{\"fmin\":938708,\"fmax\":938770,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"mRNA\"},\"name\":\"GB40736-RA\",\"children\":[{\"location\":{\"fmin\":938708,\"fmax\":938770,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"exon\"}}]}],\"operation\":\"add_transcript\"}"
         String addTranscriptString2 = "{${testCredentials} \"track\":\"Group1.10\",\"features\":[{\"location\":{\"fmin\":939570,\"fmax\":939601,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"mRNA\"},\"name\":\"GB40736-RA\",\"children\":[{\"location\":{\"fmin\":939570,\"fmax\":939601,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"exon\"}}]}],\"operation\":\"add_transcript\"}"
         String mergeString = "{ ${testCredentials} \"track\": \"Group1.10\", \"features\": [ { \"uniquename\": \"@TRANSCRIPT_1@\" }, { \"uniquename\": \"@TRANSCRIPT_2@\" } ], \"operation\": \"merge_transcripts\" }"
@@ -405,7 +406,7 @@ class FeatureEventServiceIntegrationSpec extends AbstractIntegrationSpec {
     void "should handle merge, change on upstream / RHS gene, undo, redo"() {
 
         given: "two transcripts"
-        setup()
+        setupDefaultUserOrg()
         // gene 1 - GB40787
         Integer allFmin = 75270
         Integer oldFmax = 75367
@@ -579,7 +580,7 @@ class FeatureEventServiceIntegrationSpec extends AbstractIntegrationSpec {
     void "should handle merge, change on downstream / LHS , undo, redo"() {
 
         given: "two transcripts"
-        setup()
+        setupDefaultUserOrg()
         // gene 1 - GB40787
         Integer oldFmin = 77860
         Integer newFmin = 77685
@@ -740,7 +741,7 @@ class FeatureEventServiceIntegrationSpec extends AbstractIntegrationSpec {
     void "should handle merge, change on downstream / LHS , undo, undo"() {
 
         given: "two transcripts"
-        setup()
+        setupDefaultUserOrg()
         // gene 1 - GB40787
         Integer oldFmin = 77860
         Integer newFmin = 77685
@@ -890,7 +891,7 @@ class FeatureEventServiceIntegrationSpec extends AbstractIntegrationSpec {
     void "we should be able to create a uniform tree merge and undo it"() {
 
         given: "two transcripts A = gb40788 and B = gb40787"
-        setup()
+        setupDefaultUserOrg()
         Integer gb40788Fmin = 75270
         Integer old40788Fmax = 75367
         Integer new40788Fmax = 75562
@@ -1129,7 +1130,7 @@ class FeatureEventServiceIntegrationSpec extends AbstractIntegrationSpec {
     void "we should be able to do a merge THEN split and undo and then redo it"() {
 
         given: "two transcripts A = gb40788 and B = gb40787"
-        setup()
+        setupDefaultUserOrg()
         String gb40787String = "{ ${testCredentials} \"track\": \"Group1.10\", \"features\": [{\"location\":{\"fmin\":77860,\"fmax\":78076,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"mRNA\"},\"name\":\"GB40787-RA\",\"children\":[{\"location\":{\"fmin\":77860,\"fmax\":77944,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"exon\"}},{\"location\":{\"fmin\":78049,\"fmax\":78076,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"exon\"}},{\"location\":{\"fmin\":77860,\"fmax\":78076,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"CDS\"}}]}], \"operation\": \"add_transcript\" }"
         String gb40788String = "{ ${testCredentials} \"track\": \"Group1.10\", \"features\": [{\"location\":{\"fmin\":65107,\"fmax\":75367,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"mRNA\"},\"name\":\"GB40788-RA\",\"children\":[{\"location\":{\"fmin\":65107,\"fmax\":65286,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"exon\"}},{\"location\":{\"fmin\":71477,\"fmax\":71651,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"exon\"}},{\"location\":{\"fmin\":75270,\"fmax\":75367,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"exon\"}},{\"location\":{\"fmin\":65107,\"fmax\":75367,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"CDS\"}}]}], \"operation\": \"add_transcript\" }"
         JSONObject jsonAddTranscriptObject1 = JSON.parse(gb40787String) as JSONObject
@@ -1269,7 +1270,7 @@ class FeatureEventServiceIntegrationSpec extends AbstractIntegrationSpec {
     void "we should be able to do a split THEN merge and undo and then redo it"() {
 
         given: "two transcripts A = gb40788 and B = gb40787"
-        setup()
+        setupDefaultUserOrg()
         String gb40787String = "{ ${testCredentials} \"track\": \"Group1.10\", \"features\": [{\"location\":{\"fmin\":77860,\"fmax\":78076,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"mRNA\"},\"name\":\"GB40787-RA\",\"children\":[{\"location\":{\"fmin\":77860,\"fmax\":77944,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"exon\"}},{\"location\":{\"fmin\":78049,\"fmax\":78076,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"exon\"}},{\"location\":{\"fmin\":77860,\"fmax\":78076,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"CDS\"}}]}], \"operation\": \"add_transcript\" }"
         String gb40788String = "{ ${testCredentials} \"track\": \"Group1.10\", \"features\": [{\"location\":{\"fmin\":65107,\"fmax\":75367,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"mRNA\"},\"name\":\"GB40788-RA\",\"children\":[{\"location\":{\"fmin\":65107,\"fmax\":65286,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"exon\"}},{\"location\":{\"fmin\":71477,\"fmax\":71651,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"exon\"}},{\"location\":{\"fmin\":75270,\"fmax\":75367,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"exon\"}},{\"location\":{\"fmin\":65107,\"fmax\":75367,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"CDS\"}}]}], \"operation\": \"add_transcript\" }"
         JSONObject jsonAddTranscriptObject1 = JSON.parse(gb40787String) as JSONObject
