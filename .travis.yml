@@ -45,7 +45,6 @@ cache:
 script:
   - |
     if [[ $TEST_SUITE == "apollo" ]]; then
-#      travis_wait ./gradlew installJBrowseWebOnly gwtc installJBrowseTools && ./grailsw refresh-dependencies --stacktrace && ./grailsw test-app -coverage -xml --stacktrace && ./grailsw coveralls
       travis_wait ./grailsw test-app
     fi
   - |
