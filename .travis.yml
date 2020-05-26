@@ -3,15 +3,11 @@ dist: trusty
 
 language: java
 
-node_js:
-  - "13"
-
 env:
-  - DB=postgres TEST_SUITE=apollo
-  - DB=mysql TEST_SUITE=apollo
+#  - DB=postgres TEST_SUITE=apollo
+#  - DB=mysql TEST_SUITE=apollo
   - DB=h2 TEST_SUITE=apollo
-  - DB=h2 TEST_SUITE=javascript
-  - DB=h2 TEST_SUITE=python-apollo
+#  - DB=h2 TEST_SUITE=python-apollo
 
 python:
   - 3.6
@@ -28,13 +24,7 @@ services:
 - postgresql
 - mysql
 
-before_install:
-  - npm install -g jshint
-
 before_script:
-  - node -v
-  - npm -v
-  - npm install -g yarn
   - "echo $JAVA_OPTS"
   - "export JAVA_OPTS='-Xmx2048m'"
   - "echo $JAVA_OPTS"
@@ -50,17 +40,13 @@ cache:
     - extlib/
     - $HOME/.grails/
     - $HOME/.m2/
-    - $HOME/.npm/
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 script:
   - |
     if [[ $TEST_SUITE == "apollo" ]]; then
-      travis_wait ./gradlew installJBrowseWebOnly gwtc installJBrowseTools && ./grailsw refresh-dependencies --stacktrace && ./grailsw test-app -coverage -xml --stacktrace && ./grailsw coveralls
-    fi
-  - |
-    if [[ $TEST_SUITE == "javascript" ]]; then
-      jshint client/apollo/js
+#      travis_wait ./gradlew installJBrowseWebOnly gwtc installJBrowseTools && ./grailsw refresh-dependencies --stacktrace && ./grailsw test-app -coverage -xml --stacktrace && ./grailsw coveralls
+      travis_wait ./grailsw test-app
     fi
   - |
     if [[ $TEST_SUITE == "python-apollo" ]]; then
