@@ -218,6 +218,7 @@ class OverlapperServiceIntegrationSpec extends AbstractIntegrationSpec{
     void "isoform overlap test for GB40810-RA loci"() {
 
         given: "A set of isoforms at GB40810-RA loci"
+        setupDefaultUserOrg()
         String mainTranscript1 = "{${testCredentials} \"operation\":\"add_transcript\",\"features\":[{\"location\":{\"fmin\":335756,\"strand\":1,\"fmax\":337187},\"name\":\"GB40810-RA\",\"children\":[{\"location\":{\"fmin\":335756,\"strand\":1,\"fmax\":336018},\"type\":{\"name\":\"exon\",\"cv\":{\"name\":\"sequence\"}}},{\"location\":{\"fmin\":335756,\"strand\":1,\"fmax\":336120},\"type\":{\"name\":\"exon\",\"cv\":{\"name\":\"sequence\"}}},{\"location\":{\"fmin\":336248,\"strand\":1,\"fmax\":336302},\"type\":{\"name\":\"exon\",\"cv\":{\"name\":\"sequence\"}}},{\"location\":{\"fmin\":336471,\"strand\":1,\"fmax\":336855},\"type\":{\"name\":\"exon\",\"cv\":{\"name\":\"sequence\"}}},{\"location\":{\"fmin\":336923,\"strand\":1,\"fmax\":336954},\"type\":{\"name\":\"exon\",\"cv\":{\"name\":\"sequence\"}}},{\"location\":{\"fmin\":337080,\"strand\":1,\"fmax\":337187},\"type\":{\"name\":\"exon\",\"cv\":{\"name\":\"sequence\"}}},{\"location\":{\"fmin\":336018,\"strand\":1,\"fmax\":337187},\"type\":{\"name\":\"CDS\",\"cv\":{\"name\":\"sequence\"}}}],\"type\":{\"name\":\"mRNA\",\"cv\":{\"name\":\"sequence\"}}}],\"track\":\"Group1.10\",'clientToken':'123123'}"
 
         // isoforms for mainTranscript1
