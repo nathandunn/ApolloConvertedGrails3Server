@@ -38,10 +38,10 @@ RUN curl -s "http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/blat/blat" -o
 RUN useradd -ms /bin/bash -d /apollo apollo
 COPY gradlew /apollo
 COPY grails-app /apollo/grails-app
-COPY lib /apollo/lib
+#COPY lib /apollo/lib
 COPY src /apollo/src
 COPY src/main/scripts /apollo/scripts
-ADD gra* /apollo/
+ADD grails* /apollo/
 COPY apollo /apollo/apollo
 ADD build* /apollo/
 ADD settings.gradle /apollo

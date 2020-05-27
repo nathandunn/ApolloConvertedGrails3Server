@@ -316,8 +316,11 @@ class OrganismController {
 
           if (organismDataFile) {
             println "Successfully created directory ${directory.absolutePath}"
+            println "original name ${organismDataFile.getOriginalFilename()} "
             File archiveFile = new File(organismDataFile.getOriginalFilename())
+            println "1 archive file ${archiveFile} ${archiveFile.absolutePath}, ${archiveFile.exists()} ${archiveFile.size()}"
             organismDataFile.transferTo(archiveFile)
+            println "archive file ${archiveFile} ${archiveFile.absolutePath}, ${archiveFile.exists()} . . size > 0 ${archiveFile.size()}"
             try {
               fileService.decompress(archiveFile, directory.absolutePath, null, false)
               println "Adding ${organismName} with directory: ${directory.absolutePath}"
