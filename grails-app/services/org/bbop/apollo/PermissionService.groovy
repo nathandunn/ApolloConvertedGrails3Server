@@ -421,7 +421,7 @@ class PermissionService {
 //            sequence = UserOrganismPreference.findByClientTokenAndOrganism(sequenceName, organism, [max: 1, sort: "lastUpdated", order: "desc"])?.sequence
 //        } else {
           Sequence sequence = Sequence.findByNameAndOrganism(sequenceName, organism)
-        println "seq ${sequence} org ${organism} input ${inputObject as JSON}"
+        println "seq ${sequence} org ${organism} "
 //            if (!sequence) {
 //                throw new AnnotationException("No sequence found for name '${sequenceName}' and organism '${organism?.commonName}'")
 //            }
