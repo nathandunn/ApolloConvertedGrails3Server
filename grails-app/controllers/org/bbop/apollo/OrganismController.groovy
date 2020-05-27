@@ -256,6 +256,10 @@ class OrganismController {
     def organismDataFile = request.getFile(FeatureStringEnum.ORGANISM_DATA.value)
     def sequenceDataFile = request.getFile(FeatureStringEnum.SEQUENCE_DATA.value)
     def searchDatabaseDataFile = request.getFile(FeatureStringEnum.SEARCH_DATABASE_DATA.value)
+    println "input request ${request}"
+    println "organism data file ${organismDataFile}"
+    println "sequence data file ${sequenceDataFile}"
+    println "search database data file ${searchDatabaseDataFile}"
 
     if (!requestObject.containsKey(FeatureStringEnum.ORGANISM_NAME.value)) {
       returnObject.put("error", "/addOrganismWithSequence requires '${FeatureStringEnum.ORGANISM_NAME.value}'.")
@@ -304,7 +308,9 @@ class OrganismController {
           userId = currentUser ? currentUser.id?.toString() : userId
         }
         organism.addMetaData("creator", userId)
+        println "oirganism ${organism as JSON}"
         File directory = trackService.getExtendedDataDirectory(organism)
+        println "DIRECTORY ${directory}"
 
         if (directory.mkdirs() && directory.setWritable(true)) {
 
