@@ -315,8 +315,9 @@ class OrganismController {
           if (organismDataFile) {
             println "Successfully created directory ${directory.absolutePath}"
             println "file type is ${organismDataFile.getClass().getCanonicalName()}"
-            println "original name ${organismDataFile.getOriginalFilename()} is empty ? ${organismDataFile.empty} "
-            File archiveFile = new File(organismDataFile.getOriginalFilename())
+            println "original name ${organismDataFile.getOriginalFilename()} is empty ? ${organismDataFile.empty} ${organismDataFile}"
+//            File archiveFile = new File(organismDataFile.getOriginalFilename())
+            File archiveFile = File.createTempFile("archive",".tar.gz").deleteOnExit()
             println "1 archive file ${archiveFile} ${archiveFile.absolutePath}, ${archiveFile.exists()} ${archiveFile.size()}"
             organismDataFile.transferTo(archiveFile)
             println "archive file ${archiveFile} ${archiveFile.absolutePath}, ${archiveFile.exists()} . . size > 0 ${archiveFile.size()}"

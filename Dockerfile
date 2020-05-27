@@ -36,7 +36,7 @@ RUN curl -s "http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/blat/blat" -o
 
 #NOTE, we had problems with the build the archive-file coming in from github so using a clone instead
 RUN useradd -ms /bin/bash -d /apollo apollo
-COPY gradlew /apollo
+COPY gradle* /apollo
 COPY grails-app /apollo/grails-app
 #COPY lib /apollo/lib
 COPY src /apollo/src
