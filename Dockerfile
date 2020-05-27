@@ -38,18 +38,18 @@ RUN curl -s "http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/blat/blat" -o
 RUN useradd -ms /bin/bash -d /apollo apollo
 COPY gradlew /apollo
 COPY gradle.properties /apollo
-COPY gradle /apollo
+COPY gradle /apollo/gradle
 COPY grails-app /apollo/grails-app
 #COPY lib /apollo/lib
 COPY src /apollo/src
 COPY src/main/scripts /apollo/scripts
 ADD grails* /apollo/
 #COPY apollo /apollo/apollo
-#ADD build* /apollo/
+COPY build.gradle /apollo/build.gradle
 ADD settings.gradle /apollo
 RUN ls /apollo
 
-COPY docker-files/build.sh /bin/build.sh
+#COPY docker-files/build.sh /bin/build.sh
 RUN ["chmod", "+x", "/bin/build.sh"]
 ADD docker-files/docker-apollo-config.groovy /apollo/apollo-config.groovy
 RUN chown -R apollo:apollo /apollo
@@ -60,14 +60,15 @@ USER apollo
 #RUN pip3 install setuptools
 #RUN pip3 install nose "apollo==4.2"
 
-#RUN curl -s get.sdkman.io | bash && \
-#     /bin/bash -c "source $HOME/.sdkman/bin/sdkman-init.sh && yes | sdk install grails 2.5.5" && \
-#     /bin/bash -c "source $HOME/.sdkman/bin/sdkman-init.sh && yes | sdk install gradle 3.2.1"
-#RUN /bin/bash -c "source $HOME/.sdkman/bin/sdkman-init.sh && /bin/bash /bin/build.sh"
-
+WORKDIR /apollo
+RUN ./grailsw clean
+RUN rm -rf build/*
+RUN ./grailsw war
+RUN cp /apollo/build/libs/*.war /tmp/apollo.war && rm -rf /apollo/ || true
+RUN mv /tmp/apollo.war /apollo/apollo.war
 
 USER root
-RUN /bin/build.sh
+#RUN /bin/build.sh
 # remove from webapps and copy it into a staging directory
 RUN rm -rf ${CATALINA_BASE}/webapps/* && \
 	cp /apollo/apollo*.war ${CATALINA_BASE}/apollo.war
