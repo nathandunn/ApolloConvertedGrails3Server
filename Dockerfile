@@ -50,7 +50,7 @@ ADD settings.gradle /apollo
 RUN ls /apollo
 
 #COPY docker-files/build.sh /bin/build.sh
-RUN ["chmod", "+x", "/bin/build.sh"]
+#RUN ["chmod", "+x", "/bin/build.sh"]
 ADD docker-files/docker-apollo-config.groovy /apollo/apollo-config.groovy
 RUN chown -R apollo:apollo /apollo
 
