@@ -15,7 +15,8 @@ import org.grails.web.converters.exceptions.ConverterException
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
 import io.swagger.annotations.*
-//import org.springframework.web.multipart.commons.CommonsMultipartFile
+import org.springframework.web.multipart.MultipartFile
+
 import org.springframework.web.multipart.support.AbstractMultipartHttpServletRequest
 
 import javax.servlet.http.HttpServletResponse
@@ -33,7 +34,6 @@ class OrganismController {
   def sequenceService
   def permissionService
   def requestHandlingService
-//  def preferenceService
   def organismService
   def reportService
   def configWrapperService
@@ -84,8 +84,6 @@ class OrganismController {
         render error as JSON
         return
       }
-
-//      UserOrganismPreference.deleteAll(UserOrganismPreference.findAllByOrganism(organism))
       OrganismFilter.deleteAll(OrganismFilter.findAllByOrganism(organism))
       organism.delete()
       println "Success deleting organism: ${organismJson.organism}"
@@ -253,9 +251,9 @@ class OrganismController {
     JSONObject requestObject = permissionService.handleInput(request, params)
     println "Adding organism with SEQUENCE ${requestObject as String}"
     String clientToken = requestObject.getString(FeatureStringEnum.CLIENT_TOKEN.value)
-    def organismDataFile = request.getFile(FeatureStringEnum.ORGANISM_DATA.value)
-    def sequenceDataFile = request.getFile(FeatureStringEnum.SEQUENCE_DATA.value)
-    def searchDatabaseDataFile = request.getFile(FeatureStringEnum.SEARCH_DATABASE_DATA.value)
+    MultipartFile organismDataFile = request.getFile(FeatureStringEnum.ORGANISM_DATA.value)
+    MultipartFile sequenceDataFile = request.getFile(FeatureStringEnum.SEQUENCE_DATA.value)
+    MultipartFile searchDatabaseDataFile = request.getFile(FeatureStringEnum.SEARCH_DATABASE_DATA.value)
     println "input request ${request}"
     println "organism data file ${organismDataFile}"
     println "sequence data file ${sequenceDataFile}"
@@ -316,7 +314,8 @@ class OrganismController {
 
           if (organismDataFile) {
             println "Successfully created directory ${directory.absolutePath}"
-            println "original name ${organismDataFile.getOriginalFilename()} "
+            println "file type is ${organismDataFile.getClass().getCanonicalName()}"
+            println "original name ${organismDataFile.getOriginalFilename()} is empty ? ${organismDataFile.empty} "
             File archiveFile = new File(organismDataFile.getOriginalFilename())
             println "1 archive file ${archiveFile} ${archiveFile.absolutePath}, ${archiveFile.exists()} ${archiveFile.size()}"
             organismDataFile.transferTo(archiveFile)

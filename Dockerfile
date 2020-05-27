@@ -42,7 +42,7 @@ COPY grails-app /apollo/grails-app
 COPY src /apollo/src
 COPY src/main/scripts /apollo/scripts
 ADD grails* /apollo/
-COPY apollo /apollo/apollo
+#COPY apollo /apollo/apollo
 ADD build* /apollo/
 ADD settings.gradle /apollo
 RUN ls /apollo
