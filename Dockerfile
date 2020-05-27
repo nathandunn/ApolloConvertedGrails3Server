@@ -36,34 +36,38 @@ RUN curl -s "http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/blat/blat" -o
 
 #NOTE, we had problems with the build the archive-file coming in from github so using a clone instead
 RUN useradd -ms /bin/bash -d /apollo apollo
-COPY gradle* /apollo
+COPY gradlew /apollo
+COPY gradle.properties /apollo
+COPY gradle /apollo
 COPY grails-app /apollo/grails-app
 #COPY lib /apollo/lib
 COPY src /apollo/src
 COPY src/main/scripts /apollo/scripts
 ADD grails* /apollo/
 #COPY apollo /apollo/apollo
-ADD build* /apollo/
+#ADD build* /apollo/
 ADD settings.gradle /apollo
 RUN ls /apollo
 
 COPY docker-files/build.sh /bin/build.sh
+RUN ["chmod", "+x", "/bin/build.sh"]
 ADD docker-files/docker-apollo-config.groovy /apollo/apollo-config.groovy
 RUN chown -R apollo:apollo /apollo
 
 # install grails and python libraries
 USER apollo
 
-RUN pip3 install setuptools
-RUN pip3 install nose "apollo==4.2"
+#RUN pip3 install setuptools
+#RUN pip3 install nose "apollo==4.2"
 
-RUN curl -s get.sdkman.io | bash && \
-     /bin/bash -c "source $HOME/.sdkman/bin/sdkman-init.sh && yes | sdk install grails 2.5.5" && \
-     /bin/bash -c "source $HOME/.sdkman/bin/sdkman-init.sh && yes | sdk install gradle 3.2.1"
+#RUN curl -s get.sdkman.io | bash && \
+#     /bin/bash -c "source $HOME/.sdkman/bin/sdkman-init.sh && yes | sdk install grails 2.5.5" && \
+#     /bin/bash -c "source $HOME/.sdkman/bin/sdkman-init.sh && yes | sdk install gradle 3.2.1"
+#RUN /bin/bash -c "source $HOME/.sdkman/bin/sdkman-init.sh && /bin/bash /bin/build.sh"
 
-RUN /bin/bash -c "source $HOME/.sdkman/bin/sdkman-init.sh && /bin/bash /bin/build.sh"
 
 USER root
+RUN /bin/build.sh
 # remove from webapps and copy it into a staging directory
 RUN rm -rf ${CATALINA_BASE}/webapps/* && \
 	cp /apollo/apollo*.war ${CATALINA_BASE}/apollo.war

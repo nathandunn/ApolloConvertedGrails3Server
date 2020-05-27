@@ -317,10 +317,11 @@ class OrganismController {
             println "file type is ${organismDataFile.getClass().getCanonicalName()}"
             println "original name ${organismDataFile.getOriginalFilename()} is empty ? ${organismDataFile.empty} ${organismDataFile}"
 //            File archiveFile = new File(organismDataFile.getOriginalFilename())
-            File archiveFile = File.createTempFile("archive",".tar.gz").deleteOnExit()
-            println "1 archive file ${archiveFile} ${archiveFile.absolutePath}, ${archiveFile.exists()} ${archiveFile.size()}"
+            File archiveFile = File.createTempFile("archive",".tar.gz")
+            println "1 archive file ${archiveFile} "
+            println "2 archive file${archiveFile.absolutePath}, ${archiveFile.exists()} ${archiveFile.size()}"
             organismDataFile.transferTo(archiveFile)
-            println "archive file ${archiveFile} ${archiveFile.absolutePath}, ${archiveFile.exists()} . . size > 0 ${archiveFile.size()}"
+            println "3 archive file ${archiveFile} ${archiveFile.absolutePath}, ${archiveFile.exists()} . . size > 0 ${archiveFile.size()}"
             try {
               fileService.decompress(archiveFile, directory.absolutePath, null, false)
               println "Adding ${organismName} with directory: ${directory.absolutePath}"
