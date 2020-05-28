@@ -34,7 +34,7 @@
 					</tr>
 				</thead>
 				<tbody>
-				<g:each in="${suggestedNameInstanceList}" status="i" var="suggestedNameInstance">
+				<g:each in="${suggestedNameList}" status="i" var="suggestedNameInstance">
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 					
 						<td><g:link action="show" id="${suggestedNameInstance.id}">${fieldValue(bean: suggestedNameInstance, field: "name")}</g:link></td>

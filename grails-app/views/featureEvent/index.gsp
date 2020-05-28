@@ -39,7 +39,7 @@
 					</tr>
 				</thead>
 				<tbody>
-				<g:each in="${featureEventInstanceList}" status="i" var="featureEventInstance">
+				<g:each in="${featureEventList}" status="i" var="featureEventInstance">
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 					
 						<td><g:link action="show" id="${featureEventInstance.id}">${fieldValue(bean: featureEventInstance, field: "editor")}</g:link></td>

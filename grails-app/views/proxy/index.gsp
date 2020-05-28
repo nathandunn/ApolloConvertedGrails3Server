@@ -40,7 +40,7 @@
 					</tr>
 				</thead>
 				<tbody>
-				<g:each in="${proxyInstanceList}" status="i" var="proxyInstance">
+				<g:each in="${proxyList}" status="i" var="proxyInstance">
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 
 
