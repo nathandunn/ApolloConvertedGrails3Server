@@ -66,7 +66,7 @@ dependencies {
     compile 'org.grails.plugins:grails-spring-websocket:2.4.1'
 
     // shiro:
-    compile 'org.grails.plugins:grails-shiro:3.2'
+    compile 'org.grails.plugins:grails-shiro:3.3'
 
     // spring security:
 //    compile 'org.grails.plugins:spring-security-core:4.0.0'
