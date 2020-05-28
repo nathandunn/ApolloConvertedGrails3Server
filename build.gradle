@@ -33,9 +33,9 @@ repositories {
         url "https://repo.grails.org/grails/core"
     }
     // added
-    maven {
-        url "https://dl.bintray.com/ajay-kumar/plugins"
-    }
+//    maven {
+//        url "https://dl.bintray.com/ajay-kumar/plugins"
+//    }
 
 
 }
