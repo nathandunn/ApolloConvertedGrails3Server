@@ -7,6 +7,7 @@ buildscript {
         classpath "org.grails:grails-gradle-plugin:$grailsVersion"
         classpath "org.grails.plugins:hibernate5:${gormVersion-".RELEASE"}"
         classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.15.1"
+        classpath "gradle.plugin.com.energizedwork.webdriver-binaries:webdriver-binaries-gradle-plugin:$webdriverBinariesVersion"
     }
 }
 
@@ -20,6 +21,8 @@ apply plugin:"war"
 apply plugin:"org.grails.grails-web"
 apply plugin:"asset-pipeline"
 apply plugin:"org.grails.grails-gsp"
+apply plugin:"com.energizedwork.webdriver-binaries"
+
 //apply plugin: 'java'
 //apply plugin: 'groovy'
 
@@ -40,9 +43,12 @@ repositories {
 // In this section you declare the dependencies for your production and test code
 dependencies {
     // START added dependencies
-    compile 'org.grails.plugins:swagger:1.0.1'
+//    compile 'org.grails.plugins:swagger:1.0.1'
+    annotationProcessor "io.micronaut.configuration:micronaut-openapi:1.4.0"
+    compile "io.swagger.core.v3:swagger-annotations:2.1.1"
+    compileOnly "io.micronaut.configuration:micronaut-openapi:1.4.0"
 
-    runtime 'mysql:mysql-connector-java:5.1.49'
+//    runtime 'mysql:mysql-connector-java:5.1.49'
     runtime 'org.postgresql:postgresql:9.4.1212'
 
 
@@ -93,8 +99,8 @@ dependencies {
     compile "org.grails.plugins:scaffolding"
     compile "org.grails.plugins:events"
     compile "org.grails.plugins:hibernate5"
-    compile "org.hibernate:hibernate-core:5.1.17.Final"
-    compile "org.hibernate:hibernate-validator:5.4.3.Final"
+    compile "org.hibernate:hibernate-core:5.4.16.Final"
+    compile "org.hibernate:hibernate-validator:6.1.5.Final"
     compile "org.grails.plugins:gsp"
     console "org.grails:grails-console"
     profile "org.grails.profiles:web"
@@ -103,18 +109,32 @@ dependencies {
     runtime "org.apache.tomcat:tomcat-jdbc"
     runtime "com.bertramlabs.plugins:asset-pipeline-grails:2.15.1"
     testCompile "org.grails:grails-gorm-testing-support"
-    testCompile "org.grails.plugins:geb"
+//    testCompile "org.grails.plugins:geb"
     testCompile "org.grails:grails-web-testing-support"
-    testCompile "org.grails.plugins:geb:1.1.2"
+//    testCompile "org.grails.plugins:geb:1.1.2"
     testCompile "org.grails:grails-test-mixins:3.3.0"
-    testRuntime "org.seleniumhq.selenium:selenium-htmlunit-driver:2.47.1"
+//    testRuntime "org.seleniumhq.selenium:selenium-htmlunit-driver:2.47.1"
     testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
     testRuntime "org.seleniumhq.selenium:selenium-chrome-driver:2.47.1"
+
+    testCompile "org.grails.plugins:geb"
+    testRuntime "org.seleniumhq.selenium:selenium-chrome-driver:$seleniumVersion"
+    testRuntime "org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion"
+    testRuntime "org.seleniumhq.selenium:selenium-safari-driver:$seleniumSafariDriverVersion"
+
+    testCompile "org.seleniumhq.selenium:selenium-remote-driver:$seleniumVersion"
+    testCompile "org.seleniumhq.selenium:selenium-api:$seleniumVersion"
+    testCompile "org.seleniumhq.selenium:selenium-support:$seleniumVersion"
+}
+
+webdriverBinaries {
+    chromedriver "$chromeDriverVersion"
+    geckodriver "$geckodriverVersion"
 }
 
 bootRun {
     jvmArgs('-Dspring.output.ansi.enabled=always')
-    addResources = true
+//    addResources = true
     String springProfilesActive = 'spring.profiles.active'
     systemProperty springProfilesActive, System.getProperty(springProfilesActive)
 }

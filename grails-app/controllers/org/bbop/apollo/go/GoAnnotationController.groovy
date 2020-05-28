@@ -8,7 +8,9 @@ import org.bbop.apollo.gwt.shared.PermissionEnum
 import org.bbop.apollo.history.FeatureOperation
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
-import io.swagger.annotations.*
+//import io.swagger.annotations.*
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+
 
 import static org.springframework.http.HttpStatus.NOT_FOUND
 
