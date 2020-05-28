@@ -700,11 +700,11 @@ class AnnotatorController {
  * This is a public passthrough to version
  */
     def version() {
-        println "version "
+        log.debug "version "
     }
 
     def about() {
-        println "about . . . . "
+        log.debug  "about . . . . "
     }
 /**
  * This is a very specific method for the GWT interface.

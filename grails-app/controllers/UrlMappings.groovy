@@ -21,9 +21,9 @@ class UrlMappings {
         "500"(view: '/error')
 //        "/menu"(view: '/menu')
         "/"(view: '/index')
-        "/${clientToken}/version.jsp"(controller: 'annotator', view: "version")
-        "/about"(controller: 'annotator', view: "about")
-        "/${clientToken}/about"(controller: 'annotator', view: "about")
+//        "/${clientToken}/version.jsp"(controller: 'annotator', view: "version")
+//        "/about"(controller: 'annotator', view: "about")
+//        "/${clientToken}/about"(controller: 'annotator', view: "about")
 
         "/track/nclist/${organismString}/${trackName}/${sequence}:${fmin}..${fmax}.json"(controller: "track", action: "nclist")
         "/track/nclist/${organismString}/${trackName}/?loc=${sequence}:${fmin}..${fmax}"(controller: "track", action: "nclist")

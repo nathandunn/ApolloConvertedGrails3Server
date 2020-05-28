@@ -82,12 +82,11 @@
     <hr/>
     <ul>
         <li>Version:
-        %{--${grails.util.Metadata.current[attrs[app.version]]}--}%
-            <g:if test="${grails.util.Metadata.current['app.version'].contains('SNAPSHOT')}">
-                <a href='https://github.com/GMOD/Apollo/releases'><g:meta name="app.version"/></a>
+            <g:if test="${grailsApplication.metadata.info.app.version.contains('SNAPSHOT')}">
+                <a href='https://github.com/GMOD/Apollo/releases'><g:meta name="info.app.version"/></a>
             </g:if>
             <g:else>
-                <a href='https://github.com/GMOD/Apollo/releases/tag/<g:meta name="app.version"/>'><g:meta
+                <a href='https://github.com/GMOD/Apollo/releases/tag/<g:meta name="info.app.version"/>'><g:meta
                         name="app.version"/></a>
             </g:else>
         </li>

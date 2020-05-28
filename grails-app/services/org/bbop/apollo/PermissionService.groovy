@@ -339,7 +339,8 @@ class PermissionService {
         if (!username) {
             username = SecurityUtils.subject.principal
         }
-        if (!username) {
+        // TODO: remove
+        if (false && !username) {
             return null
         }
 
