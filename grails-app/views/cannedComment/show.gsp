@@ -27,34 +27,34 @@
     </g:if>
     <ol class="property-list cannedComment">
 
-        <g:if test="${cannedCommentInstance?.comment}">
+        <g:if test="${cannedComment?.comment}">
             <li class="fieldcontain">
                 <span id="comment-label" class="property-label"><g:message code="cannedComment.comment.label"
                                                                            default="Comment"/></span>
 
                 <span class="property-value" aria-labelledby="comment-label"><g:fieldValue
-                        bean="${cannedCommentInstance}" field="comment"/></span>
+                        bean="${cannedComment}" field="comment"/></span>
 
             </li>
         </g:if>
 
-        <g:if test="${cannedCommentInstance?.metadata}">
+        <g:if test="${cannedComment?.metadata}">
             <li class="fieldcontain">
                 <span id="metadata-label" class="property-label"><g:message code="cannedComment.metadata.label"
                                                                             default="Metadata"/></span>
 
                 <span class="property-value" aria-labelledby="metadata-label"><g:fieldValue
-                        bean="${cannedCommentInstance}" field="metadata"/></span>
+                        bean="${cannedComment}" field="metadata"/></span>
 
             </li>
         </g:if>
 
-        <g:if test="${cannedCommentInstance?.featureTypes}">
+        <g:if test="${cannedComment?.featureTypes}">
             <li class="fieldcontain">
                 <span id="featureTypes-label" class="property-label"><g:message code="cannedComment.featureTypes.label"
                                                                                 default="Feature Types"/></span>
 
-                <g:each in="${cannedCommentInstance.featureTypes}" var="f">
+                <g:each in="${cannedComment.featureTypes}" var="f">
                     <span class="property-value" aria-labelledby="featureTypes-label"><g:link controller="featureType"
                                                                                               action="show"
                                                                                               id="${f.id}">${f?.name}</g:link></span>
@@ -77,9 +77,9 @@
         </g:if>
 
     </ol>
-    <g:form url="[resource: cannedCommentInstance, action: 'delete']" method="DELETE">
+    <g:form url="[resource: cannedComment, action: 'delete']" method="DELETE">
         <fieldset class="buttons">
-            <g:link class="edit" action="edit" resource="${cannedCommentInstance}"><g:message
+            <g:link class="edit" action="edit" resource="${cannedComment}"><g:message
                     code="default.button.edit.label" default="Edit"/></g:link>
             <g:actionSubmit class="delete" action="delete"
                             value="${message(code: 'default.button.delete.label', default: 'Delete')}"

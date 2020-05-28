@@ -2,16 +2,16 @@
 
 
 
-<div class="fieldcontain ${hasErrors(bean: availableStatusInstance, field: 'value', 'error')} required">
+<div class="fieldcontain ${hasErrors(bean: availableStatus, field: 'value', 'error')} required">
 	<label for="value">
 		<g:message code="availableStatus.value.label" default="Value" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:textField name="value" required="" value="${availableStatusInstance?.value}"/>
+	<g:textField name="value" required="" value="${availableStatus?.value}"/>
 
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: availableStatusInstance, field: 'featureTypes', 'error')} ">
+<div class="fieldcontain ${hasErrors(bean: availableStatus, field: 'featureTypes', 'error')} ">
 	<label for="featureTypes">
 		<g:message code="availableStatus.featureTypes.label" default="Feature Types" />
 
@@ -20,11 +20,11 @@
 			  multiple="multiple"
 			  optionKey="id" size="10"
 			  optionValue="display"
-			  value="${availableStatusInstance?.featureTypes*.id}" class="many-to-many"/>
+			  value="${availableStatus?.featureTypes*.id}" class="many-to-many"/>
 
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: availableStatusInstance, field: 'organisms', 'error')} ">
+<div class="fieldcontain ${hasErrors(bean: availableStatus, field: 'organisms', 'error')} ">
 	<label for="organisms">
 		<g:message code="availableStatus.organisms.label" default="Organisms" />
 

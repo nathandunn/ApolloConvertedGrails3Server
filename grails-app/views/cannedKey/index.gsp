@@ -33,30 +33,30 @@
 					</tr>
 				</thead>
 				<tbody>
-				<g:each in="${cannedKeyList}" status="i" var="cannedKeyInstance">
+				<g:each in="${cannedKeyList}" status="i" var="cannedKey">
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 					
-						<td><g:link action="show" id="${cannedKeyInstance.id}">${fieldValue(bean: cannedKeyInstance, field: "label")}</g:link></td>
+						<td><g:link action="show" id="${cannedKey.id}">${fieldValue(bean: cannedKey, field: "label")}</g:link></td>
 
 						<td>
-							<g:each in="${cannedKeyInstance.featureTypes.sort() { a,b -> a.display <=> b.display }}" var="featureType">
+							<g:each in="${cannedKey.featureTypes.sort() { a,b -> a.display <=> b.display }}" var="featureType">
 								${featureType.type}:${featureType.name}
 							</g:each>
 						</td>
 						<td>
-							<g:each in="${organismFilters.get(cannedKeyInstance)}" var="filter">
+							<g:each in="${organismFilters.get(cannedKey)}" var="filter">
 								<g:link controller="organism" id="${filter.organism.id}">${filter.organism.commonName}</g:link>
 							</g:each>
 						</td>
 
-						<td>${fieldValue(bean: cannedKeyInstance, field: "metadata")}</td>
+						<td>${fieldValue(bean: cannedKey, field: "metadata")}</td>
 					
 					</tr>
 				</g:each>
 				</tbody>
 			</table>
 			<div class="pagination">
-				<g:paginate total="${cannedKeyInstanceCount ?: 0}" />
+				<g:paginate total="${cannedKeyCount ?: 0}" />
 			</div>
 		</div>
 	</body>

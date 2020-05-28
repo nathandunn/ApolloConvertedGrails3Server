@@ -27,34 +27,34 @@
     </g:if>
     <ol class="property-list cannedKey">
 
-        <g:if test="${cannedKeyInstance?.label}">
+        <g:if test="${cannedKey?.label}">
             <li class="fieldcontain">
                 <span id="label-label" class="property-label"><g:message code="cannedKey.label.label"
                                                                          default="Label"/></span>
 
-                <span class="property-value" aria-labelledby="label-label"><g:fieldValue bean="${cannedKeyInstance}"
+                <span class="property-value" aria-labelledby="label-label"><g:fieldValue bean="${cannedKey}"
                                                                                          field="label"/></span>
 
             </li>
         </g:if>
 
-        <g:if test="${cannedKeyInstance?.metadata}">
+        <g:if test="${cannedKey?.metadata}">
             <li class="fieldcontain">
                 <span id="metadata-label" class="property-label"><g:message code="cannedKey.metadata.label"
                                                                             default="Metadata"/></span>
 
-                <span class="property-value" aria-labelledby="metadata-label"><g:fieldValue bean="${cannedKeyInstance}"
+                <span class="property-value" aria-labelledby="metadata-label"><g:fieldValue bean="${cannedKey}"
                                                                                             field="metadata"/></span>
 
             </li>
         </g:if>
 
-        <g:if test="${cannedKeyInstance?.featureTypes}">
+        <g:if test="${cannedKey?.featureTypes}">
             <li class="fieldcontain">
                 <span id="featureTypes-label" class="property-label"><g:message code="cannedKey.featureTypes.label"
                                                                                 default="Feature Types"/></span>
 
-                <g:each in="${cannedKeyInstance.featureTypes}" var="f">
+                <g:each in="${cannedKey.featureTypes}" var="f">
                     <span class="property-value" aria-labelledby="featureTypes-label"><g:link controller="featureType"
                                                                                               action="show"
                                                                                               id="${f.id}">${f?.display}</g:link></span>
@@ -76,11 +76,11 @@
             </li>
         </g:if>
 
-    %{--<g:if test="${cannedKeyInstance?.values}">--}%
+    %{--<g:if test="${cannedKey?.values}">--}%
     %{--<li class="fieldcontain">--}%
     %{--<span id="values-label" class="property-label"><g:message code="cannedKey.values.label" default="Values" /></span>--}%
     %{----}%
-    %{--<g:each in="${cannedKeyInstance.values}" var="v">--}%
+    %{--<g:each in="${cannedKey.values}" var="v">--}%
     %{--<span class="property-value" aria-labelledby="values-label"><g:link controller="cannedValue" action="show" id="${v.id}">${v?.label}</g:link></span>--}%
     %{--</g:each>--}%
     %{----}%
@@ -88,9 +88,9 @@
     %{--</g:if>--}%
 
     </ol>
-    <g:form url="[resource: cannedKeyInstance, action: 'delete']" method="DELETE">
+    <g:form url="[resource: cannedKey, action: 'delete']" method="DELETE">
         <fieldset class="buttons">
-            <g:link class="edit" action="edit" resource="${cannedKeyInstance}"><g:message
+            <g:link class="edit" action="edit" resource="${cannedKey}"><g:message
                     code="default.button.edit.label" default="Edit"/></g:link>
             <g:actionSubmit class="delete" action="delete"
                             value="${message(code: 'default.button.delete.label', default: 'Delete')}"

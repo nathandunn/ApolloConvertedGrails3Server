@@ -20,15 +20,15 @@
 			<g:if test="${flash.message}">
 			<div class="message" role="status">${flash.message}</div>
 			</g:if>
-			<g:hasErrors bean="${cannedCommentInstance}">
+			<g:hasErrors bean="${cannedComment}">
 			<ul class="errors" role="alert">
-				<g:eachError bean="${cannedCommentInstance}" var="error">
+				<g:eachError bean="${cannedComment}" var="error">
 				<li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message error="${error}"/></li>
 				</g:eachError>
 			</ul>
 			</g:hasErrors>
-			<g:form url="[resource:cannedCommentInstance, action:'update']" method="PUT" >
-				<g:hiddenField name="version" value="${cannedCommentInstance?.version}" />
+			<g:form url="[resource:cannedComment, action:'update']" method="PUT" >
+				<g:hiddenField name="version" value="${cannedComment?.version}" />
 				<fieldset class="form">
 					<g:render template="form"/>
 				</fieldset>

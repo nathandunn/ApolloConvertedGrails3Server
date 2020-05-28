@@ -27,23 +27,23 @@
     </g:if>
     <ol class="property-list availableStatus">
 
-        <g:if test="${availableStatusInstance?.value}">
+        <g:if test="${availableStatus?.value}">
             <li class="fieldcontain">
                 <span id="value-label" class="property-label"><g:message code="availableStatus.value.label"
                                                                          default="Value"/></span>
 
                 <span class="property-value" aria-labelledby="value-label"><g:fieldValue
-                        bean="${availableStatusInstance}" field="value"/></span>
+                        bean="${availableStatus}" field="value"/></span>
 
             </li>
         </g:if>
 
-        <g:if test="${availableStatusInstance?.featureTypes}">
+        <g:if test="${availableStatus?.featureTypes}">
             <li class="fieldcontain">
                 <span id="featureTypes-label" class="property-label"><g:message code="availableStatus.featureTypes.label"
                                                                                 default="Feature Types"/></span>
 
-                <g:each in="${availableStatusInstance.featureTypes}" var="f">
+                <g:each in="${availableStatus.featureTypes}" var="f">
                     <span class="property-value" aria-labelledby="featureTypes-label"><g:link controller="featureType"
                                                                                               action="show"
                                                                                               id="${f.id}">${f?.name}</g:link></span>
@@ -65,9 +65,9 @@
             </li>
         </g:if>
     </ol>
-    <g:form url="[resource: availableStatusInstance, action: 'delete']" method="DELETE">
+    <g:form url="[resource: availableStatus, action: 'delete']" method="DELETE">
         <fieldset class="buttons">
-            <g:link class="edit" action="edit" resource="${availableStatusInstance}"><g:message
+            <g:link class="edit" action="edit" resource="${availableStatus}"><g:message
                     code="default.button.edit.label" default="Edit"/></g:link>
             <g:actionSubmit class="delete" action="delete"
                             value="${message(code: 'default.button.delete.label', default: 'Delete')}"
