@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 if [[ $TEST_SUITE == "apollo" ]]; then
-  travis_wait ./grailsw test-app
+  ./grailsw test-app
 fi
 if [[ $TEST_SUITE == "python-apollo" ]]; then
   set -ex
