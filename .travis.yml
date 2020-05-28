@@ -51,5 +51,5 @@ cache:
     - $HOME/.m2/
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
-script: travis_wait src/integration-test/groovy/resources/travis/run-travis.sh
+script: "./src/integration-test/groovy/resources/travis/run-travis.sh"
 
