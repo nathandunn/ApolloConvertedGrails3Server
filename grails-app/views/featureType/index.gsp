@@ -36,23 +36,23 @@
 					</tr>
 				</thead>
 				<tbody>
-				<g:each in="${featureTypeList}" status="i" var="featureTypeInstance">
+				<g:each in="${featureTypeList}" status="i" var="featureType">
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 					
-						<td><g:link action="show" id="${featureTypeInstance.id}">${fieldValue(bean: featureTypeInstance, field: "display")}</g:link></td>
+						<td><g:link action="show" id="${featureType.id}">${fieldValue(bean: featureType, field: "display")}</g:link></td>
 
-						<td>${fieldValue(bean: featureTypeInstance, field: "display")}</td>
-						<td>${fieldValue(bean: featureTypeInstance, field: "ontologyId")}</td>
-						<td>${fieldValue(bean: featureTypeInstance, field: "type")}</td>
+						<td>${fieldValue(bean: featureType, field: "display")}</td>
+						<td>${fieldValue(bean: featureType, field: "ontologyId")}</td>
+						<td>${fieldValue(bean: featureType, field: "type")}</td>
 
-						<td>${fieldValue(bean: featureTypeInstance, field: "type")}:${featureTypeInstance.name}</td>
+						<td>${fieldValue(bean: featureType, field: "type")}:${featureType.name}</td>
 					
 					</tr>
 				</g:each>
 				</tbody>
 			</table>
 			<div class="pagination">
-				<g:paginate total="${featureTypeInstanceCount ?: 0}" />
+				<g:paginate total="${featureTypeCount ?: 0}" />
 			</div>
 		</div>
 	</body>

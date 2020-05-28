@@ -31,7 +31,7 @@
             <span id="name-label" class="property-label"><g:message code="featureType.name.label"
                                                                     default="Name"/></span>
 
-            <span class="property-value" aria-labelledby="name-label"><g:fieldValue bean="${featureTypeInstance}"
+            <span class="property-value" aria-labelledby="name-label"><g:fieldValue bean="${featureType}"
                                                                                     field="name"/></span>
 
         </li>
@@ -39,28 +39,28 @@
         <li class="fieldcontain">
             <span id="display-label" class="property-label"><g:message code="featureType.display.label"
                                                                        default="Display"/></span>
-            <span class="property-value" aria-labelledby="display-label"><g:fieldValue bean="${featureTypeInstance}"
+            <span class="property-value" aria-labelledby="display-label"><g:fieldValue bean="${featureType}"
                                                                                        field="display"/></span>
         </li>
 
         <li class="fieldcontain">
             <span id="ontologyId-label" class="property-label"><g:message code="featureType.ontologyId.label"
                                                                           default="Ontology Id"/></span>
-            <span class="property-value" aria-labelledby="ontologyId-label"><g:fieldValue bean="${featureTypeInstance}"
+            <span class="property-value" aria-labelledby="ontologyId-label"><g:fieldValue bean="${featureType}"
                                                                                           field="ontologyId"/></span>
         </li>
 
         <li class="fieldcontain">
             <span id="type-label" class="property-label"><g:message code="featureType.type.label"
                                                                     default="Type"/></span>
-            <span class="property-value" aria-labelledby="type-label"><g:fieldValue bean="${featureTypeInstance}"
+            <span class="property-value" aria-labelledby="type-label"><g:fieldValue bean="${featureType}"
                                                                                     field="type"/></span>
         </li>
 
     </ol>
-    <g:form url="[resource: featureTypeInstance, action: 'delete']" method="DELETE">
+    <g:form url="[resource: featureType, action: 'delete']" method="DELETE">
         <fieldset class="buttons">
-            <g:link class="edit" action="edit" resource="${featureTypeInstance}"><g:message
+            <g:link class="edit" action="edit" resource="${featureType}"><g:message
                     code="default.button.edit.label" default="Edit"/></g:link>
             <g:actionSubmit class="delete" action="delete"
                             value="${message(code: 'default.button.delete.label', default: 'Delete')}"

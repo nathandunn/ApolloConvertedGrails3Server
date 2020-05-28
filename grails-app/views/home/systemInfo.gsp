@@ -12,7 +12,7 @@
 
 <body>
 
-<g:render template="../layouts/reportHeader"/>
+<g:render template="/layouts/reportHeader"/>
 
 
 

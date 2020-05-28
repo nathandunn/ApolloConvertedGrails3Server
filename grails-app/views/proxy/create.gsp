@@ -18,14 +18,14 @@
 			<g:if test="${flash.message}">
 			<div class="message" role="status">${flash.message}</div>
 			</g:if>
-			<g:hasErrors bean="${proxyInstance}">
+			<g:hasErrors bean="${proxy}">
 			<ul class="errors" role="alert">
-				<g:eachError bean="${proxyInstance}" var="error">
+				<g:eachError bean="${proxy}" var="error">
 				<li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message error="${error}"/></li>
 				</g:eachError>
 			</ul>
 			</g:hasErrors>
-			<g:form url="[resource:proxyInstance, action:'save']" >
+			<g:form url="[resource:proxy, action:'save']" >
 				<fieldset class="form">
 					<g:render template="form"/>
 				</fieldset>

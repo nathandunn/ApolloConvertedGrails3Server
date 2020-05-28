@@ -14,7 +14,7 @@
 
 <body>
 
-<g:render template="../layouts/reportHeader"/>
+<g:render template="/layouts/reportHeader"/>
 
 
 <g:form id="customform" name="myForm" url="[action: 'report', controller: 'featureEvent']">

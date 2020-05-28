@@ -20,15 +20,15 @@
 			<g:if test="${flash.message}">
 			<div class="message" role="status">${flash.message}</div>
 			</g:if>
-			<g:hasErrors bean="${proxyInstance}">
+			<g:hasErrors bean="${proxy}">
 			<ul class="errors" role="alert">
-				<g:eachError bean="${proxyInstance}" var="error">
+				<g:eachError bean="${proxy}" var="error">
 				<li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message error="${error}"/></li>
 				</g:eachError>
 			</ul>
 			</g:hasErrors>
-			<g:form url="[resource:proxyInstance, action:'update']" method="PUT" >
-				<g:hiddenField name="version" value="${proxyInstance?.version}" />
+			<g:form url="[resource:proxy, action:'update']" method="PUT" >
+				<g:hiddenField name="version" value="${proxy?.version}" />
 				<fieldset class="form">
 					<g:render template="form"/>
 				</fieldset>

@@ -19,7 +19,7 @@
 
 <body>
 
-<g:render template="../layouts/reportHeader"/>
+<g:render template="/layouts/reportHeader"/>
 
 %{--<jumbotron>--}%
 <div class="page-header" style="margin-left: 30px;">

@@ -34,30 +34,30 @@
 					</tr>
 				</thead>
 				<tbody>
-				<g:each in="${suggestedNameList}" status="i" var="suggestedNameInstance">
+				<g:each in="${suggestedNameList}" status="i" var="suggestedName">
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 					
-						<td><g:link action="show" id="${suggestedNameInstance.id}">${fieldValue(bean: suggestedNameInstance, field: "name")}</g:link></td>
+						<td><g:link action="show" id="${suggestedName.id}">${fieldValue(bean: suggestedName, field: "name")}</g:link></td>
 
 						<td>
-							<g:each in="${suggestedNameInstance.featureTypes.sort() { a,b -> a.display <=> b.display }}" var="featureType">
+							<g:each in="${suggestedName.featureTypes.sort() { a,b -> a.display <=> b.display }}" var="featureType">
 								${featureType.type}:${featureType.name}
 							</g:each>
 						</td>
 						<td>
-							<g:each in="${organismFilters.get(suggestedNameInstance)}" var="filter">
+							<g:each in="${organismFilters.get(suggestedName)}" var="filter">
 								<g:link controller="organism" id="${filter.organism.id}">${filter.organism.commonName}</g:link>
 							</g:each>
 						</td>
 
-						<td>${fieldValue(bean: suggestedNameInstance, field: "metadata")}</td>
+						<td>${fieldValue(bean: suggestedName, field: "metadata")}</td>
 					
 					</tr>
 				</g:each>
 				</tbody>
 			</table>
 			<div class="pagination">
-				<g:paginate total="${suggestedNameInstanceCount ?: 0}" />
+				<g:paginate total="${suggestedNameCount ?: 0}" />
 			</div>
 		</div>
 	</body>

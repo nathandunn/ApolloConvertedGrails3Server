@@ -15,7 +15,7 @@
 
 <body>
 
-<g:render template="../layouts/reportHeader"/>
+<g:render template="/layouts/reportHeader"/>
 
 <div id="list-track" class="form-group report-header content scaffold-list" role="main">
     <div class="row form-group">

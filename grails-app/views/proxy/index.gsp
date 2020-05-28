@@ -40,25 +40,25 @@
 					</tr>
 				</thead>
 				<tbody>
-				<g:each in="${proxyList}" status="i" var="proxyInstance">
+				<g:each in="${proxyList}" status="i" var="proxy">
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 
 
 						<td>
-							<g:link action="show" id="${proxyInstance.id}">Show</g:link>
+							<g:link action="show" id="${proxy.id}">Show</g:link>
 						</td>
 
-						<td>${fieldValue(bean: proxyInstance, field: "referenceUrl")}</td>
+						<td>${fieldValue(bean: proxy, field: "referenceUrl")}</td>
 
-						<td>${fieldValue(bean: proxyInstance, field: "targetUrl")}</td>
+						<td>${fieldValue(bean: proxy, field: "targetUrl")}</td>
 
-						<td><g:formatBoolean boolean="${proxyInstance.active}" /></td>
+						<td><g:formatBoolean boolean="${proxy.active}" /></td>
 
-						<td>${fieldValue(bean: proxyInstance, field: "fallbackOrder")}</td>
+						<td>${fieldValue(bean: proxy, field: "fallbackOrder")}</td>
 					
-						<td><g:formatDate date="${proxyInstance.lastSuccess}" /></td>
+						<td><g:formatDate date="${proxy.lastSuccess}" /></td>
 					
-						<td><g:formatDate date="${proxyInstance.lastFail}" /></td>
+						<td><g:formatDate date="${proxy.lastFail}" /></td>
 					
 
 					</tr>
@@ -66,7 +66,7 @@
 				</tbody>
 			</table>
 			<div class="pagination">
-				<g:paginate total="${proxyInstanceCount ?: 0}" />
+				<g:paginate total="${proxyCount ?: 0}" />
 			</div>
 		</div>
 	</body>

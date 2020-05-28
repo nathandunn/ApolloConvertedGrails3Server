@@ -27,34 +27,34 @@
     </g:if>
     <ol class="property-list suggestedName">
 
-        <g:if test="${suggestedNameInstance?.name}">
+        <g:if test="${suggestedName?.name}">
             <li class="fieldcontain">
                 <span id="name-label" class="property-label"><g:message code="suggestedName.name.label"
                                                                            default="Name"/></span>
 
                 <span class="property-value" aria-labelledby="name-label"><g:fieldValue
-                        bean="${suggestedNameInstance}" field="name"/></span>
+                        bean="${suggestedName}" field="name"/></span>
 
             </li>
         </g:if>
 
-        <g:if test="${suggestedNameInstance?.metadata}">
+        <g:if test="${suggestedName?.metadata}">
             <li class="fieldcontain">
                 <span id="metadata-label" class="property-label"><g:message code="suggestedName.metadata.label"
                                                                             default="Metadata"/></span>
 
                 <span class="property-value" aria-labelledby="metadata-label"><g:fieldValue
-                        bean="${suggestedNameInstance}" field="metadata"/></span>
+                        bean="${suggestedName}" field="metadata"/></span>
 
             </li>
         </g:if>
 
-        <g:if test="${suggestedNameInstance?.featureTypes}">
+        <g:if test="${suggestedName?.featureTypes}">
             <li class="fieldcontain">
                 <span id="featureTypes-label" class="property-label"><g:message code="suggestedName.featureTypes.label"
                                                                                 default="Feature Types"/></span>
 
-                <g:each in="${suggestedNameInstance.featureTypes}" var="f">
+                <g:each in="${suggestedName.featureTypes}" var="f">
                     <span class="property-value" aria-labelledby="featureTypes-label"><g:link controller="featureType"
                                                                                               action="show"
                                                                                               id="${f.id}">${f?.name}</g:link></span>
@@ -77,9 +77,9 @@
         </g:if>
 
     </ol>
-    <g:form url="[resource: suggestedNameInstance, action: 'delete']" method="DELETE">
+    <g:form url="[resource: suggestedName, action: 'delete']" method="DELETE">
         <fieldset class="buttons">
-            <g:link class="edit" action="edit" resource="${suggestedNameInstance}"><g:message
+            <g:link class="edit" action="edit" resource="${suggestedName}"><g:message
                     code="default.button.edit.label" default="Edit"/></g:link>
             <g:actionSubmit class="delete" action="delete"
                             value="${message(code: 'default.button.delete.label', default: 'Delete')}"

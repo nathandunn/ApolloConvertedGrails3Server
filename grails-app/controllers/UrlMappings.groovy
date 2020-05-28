@@ -19,7 +19,8 @@ class UrlMappings {
 
 //        "/"(redirect: '/annotator/index')
         "500"(view: '/error')
-        "/menu"(view: '/menu')
+//        "/menu"(view: '/menu')
+        "/"(view: '/index')
         "/${clientToken}/version.jsp"(controller: 'annotator', view: "version")
         "/about"(controller: 'annotator', view: "about")
         "/${clientToken}/about"(controller: 'annotator', view: "about")
@@ -91,7 +92,7 @@ class UrlMappings {
         "/IOService/download"(controller:"IOService",action: "download", params:params)
         "/${clientToken}/IOService/download"(controller:"IOService",action: "download", params:params)
 
-        "/jbrowse/web_services/api"(controller:"annotationEditor",action: "web_services", params:params)
+//        "/jbrowse/web_services/api"(controller:"annotationEditor",action: "web_services", params:params)
 //        "/jbrowse/web_services/api"(controller:"webServices",action: "index", params:params)
 //        "/${clientToken}/jbrowse/web_services/api"(controller:"webServices",action: "index", params:params)
 

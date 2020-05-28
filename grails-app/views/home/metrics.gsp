@@ -12,7 +12,7 @@
 
 <body>
 
-<g:render template="../layouts/reportHeader"/>
+<g:render template="/layouts/reportHeader"/>
 
 <div class="page-header" style="margin-left: 20px;">
     <div class="header"><h4>Total Hits <span class="label label-info">${countTotal}</span></h4></div>

@@ -10,7 +10,7 @@
 %{--<a href="#show-feature" class="skip" tabindex="-1"><g:message code="default.link.skip.label"--}%
 %{--default="Skip to content&hellip;"/></a>--}%
 
-<g:render template="../layouts/reportHeader"/>
+<g:render template="/layouts/reportHeader"/>
 
 %{--<div class="nav" role="navigation">--}%
 %{--<ul>--}%
