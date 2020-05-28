@@ -1291,7 +1291,6 @@ class OrganismController {
   def updateOrganismInfo() {
     try {
       JSONObject organismJson = permissionService.handleInput(request, params)
-      println "UPDATE ORGANISM INFO ${organismJson as JSON}"
       permissionService.checkPermissions(organismJson, PermissionEnum.ADMINISTRATE)
       Organism organism = Organism.findById(organismJson.id)
       Boolean madeObsolete
@@ -1299,7 +1298,6 @@ class OrganismController {
       if (organism) {
         String oldOrganismDirectory = organism.directory
 
-        println "Updating organism info ${organismJson.commonName}"
         organism.commonName = organismJson.name ?: organism.commonName
         organism.species = organismJson.species ?: organism.species
         organism.genus = organismJson.genus ?: organism.genus
@@ -1310,24 +1308,18 @@ class OrganismController {
         madeObsolete = !organism.obsolete && (organismJson.containsKey("obsolete") ? Boolean.valueOf(organismJson.obsolete as String) : false)
         organism.obsolete = organismJson.containsKey("obsolete") ? Boolean.valueOf(organismJson.obsolete as String) : false
         organism.nonDefaultTranslationTable = organismJson.nonDefaultTranslationTable ?: organism.nonDefaultTranslationTable
-        println "organism is ${organism as JSON}"
         if (organism.genomeFasta) {
           // update location of genome fasta
-          println "B"
           sequenceService.updateGenomeFasta(organism)
         }
 
 //        CommonsMultipartFile organismDataFile = request.getFile(FeatureStringEnum.ORGANISM_DATA.value)
         def organismDataFile = null
-        println "C"
         if (request instanceof AbstractMultipartHttpServletRequest) {
-          println "C.1"
           organismDataFile = request.getFile(FeatureStringEnum.ORGANISM_DATA.value)
         }
-        println "D"
         String foundBlatdb = null
         if (organismDataFile) {
-          println "D.1"
 //          File archiveFile = new File(organismDataFile.getOriginalFilename())
           File archiveFile = File.createTempFile("archive",".tar.gz")
           organismDataFile.transferTo(archiveFile)
@@ -1337,7 +1329,6 @@ class OrganismController {
           assert organismDirectory.setWritable(true)
           fileService.decompress(archiveFile, organism.directory, null, false)
           foundBlatdb = organismService.findBlatDB(organismDirectory.absolutePath)
-          println "D.2"
         }
 
         if (organismJson.blatdb) {
@@ -1347,42 +1338,28 @@ class OrganismController {
         } else {
           organism.blatdb = organism.blatdb
         }
-        println "E"
 
         if (checkOrganism(organism)) {
-          println "E.1"
           if (madeObsolete) {
             // TODO: remove all organism permissions
             permissionService.removeAllPermissions(organism)
           }
-          println "E.2"
           organism.save(flush: true, insert: false, failOnError: true)
-          println "E.3"
 
           if ((organismDataFile || oldOrganismDirectory != organism.directory) && !noReloadSequencesIfOrganismChanges) {
-            println "E.4"
             // we need to reload
             sequenceService.loadRefSeqs(organism)
-            println "E.6"
             // we need to reload
           }
         } else {
           throw new Exception("Bad organism directory: " + organism.directory)
         }
-
-        println "F"
-
-        println "final organism ${organism as JSON}"
-
       } else {
         throw new Exception('organism not found')
       }
-      println "G"
       findAllOrganisms()
-      println "H"
     }
     catch (e) {
-      println "X ${e}"
       def error = [error: 'problem saving organism: ' + e]
       render error as JSON
       log.error(error.error)
