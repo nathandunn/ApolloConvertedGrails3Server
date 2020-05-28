@@ -94,16 +94,16 @@
         <li>Groovy version: ${GroovySystem.getVersion()}</li>
         <li>JVM version: ${System.getProperty('java.version')}</li>
         <li>Servlet Container Version: ${application.getServerInfo()}</li>
-        <li>JBrowse config: ${grailsApplication.config.jbrowse.git.branch ? grailsApplication.config.jbrowse.git.branch : grailsApplication.config.jbrowse.git.tag}</li>
-        <li>JBrowse url: ${grailsApplication.config.jbrowse.git.url}</li>
+%{--        <li>JBrowse config: ${grailsApplication.config.jbrowse.git.branch ? grailsApplication.config.jbrowse.git.branch : grailsApplication.config.jbrowse.git.tag}</li>--}%
+%{--        <li>JBrowse url: ${grailsApplication.config.jbrowse.git.url}</li>--}%
     </ul>
 
-    <h3>JBrowse Plugins</h3>
-    <ul>
-        <g:each in="${grailsApplication.config.jbrowse.plugins}">
-            <li>${it}</li>
-        </g:each>
-    </ul>
+%{--    <h3>JBrowse Plugins</h3>--}%
+%{--    <ul>--}%
+%{--        <g:each in="${grailsApplication.config.jbrowse.plugins}">--}%
+%{--            <li>${it}</li>--}%
+%{--        </g:each>--}%
+%{--    </ul>--}%
 
     <h3>Apollo Config</h3>
     <ul>
