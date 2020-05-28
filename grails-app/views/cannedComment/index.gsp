@@ -34,7 +34,7 @@
 					</tr>
 				</thead>
 				<tbody>
-				<g:each in="${cannedCommentInstanceList}" status="i" var="cannedCommentInstance">
+				<g:each in="${cannedCommentList}" status="i" var="cannedCommentInstance">
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 					
 						<td><g:link action="show" id="${cannedCommentInstance.id}">${fieldValue(bean: cannedCommentInstance, field: "comment")}</g:link></td>

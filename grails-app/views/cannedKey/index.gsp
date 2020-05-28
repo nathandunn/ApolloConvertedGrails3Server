@@ -33,7 +33,7 @@
 					</tr>
 				</thead>
 				<tbody>
-				<g:each in="${cannedKeyInstanceList}" status="i" var="cannedKeyInstance">
+				<g:each in="${cannedKeyList}" status="i" var="cannedKeyInstance">
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 					
 						<td><g:link action="show" id="${cannedKeyInstance.id}">${fieldValue(bean: cannedKeyInstance, field: "label")}</g:link></td>

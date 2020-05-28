@@ -38,7 +38,7 @@
         </tr>
         </thead>
         <tbody>
-        <g:each in="${cannedValueInstanceList}" status="i" var="cannedValueInstance">
+        <g:each in="${cannedValueList}" status="i" var="cannedValueInstance">
             <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 
                 <td><g:link action="show"
