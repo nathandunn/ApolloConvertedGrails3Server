@@ -25,7 +25,7 @@ addons:
   postgresql: "9.3"
   apt:
     packages:
-      - python3.6
+      - python3
 #  apt:
 #    packages:
 #    - mysql-server-5.6
