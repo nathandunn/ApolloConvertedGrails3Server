@@ -6,24 +6,32 @@ language: groovy
 jdk:
   - oraclejdk8
   - oraclejdk11
+#
+#before_install:
+#  - sudo apt-get update
+#  - sudo apt-get install python3
 
 env:
 #  - DB=postgres TEST_SUITE=apollo
 #  - DB=mysql TEST_SUITE=apollo
   - DB=h2 TEST_SUITE=apollo
 #  - DB=h2 TEST_SUITE=python-apollo
-
-python:
-  - 3.6
+#
+#python:
+#  - 3.6
 
 addons:
   chrome: stable
   postgresql: "9.3"
+  apt:
+    packages:
+      - python3.6
 #  apt:
 #    packages:
 #    - mysql-server-5.6
 #    - mysql-client-core-5.6
 #    - mysql-client-5.6
+
 
 install:
   - true
