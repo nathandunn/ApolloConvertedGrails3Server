@@ -7,10 +7,10 @@ import org.bbop.apollo.gwt.shared.GlobalPermissionEnum
 
 import grails.gorm.transactions.Transactional
 import org.grails.web.json.JSONObject
-import io.swagger.annotations.*
+// import io.swagger.annotations.*
 
 
-@Api(value = "Available Status Services: Methods for managing available statuses")
+// @Api(value = "Available Status Services: Methods for managing available statuses")
 @Transactional(readOnly = true)
 class AvailableStatusController {
 
@@ -162,13 +162,13 @@ class AvailableStatusController {
         }
     }
 
-    @ApiOperation(value= "Create status", nickname = "/availableStatus/createStatus", httpMethod = "POST")
-    @ApiImplicitParams( [
-            @ApiImplicitParam(name = "username", dataType ="email", paramType = "query")
-            , @ApiImplicitParam(name = "password", dataType ="password", paramType = "query")
-            , @ApiImplicitParam(name = "value", dataType ="string", paramType = "query", example = "Status name to add")
-    ]
-    )
+    // @ApiOperation(value= "Create status", nickname = "/availableStatus/createStatus", httpMethod = "POST")
+    // @ApiImplicitParams( [
+            // @ApiImplicitParam(name = "username", dataType ="email", paramType = "query")
+            // , @ApiImplicitParam(name = "password", dataType ="password", paramType = "query")
+            // , @ApiImplicitParam(name = "value", dataType ="string", paramType = "query", example = "Status name to add")
+//    ]
+//    )
     @Transactional
     def createStatus() {
         JSONObject statusJson = permissionService.handleInput(request, params)
@@ -197,15 +197,15 @@ class AvailableStatusController {
         }
     }
 
-    @ApiOperation(value = "Update status", nickname = "/availableStatus/updateStatus", httpMethod = "POST")
-    @ApiImplicitParams( [
-            @ApiImplicitParam(name = "username", dataType ="email", paramType = "query")
-            , @ApiImplicitParam(name = "password", dataType ="password", paramType = "query")
-            , @ApiImplicitParam(name = "id", dataType ="long", paramType = "query", example = "Status ID to update (or specify the old_value)")
-            , @ApiImplicitParam(name = "old_value", dataType ="string", paramType = "query", example = "Status name to update")
-            , @ApiImplicitParam(name = "new_value", dataType ="string", paramType = "query", example = "Status name to change to (the only editable option)")
-    ]
-    )
+    // @ApiOperation(value = "Update status", nickname = "/availableStatus/updateStatus", httpMethod = "POST")
+    // @ApiImplicitParams( [
+            // @ApiImplicitParam(name = "username", dataType ="email", paramType = "query")
+            // , @ApiImplicitParam(name = "password", dataType ="password", paramType = "query")
+            // , @ApiImplicitParam(name = "id", dataType ="long", paramType = "query", example = "Status ID to update (or specify the old_value)")
+            // , @ApiImplicitParam(name = "old_value", dataType ="string", paramType = "query", example = "Status name to update")
+            // , @ApiImplicitParam(name = "new_value", dataType ="string", paramType = "query", example = "Status name to change to (the only editable option)")
+//    ]
+//    )
     @Transactional
     def updateStatus() {
         try {
@@ -244,13 +244,13 @@ class AvailableStatusController {
         }
     }
 
-    @ApiOperation(value = "Remove a status", nickname = "/availableStatus/deleteStatus", httpMethod = "POST")
-    @ApiImplicitParams( [
-            @ApiImplicitParam(name = "username", dataType ="email", paramType = "query")
-            , @ApiImplicitParam(name = "password", dataType ="password", paramType = "query")
-            , @ApiImplicitParam(name = "id", dataType ="long", paramType = "query", example = "Status ID to remove (or specify the name)")
-            , @ApiImplicitParam(name = "value", dataType ="string", paramType = "query", example = "Status name to delete")
-    ])
+    // @ApiOperation(value = "Remove a status", nickname = "/availableStatus/deleteStatus", httpMethod = "POST")
+    // @ApiImplicitParams( [
+            // @ApiImplicitParam(name = "username", dataType ="email", paramType = "query")
+            // , @ApiImplicitParam(name = "password", dataType ="password", paramType = "query")
+            // , @ApiImplicitParam(name = "id", dataType ="long", paramType = "query", example = "Status ID to remove (or specify the name)")
+            // , @ApiImplicitParam(name = "value", dataType ="string", paramType = "query", example = "Status name to delete")
+//    ])
     @Transactional
     def deleteStatus() {
         try {
@@ -284,13 +284,13 @@ class AvailableStatusController {
         }
     }
 
-    @ApiOperation(value = "Returns a JSON array of all statuses, or optionally, gets information about a specific status", nickname =  "/availableStatus/showStatus", httpMethod = "POST")
-    @ApiImplicitParams( [
-            @ApiImplicitParam(name = "username", dataType ="email", paramType = "query")
-            , @ApiImplicitParam(name = "password", dataType ="password", paramType = "query")
-            , @ApiImplicitParam(name = "id", dataType ="long", paramType = "query", example = "Status ID to show (or specify a name)")
-            , @ApiImplicitParam(name = "name", dataType ="string", paramType = "query", example = "Status name to show")
-    ])
+    // @ApiOperation(value = "Returns a JSON array of all statuses, or optionally, gets information about a specific status", nickname =  "/availableStatus/showStatus", httpMethod = "POST")
+    // @ApiImplicitParams( [
+            // @ApiImplicitParam(name = "username", dataType ="email", paramType = "query")
+            // , @ApiImplicitParam(name = "password", dataType ="password", paramType = "query")
+            // , @ApiImplicitParam(name = "id", dataType ="long", paramType = "query", example = "Status ID to show (or specify a name)")
+            // , @ApiImplicitParam(name = "name", dataType ="string", paramType = "query", example = "Status name to show")
+//    ])
     @Transactional
     def showStatus() {
         try {

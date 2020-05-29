@@ -23,7 +23,7 @@ import org.grails.web.json.JSONObject
 import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.multipart.support.AbstractMultipartHttpServletRequest
 
-//import io.swagger.annotations.*
+//// import io.swagger.annotations.*
 
 import javax.servlet.http.HttpServletResponse
 import java.nio.file.FileSystems
@@ -60,11 +60,11 @@ class OrganismController {
     @Parameter(name = "password", description = "password")
     @Parameter(name = "id", description = "Pass an Organism ID or commonName that corresponds to the organism to be removed")
     @Parameter(name = "organism", description = "Pass an Organism ID or commonName that corresponds to the organism to be removed")
-//    @ApiImplicitParams([
-//        @ApiImplicitParam(name = "username", type = "email", paramType = "query")
-//        , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
-//        , @ApiImplicitParam(name = "id", type = "string or number", paramType = "query", example = "Pass an Organism ID or commonName that corresponds to the organism to be removed")
-//        , @ApiImplicitParam(name = "organism", type = "string or number", paramType = "query", example = "Pass an Organism ID or commonName that corresponds to the organism to be removed")
+//    // @ApiImplicitParams([
+//        // @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+//        // , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+//        // , @ApiImplicitParam(name = "id", type = "string or number", paramType = "query", example = "Pass an Organism ID or commonName that corresponds to the organism to be removed")
+//        // , @ApiImplicitParam(name = "organism", type = "string or number", paramType = "query", example = "Pass an Organism ID or commonName that corresponds to the organism to be removed")
 //    ])
     @Transactional
     def deleteOrganism() {
@@ -122,13 +122,13 @@ class OrganismController {
         }
     }
 
-    @ApiOperation(value = "Delete an organism along with its data directory and returns a JSON object containing properties of the deleted organism", nickname = "/organism/deleteOrganismWithSequence", httpMethod = "POST")
-    @ApiImplicitParams([
-        @ApiImplicitParam(name = "username", type = "email", paramType = "query")
-        , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
-        , @ApiImplicitParam(name = "organism", type = "string", paramType = "query", example = "ID or commonName that can be used to uniquely identify an organism")
-        , @ApiImplicitParam(name = "id", type = "string", paramType = "query", example = "ID or commonName that can be used to uniquely identify an organism")
-    ])
+//    // @ApiOperation(value = "Delete an organism along with its data directory and returns a JSON object containing properties of the deleted organism", nickname = "/organism/deleteOrganismWithSequence", httpMethod = "POST")
+//    // @ApiImplicitParams([
+//        // @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+//        // , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+//        // , @ApiImplicitParam(name = "organism", type = "string", paramType = "query", example = "ID or commonName that can be used to uniquely identify an organism")
+//        // , @ApiImplicitParam(name = "id", type = "string", paramType = "query", example = "ID or commonName that can be used to uniquely identify an organism")
+//    ])
     @Transactional
     def deleteOrganismWithSequence() {
 
@@ -193,13 +193,13 @@ class OrganismController {
         render responseObject as JSON
     }
 
-    @ApiOperation(value = "Remove features from an organism", nickname = "/organism/deleteOrganismFeatures", httpMethod = "POST")
-    @ApiImplicitParams([
-        @ApiImplicitParam(name = "username", type = "email", paramType = "query")
-        , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
-        , @ApiImplicitParam(name = "organism", type = "string", paramType = "query", example = "ID or commonName that can be used to uniquely identify an organism.")
-        , @ApiImplicitParam(name = "sequences", type = "string", paramType = "query", example = "(optional) Comma-delimited sequence names on that organism if only certain sequences should be deleted.")
-    ])
+//    // @ApiOperation(value = "Remove features from an organism", nickname = "/organism/deleteOrganismFeatures", httpMethod = "POST")
+//    // @ApiImplicitParams([
+//        // @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+//        // , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+//        // , @ApiImplicitParam(name = "organism", type = "string", paramType = "query", example = "ID or commonName that can be used to uniquely identify an organism.")
+//        // , @ApiImplicitParam(name = "sequences", type = "string", paramType = "query", example = "(optional) Comma-delimited sequence names on that organism if only certain sequences should be deleted.")
+//    ])
     @NotTransactional
     def deleteOrganismFeatures() {
         JSONObject organismJson = permissionService.handleInput(request, params)
@@ -246,21 +246,21 @@ class OrganismController {
     }
 
 
-    @ApiOperation(value = "Adds an organism returning a JSON array of all organisms", nickname = "/organism/addOrganismWithSequence", httpMethod = "POST")
-    @ApiImplicitParams([
-        @ApiImplicitParam(name = "username", type = "email", paramType = "query")
-        , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
-        , @ApiImplicitParam(name = "species", type = "string", paramType = "query", example = "species name")
-        , @ApiImplicitParam(name = "genus", type = "string", paramType = "query", example = "species genus")
-        , @ApiImplicitParam(name = "blatdb", type = "string", paramType = "query", example = "filesystem path for a BLAT database (e.g. a .2bit file) if not uploaded")
-        , @ApiImplicitParam(name = "publicMode", type = "boolean", paramType = "query", example = "a flag for whether the organism appears as in the public genomes list")
-        , @ApiImplicitParam(name = "commonName", type = "string", paramType = "query", example = "commonName for an organism")
-        , @ApiImplicitParam(name = "nonDefaultTranslationTable", type = "string", paramType = "query", example = "non-default translation table")
-        , @ApiImplicitParam(name = "metadata", type = "string", paramType = "query", example = "organism metadata")
-        , @ApiImplicitParam(name = "organismData", type = "file", paramType = "query", example = "zip or tar.gz compressed data directory (if other options not used).  Blat data should include a .2bit suffix and be in a directory 'searchDatabaseData'")
-        , @ApiImplicitParam(name = "sequenceData", type = "file", paramType = "query", example = "FASTA file (optionally compressed) to automatically upload with")
-        , @ApiImplicitParam(name = "searchDatabaseData", type = "file", paramType = "query", example = "2bit file for blat search (optional)")
-    ])
+//    // @ApiOperation(value = "Adds an organism returning a JSON array of all organisms", nickname = "/organism/addOrganismWithSequence", httpMethod = "POST")
+//    // @ApiImplicitParams([
+//        // @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+//        // , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+//        // , @ApiImplicitParam(name = "species", type = "string", paramType = "query", example = "species name")
+//        // , @ApiImplicitParam(name = "genus", type = "string", paramType = "query", example = "species genus")
+//        // , @ApiImplicitParam(name = "blatdb", type = "string", paramType = "query", example = "filesystem path for a BLAT database (e.g. a .2bit file) if not uploaded")
+//        // , @ApiImplicitParam(name = "publicMode", type = "boolean", paramType = "query", example = "a flag for whether the organism appears as in the public genomes list")
+//        // , @ApiImplicitParam(name = "commonName", type = "string", paramType = "query", example = "commonName for an organism")
+//        // , @ApiImplicitParam(name = "nonDefaultTranslationTable", type = "string", paramType = "query", example = "non-default translation table")
+//        // , @ApiImplicitParam(name = "metadata", type = "string", paramType = "query", example = "organism metadata")
+//        // , @ApiImplicitParam(name = "organismData", type = "file", paramType = "query", example = "zip or tar.gz compressed data directory (if other options not used).  Blat data should include a .2bit suffix and be in a directory 'searchDatabaseData'")
+//        // , @ApiImplicitParam(name = "sequenceData", type = "file", paramType = "query", example = "FASTA file (optionally compressed) to automatically upload with")
+//        // , @ApiImplicitParam(name = "searchDatabaseData", type = "file", paramType = "query", example = "2bit file for blat search (optional)")
+//    ])
     @Transactional
     def addOrganismWithSequence() {
 
@@ -460,13 +460,13 @@ class OrganismController {
         render returnObject as JSON
     }
 
-    @ApiOperation(value = "Removes an added track from an existing organism returning a JSON object containing all tracks for the current organism.", nickname = "/organism/removeTrackFromOrganism", httpMethod = "POST")
-    @ApiImplicitParams([
-        @ApiImplicitParam(name = "username", type = "email", paramType = "query")
-        , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
-        , @ApiImplicitParam(name = "organism", type = "string", paramType = "query", example = "ID or commonName that can be used to uniquely identify an organism")
-        , @ApiImplicitParam(name = "trackLabel", type = "string", paramType = "query", example = "Name of track")
-    ])
+//    // @ApiOperation(value = "Removes an added track from an existing organism returning a JSON object containing all tracks for the current organism.", nickname = "/organism/removeTrackFromOrganism", httpMethod = "POST")
+//    // @ApiImplicitParams([
+//        // @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+//        // , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+//        // , @ApiImplicitParam(name = "organism", type = "string", paramType = "query", example = "ID or commonName that can be used to uniquely identify an organism")
+//        // , @ApiImplicitParam(name = "trackLabel", type = "string", paramType = "query", example = "Name of track")
+//    ])
     @Transactional
     def removeTrackFromOrganism() {
         JSONObject returnObject = new JSONObject()
@@ -543,16 +543,16 @@ class OrganismController {
     }
 
 
-    @ApiOperation(value = "Adds a track to an existing organism returning a JSON object containing all tracks for the current organism.", nickname = "/organism/addTrackToOrganism", httpMethod = "POST")
-    @ApiImplicitParams([
-        @ApiImplicitParam(name = "username", type = "email", paramType = "query")
-        , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
-        , @ApiImplicitParam(name = "organism", type = "string", paramType = "query", example = "ID or commonName that can be used to uniquely identify an organism")
-        , @ApiImplicitParam(name = "trackData", type = "string", paramType = "query", example = "zip or tar.gz compressed track data")
-        , @ApiImplicitParam(name = "trackFile", type = "string", paramType = "query", example = "track file (*.bam, *.vcf, *.bw, *gff)")
-        , @ApiImplicitParam(name = "trackFileIndex", type = "string", paramType = "query", example = "index (*.bai, *.tbi)")
-        , @ApiImplicitParam(name = "trackConfig", type = "string", paramType = "query", example = "Track configuration (JBrowse JSON)")
-    ])
+//    // @ApiOperation(value = "Adds a track to an existing organism returning a JSON object containing all tracks for the current organism.", nickname = "/organism/addTrackToOrganism", httpMethod = "POST")
+//    // @ApiImplicitParams([
+//        // @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+//        // , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+//        // , @ApiImplicitParam(name = "organism", type = "string", paramType = "query", example = "ID or commonName that can be used to uniquely identify an organism")
+//        // , @ApiImplicitParam(name = "trackData", type = "string", paramType = "query", example = "zip or tar.gz compressed track data")
+//        // , @ApiImplicitParam(name = "trackFile", type = "string", paramType = "query", example = "track file (*.bam, *.vcf, *.bw, *gff)")
+//        // , @ApiImplicitParam(name = "trackFileIndex", type = "string", paramType = "query", example = "index (*.bai, *.tbi)")
+//        // , @ApiImplicitParam(name = "trackConfig", type = "string", paramType = "query", example = "Track configuration (JBrowse JSON)")
+//    ])
     @Transactional
     def addTrackToOrganism() {
 
@@ -841,13 +841,13 @@ class OrganismController {
         render returnObject as JSON
     }
 
-    @ApiOperation(value = "Deletes a track from an existing organism and returns a JSON object of the deleted track's configuration", nickname = "/organism/deleteTrackFromOrganism", httpMethod = "POST")
-    @ApiImplicitParams([
-        @ApiImplicitParam(name = "username", type = "email", paramType = "query")
-        , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
-        , @ApiImplicitParam(name = "organism", type = "string", paramType = "query", example = "ID or commonName that can be used to uniquely identify an organism")
-        , @ApiImplicitParam(name = "trackLabel", type = "string", paramType = "query", example = "Track label corresponding to the track that is to be deleted")
-    ])
+//    // @ApiOperation(value = "Deletes a track from an existing organism and returns a JSON object of the deleted track's configuration", nickname = "/organism/deleteTrackFromOrganism", httpMethod = "POST")
+//    // @ApiImplicitParams([
+//        // @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+//        // , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+//        // , @ApiImplicitParam(name = "organism", type = "string", paramType = "query", example = "ID or commonName that can be used to uniquely identify an organism")
+//        // , @ApiImplicitParam(name = "trackLabel", type = "string", paramType = "query", example = "Track label corresponding to the track that is to be deleted")
+//    ])
     @Transactional
     def deleteTrackFromOrganism() {
 
@@ -965,13 +965,13 @@ class OrganismController {
         render returnObject as JSON
     }
 
-    @ApiOperation(value = "Update a track in an existing organism returning a JSON object containing old and new track configurations", nickname = "/organism/updateTrackForOrganism", httpMethod = "POST")
-    @ApiImplicitParams([
-        @ApiImplicitParam(name = "username", type = "email", paramType = "query")
-        , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
-        , @ApiImplicitParam(name = "organism", type = "string", paramType = "query", example = "ID or commonName that can be used to uniquely identify an organism")
-        , @ApiImplicitParam(name = "trackConfig", type = "string", paramType = "query", example = "Track configuration (JBrowse JSON)")
-    ])
+//    // @ApiOperation(value = "Update a track in an existing organism returning a JSON object containing old and new track configurations", nickname = "/organism/updateTrackForOrganism", httpMethod = "POST")
+//    // @ApiImplicitParams([
+//        // @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+//        // , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+//        // , @ApiImplicitParam(name = "organism", type = "string", paramType = "query", example = "ID or commonName that can be used to uniquely identify an organism")
+//        // , @ApiImplicitParam(name = "trackConfig", type = "string", paramType = "query", example = "Track configuration (JBrowse JSON)")
+//    ])
     @Transactional
     def updateTrackForOrganism() {
 
@@ -1100,19 +1100,19 @@ class OrganismController {
         render returnObject as JSON
     }
 
-    @ApiOperation(value = "Adds an organism returning a JSON array of all organisms", nickname = "/organism/addOrganism", httpMethod = "POST")
-    @ApiImplicitParams([
-        @ApiImplicitParam(name = "username", type = "email", paramType = "query")
-        , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
-        , @ApiImplicitParam(name = "directory", type = "string", paramType = "query", example = "Filesystem path for the organisms data directory (required)")
-        , @ApiImplicitParam(name = "commonName", type = "string", paramType = "query", example = "A name used for the organism")
-        , @ApiImplicitParam(name = "species", type = "string", paramType = "query", example = "(optional) Species name")
-        , @ApiImplicitParam(name = "genus", type = "string", paramType = "query", example = "(optional) Species genus")
-        , @ApiImplicitParam(name = "blatdb", type = "string", paramType = "query", example = "(optional) Filesystem path for a BLAT database (e.g. a .2bit file)")
-        , @ApiImplicitParam(name = "publicMode", type = "boolean", paramType = "query", example = "(optional) A flag for whether the organism appears as in the public genomes list (default false)")
-        , @ApiImplicitParam(name = "metadata", type = "string", paramType = "query", example = "(optional) Organism metadata")
-        , @ApiImplicitParam(name = "returnAllOrganisms", type = "boolean", paramType = "query", example = "(optional) Return all organisms (true / false) (default true)")
-    ])
+//    // @ApiOperation(value = "Adds an organism returning a JSON array of all organisms", nickname = "/organism/addOrganism", httpMethod = "POST")
+//    // @ApiImplicitParams([
+//        // @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+//        // , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+//        // , @ApiImplicitParam(name = "directory", type = "string", paramType = "query", example = "Filesystem path for the organisms data directory (required)")
+//        // , @ApiImplicitParam(name = "commonName", type = "string", paramType = "query", example = "A name used for the organism")
+//        // , @ApiImplicitParam(name = "species", type = "string", paramType = "query", example = "(optional) Species name")
+//        // , @ApiImplicitParam(name = "genus", type = "string", paramType = "query", example = "(optional) Species genus")
+//        // , @ApiImplicitParam(name = "blatdb", type = "string", paramType = "query", example = "(optional) Filesystem path for a BLAT database (e.g. a .2bit file)")
+//        // , @ApiImplicitParam(name = "publicMode", type = "boolean", paramType = "query", example = "(optional) A flag for whether the organism appears as in the public genomes list (default false)")
+//        // , @ApiImplicitParam(name = "metadata", type = "string", paramType = "query", example = "(optional) Organism metadata")
+//        // , @ApiImplicitParam(name = "returnAllOrganisms", type = "boolean", paramType = "query", example = "(optional) Return all organisms (true / false) (default true)")
+//    ])
     @Transactional
     def addOrganism() {
         JSONObject organismJson = permissionService.handleInput(request, params)
@@ -1202,12 +1202,12 @@ class OrganismController {
         }
     }
 
-    @ApiOperation(value = "Finds sequences for a given organism and returns a JSON object including the username, organism and a JSONArray of sequences", nickname = "/organism/getSequencesForOrganism", httpMethod = "POST")
-    @ApiImplicitParams([
-        @ApiImplicitParam(name = "username", type = "email", paramType = "query")
-        , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
-        , @ApiImplicitParam(name = "organism", type = "string", paramType = "query", example = "Common name or ID for the organism")
-    ])
+//    // @ApiOperation(value = "Finds sequences for a given organism and returns a JSON object including the username, organism and a JSONArray of sequences", nickname = "/organism/getSequencesForOrganism", httpMethod = "POST")
+//    // @ApiImplicitParams([
+//        // @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+//        // , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+//        // , @ApiImplicitParam(name = "organism", type = "string", paramType = "query", example = "Common name or ID for the organism")
+//    ])
     def getSequencesForOrganism() {
         JSONObject organismJson = permissionService.handleInput(request, params)
         if (organismJson.username == "" || organismJson.organism == "" || organismJson.password == "") {
@@ -1287,22 +1287,22 @@ class OrganismController {
     }
 
 
-    @ApiOperation(value = "Adds an organism returning a JSON array of all organisms", nickname = "/organism/updateOrganismInfo", httpMethod = "POST")
-    @ApiImplicitParams([
-        @ApiImplicitParam(name = "username", type = "email", paramType = "query")
-        , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
-        , @ApiImplicitParam(name = "id", type = "long", paramType = "query", example = "unique id of organism to change")
-        , @ApiImplicitParam(name = "directory", type = "string", paramType = "query", example = "filesystem path for the organisms data directory (required)")
-        , @ApiImplicitParam(name = "species", type = "string", paramType = "query", example = "species name")
-        , @ApiImplicitParam(name = "genus", type = "string", paramType = "query", example = "species genus")
-        , @ApiImplicitParam(name = "blatdb", type = "string", paramType = "query", example = "filesystem path for a BLAT database (e.g. a .2bit file)")
-        , @ApiImplicitParam(name = "publicMode", type = "boolean", paramType = "query", example = "a flag for whether the organism appears as in the public genomes list")
-        , @ApiImplicitParam(name = "name", type = "string", paramType = "query", example = "a common name used for the organism")
-        , @ApiImplicitParam(name = "nonDefaultTranslationTable", type = "string", paramType = "query", example = "non-default translation table")
-        , @ApiImplicitParam(name = "metadata", type = "string", paramType = "query", example = "organism metadata")
-        , @ApiImplicitParam(name = "organismData", type = "file", paramType = "query", example = "zip or tar.gz compressed data directory (if other options not used).  Blat data should include a .2bit suffix and be in a directory 'searchDatabaseData'")
-        , @ApiImplicitParam(name = "noReloadSequences", type = "boolean", paramType = "query", example = "(default false) If set to true, then sequences will not be reloaded if the organism directory changes.")
-    ])
+//    // @ApiOperation(value = "Adds an organism returning a JSON array of all organisms", nickname = "/organism/updateOrganismInfo", httpMethod = "POST")
+//    // @ApiImplicitParams([
+//        // @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+//        // , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+//        // , @ApiImplicitParam(name = "id", type = "long", paramType = "query", example = "unique id of organism to change")
+//        // , @ApiImplicitParam(name = "directory", type = "string", paramType = "query", example = "filesystem path for the organisms data directory (required)")
+//        // , @ApiImplicitParam(name = "species", type = "string", paramType = "query", example = "species name")
+//        // , @ApiImplicitParam(name = "genus", type = "string", paramType = "query", example = "species genus")
+//        // , @ApiImplicitParam(name = "blatdb", type = "string", paramType = "query", example = "filesystem path for a BLAT database (e.g. a .2bit file)")
+//        // , @ApiImplicitParam(name = "publicMode", type = "boolean", paramType = "query", example = "a flag for whether the organism appears as in the public genomes list")
+//        // , @ApiImplicitParam(name = "name", type = "string", paramType = "query", example = "a common name used for the organism")
+//        // , @ApiImplicitParam(name = "nonDefaultTranslationTable", type = "string", paramType = "query", example = "non-default translation table")
+//        // , @ApiImplicitParam(name = "metadata", type = "string", paramType = "query", example = "organism metadata")
+//        // , @ApiImplicitParam(name = "organismData", type = "file", paramType = "query", example = "zip or tar.gz compressed data directory (if other options not used).  Blat data should include a .2bit suffix and be in a directory 'searchDatabaseData'")
+//        // , @ApiImplicitParam(name = "noReloadSequences", type = "boolean", paramType = "query", example = "(default false) If set to true, then sequences will not be reloaded if the organism directory changes.")
+//    ])
     @Transactional
     def updateOrganismInfo() {
         try {
@@ -1382,14 +1382,14 @@ class OrganismController {
         }
     }
 
-    @ApiOperation(value = "Set official gene set track name", nickname = "/organism/setOfficialGeneSetTrack", httpMethod = "POST")
-    @ApiImplicitParams([
-        @ApiImplicitParam(name = "username", type = "email", paramType = "query")
-        , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
-        , @ApiImplicitParam(name = "id", type = "long", paramType = "query", example = "(required) unique id of organism to change")
-        , @ApiImplicitParam(name = "trackLabel", type = "string", paramType = "query", example = "(required) Official track name, if empty string or not specified the official track will be removed")
-        , @ApiImplicitParam(name = "trackCommand", type = "string", paramType = "query", example = "(required) ADD, REMOVE, CLEAR")
-    ])
+//    // @ApiOperation(value = "Set official gene set track name", nickname = "/organism/setOfficialGeneSetTrack", httpMethod = "POST")
+//    // @ApiImplicitParams([
+//        // @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+//        // , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+//        // , @ApiImplicitParam(name = "id", type = "long", paramType = "query", example = "(required) unique id of organism to change")
+//        // , @ApiImplicitParam(name = "trackLabel", type = "string", paramType = "query", example = "(required) Official track name, if empty string or not specified the official track will be removed")
+//        // , @ApiImplicitParam(name = "trackCommand", type = "string", paramType = "query", example = "(required) ADD, REMOVE, CLEAR")
+//    ])
     @Transactional
     def updateOfficialGeneSetTrack() {
         println "updating organism official track name ${params}"
@@ -1435,13 +1435,13 @@ class OrganismController {
         }
     }
 
-    @ApiOperation(value = "Update organism metadata", nickname = "/organism/updateOrganismMetadata", httpMethod = "POST")
-    @ApiImplicitParams([
-        @ApiImplicitParam(name = "username", type = "email", paramType = "query")
-        , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
-        , @ApiImplicitParam(name = "id", type = "long", paramType = "query", example = "unique id of organism to change")
-        , @ApiImplicitParam(name = "metadata", type = "string", paramType = "query", example = "organism metadata")
-    ])
+//    // @ApiOperation(value = "Update organism metadata", nickname = "/organism/updateOrganismMetadata", httpMethod = "POST")
+//    // @ApiImplicitParams([
+//        // @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+//        // , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+//        // , @ApiImplicitParam(name = "id", type = "long", paramType = "query", example = "unique id of organism to change")
+//        // , @ApiImplicitParam(name = "metadata", type = "string", paramType = "query", example = "organism metadata")
+//    ])
     @Transactional
     def updateOrganismMetadata() {
         println "updating organism metadata ${params}"
@@ -1465,12 +1465,12 @@ class OrganismController {
         }
     }
 
-    @ApiOperation(value = "Get creator metadata for organism, returns userId as String", nickname = "/organism/getOrganismCreator", httpMethod = "POST")
-    @ApiImplicitParams([
-        @ApiImplicitParam(name = "username", type = "email", paramType = "query")
-        , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
-        , @ApiImplicitParam(name = "organism", type = "string", paramType = "query", example = "ID or commonName that can be used to uniquely identify an organism")
-    ])
+//    // @ApiOperation(value = "Get creator metadata for organism, returns userId as String", nickname = "/organism/getOrganismCreator", httpMethod = "POST")
+//    // @ApiImplicitParams([
+//        // @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+//        // , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+//        // , @ApiImplicitParam(name = "organism", type = "string", paramType = "query", example = "ID or commonName that can be used to uniquely identify an organism")
+//    ])
     def getOrganismCreator() {
         JSONObject organismJson = permissionService.handleInput(request, params)
         if (!permissionService.hasGlobalPermissions(organismJson, GlobalPermissionEnum.ADMIN)) {
@@ -1492,12 +1492,12 @@ class OrganismController {
 
     }
 
-    @ApiOperation(value = "Returns a JSON array of all organisms, or optionally, gets information about a specific organism", nickname = "/organism/findAllOrganisms", httpMethod = "POST")
-    @ApiImplicitParams([
-        @ApiImplicitParam(name = "username", type = "email", paramType = "query")
-        , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
-        , @ApiImplicitParam(name = "organism", type = "string", paramType = "query", example = "(optional) ID or commonName that can be used to uniquely identify an organism")
-    ])
+//    // @ApiOperation(value = "Returns a JSON array of all organisms, or optionally, gets information about a specific organism", nickname = "/organism/findAllOrganisms", httpMethod = "POST")
+//    // @ApiImplicitParams([
+//        // @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+//        // , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+//        // , @ApiImplicitParam(name = "organism", type = "string", paramType = "query", example = "(optional) ID or commonName that can be used to uniquely identify an organism")
+//    ])
     def findAllOrganisms() {
         try {
             JSONObject requestObject = permissionService.handleInput(request, params)
