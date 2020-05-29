@@ -1,7 +1,7 @@
 package org.bbop.apollo
 
 import grails.testing.mixin.integration.Integration
-import grails.transaction.Rollback
+import grails.gorm.transactions.Rollback
 
 @Integration
 @Rollback

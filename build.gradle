@@ -120,21 +120,20 @@ dependencies {
     testCompile "org.grails:grails-test-mixins:3.3.0"
 //    testRuntime "org.seleniumhq.selenium:selenium-htmlunit-driver:2.47.1"
     testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
-    testRuntime "org.seleniumhq.selenium:selenium-chrome-driver:2.47.1"
+//    testRuntime "org.seleniumhq.selenium:selenium-chrome-driver:2.47.1"
 
     testCompile "org.grails.plugins:geb"
-    testRuntime "org.seleniumhq.selenium:selenium-chrome-driver:$seleniumVersion"
-    testRuntime "org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion"
-    testRuntime "org.seleniumhq.selenium:selenium-safari-driver:$seleniumSafariDriverVersion"
-
+//    testRuntime "org.seleniumhq.selenium:selenium-chrome-driver:$seleniumVersion"
+//    testRuntime "org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion"
+//    testRuntime "org.seleniumhq.selenium:selenium-safari-driver:$seleniumSafariDriverVersion"
     testCompile "org.seleniumhq.selenium:selenium-remote-driver:$seleniumVersion"
     testCompile "org.seleniumhq.selenium:selenium-api:$seleniumVersion"
     testCompile "org.seleniumhq.selenium:selenium-support:$seleniumVersion"
 }
 
 webdriverBinaries {
-    chromedriver "$chromeDriverVersion"
-    geckodriver "$geckodriverVersion"
+//    chromedriver "$chromeDriverVersion"
+//    geckodriver "$geckodriverVersion"
 }
 
 bootRun {
@@ -147,8 +146,8 @@ bootRun {
 tasks.withType(Test) {
     systemProperty "geb.env", System.getProperty('geb.env')
     systemProperty "geb.build.reportsDir", reporting.file("geb/integrationTest")
-    systemProperty "webdriver.chrome.driver", System.getProperty('webdriver.chrome.driver')
-    systemProperty "webdriver.gecko.driver", System.getProperty('webdriver.gecko.driver')
+//    systemProperty "webdriver.chrome.driver", System.getProperty('webdriver.chrome.driver')
+//    systemProperty "webdriver.gecko.driver", System.getProperty('webdriver.gecko.driver')
 }
 
 assets {
