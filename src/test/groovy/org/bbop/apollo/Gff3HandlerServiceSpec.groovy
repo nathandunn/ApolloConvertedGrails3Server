@@ -5,7 +5,6 @@ import grails.testing.services.ServiceUnitTest
 import spock.lang.Specification
 
 /**
- * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
 //@TestFor(Gff3HandlerService)
 //@Mock([Sequence,Gene,MRNA,Exon,CDS,Feature,FeatureLocation,FeatureRelationship,FeatureRelationshipService ])
@@ -20,7 +19,6 @@ class Gff3HandlerServiceSpec extends Specification implements ServiceUnitTest<Gf
         mockDomain Feature
         mockDomain FeatureLocation
         mockDomain FeatureRelationship
-        mockDomain FeatureRelationshipService
         new Sequence(
             length: 3
             , seqChunkSize: 3

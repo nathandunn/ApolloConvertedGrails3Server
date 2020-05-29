@@ -1,6 +1,6 @@
 package org.bbop.apollo
 
-
+import grails.testing.gorm.DataTest
 import grails.testing.services.ServiceUnitTest
 import spock.lang.Specification
 
@@ -10,7 +10,7 @@ import java.nio.file.Paths
 /**
  */
 //@TestFor(FileService)
-class FileServiceSpec extends Specification implements ServiceUnitTest<FileService> {
+class FileServiceSpec extends Specification implements ServiceUnitTest<FileService> , DataTest{
 
     private final String FINAL_DIRECTORY = "src/test/groovy/resources/archive_tests/"
 
