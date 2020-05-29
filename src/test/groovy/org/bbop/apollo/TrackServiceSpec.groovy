@@ -1,20 +1,17 @@
 package org.bbop.apollo
 
-import grails.test.mixin.TestFor
+
 import grails.testing.gorm.DataTest
-import grails.testing.gorm.DomainUnitTest
 import grails.testing.services.ServiceUnitTest
 import org.bbop.apollo.sequence.SequenceDTO
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
-import spock.lang.Ignore
 import spock.lang.Specification
 
 /**
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */
-//@TestFor(TrackService)
-class TrackServiceSpec extends Specification implements ServiceUnitTest<TrackService>, DataTest{
+class TrackServiceSpec extends Specification implements ServiceUnitTest<TrackService>, DataTest {
 
     def setup() {
         service.trackMapperService = new TrackMapperService()
@@ -35,9 +32,9 @@ class TrackServiceSpec extends Specification implements ServiceUnitTest<TrackSer
         JSONArray ncListArray = new JSONArray(ncListString)
         JSONArray classesForTrackArray = new JSONArray(classesForTrackString)
         SequenceDTO sequenceDTO = new SequenceDTO(
-                organismCommonName: 'Caenorhabditis elegans'
-                , trackName: 'All Genes'
-                , sequenceName: 'IV'
+            organismCommonName: 'Caenorhabditis elegans'
+            , trackName: 'All Genes'
+            , sequenceName: 'IV'
         )
 
         when: "we filter it to an object"

@@ -1,13 +1,13 @@
 package org.bbop.apollo
 
-import grails.test.mixin.TestFor
+
 import grails.testing.services.ServiceUnitTest
 import spock.lang.Specification
 
 /**
  */
 //@TestFor(AnnotationEditorService)
-class AnnotationEditorServiceSpec extends Specification implements  ServiceUnitTest<AnnotationEditorService>{
+class AnnotationEditorServiceSpec extends Specification implements ServiceUnitTest<AnnotationEditorService> {
 
     def setup() {
     }
@@ -22,7 +22,7 @@ class AnnotationEditorServiceSpec extends Specification implements  ServiceUnitT
 
         when: "the sequence string gets here"
         String outputJSON = service.cleanJSONString(inputJSON)
-        println "OUTOUT: "+outputJSON
+        println "OUTOUT: " + outputJSON
 
         then: "it should be good"
         assert validJSON == outputJSON

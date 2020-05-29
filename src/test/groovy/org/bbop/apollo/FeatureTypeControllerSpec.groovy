@@ -2,12 +2,20 @@ package org.bbop.apollo
 
 
 
-import grails.test.mixin.*
+//import grails.test.mixin.*
+import grails.testing.gorm.DataTest
+//import grails.testing.gorm.DomainUnitTest
+import grails.testing.web.controllers.ControllerUnitTest
 import spock.lang.*
 
-@TestFor(FeatureTypeController)
-@Mock([FeatureType,MRNA])
-class FeatureTypeControllerSpec extends Specification {
+//@TestFor(FeatureTypeController)
+//@Mock([FeatureType,MRNA])
+class FeatureTypeControllerSpec extends Specification implements ControllerUnitTest<FeatureTypeController>, DataTest{
+
+    def setup(){
+        mockDomain MRNA
+        mockDomain FeatureType
+    }
 
     def populateValidParams(params) {
         assert params != null

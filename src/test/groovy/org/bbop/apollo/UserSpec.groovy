@@ -1,7 +1,5 @@
 package org.bbop.apollo
 
-import grails.test.mixin.Mock
-import grails.test.mixin.TestFor
 import grails.testing.gorm.DomainUnitTest
 import org.bbop.apollo.authenticator.RemoteUserAuthenticatorService
 import org.grails.web.json.JSONObject
@@ -10,8 +8,6 @@ import spock.lang.Specification
 /**
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
  */
-//@TestFor(User)
-//@Mock([User])
 class UserSpec extends Specification implements DomainUnitTest<User>{
 
 

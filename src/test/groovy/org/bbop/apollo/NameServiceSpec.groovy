@@ -1,13 +1,12 @@
 package org.bbop.apollo
 
-import grails.test.mixin.TestFor
+import grails.testing.services.ServiceUnitTest
 import spock.lang.Specification
 
 /**
- * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
  */
 //@TestFor(NameService)
-class NameServiceSpec extends Specification {
+class NameServiceSpec extends Specification implements ServiceUnitTest<NameService> {
 
     void "letter padding strategy should work"() {
 

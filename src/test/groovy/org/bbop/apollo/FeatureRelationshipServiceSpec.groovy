@@ -1,17 +1,23 @@
 package org.bbop.apollo
 
-import grails.test.mixin.Mock
-import grails.test.mixin.TestFor
+//import grails.test.mixin.Mock
+//import grails.test.mixin.TestFor
+import grails.testing.gorm.DataTest
+import grails.testing.services.ServiceUnitTest
 import spock.lang.Specification
 
 /**
  * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
  */
-@TestFor(FeatureRelationshipService)
-@Mock([FeatureRelationship,Feature,Gene,MRNA])
-class FeatureRelationshipServiceSpec extends Specification {
+//@TestFor(FeatureRelationshipService)
+//@Mock([FeatureRelationship,Feature,Gene,MRNA])
+class FeatureRelationshipServiceSpec extends Specification implements ServiceUnitTest<FeatureRelationshipService>, DataTest{
 
     def setup() {
+        mockDomain Gene
+        mockDomain MRNA
+        mockDomain Feature
+        mockDomain FeatureRelationship
     }
 
     def cleanup() {

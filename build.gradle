@@ -117,7 +117,7 @@ dependencies {
 //    testCompile "org.grails.plugins:geb"
     testCompile "org.grails:grails-web-testing-support"
 //    testCompile "org.grails.plugins:geb:1.1.2"
-    testCompile "org.grails:grails-test-mixins:3.3.0"
+//    testCompile "org.grails:grails-test-mixins:3.3.0"
 //    testRuntime "org.seleniumhq.selenium:selenium-htmlunit-driver:2.47.1"
     testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
 //    testRuntime "org.seleniumhq.selenium:selenium-chrome-driver:2.47.1"
