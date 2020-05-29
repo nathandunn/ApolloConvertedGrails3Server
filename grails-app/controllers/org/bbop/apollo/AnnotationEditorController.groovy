@@ -13,8 +13,8 @@ import org.grails.web.json.JSONException
 import org.grails.web.json.JSONObject
 //// import io.swagger.annotations.*
 import org.springframework.http.HttpStatus
-//import org.springframework.messaging.handler.annotation.MessageMapping
-//import org.springframework.messaging.handler.annotation.SendTo
+import org.springframework.messaging.handler.annotation.MessageMapping
+import org.springframework.messaging.handler.annotation.SendTo
 
 import java.lang.reflect.InvocationTargetException
 import java.nio.charset.Charset
@@ -1222,8 +1222,8 @@ class AnnotationEditorController extends AbstractApolloController implements Ann
     }
 
 
-//    @MessageMapping("/AnnotationNotification")
-//    @SendTo("/topic/AnnotationNotification")
+    @MessageMapping("/AnnotationNotification")
+    @SendTo("/topic/AnnotationNotification")
     protected String annotationEditor(String inputString, Principal principal) {
         inputString = annotationEditorService.cleanJSONString(inputString)
         JSONObject rootElement = (JSONObject) JSON.parse(inputString)
@@ -1308,7 +1308,7 @@ class AnnotationEditorController extends AbstractApolloController implements Ann
     }
 
 
-//    @SendTo("/topic/AnnotationNotification")
+    @SendTo("/topic/AnnotationNotification")
     protected String sendAnnotationEvent(String returnString) {
         log.debug "sendAnnotationEvent ${returnString?.size()}"
         return returnString

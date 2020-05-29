@@ -34,7 +34,7 @@ class UserController {
             // , @ApiImplicitParam(name = "sortAscending", type = "boolean", paramType = "query", example = "(optional) Sort column is ascending if true (default false)")
             // , @ApiImplicitParam(name = "omitEmptyOrganisms", type = "boolean", paramType = "query", example = "(optional) Omits empty organism permissions from return (default false)")
             // , @ApiImplicitParam(name = "showInactiveUsers", type = "boolean", paramType = "query", example = "(optional) Shows inactive users without permissions (default false)")
-    ])
+//    ])
     def loadUsers() {
         try {
             JSONObject dataObject = permissionService.handleInput(request, params)
@@ -303,7 +303,7 @@ class UserController {
             // , @ApiImplicitParam(name = "group", type = "string", paramType = "query", example = "Group name")
             // , @ApiImplicitParam(name = "userId", type = "long", paramType = "query", example = "User id")
             // , @ApiImplicitParam(name = "user", type = "email", paramType = "query", example = "User email/username (supplied if user id unknown)")
-    ])
+//    ])
     @Transactional
     def addUserToGroup() {
         JSONObject dataObject = permissionService.handleInput(request, params)
@@ -328,7 +328,7 @@ class UserController {
             // , @ApiImplicitParam(name = "group", type = "string", paramType = "query", example = "Group name")
             // , @ApiImplicitParam(name = "userId", type = "long", paramType = "query", example = "User id")
             // , @ApiImplicitParam(name = "user", type = "email", paramType = "query", example = "User email/username (supplied if user id unknown)")
-    ])
+//    ])
     @Transactional
     def removeUserFromGroup() {
         JSONObject dataObject = permissionService.handleInput(request, params)
@@ -356,7 +356,7 @@ class UserController {
             // , @ApiImplicitParam(name = "metadata", type = "string", paramType = "query", example = "User metadata (optional)")
             // , @ApiImplicitParam(name = "role", type = "string", paramType = "query", example = "User role USER / ADMIN (optional: default USER) ")
             // , @ApiImplicitParam(name = "newPassword", type = "string", paramType = "query", example = "Password of user to add")
-    ])
+//    ])
     @Transactional
     def createUser() {
         try {
@@ -419,7 +419,7 @@ class UserController {
             // , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
             // , @ApiImplicitParam(name = "userId", type = "long", paramType = "query", example = "User ID to delete")
             // , @ApiImplicitParam(name = "userToDelete", type = "email", paramType = "query", example = "Username (email) to inactivate")
-    ])
+//    ])
     @Transactional
     def inactivateUser() {
         try {
@@ -480,7 +480,7 @@ class UserController {
             // , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
             // , @ApiImplicitParam(name = "userId", type = "long", paramType = "query", example = "User ID to delete")
             // , @ApiImplicitParam(name = "userToActivate", type = "email", paramType = "query", example = "Username (email) to inactivate")
-    ])
+//    ])
     @Transactional
     def activateUser() {
         try {
@@ -534,7 +534,7 @@ class UserController {
             // , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
             // , @ApiImplicitParam(name = "userId", type = "long", paramType = "query", example = "User ID to delete")
             // , @ApiImplicitParam(name = "userToDelete", type = "email", paramType = "query", example = "Username (email) to delete")
-    ])
+//    ])
     @Transactional
     def deleteUser() {
         try {
@@ -599,8 +599,7 @@ class UserController {
             // , @ApiImplicitParam(name = "lastName", type = "string", paramType = "query", example = "Last name of user to update")
             // , @ApiImplicitParam(name = "metadata", type = "string", paramType = "query", example = "User metadata (optional)")
             // , @ApiImplicitParam(name = "newPassword", type = "string", paramType = "query", example = "Password of user to update")
-    ]
-    )
+//    ] )
     @Transactional
     def updateUser() {
         try {
@@ -676,7 +675,7 @@ class UserController {
             // @ApiImplicitParam(name = "username", type = "email", paramType = "query")
             // , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
             // , @ApiImplicitParam(name = "userId", type = "long", paramType = "query", example = "User ID to fetch")
-    ])
+//    ])
     def getOrganismPermissionsForUser() {
         JSONObject dataObject = permissionService.handleInput(request, params)
         // to support webservice using either userId or username
@@ -704,7 +703,7 @@ class UserController {
             // , @ApiImplicitParam(name = "WRITE", type = "boolean", paramType = "query", example = "Indicate if user has write and all lesser privileges for the organism")
             // , @ApiImplicitParam(name = "EXPORT", type = "boolean", paramType = "query", example = "Indicate if user has export and all lesser privileges for the organism")
             // , @ApiImplicitParam(name = "READ", type = "boolean", paramType = "query", example = "Indicate if user has read and all lesser privileges for the organism")
-    ])
+//    ])
     @Transactional
     def updateOrganismPermission() {
         log.info "Updating organism permissions"
@@ -776,7 +775,7 @@ class UserController {
             // @ApiImplicitParam(name = "username", type = "email", paramType = "query")
             // , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
             // , @ApiImplicitParam(name = "email", type = "email", paramType = "query", example = "Email of the user")
-    ])
+//    ])
     def getUserCreator() {
         JSONObject dataObject = permissionService.handleInput(request, params)
         if (!permissionService.hasGlobalPermissions(dataObject, GlobalPermissionEnum.ADMIN)) {

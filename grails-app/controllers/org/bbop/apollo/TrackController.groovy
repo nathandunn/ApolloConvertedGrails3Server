@@ -43,7 +43,7 @@ class TrackController {
     // @ApiImplicitParams([
             // @ApiImplicitParam(name = "organismName", type = "string", paramType = "query", example = "Organism common name (required)")
             // , @ApiImplicitParam(name = "trackName", type = "string", paramType = "query", example = "Track name (required)")
-    ])
+//    ])
     @Transactional
     def clearTrackCache(String organismName, String trackName) {
         if (!trackService.checkPermission(response, organismName)) return
@@ -54,7 +54,7 @@ class TrackController {
     // @ApiOperation(value = "Remove track cache for an organism", nickname = "/track/cache/clear/<organism name>", httpMethod = "get")
     // @ApiImplicitParams([
             // @ApiImplicitParam(name = "organismName", type = "string", paramType = "query", example = "Organism common name (required) or 'ALL' if admin")
-    ])
+//    ])
     @Transactional
     def clearOrganismCache(String organismName) {
         if (organismName.toLowerCase().equals("all") && permissionService.isAdmin()) {
@@ -79,7 +79,7 @@ class TrackController {
     // @ApiOperation(value = "List all tracks for an organism", nickname = "/track/list/<organism name>", httpMethod = "get")
     // @ApiImplicitParams([
             // @ApiImplicitParam(name = "organismName", type = "string", paramType = "query", example = "Organism common name (required)")
-    ])
+//    ])
     @Transactional
     def getTracks(String organismName) {
         if (!trackService.checkPermission(response, organismName)) return
@@ -96,7 +96,7 @@ class TrackController {
             // , @ApiImplicitParam(name = "ignoreCache", type = "boolean", paramType = "query", example = "(default false).  Use cache for request if available.")
             // , @ApiImplicitParam(name = "flatten", type = "string", paramType = "query", example = "Brings nested top-level components to the root level.  If not provided or 'false' it will not flatten.  Default is 'gene'." )
             // , @ApiImplicitParam(name = "type", type = "json/svg", paramType = "query", example = ".json or .svg")
-    ])
+//    ])
     @Transactional
     def featuresByName(String organismString, String trackName, String sequence, String featureName, String type) {
         if (!trackService.checkPermission(response, organismString)) return
@@ -191,7 +191,7 @@ class TrackController {
             // , @ApiImplicitParam(name = "ignoreCache", type = "boolean", paramType = "query", example = "(default false).  Use cache for request if available.")
             // , @ApiImplicitParam(name = "flatten", type = "string", paramType = "query", example = "Brings nested top-level components to the root level.  If not provided or 'false' it will not flatten.  Default is 'gene'.")
             // , @ApiImplicitParam(name = "type", type = "string", paramType = "query", example = ".json or .svg")
-    ])
+//    ])
     @Transactional
     def featuresByLocation(String organismString, String trackName, String sequence, Long fmin, Long fmax, String type) {
         if (!trackService.checkPermission(response, organismString)) return

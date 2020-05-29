@@ -33,7 +33,7 @@ class VcfController {
             // @ApiImplicitParam(name = "type", type = "string", paramType = "query", example = ".json (required)"),
             // @ApiImplicitParam(name = "includeGenotypes", type = "boolean", paramType = "query", example = "(default: false).  If true, will include genotypes associated with variants from VCF."),
             // @ApiImplicitParam(name = "ignoreCache", type = "boolean", paramType = "query", example = "(default: false).  Use cache for request, if available."),
-    ])
+//    ])
     def featuresByLocation(String organismString, String trackName, String sequence, Long fmin, Long fmax, String type, boolean includeGenotypes) {
         if(!trackService.checkPermission(response, organismString)) return
 
