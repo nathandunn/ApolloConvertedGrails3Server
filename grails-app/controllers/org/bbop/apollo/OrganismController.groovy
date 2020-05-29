@@ -14,7 +14,9 @@ import org.bbop.apollo.track.TrackDefaults
 import org.grails.web.converters.exceptions.ConverterException
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
-import io.swagger.annotations.*
+//import io.swagger.annotations.*
+import io.swagger.v3.oas.annotations.*
+import io.swagger.v3.oas.annotations.info.*
 import org.springframework.web.multipart.MultipartFile
 
 import org.springframework.web.multipart.support.AbstractMultipartHttpServletRequest
@@ -25,7 +27,10 @@ import java.nio.file.Path
 
 import static org.springframework.http.HttpStatus.NOT_FOUND
 
-@Api(value = "Organism Services: Methods for managing organisms")
+@OpenAPIDefinition(info = @Info(
+    title = "Organism Services: Methods for managing organisms"
+)
+)
 @Transactional(readOnly = true)
 class OrganismController {
 
