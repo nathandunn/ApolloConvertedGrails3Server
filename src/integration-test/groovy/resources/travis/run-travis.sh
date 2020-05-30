@@ -1,6 +1,13 @@
-#!/usr/bin/env bash
+#!/bin/bash
+
+EXIT_STATUS=0
+
+echo "Running test $TEST_SUITE"
+
 if [[ $TEST_SUITE == "apollo" ]]; then
-  travis_wait ./grailsw test-app
+#  ./grailsw test-app
+  echo "Running tests with geb.env chromeHeadless $TEST_SUITE"
+  ./gradlew -Dgeb.env=chromeHeadless check || EXIT_STATUS=$? #
 fi
 if [[ $TEST_SUITE == "python-apollo" ]]; then
   set -ex
@@ -19,3 +26,5 @@ if [[ $TEST_SUITE == "python-apollo" ]]; then
   python setup.py nosetests
   killall java || true
 fi
+
+exit $EXIT_STATUS

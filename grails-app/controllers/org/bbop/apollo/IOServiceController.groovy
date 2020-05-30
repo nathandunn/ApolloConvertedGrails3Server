@@ -1,6 +1,6 @@
 package org.bbop.apollo
 
-import com.google.common.base.Splitter
+//import com.google.common.base.Splitter
 import grails.converters.JSON
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
 import org.bbop.apollo.gwt.shared.PermissionEnum
@@ -8,12 +8,12 @@ import org.bbop.apollo.sequence.DownloadFile
 import org.bbop.apollo.sequence.Strand
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
-import io.swagger.annotations.*
+// import io.swagger.annotations.*
 import org.springframework.http.HttpStatus
 
 import java.util.zip.GZIPOutputStream
 
-@Api(value = "IO Services: Methods for bulk importing and exporting sequence data")
+// @Api(value = "IO Services: Methods for bulk importing and exporting sequence data")
 class IOServiceController extends AbstractApolloController {
 
     def sequenceService
@@ -44,25 +44,23 @@ class IOServiceController extends AbstractApolloController {
         forward action: "${mappedAction}", params: params
     }
 
-    @ApiOperation(value = "Write out genomic data.  An example script is used in the https://github.com/GMOD/Apollo/blob/master/docs/web_services/examples/groovy/get_gff3.groovy"
-            , nickname = "/IOService/write", httpMethod = "POST"
-    )
-    @ApiImplicitParams([
-    @ApiImplicitParam(name = "username", type = "email", paramType = "query")
-    , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+    // @ApiOperation(value = "Write out genomic data.  An example script is used in the https://github.com/GMOD/Apollo/blob/master/docs/web_services/examples/groovy/get_gff3.groovy"
+//            , nickname = "/IOService/write", httpMethod = "POST"
+//    )
+    // @ApiImplicitParams([
+    // @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+    // , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
 
-    , @ApiImplicitParam(name = "type", type = "string", paramType = "query", example = "Type of annotated genomic features to export 'FASTA','GFF3','CHADO'.")
+    // , @ApiImplicitParam(name = "type", type = "string", paramType = "query", example = "Type of annotated genomic features to export 'FASTA','GFF3','CHADO'.")
 
-    , @ApiImplicitParam(name = "seqType", type = "string", paramType = "query", example = "Type of output sequence 'peptide','cds','cdna','genomic'.")
-    , @ApiImplicitParam(name = "format", type = "string", paramType = "query", example = "'gzip' or 'text'")
-    , @ApiImplicitParam(name = "sequences", type = "string", paramType = "query", example = "Names of references sequences to add (default is all).")
-    , @ApiImplicitParam(name = "organism", type = "string", paramType = "query", example = "Name of organism that sequences belong to (will default to last organism).")
-    , @ApiImplicitParam(name = "output", type = "string", paramType = "query", example = "Output method 'file','text'")
-    , @ApiImplicitParam(name = "exportAllSequences", type = "boolean", paramType = "query", example = "Export all reference sequences for an organism (over-rides 'sequences')")
-    , @ApiImplicitParam(name = "region", type = "String", paramType = "query", example = "Highlighted genomic region to export in form sequence:min..max  e.g., chr3:1001..1034")
-    ]
-    )
-
+    // , @ApiImplicitParam(name = "seqType", type = "string", paramType = "query", example = "Type of output sequence 'peptide','cds','cdna','genomic'.")
+    // , @ApiImplicitParam(name = "format", type = "string", paramType = "query", example = "'gzip' or 'text'")
+    // , @ApiImplicitParam(name = "sequences", type = "string", paramType = "query", example = "Names of references sequences to add (default is all).")
+    // , @ApiImplicitParam(name = "organism", type = "string", paramType = "query", example = "Name of organism that sequences belong to (will default to last organism).")
+    // , @ApiImplicitParam(name = "output", type = "string", paramType = "query", example = "Output method 'file','text'")
+    // , @ApiImplicitParam(name = "exportAllSequences", type = "boolean", paramType = "query", example = "Export all reference sequences for an organism (over-rides 'sequences')")
+    // , @ApiImplicitParam(name = "region", type = "String", paramType = "query", example = "Highlighted genomic region to export in form sequence:min..max  e.g., chr3:1001..1034")
+//    ] )
     def write() {
         File outputFile = null
         try {
@@ -279,17 +277,15 @@ class IOServiceController extends AbstractApolloController {
         }
     }
 
-    @ApiOperation(value = "This is used to retrieve the a download link once the write operation was initialized using output: file."
-            , nickname = "/IOService/download", httpMethod = "POST"
-    )
-    @ApiImplicitParams([
-            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
-            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
-            , @ApiImplicitParam(name = "uuid", type = "string", paramType = "query", example = "UUID that holds the key to the stored download.")
-            , @ApiImplicitParam(name = "format", type = "string", paramType = "query", example = "'gzip' or 'text'")
-    ]
-    )
-
+    // @ApiOperation(value = "This is used to retrieve the a download link once the write operation was initialized using output: file."
+//            , nickname = "/IOService/download", httpMethod = "POST"
+//    )
+    // @ApiImplicitParams([
+            // @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+            // , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+            // , @ApiImplicitParam(name = "uuid", type = "string", paramType = "query", example = "UUID that holds the key to the stored download.")
+            // , @ApiImplicitParam(name = "format", type = "string", paramType = "query", example = "'gzip' or 'text'")
+//    ] )
     def download() {
         String uuid = params.uuid
         DownloadFile downloadFile = fileMap.remove(uuid)

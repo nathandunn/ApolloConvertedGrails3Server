@@ -2,7 +2,7 @@ package org.bbop.apollo
 
 import grails.converters.JSON
 import grails.testing.mixin.integration.Integration
-import grails.transaction.Rollback
+import grails.gorm.transactions.Rollback
 
 //import grails.test.spock.IntegrationSpec
 //import org.grails.web.json.JSONObject

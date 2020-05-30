@@ -6,24 +6,32 @@ language: groovy
 jdk:
   - oraclejdk8
   - oraclejdk11
+#
+#before_install:
+#  - sudo apt-get update
+#  - sudo apt-get install python3
 
 env:
 #  - DB=postgres TEST_SUITE=apollo
 #  - DB=mysql TEST_SUITE=apollo
   - DB=h2 TEST_SUITE=apollo
 #  - DB=h2 TEST_SUITE=python-apollo
-
-python:
-  - 3.6
+#
+#python:
+#  - 3.6
 
 addons:
   chrome: stable
   postgresql: "9.3"
+  apt:
+    packages:
+      - python3
 #  apt:
 #    packages:
 #    - mysql-server-5.6
 #    - mysql-client-core-5.6
 #    - mysql-client-5.6
+
 
 install:
   - true
@@ -36,8 +44,9 @@ before_script:
   - "echo $JAVA_OPTS"
   - "export JAVA_OPTS='-Xmx2048m'"
   - "echo $JAVA_OPTS"
-  - if [ ${DB} == "mysql" ]; then cp src/integration-test/groovy/resources/travis/mysql.travis apollo-config.groovy; mysql -u root -e 'SET GLOBAL interactive_timeout=28800;'; mysql -u root -e 'SET GLOBAL wait_timeout=28800;'; mysql -u root -e 'SET GLOBAL connect_timeout=28800;';  mysql -u root -e 'create database apollo'; fi;
-  - if [ ${DB} == "postgres" ]; then cp src/integration-test/groovy/resources/travis/postgres.travis apollo-config.groovy; psql -c 'create database apollo;' -U postgres; psql -c 'create database apollo_chado' -U postgres; gunzip -c scripts/chado-schema-with-ontologies.sql.gz | psql -U postgres -h localhost -d apollo_chado; fi;
+#  - if [ ${DB} == "mysql" ]; then cp src/integration-test/groovy/resources/travis/mysql.travis apollo-config.groovy; mysql -u root -e 'SET GLOBAL interactive_timeout=28800;'; mysql -u root -e 'SET GLOBAL wait_timeout=28800;'; mysql -u root -e 'SET GLOBAL connect_timeout=28800;';  mysql -u root -e 'create database apollo'; fi;
+#  - if [ ${DB} == "postgres" ]; then cp src/integration-test/groovy/resources/travis/postgres.travis apollo-config.groovy; psql -c 'create database apollo;' -U postgres; psql -c 'create database apollo_chado' -U postgres; gunzip -c scripts/chado-schema-with-ontologies.sql.gz | psql -U postgres -h localhost -d apollo_chado; fi;
+  - if [ ${DB} == "postgres" ]; then cp src/integration-test/groovy/resources/travis/postgres.travis apollo-config.groovy; psql -c 'create database apollo;' -U postgres;  fi;
 
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -50,5 +59,5 @@ cache:
     - $HOME/.m2/
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
-script: src/integration-test/groovy/resources/travis/run-travis.sh
+script: "./src/integration-test/groovy/resources/travis/run-travis.sh"
 

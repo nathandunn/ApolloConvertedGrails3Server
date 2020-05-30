@@ -1,14 +1,13 @@
 package org.bbop.apollo
 
-import grails.test.mixin.TestFor
+
 import grails.testing.services.ServiceUnitTest
 import spock.lang.Specification
 
 /**
- * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
  */
 //@TestFor(JbrowseService)
-class JbrowseServiceSpec extends Specification implements ServiceUnitTest<JbrowseService>{
+class JbrowseServiceSpec extends Specification implements ServiceUnitTest<JbrowseService> {
 
     String path1 = "yeast/include/myTrackMetaData.csv"
     String path2 = "/opt/apollo/yeast/"
@@ -29,17 +28,17 @@ class JbrowseServiceSpec extends Specification implements ServiceUnitTest<Jbrows
         when: "we try to do overlapping"
 
         then: "assert behaviors"
-        assert service.hasOverlappingDirectory(path2,path1)
-        assert service.hasOverlappingDirectory(path2a,path1)
-        assert !service.hasOverlappingDirectory(path3,path1)
-        assert !service.hasOverlappingDirectory(path4,path1)
+        assert service.hasOverlappingDirectory(path2, path1)
+        assert service.hasOverlappingDirectory(path2a, path1)
+        assert !service.hasOverlappingDirectory(path3, path1)
+        assert !service.hasOverlappingDirectory(path4, path1)
     }
 
     void "test fixing paths"() {
         when: "we try to do overlapping"
 
         then: "assert behaviors"
-        assert finalPath == service.fixOverlappingPath(path2,path1)
-        assert finalPath == service.fixOverlappingPath(path2a,path1)
+        assert finalPath == service.fixOverlappingPath(path2, path1)
+        assert finalPath == service.fixOverlappingPath(path2a, path1)
     }
 }

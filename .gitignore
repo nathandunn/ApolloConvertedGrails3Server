@@ -40,3 +40,4 @@ jb_setup.js
 yarn.lock
 bin
 build
+apollo_data

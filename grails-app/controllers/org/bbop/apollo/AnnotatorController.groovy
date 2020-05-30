@@ -14,13 +14,13 @@ import org.bbop.apollo.report.AnnotatorSummary
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
 import org.hibernate.FetchMode
-import io.swagger.annotations.*
+// import io.swagger.annotations.*
 import org.springframework.http.HttpStatus
 
 /**
  * This is server-side code supporting the high-level functionality of the GWT AnnotatorPanel class.
  */
-@Api(value = "Annotator Engine Services", description = "Methods for running the annotation engine")
+// @Api(value = "Annotator Engine Services", description = "Methods for running the annotation engine")
 class AnnotatorController {
 
     def featureService
@@ -183,18 +183,18 @@ class AnnotatorController {
  * updates shallow properties of gene / feature
  * @return
  */
-    @ApiOperation(value = "Update shallow feature properties", nickname = "/annotator/updateFeature", httpMethod = "POST")
-    @ApiImplicitParams([
-            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
-            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
-            , @ApiImplicitParam(name = "uniquename", type = "string", paramType = "query", example = "Uniquename (UUID) of the feature we are editing")
-            , @ApiImplicitParam(name = "name", type = "string", paramType = "query", example = "Updated feature name")
-            , @ApiImplicitParam(name = "symbol", type = "string", paramType = "query", example = "Updated feature symbol")
-            , @ApiImplicitParam(name = "synonyms", type = "string", paramType = "query", example = "Updated synonyms pipe (|) separated")
-            , @ApiImplicitParam(name = "description", type = "string", paramType = "query", example = "Updated feature description")
-            , @ApiImplicitParam(name = "status", type = "string", paramType = "query", example = "Updated status")
-    ]
-    )
+    // @ApiOperation(value = "Update shallow feature properties", nickname = "/annotator/updateFeature", httpMethod = "POST")
+    // @ApiImplicitParams([
+            // @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+//            // , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+//            // , @ApiImplicitParam(name = "uniquename", type = "string", paramType = "query", example = "Uniquename (UUID) of the feature we are editing")
+//            // , @ApiImplicitParam(name = "name", type = "string", paramType = "query", example = "Updated feature name")
+//            // , @ApiImplicitParam(name = "symbol", type = "string", paramType = "query", example = "Updated feature symbol")
+//            // , @ApiImplicitParam(name = "synonyms", type = "string", paramType = "query", example = "Updated synonyms pipe (|) separated")
+//            // , @ApiImplicitParam(name = "description", type = "string", paramType = "query", example = "Updated feature description")
+//            // , @ApiImplicitParam(name = "status", type = "string", paramType = "query", example = "Updated status")
+//    ]
+//    )
     @Transactional
     def updateFeature() {
         log.debug "updateFeature ${params.data}"
@@ -302,16 +302,16 @@ class AnnotatorController {
     }
 
 
-    @ApiOperation(value = "Update exon boundaries", nickname = "/annotator/setExonBoundaries", httpMethod = "POST")
-    @ApiImplicitParams([
-            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
-            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
-            , @ApiImplicitParam(name = "uniquename", type = "string", paramType = "query", example = "Uniquename (UUID) of the exon we are editing")
-            , @ApiImplicitParam(name = "fmin", type = "int", paramType = "query", example = "fmin for Exon Location")
-            , @ApiImplicitParam(name = "fmax", type = "int", paramType = "query", example = "fmax for Exon Location")
-            , @ApiImplicitParam(name = "strand", type = "int", paramType = "query", example = "strand for Feature Location 1 or -1")
-    ]
-    )
+    // @ApiOperation(value = "Update exon boundaries", nickname = "/annotator/setExonBoundaries", httpMethod = "POST")
+    // @ApiImplicitParams([
+            // @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+//            // , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+//            // , @ApiImplicitParam(name = "uniquename", type = "string", paramType = "query", example = "Uniquename (UUID) of the exon we are editing")
+//            // , @ApiImplicitParam(name = "fmin", type = "int", paramType = "query", example = "fmin for Exon Location")
+//            // , @ApiImplicitParam(name = "fmax", type = "int", paramType = "query", example = "fmax for Exon Location")
+//            // , @ApiImplicitParam(name = "strand", type = "int", paramType = "query", example = "strand for Feature Location 1 or -1")
+//    ]
+//    )
     def setExonBoundaries() {
         JSONObject data = permissionService.handleInput(request, params)
         if (!permissionService.hasPermissions(data, PermissionEnum.WRITE)) {
@@ -893,14 +893,14 @@ class AnnotatorController {
         exportService.export(params.format, response.outputStream, annotatorGroupList, fields, labels, formatters, parameters)
     }
 
-    @ApiOperation(value = "Get annotators report for group", nickname = "/group/getAnnotatorsReportForGroup", httpMethod = "POST")
-    @ApiImplicitParams([
-            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
-            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
-            , @ApiImplicitParam(name = "id", type = "long", paramType = "query", example = "Group ID (or specify the name)")
-            , @ApiImplicitParam(name = "name", type = "string", paramType = "query", example = "Group name")
-    ]
-    )
+    // @ApiOperation(value = "Get annotators report for group", nickname = "/group/getAnnotatorsReportForGroup", httpMethod = "POST")
+    // @ApiImplicitParams([
+            // @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+//            // , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+//            // , @ApiImplicitParam(name = "id", type = "long", paramType = "query", example = "Group ID (or specify the name)")
+//            // , @ApiImplicitParam(name = "name", type = "string", paramType = "query", example = "Group name")
+//    ]
+//    )
     def getAnnotatorsReportForGroup() {
         JSONObject dataObject = permissionService.handleInput(request, params)
         if (!permissionService.hasGlobalPermissions(dataObject, GlobalPermissionEnum.ADMIN)) {
