@@ -9,30 +9,33 @@ import org.grails.web.json.JSONObject
 import spock.lang.Ignore
 import spock.lang.Specification
 
+import java.time.LocalDate
+
 /**
  */
 //@TestFor(FeatureEventService)
 //@Mock([FeatureEvent])
 class FeatureEventServiceSpec extends Specification implements ServiceUnitTest<FeatureEventService>, DataTest {
 
-    Date today = new Date()
+    LocalDate today = LocalDate.now()
     String classUniqueName = "uniqueName"
 
     // create 5 FeatureEvents
     def setup() {
         mockDomain FeatureEvent
-        FeatureEvent f1 = new FeatureEvent(operation: FeatureOperation.ADD_FEATURE, name: "Gene123", uniqueName: classUniqueName, dateCreated: today - 7, current: false).save(failOnError: true)
-        FeatureEvent f2 = new FeatureEvent(operation: FeatureOperation.SPLIT_TRANSCRIPT, parentId: f1.id, name: "Gene123", uniqueName: classUniqueName, dateCreated: today - 6, current: false).save(failOnError: true)
+
+        FeatureEvent f1 = new FeatureEvent(operation: FeatureOperation.ADD_FEATURE, name: "Gene123", uniqueName: classUniqueName, dateCreated: today.minusDays(7), current: false).save(failOnError: true)
+        FeatureEvent f2 = new FeatureEvent(operation: FeatureOperation.SPLIT_TRANSCRIPT, parentId: f1.id, name: "Gene123", uniqueName: classUniqueName, dateCreated: today.minusDays(6), current: false).save(failOnError: true)
         f1.childId = f2.id
-        FeatureEvent f3 = new FeatureEvent(operation: FeatureOperation.SET_TRANSLATION_END, parentId: f2.id, name: "Gene123", uniqueName: classUniqueName, dateCreated: today - 5, current: false).save(failOnError: true)
+        FeatureEvent f3 = new FeatureEvent(operation: FeatureOperation.SET_TRANSLATION_END, parentId: f2.id, name: "Gene123", uniqueName: classUniqueName, dateCreated: today.minusDays(5), current: false).save(failOnError: true)
         f2.childId = f3.id
-        FeatureEvent f4 = new FeatureEvent(operation: FeatureOperation.SET_READTHROUGH_STOP_CODON, parentId: f3.id, name: "Gene123", uniqueName: classUniqueName, dateCreated: today - 4, current: false).save(failOnError: true)
+        FeatureEvent f4 = new FeatureEvent(operation: FeatureOperation.SET_READTHROUGH_STOP_CODON, parentId: f3.id, name: "Gene123", uniqueName: classUniqueName, dateCreated: today.minusDays(4), current: false).save(failOnError: true)
         f3.childId = f4.id
-        FeatureEvent f5 = new FeatureEvent(operation: FeatureOperation.SET_BOUNDARIES, parentId: f4.id, name: "Gene123", uniqueName: classUniqueName, dateCreated: today - 3, current: true).save(failOnError: true)
+        FeatureEvent f5 = new FeatureEvent(operation: FeatureOperation.SET_BOUNDARIES, parentId: f4.id, name: "Gene123", uniqueName: classUniqueName, dateCreated: today.minusDays(3), current: true).save(failOnError: true)
         f4.childId = f5.id
-        FeatureEvent f6 = new FeatureEvent(operation: FeatureOperation.ADD_EXON, parentId: f5.id, name: "Gene123", uniqueName: classUniqueName, dateCreated: today - 2, current: false).save(failOnError: true)
+        FeatureEvent f6 = new FeatureEvent(operation: FeatureOperation.ADD_EXON, parentId: f5.id, name: "Gene123", uniqueName: classUniqueName, dateCreated: today.minusDays(2), current: false).save(failOnError: true)
         f5.childId = f6.id
-        FeatureEvent f7 = new FeatureEvent(operation: FeatureOperation.MERGE_TRANSCRIPTS, parentId: f6.id, name: "Gene123", uniqueName: classUniqueName, dateCreated: today - 1, current: false).save(failOnError: true)
+        FeatureEvent f7 = new FeatureEvent(operation: FeatureOperation.MERGE_TRANSCRIPTS, parentId: f6.id, name: "Gene123", uniqueName: classUniqueName, dateCreated: today.minusDays(1), current: false).save(failOnError: true)
         f1.save()
         f2.save()
         f3.save()
@@ -78,7 +81,7 @@ class FeatureEventServiceSpec extends Specification implements ServiceUnitTest<F
             , name: "Gene123"
             , uniqueName: "AAAA"
             , current: false
-            , dateCreated: new Date() - 1
+            , dateCreated: LocalDate.now().minusDays(1)
         ).save()
         FeatureEvent f3 = new FeatureEvent(
             operation: FeatureOperation.ADD_TRANSCRIPT
@@ -86,7 +89,7 @@ class FeatureEventServiceSpec extends Specification implements ServiceUnitTest<F
             , uniqueName: "AAAA"
             , childId: f4.id
             , current: false
-            , dateCreated: new Date() - 2
+            , dateCreated: LocalDate.now().minusDays( 2)
         ).save()
         FeatureEvent f2 = new FeatureEvent(
             operation: FeatureOperation.SPLIT_TRANSCRIPT
@@ -94,7 +97,7 @@ class FeatureEventServiceSpec extends Specification implements ServiceUnitTest<F
             , uniqueName: "AAAA"
             , childId: f3.id
             , current: true
-            , dateCreated: new Date() - 3
+            , dateCreated: LocalDate.now().minusDays( 3)
         ).save()
         // this is the first one!
         FeatureEvent f1 = new FeatureEvent(
@@ -103,7 +106,7 @@ class FeatureEventServiceSpec extends Specification implements ServiceUnitTest<F
             , childId: f2.id
             , uniqueName: "AAAA"
             , current: false
-            , dateCreated: new Date() - 4
+            , dateCreated: LocalDate.now().minusDays( 4)
         ).save()
         f4.parentId = f3.id
         f4.save()
