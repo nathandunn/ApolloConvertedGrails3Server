@@ -1,6 +1,7 @@
 package org.bbop.apollo
 
 import grails.converters.JSON
+import grails.gorm.transactions.Transactional
 import groovy.json.JsonBuilder
 import org.apache.shiro.SecurityUtils
 import org.bbop.apollo.event.AnnotationEvent
@@ -30,6 +31,7 @@ import static grails.async.Promises.task
  * This code primarily provides integration with genomic editing functionality visible in the JBrowse window.
  */
 //// @Api(value = "Annotation Services: Methods for running the annotation engine")
+@Transactional
 class AnnotationEditorController extends AbstractApolloController implements AnnotationListener {
 
 

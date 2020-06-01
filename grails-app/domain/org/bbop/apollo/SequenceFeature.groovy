@@ -3,7 +3,7 @@ package org.bbop.apollo
 /**
  * Note: top-level in the sequence ontology
  */
-class SequenceFeature extends Feature implements Ontological {
+class SequenceFeature extends Feature {
 
     static constraints = {
     }
