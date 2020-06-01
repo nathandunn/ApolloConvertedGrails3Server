@@ -15,12 +15,12 @@ if [[ $TEST_SUITE == "python-apollo" ]]; then
   ./grailsw run-app &
   git clone --single-branch --branch add_bulk_gff_loader --depth=1 https://github.com/galaxy-genome-annotation/python-apollo
   cd python-apollo
-  python --version
-#  pyenv global 3.6.3
   sed -i 's|8888|8080/apollo|' `pwd`/test-data/arrow.yml
   export ARROW_GLOBAL_CONFIG_PATH=`pwd`/test-data/arrow.yml
   virtualenv .venv
   . .venv/bin/activate
+  python --version
+  python3 --version
   pip install .
   pip install nose
   ./bootstrap_apollo.sh --nodocker
