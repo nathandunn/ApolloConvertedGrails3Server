@@ -46,6 +46,7 @@ before_script:
   - "echo $JAVA_OPTS"
 #  - if [ ${DB} == "mysql" ]; then cp src/integration-test/groovy/resources/travis/mysql.travis apollo-config.groovy; mysql -u root -e 'SET GLOBAL interactive_timeout=28800;'; mysql -u root -e 'SET GLOBAL wait_timeout=28800;'; mysql -u root -e 'SET GLOBAL connect_timeout=28800;';  mysql -u root -e 'create database apollo'; fi;
 #  - if [ ${DB} == "postgres" ]; then cp src/integration-test/groovy/resources/travis/postgres.travis apollo-config.groovy; psql -c 'create database apollo;' -U postgres; psql -c 'create database apollo_chado' -U postgres; gunzip -c scripts/chado-schema-with-ontologies.sql.gz | psql -U postgres -h localhost -d apollo_chado; fi;
+  - apt-get install python3-venv
   - if [ ${DB} == "postgres" ]; then cp src/integration-test/groovy/resources/travis/postgres.travis apollo-config.groovy; psql -c 'create database apollo;' -U postgres;  fi;
 
 before_cache:
