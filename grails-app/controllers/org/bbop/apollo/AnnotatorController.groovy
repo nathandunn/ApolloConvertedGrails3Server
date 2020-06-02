@@ -13,7 +13,7 @@ import org.bbop.apollo.history.FeatureOperation
 import org.bbop.apollo.report.AnnotatorSummary
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
-import org.hibernate.FetchMode
+//import org.hibernate.FetchMode
 // import io.swagger.annotations.*
 import org.springframework.http.HttpStatus
 
@@ -512,25 +512,45 @@ class AnnotatorController {
                     order('lastUpdated', sortorder)
                 }
                 if (showOnlyGoAnnotations) {
-                    fetchMode 'goAnnotations', FetchMode.JOIN
+                    'goAnnotations'
                 }
-                fetchMode 'owners', FetchMode.JOIN
-                fetchMode 'featureSynonyms', FetchMode.JOIN
-                fetchMode 'featureDBXrefs', FetchMode.JOIN
-                fetchMode 'featureProperties', FetchMode.JOIN
-                fetchMode 'featureLocations', FetchMode.JOIN
-                fetchMode 'featureLocations.sequence', FetchMode.JOIN
-                fetchMode 'parentFeatureRelationships', FetchMode.JOIN
-                fetchMode 'parentFeatureRelationships.childFeature', FetchMode.JOIN
-                fetchMode 'parentFeatureRelationships.parentFeature', FetchMode.JOIN
-                fetchMode 'parentFeatureRelationships.childFeature.parentFeatureRelationships', FetchMode.JOIN
-                fetchMode 'parentFeatureRelationships.childFeature.parentFeatureRelationships.childFeature', FetchMode.JOIN
-                fetchMode 'parentFeatureRelationships.childFeature.parentFeatureRelationships.childFeature.featureLocations', FetchMode.JOIN
-                fetchMode 'parentFeatureRelationships.childFeature.parentFeatureRelationships.childFeature.featureLocations.sequence', FetchMode.JOIN
-                fetchMode 'parentFeatureRelationships.childFeature.childFeatureRelationships', FetchMode.JOIN
-                fetchMode 'parentFeatureRelationships.childFeature.featureLocations', FetchMode.JOIN
-                fetchMode 'parentFeatureRelationships.childFeature.featureLocations.sequence', FetchMode.JOIN
-                fetchMode 'parentFeatureRelationships.childFeature.owners', FetchMode.JOIN
+                'owners'
+                'featureSynonyms'
+                'featureDBXrefs'
+                'featureProperties'
+                'featureLocations'
+                'featureLocations.sequence'
+                'parentFeatureRelationships'
+                'parentFeatureRelationships.childFeature'
+                'parentFeatureRelationships.parentFeature'
+                'parentFeatureRelationships.childFeature.parentFeatureRelationships'
+                'parentFeatureRelationships.childFeature.parentFeatureRelationships.childFeature'
+                'parentFeatureRelationships.childFeature.parentFeatureRelationships.childFeature.featureLocations'
+                'parentFeatureRelationships.childFeature.parentFeatureRelationships.childFeature.featureLocations.sequence'
+                'parentFeatureRelationships.childFeature.childFeatureRelationships'
+                'parentFeatureRelationships.childFeature.featureLocations'
+                'parentFeatureRelationships.childFeature.featureLocations.sequence'
+                'parentFeatureRelationships.childFeature.owners'
+//                if (showOnlyGoAnnotations) {
+//                    fetchMode 'goAnnotations', FetchMode.JOIN
+//                }
+//                fetchMode 'owners', FetchMode.JOIN
+//                fetchMode 'featureSynonyms', FetchMode.JOIN
+//                fetchMode 'featureDBXrefs', FetchMode.JOIN
+//                fetchMode 'featureProperties', FetchMode.JOIN
+//                fetchMode 'featureLocations', FetchMode.JOIN
+//                fetchMode 'featureLocations.sequence', FetchMode.JOIN
+//                fetchMode 'parentFeatureRelationships', FetchMode.JOIN
+//                fetchMode 'parentFeatureRelationships.childFeature', FetchMode.JOIN
+//                fetchMode 'parentFeatureRelationships.parentFeature', FetchMode.JOIN
+//                fetchMode 'parentFeatureRelationships.childFeature.parentFeatureRelationships', FetchMode.JOIN
+//                fetchMode 'parentFeatureRelationships.childFeature.parentFeatureRelationships.childFeature', FetchMode.JOIN
+//                fetchMode 'parentFeatureRelationships.childFeature.parentFeatureRelationships.childFeature.featureLocations', FetchMode.JOIN
+//                fetchMode 'parentFeatureRelationships.childFeature.parentFeatureRelationships.childFeature.featureLocations.sequence', FetchMode.JOIN
+//                fetchMode 'parentFeatureRelationships.childFeature.childFeatureRelationships', FetchMode.JOIN
+//                fetchMode 'parentFeatureRelationships.childFeature.featureLocations', FetchMode.JOIN
+//                fetchMode 'parentFeatureRelationships.childFeature.featureLocations.sequence', FetchMode.JOIN
+//                fetchMode 'parentFeatureRelationships.childFeature.owners', FetchMode.JOIN
             }
             long durationInMilliseconds = System.currentTimeMillis() - start;
             log.debug "criteria query ${durationInMilliseconds}"

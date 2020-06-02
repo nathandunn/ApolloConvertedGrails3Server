@@ -9,7 +9,7 @@ import groovy.json.JsonSlurper
 class PhoneHomeService {
 
     def configWrapperService
-    def grailsApplication
+//    def grailsApplication
 
     def pingServerAsync(String message = null ,Map<String,String> argMap = [:]) {
         try {

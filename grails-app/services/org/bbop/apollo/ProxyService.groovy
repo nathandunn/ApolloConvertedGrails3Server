@@ -26,10 +26,15 @@ class ProxyService {
 
     @Transactional
     def initProxies(){
+        println "C.1"
         def proxies = grailsApplication.config.apollo.proxies
+        println "C.2 ${proxies}"
+
 
         for(proxyConfig in proxies){
+            println "C.3 ${proxyConfig}"
             def proxy = Proxy.findByReferenceUrlAndTargetUrl(proxyConfig.referenceUrl,proxyConfig.targetUrl)
+            println "C.4 ${proxy}"
 
             if (proxy && proxyConfig.replace) {
                 proxy.active= proxyConfig.active

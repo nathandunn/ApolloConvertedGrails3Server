@@ -13,7 +13,7 @@ import org.bbop.apollo.sequence.Strand
 import org.bbop.apollo.sequence.TranslationTable
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
-import org.hibernate.sql.JoinType
+//import org.hibernate.sql.JoinType
 
 import java.util.zip.CRC32
 import java.util.zip.GZIPInputStream
@@ -82,8 +82,10 @@ class SequenceService {
 
         StringBuilder residues = new StringBuilder(residueString);
         List<SequenceAlterationArtifact> sequenceAlterationList = SequenceAlterationArtifact.withCriteria {
-            createAlias('featureLocations', 'fl', JoinType.INNER_JOIN)
-            createAlias('fl.sequence', 's', JoinType.INNER_JOIN)
+//            createAlias('featureLocations', 'fl', JoinType.INNER_JOIN)
+//            createAlias('fl.sequence', 's', JoinType.INNER_JOIN)
+            createAlias('featureLocations', 'fl')
+            createAlias('fl.sequence', 's')
             and {
                 or {
                     and {

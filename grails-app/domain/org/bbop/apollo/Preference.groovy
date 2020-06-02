@@ -1,5 +1,8 @@
 package org.bbop.apollo
 
+//import grails.gorm.annotation.Entity
+//
+//@Entity
 class Preference {
 
     static constraints = {

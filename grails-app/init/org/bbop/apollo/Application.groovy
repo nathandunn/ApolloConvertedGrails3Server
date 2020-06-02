@@ -7,6 +7,9 @@ import io.swagger.v3.oas.annotations.OpenAPIDefinition
 import io.swagger.v3.oas.annotations.info.Contact
 import io.swagger.v3.oas.annotations.info.Info
 import io.swagger.v3.oas.annotations.info.License
+//import org.grails.boot.internal.EnableAutoConfiguration
+//import org.springframework.context.annotation.ComponentScan
+//import org.springframework.context.annotation.Configuration
 
 @OpenAPIDefinition(
     info = @Info(
@@ -17,6 +20,10 @@ import io.swagger.v3.oas.annotations.info.License
         contact = @Contact(url = "http://something.com", name = "something", email = "something")
     )
 )
+
+//@Configuration
+//@EnableAutoConfiguration
+//@ComponentScan
 @CompileStatic
 class Application extends GrailsAutoConfiguration {
     static void main(String[] args) {
