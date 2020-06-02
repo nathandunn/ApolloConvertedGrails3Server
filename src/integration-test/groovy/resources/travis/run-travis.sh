@@ -17,10 +17,10 @@ if [[ $TEST_SUITE == "python-apollo" ]]; then
   cd python-apollo
   sed -i 's|8888|8080/apollo|' `pwd`/test-data/arrow.yml
   export ARROW_GLOBAL_CONFIG_PATH=`pwd`/test-data/arrow.yml
-  sudo pip3 install virtualenv pathlib2
+#  sudo pip3 install virtualenv pathlib2
   python3 --version
-#  python3 -m venv .venv
-  virtualenv .venv
+  python3 -m venv .venv
+#  virtualenv .venv
   . .venv/bin/activate
   python3 --version
   pip3 install .
