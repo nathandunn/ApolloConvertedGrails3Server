@@ -1254,18 +1254,12 @@ class OrganismController {
 
     private boolean checkOrganism(Organism organism) {
 
-        println "A"
         File directory = new File(organism.directory)
-        println "B"
         File trackListFile = new File(organism.getTrackList())
-        println "C"
         File refSeqFile = new File(organism.getRefseqFile())
-        println "D"
-        println "directory ${directory.exists()} -> ${directory.isDirectory()} -> ${directory.absolutePath}"
-
         if (!directory.exists() || !directory.isDirectory()) {
             organism.valid = false
-            throw new Exception("zzzzzzzz Invalid directory specified: " + directory.absolutePath)
+            throw new Exception("Invalid directory specified: " + directory.absolutePath)
         } else if (!trackListFile.exists()) {
             organism.valid = false
             throw new Exception("Track file does not exists: " + trackListFile.absolutePath)
