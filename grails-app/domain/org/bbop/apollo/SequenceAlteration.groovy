@@ -14,8 +14,8 @@ class SequenceAlteration extends SequenceFeature{
     }
 
     static mapping = {
-        alleles cascade: 'all-delete-orphan'
-        variantInfo cascade: 'all-delete-orphan'
+//        alleles cascade: 'all-delete-orphan'
+//        variantInfo cascade: 'all-delete-orphan'
     }
 
     static hasMany = [

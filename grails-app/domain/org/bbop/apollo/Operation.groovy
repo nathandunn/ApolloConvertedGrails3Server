@@ -22,9 +22,9 @@ class Operation {
 
 
     static mapping = {
-        attributes type: 'text'
-        oldFeatures type: 'text'
-        newFeatures type: 'text'
+//        attributes type: 'text'
+//        oldFeatures type: 'text'
+//        newFeatures type: 'text'
     }
 
     static constraints = {

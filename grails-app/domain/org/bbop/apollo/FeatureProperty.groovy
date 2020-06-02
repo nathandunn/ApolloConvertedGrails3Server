@@ -31,7 +31,7 @@ class FeatureProperty implements Ontological {
     ]
 
     static mapping = {
-        value type: 'text'
+//        value type: 'text'
     }
 
     boolean equals(Object other) {

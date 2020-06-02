@@ -22,8 +22,8 @@ class Sequence {
     static mapping = {
         end column: 'sequence_end'
         start column: 'sequence_start'
-        featureLocations cascade: 'all-delete-orphan'
-        sequenceChunks cascade: 'all-delete-orphan'
+//        featureLocations cascade: 'all-delete-orphan'
+//        sequenceChunks cascade: 'all-delete-orphan'
     }
 
     static belongsTo = [Organism]

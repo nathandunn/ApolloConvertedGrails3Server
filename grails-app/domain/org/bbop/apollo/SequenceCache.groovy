@@ -25,8 +25,8 @@ class SequenceCache {
     }
 
     static mapping = {
-        response type: "text"
-        sequenceName type: "text"
-        paramMap type: "text"
+//        response type: "text"
+//        sequenceName type: "text"
+//        paramMap type: "text"
     }
 }

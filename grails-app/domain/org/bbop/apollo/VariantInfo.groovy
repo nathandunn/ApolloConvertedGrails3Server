@@ -11,7 +11,7 @@ class VariantInfo {
     }
 
     static mapping = {
-        value type: 'text'
+//        value type: 'text'
     }
 
     static belongsTo = [

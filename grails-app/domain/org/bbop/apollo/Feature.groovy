@@ -5,8 +5,6 @@ import org.bbop.apollo.go.GoAnnotation
 
 class Feature implements Ontological{
 
-    static auditable = true
-
     static constraints = {
         name nullable: false
         uniqueName nullable: false
@@ -25,7 +23,7 @@ class Feature implements Ontological{
     String symbol
     String description
     DBXref dbxref;
-    String name;
+    String name
     String uniqueName;
     Integer sequenceLength;
     String md5checksum;
@@ -60,15 +58,15 @@ class Feature implements Ontological{
     ]
 
     static mapping = {
-            featureSynonyms cascade: 'all-delete-orphan'
-            childFeatureRelationships cascade: 'all-delete-orphan'
-            parentFeatureRelationships cascade: 'all-delete-orphan'
-            featureLocations cascade: 'all-delete-orphan' // lazy: false  since most / all feature locations have a single element join is more efficient
-            goAnnotations cascade: 'all-delete-orphan'
-            geneProducts cascade: 'all-delete-orphan'
-            provenances cascade: 'all-delete-orphan'
-            name type: 'text'
-            description type: 'text'
+//            featureSynonyms cascade: 'all-delete-orphan'
+//            childFeatureRelationships cascade: 'all-delete-orphan'
+//            parentFeatureRelationships cascade: 'all-delete-orphan'
+//            featureLocations cascade: 'all-delete-orphan' // lazy: false  since most / all feature locations have a single element join is more efficient
+//            goAnnotations cascade: 'all-delete-orphan'
+//            geneProducts cascade: 'all-delete-orphan'
+//            provenances cascade: 'all-delete-orphan'
+//            name type: 'text'
+//            description type: 'text'
     }
 
 

@@ -20,7 +20,7 @@ class Allele {
     ]
 
     static mapping = {
-        alleleInfo cascade: 'all-delete-orphan'
+//        alleleInfo cascade: 'all-delete-orphan'
     }
 
 }

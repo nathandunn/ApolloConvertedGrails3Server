@@ -77,7 +77,7 @@ class Organism implements JsonMetadata {
     static mapping = {
         publicMode defaultValue: true
         obsolete defaultValue: false
-        metadata type: 'text'
+//        metadata type: 'text'
     }
 
 }
