@@ -9,7 +9,7 @@ jdk:
 
 before_install:
   - sudo apt-get update
-  - sudo apt-get install -y python3.5
+#  - sudo apt-get install -y python3.4
   - sudo apt-get install -y python3-pip
 
 env:
