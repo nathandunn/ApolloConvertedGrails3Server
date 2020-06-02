@@ -10,8 +10,6 @@ jdk:
 before_install:
   - "pyenv global 3.7"
   - "pip install pip --upgrade"
-#  - sudo apt-get update
-#  - sudo apt-get install -y python3 python3-pip python3-venv
 
 env:
 #  - DB=postgres TEST_SUITE=apollo
@@ -25,18 +23,9 @@ python:
 addons:
   chrome: stable
   postgresql: "9.3"
-#  apt:
-#    packages:
-#      - python3.7
-#  apt:
-#    packages:
-#    - mysql-server-5.6
-#    - mysql-client-core-5.6
-#    - mysql-client-5.6
 
-
-install:
-  - true
+#install:
+#  - true
 
 services:
 - postgresql
@@ -61,5 +50,6 @@ cache:
     - $HOME/.m2/
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
+      
 script: "./src/integration-test/groovy/resources/travis/run-travis.sh"
 
