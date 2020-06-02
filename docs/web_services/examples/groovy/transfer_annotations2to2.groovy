@@ -112,7 +112,7 @@ for (String sequence in sequenceArray) {
         //println "ADDTRANSCRIPTARRAY: ${addTranscriptArray.toString()}"
         def response = triggerAddTranscript(options.destinationurl, options.username, options.password, options.destination_organism, sequenceName, addTranscriptArray, options.ignoressl)
         if (response == null) { return }
-        println "addTranscript response size: ${response.size()}"
+//        println "addTranscript response size: ${response.size()}"
     }
 
     featuresMap.put(sequenceName, (addFeaturesArray.size() + addTranscriptArray.size()))

@@ -537,7 +537,7 @@ class PermissionService {
                     return jsonObject
                 }
             } catch (Exception ae) {
-                log.error("Problem authenticating: " + ae.fillInStackTrace())
+                log.debug("Problem authenticating: " + ae.fillInStackTrace())
                 jsonObject.error_message = "Problem authenticating: " + ae.fillInStackTrace()
                 return jsonObject
             }

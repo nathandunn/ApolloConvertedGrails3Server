@@ -771,11 +771,11 @@ class RequestHandlingService {
         JSONArray featuresArray = inputObject.getJSONArray(FeatureStringEnum.FEATURES.value)
         JSONObject returnObject = jsonWebUtilityService.createJSONFeatureContainer()
 
-        println "addTranscript ${inputObject.toString()}"
+//        println "addTranscript ${inputObject.toString()}"
         Sequence sequence = permissionService.checkPermissions(inputObject, PermissionEnum.WRITE)
-        println "sequence: ${sequence}"
-        println "organism: ${sequence.organism}"
-        println "number of features: ${featuresArray?.size()}"
+//        println "sequence: ${sequence}"
+//        println "organism: ${sequence.organism}"
+//        println "number of features: ${featuresArray?.size()}"
 
         boolean useName = false
         boolean useCDS = configWrapperService.useCDS()
@@ -1900,7 +1900,7 @@ class RequestHandlingService {
 
     def addFeature(JSONObject inputObject) {
         Sequence sequence = permissionService.checkPermissions(inputObject, PermissionEnum.WRITE)
-        println "adding sequence with found sequence ${sequence}"
+//        println "adding sequence with found sequence ${sequence}"
         User user = permissionService.getCurrentUser(inputObject)
 
         JSONArray featuresArray = inputObject.getJSONArray(FeatureStringEnum.FEATURES.value)
@@ -1971,7 +1971,7 @@ class RequestHandlingService {
      */
 //    { "track": "Group1.3", "features": [ { "uniquename": "179e77b9-9329-4633-9f9e-888e3cf9b76a" } ], "operation": "delete_feature" }:
     def deleteFeature(JSONObject inputObject) {
-        println "in delete feature ${inputObject as JSON}"
+//        println "in delete feature ${inputObject as JSON}"
         Sequence sequence = permissionService.checkPermissions(inputObject, PermissionEnum.WRITE)
 
 
@@ -1997,7 +1997,7 @@ class RequestHandlingService {
         JSONArray oldJsonObjectsArray = new JSONArray()
         // we have to hold transcripts if feature is an exon, etc. or a feature itself if not a transcript
         Map<String, JSONObject> oldFeatureMap = new HashMap<>()
-        println "features to delete: ${featuresArray.size()}"
+//        println "features to delete: ${featuresArray.size()}"
 
         for (int i = 0; i < featuresArray.length(); ++i) {
             JSONObject jsonFeature = featuresArray.getJSONObject(i)
@@ -2013,7 +2013,7 @@ class RequestHandlingService {
 
             checkOwnersDelete(feature, inputObject)
 
-            println "feature found to delete ${feature?.name}"
+//            println "feature found to delete ${feature?.name}"
             if (feature) {
                 if (feature instanceof Exon) {
                     Transcript transcript = exonService.getTranscript((Exon) feature)
@@ -2038,20 +2038,20 @@ class RequestHandlingService {
 
         }
         for (String key : oldFeatureMap.keySet()) {
-            println "setting keys"
+//            println "setting keys"
             oldJsonObjectsArray.add(oldFeatureMap.get(key))
         }
 
         for (Map.Entry<String, List<Feature>> entry : modifiedFeaturesUniqueNames.entrySet()) {
             String uniqueName = entry.getKey();
             Feature feature = Feature.findByUniqueName(uniqueName);
-            println "updating name for feature ${uniqueName} -> ${feature}"
+//            println "updating name for feature ${uniqueName} -> ${feature}"
             if (feature == null) {
                 println("Feature already deleted");
                 continue;
             }
             if (!isUpdateOperation) {
-                println "is not update operation "
+//                println "is not update operation "
                 // when the line below is used, the client gives an error saying TypeError: Cannot read property 'fmin' of undefined(…)
                 featureContainer.getJSONArray(FeatureStringEnum.FEATURES.value).put(featureService.convertFeatureToJSON(feature))
                 if (feature instanceof Transcript) {
@@ -2137,7 +2137,7 @@ class RequestHandlingService {
                 }
             } else {
                 String featureName
-                println "IS update operation "
+//                println "IS update operation "
                 FeatureOperation featureOperation
                 if (feature instanceof Transcript) {
                     Transcript transcript = (Transcript) feature;
@@ -2459,14 +2459,14 @@ class RequestHandlingService {
             oldJsonArray.add(jsonTranscript1)
             oldJsonArray.add(jsonTranscript2)
             try {
-                println "trying to add history"
+//                println "trying to add history"
                 featureEventService.addMergeFeatureEvent(gene1Name, transcript1UniqueName
                     , gene2Name, transcript2UniqueName
                     , inputObject, oldJsonArray
                     , featureForHistory.getJSONArray(FeatureStringEnum.FEATURES.value).getJSONObject(0)
                     , permissionService.getCurrentUser(inputObject)
                 )
-                println "ADDED history"
+//                println "ADDED history"
             } catch (e) {
                 log.error " There was a problem adding history for this merge event ${e}"
             }
@@ -2560,11 +2560,11 @@ class RequestHandlingService {
             if (originalType == type) {
                 log.warn "Cannot change ${uniqueName} from ${originalType} -> ${type}. Nothing to do."
             } else if (originalType in FeatureService.SINGLETON_FEATURE_TYPES && type in FeatureService.RNA_FEATURE_TYPES) {
-                log.error "B Not enough information available to change ${uniqueName} from ${originalType} -> ${type}."
+                log.error "Not enough information available to change ${uniqueName} from ${originalType} -> ${type}."
             } else {
                 Feature newFeature = featureService.changeAnnotationType(inputObject, feature, sequence, user, type)
                 JSONObject newFeatureJsonObject = featureService.convertFeatureToJSON(newFeature)
-                println "New feature json object: ${newFeatureJsonObject.toString()}"
+//                println "New feature json object: ${newFeatureJsonObject.toString()}"
                 JSONArray oldFeatureJsonArray = new JSONArray()
                 JSONArray newFeatureJsonArray = new JSONArray()
                 oldFeatureJsonArray.add(originalFeatureJsonObject)
@@ -2599,7 +2599,7 @@ class RequestHandlingService {
 
 
     def associateFeatureToGene(JSONObject inputObject) {
-        println "associateFeatureToGene: ${inputObject.toString()}"
+//        println "associateFeatureToGene: ${inputObject.toString()}"
         JSONObject updateFeatureContainer = jsonWebUtilityService.createJSONFeatureContainer()
         JSONArray featuresArray = inputObject.get(FeatureStringEnum.FEATURES.value)
         Sequence sequence = permissionService.checkPermissions(inputObject, PermissionEnum.WRITE)
@@ -2610,8 +2610,8 @@ class RequestHandlingService {
         String geneUniqueName = featuresArray.getJSONObject(1).get(FeatureStringEnum.UNIQUENAME.value)
         Feature feature = Feature.findByUniqueName(featureUniqueName)
         Gene gene = Gene.findByUniqueName(geneUniqueName)
-        println "feature: ${feature}"
-        println "gene: ${gene}"
+//        println "feature: ${feature}"
+//        println "gene: ${gene}"
 
         JSONObject originalFeatureJsonObject = featureService.convertFeatureToJSON(feature)
         feature = featureService.associateFeatureToGene(feature, gene)
@@ -2635,12 +2635,12 @@ class RequestHandlingService {
             fireAnnotationEvent(annotationEvent)
         }
 
-        println "Return object: ${updateFeatureContainer.toString()}"
+//        println "Return object: ${updateFeatureContainer.toString()}"
         return updateFeatureContainer
     }
 
     def dissociateFeatureFromGene(JSONObject inputObject) {
-        println "dissociateFeatureFromGene: ${inputObject.toString()}"
+//        println "dissociateFeatureFromGene: ${inputObject.toString()}"
         JSONObject updateFeatureContainer = jsonWebUtilityService.createJSONFeatureContainer();
         JSONArray featuresArray = inputObject.getJSONArray(FeatureStringEnum.FEATURES.value)
         Sequence sequence = permissionService.checkPermissions(inputObject, PermissionEnum.WRITE)
@@ -2650,7 +2650,7 @@ class RequestHandlingService {
 
         Gene gene = featureRelationshipService.getParentForFeature(feature, Gene.ontologyId)
         String geneUniqueName = gene.uniqueName
-        println "feature: ${feature}"
+//        println "feature: ${feature}"
         println "gene: ${gene}"
 
         JSONObject originalFeatureJsonObject = featureService.convertFeatureToJSON(feature)
@@ -2688,13 +2688,13 @@ class RequestHandlingService {
             fireAnnotationEvent(annotationEvent)
         }
 
-        println "Return object: ${updateFeatureContainer.toString()}"
+//        println "Return object: ${updateFeatureContainer.toString()}"
         return updateFeatureContainer
     }
 
 
     def associateTranscriptToGene(JSONObject inputObject) {
-        println "associateTranscriptToGene: ${inputObject.toString()}"
+//        println "associateTranscriptToGene: ${inputObject.toString()}"
         JSONObject updateFeatureContainer = jsonWebUtilityService.createJSONFeatureContainer()
         JSONArray featuresArray = inputObject.get(FeatureStringEnum.FEATURES.value)
         Sequence sequence = permissionService.checkPermissions(inputObject, PermissionEnum.WRITE)
@@ -2703,8 +2703,8 @@ class RequestHandlingService {
         String geneUniqueName = featuresArray.getJSONObject(1).get(FeatureStringEnum.UNIQUENAME.value)
         Transcript transcript = Transcript.findByUniqueName(transcriptUniqueName)
         Gene gene = Gene.findByUniqueName(geneUniqueName)
-        println "transcript: ${transcript}"
-        println "gene: ${gene}"
+//        println "transcript: ${transcript}"
+//        println "gene: ${gene}"
 
         JSONObject originalFeatureJsonObject = featureService.convertFeatureToJSON(transcript)
         transcript = featureService.associateTranscriptToGene(transcript, gene)
@@ -2728,12 +2728,12 @@ class RequestHandlingService {
             fireAnnotationEvent(annotationEvent)
         }
 
-        println "Return object: ${updateFeatureContainer.toString()}"
+//        println "Return object: ${updateFeatureContainer.toString()}"
         return updateFeatureContainer
     }
 
     def dissociateTranscriptFromGene(JSONObject inputObject) {
-        println "dissociateTranscriptFromGene: ${inputObject.toString()}"
+//        println "dissociateTranscriptFromGene: ${inputObject.toString()}"
         JSONObject updateFeatureContainer = jsonWebUtilityService.createJSONFeatureContainer();
         JSONArray featuresArray = inputObject.get(FeatureStringEnum.FEATURES.value)
         Sequence sequence = permissionService.checkPermissions(inputObject, PermissionEnum.WRITE)
