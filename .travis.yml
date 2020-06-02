@@ -7,9 +7,9 @@ jdk:
   - openjdk8
   - openjdk11
 
-before_install:
-  - sudo apt-get update
-  - sudo apt-get install -y python3 python3-pip python3-venv
+#before_install:
+#  - sudo apt-get update
+#  - sudo apt-get install -y python3 python3-pip python3-venv
 
 env:
 #  - DB=postgres TEST_SUITE=apollo
@@ -17,15 +17,15 @@ env:
   - DB=h2 TEST_SUITE=apollo
   - DB=h2 TEST_SUITE=python-apollo
 #
-python:
-  - "3.4"
+#python:
+#  - "3.4"
 
 addons:
   chrome: stable
   postgresql: "9.3"
   apt:
     packages:
-      - python3
+      - python3.7
 #  apt:
 #    packages:
 #    - mysql-server-5.6
