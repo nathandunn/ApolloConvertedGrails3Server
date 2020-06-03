@@ -129,7 +129,7 @@ dependencies {
 //    testRuntime "org.seleniumhq.selenium:selenium-htmlunit-driver:2.47.1"
     testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
 //    testRuntime "org.neo4j.test:neo4j-harness:3.5.0"
-    provided "org.neo4j.test:neo4j-harness:$neo4jVersion"
+    runtime "org.neo4j.test:neo4j-harness:$neo4jVersion"
 
 
 //    testRuntime "org.seleniumhq.selenium:selenium-chrome-driver:2.47.1"
