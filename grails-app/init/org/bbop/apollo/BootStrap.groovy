@@ -39,43 +39,44 @@ class BootStrap {
         println "B.1"
 
         domainMarshallerService.registerObjects()
-        println "C"
-        proxyService.initProxies()
-        println "D"
-
-
-        SequenceTranslationHandler.spliceDonorSites.addAll(configWrapperService.spliceDonorSites)
-        println "E"
-
-        SequenceTranslationHandler.spliceAcceptorSites.addAll(configWrapperService.spliceAcceptorSites)
-        println "F"
-
-        if(FeatureType.count==0){
-            featureTypeService.stubDefaultFeatureTypes()
-        }
-
-        println "G"
-        roleService.initRoles()
-        println "H"
-
-        def admin = grailsApplication.config?.apollo?.admin
-        println "I"
-        if(admin){
-            println "J"
-            userService.registerAdmin(admin.username,admin.password,admin.firstName,admin.lastName)
-        }
-        println "K"
-        def adminUser = userService.registerAdmin("admin@local.host","password","Admin","User")
-        println "adminuser ${adminUser as JSON}"
-
-
-        def commandCommonDirectory = trackService.checkCommonDataDirectory()
-        println commandCommonDirectory
+        println "C running! "
+//        proxyService.initProxies()
+//        println "D"
+//
+//
+//        SequenceTranslationHandler.spliceDonorSites.addAll(configWrapperService.spliceDonorSites)
+//        println "E"
+//
+//        SequenceTranslationHandler.spliceAcceptorSites.addAll(configWrapperService.spliceAcceptorSites)
+//        println "F"
+//
+//        if(FeatureType.count==0){
+//            featureTypeService.stubDefaultFeatureTypes()
+//        }
+//
+//        println "G"
+//        roleService.initRoles()
+//        println "H"
+//
+//        def admin = grailsApplication.config?.apollo?.admin
+//        println "I"
+//        if(admin){
+//            println "J"
+//            userService.registerAdmin(admin.username,admin.password,admin.firstName,admin.lastName)
+//        }
+//        println "K"
+//        def adminUser = userService.registerAdmin("admin@local.host","password","Admin","User")
+//        println "adminuser ${adminUser as JSON}"
+//
+//
+//        def commandCommonDirectory = trackService.checkCommonDataDirectory()
+//        println commandCommonDirectory
 
 //        phoneHomeService.pingServerAsync(org.bbop.apollo.PhoneHomeEnum.START.value)
 
     }
     def destroy = {
+        println "dying!"
 //        phoneHomeService.pingServer(org.bbop.apollo.PhoneHomeEnum.STOP.value)
     }
 }

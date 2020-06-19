@@ -119,7 +119,7 @@ dependencies {
 //    compile "org.grails.plugins:hibernate5:$hibernateDatastoreVersion"
 //    compile "org.hibernate:hibernate-ehcache:$hibernateEhcacheVersion"
 //    compile "org.hibernate:hibernate-core:5.4.16.Final"
-//    compile "org.hibernate:hibernate-validator:6.1.5.Final"
+    compile "org.hibernate:hibernate-validator:6.1.5.Final"
     compile "org.grails.plugins:gsp"
     console "org.grails:grails-console"
     profile "org.grails.profiles:web"

@@ -9,12 +9,17 @@ grails:
             # Disabled by default for performance reasons
             events: false
     neo4j:
-        type: embedded
-#        url: bolt://localhost:7687
-#        options:
-#            maxSessions: 100
-#            encryptionLevel: NONE
-#            sessionLivenessCheckTimeout: 200
+#        type: embedded
+        url: bolt://localhost:7687
+        username: neo4j
+        password: testpass
+        flush.mode: AUTO
+        options:
+            maxSessions: 100
+            encryptionLevel: NONE
+            sessionLivenessCheckTimeout: 200
+#            encryption: true
+
 info:
     app:
         name: '@info.app.name@'
