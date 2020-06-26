@@ -24,6 +24,7 @@ class ProxyService {
         return proxy
     }
 
+
     @Transactional
     def initProxies(){
         println "C.1"
@@ -33,8 +34,8 @@ class ProxyService {
 
         for(proxyConfig in proxies){
             println "C.3 ${proxyConfig}"
-//            def proxy = Proxy.findByReferenceUrlAndTargetUrl(proxyConfig.referenceUrl,proxyConfig.targetUrl)
-            def proxy = Proxy.executeQuery("from Proxy p where p.referenceUrl = :referenceUrl and p.targetUrl = :targetUrl ",[referenceUrl:proxyConfig.referenceUrl,targetUrl:  proxyConfig.targetUrl])
+            def proxy = Proxy.findByReferenceUrlAndTargetUrl(proxyConfig.referenceUrl,proxyConfig.targetUrl)
+//            def proxy = Proxy.executeQuery("from Proxy p where p.referenceUrl = :referenceUrl and p.targetUrl = :targetUrl ",[referenceUrl:proxyConfig.referenceUrl,targetUrl:  proxyConfig.targetUrl])
             println "C.4 ${proxy}"
 
             if (proxy && proxyConfig.replace) {

@@ -20,6 +20,7 @@ class UrlMappings {
 //        "/"(redirect: '/annotator/index')
         "500"(view: '/error')
 //        "/menu"(view: '/menu')
+        "/proxytest"(controller: "proxy", action: "init")
         "/"(view: '/index')
 //        "/${clientToken}/version.jsp"(controller: 'annotator', view: "version")
 //        "/about"(controller: 'annotator', view: "about")

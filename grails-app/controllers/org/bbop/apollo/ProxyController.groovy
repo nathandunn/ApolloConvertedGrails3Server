@@ -1,7 +1,9 @@
 package org.bbop.apollo
 
+import grails.converters.JSON
 import grails.gorm.transactions.Transactional
 import org.bbop.apollo.gwt.shared.PermissionEnum
+import org.grails.web.json.JSONObject
 
 import static org.springframework.http.HttpStatus.*
 
@@ -27,6 +29,24 @@ class ProxyController {
 
     def show(Proxy proxyInstance) {
         respond proxyInstance
+    }
+
+    @Transactional
+    def init(){
+        println "intting proxy 2"
+        println "asdfasdfC running! "
+        Proxy proxy = new Proxy(
+            referenceUrl: "http://asdf.com",
+            targetUrl: "http://asdf.com",
+            active: true,
+        ).save(failOnError: true,flush: true)
+        def proxies = Proxy.findAllByActive(true)
+        if(proxies){
+            respond proxies
+        }
+//        proxyService.initProxies()
+        println "D"
+        render  new JSONObject() as JSON
     }
 
     def create() {
