@@ -4,6 +4,10 @@ import grails.converters.JSON
 import grails.core.GrailsApplication
 import grails.gorm.transactions.NotTransactional
 import grails.gorm.transactions.Transactional
+import io.swagger.annotations.Api
+import io.swagger.annotations.ApiImplicitParam
+import io.swagger.annotations.ApiImplicitParams
+import io.swagger.annotations.ApiOperation
 import org.bbop.apollo.event.AnnotationEvent
 import org.bbop.apollo.gwt.shared.ClientTokenGenerator
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
@@ -13,7 +17,6 @@ import org.bbop.apollo.history.FeatureOperation
 import org.bbop.apollo.report.AnnotatorSummary
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
-import io.swagger.annotations.*
 import org.springframework.http.HttpStatus
 
 /**
@@ -92,7 +95,7 @@ class AnnotatorController {
             String location = params.loc
             // assume that the lookup is a symbol lookup value and not a location
             if (location) {
-                if(location.contains(':') && location.contains('..')){
+                if (location.contains(':') && location.contains('..')) {
                     String[] splitString = location.split(':')
                     log.debug "splitString : ${splitString}"
                     String sequenceString = splitString[0]
@@ -111,8 +114,7 @@ class AnnotatorController {
                     }
                     log.debug "fmin ${fmin} . . fmax ${fmax} . . ${sequence}"
 //                    preferenceService.setCurrentSequenceLocation(sequence.name, fmin, fmax, clientToken)
-                }
-                else{
+                } else {
                     searchName = location
                 }
             }
@@ -135,11 +137,11 @@ class AnnotatorController {
         }
 
 
-        if(searchName){
+        if (searchName) {
             queryParamString += "&searchLocation=${searchName}"
         }
         if (queryParamString.contains("http://") || queryParamString.contains("https://") ||
-                queryParamString.contains("ftp://")) {
+            queryParamString.contains("ftp://")) {
             redirect uri: "${request.contextPath}/annotator/index?clientToken=" + clientToken + queryParamString
         } else {
             redirect uri: "/annotator/index?clientToken=" + clientToken + queryParamString
@@ -184,14 +186,14 @@ class AnnotatorController {
  */
     @ApiOperation(value = "Update shallow feature properties", nickname = "/annotator/updateFeature", httpMethod = "POST")
     @ApiImplicitParams([
-            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
-            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
-            , @ApiImplicitParam(name = "uniquename", type = "string", paramType = "query", example = "Uniquename (UUID) of the feature we are editing")
-            , @ApiImplicitParam(name = "name", type = "string", paramType = "query", example = "Updated feature name")
-            , @ApiImplicitParam(name = "symbol", type = "string", paramType = "query", example = "Updated feature symbol")
-            , @ApiImplicitParam(name = "synonyms", type = "string", paramType = "query", example = "Updated synonyms pipe (|) separated")
-            , @ApiImplicitParam(name = "description", type = "string", paramType = "query", example = "Updated feature description")
-            , @ApiImplicitParam(name = "status", type = "string", paramType = "query", example = "Updated status")
+        @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+        , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+        , @ApiImplicitParam(name = "uniquename", type = "string", paramType = "query", example = "Uniquename (UUID) of the feature we are editing")
+        , @ApiImplicitParam(name = "name", type = "string", paramType = "query", example = "Updated feature name")
+        , @ApiImplicitParam(name = "symbol", type = "string", paramType = "query", example = "Updated feature symbol")
+        , @ApiImplicitParam(name = "synonyms", type = "string", paramType = "query", example = "Updated synonyms pipe (|) separated")
+        , @ApiImplicitParam(name = "description", type = "string", paramType = "query", example = "Updated feature description")
+        , @ApiImplicitParam(name = "status", type = "string", paramType = "query", example = "Updated status")
     ]
     )
     @Transactional
@@ -220,7 +222,7 @@ class AnnotatorController {
         log.debug "old synonym names ${oldSynonymNames} ${newSynonymNames} ${synonymsToAdd} ${synonymsToRemove}"
         // add missing
 
-        if(featureOperation==null && (synonymsToRemove.size()>0 || synonymsToAdd.size()>0)){
+        if (featureOperation == null && (synonymsToRemove.size() > 0 || synonymsToAdd.size() > 0)) {
             featureOperation = FeatureOperation.SET_SYNONYMS
         }
 
@@ -236,11 +238,11 @@ class AnnotatorController {
 
         for (syn in synonymsToAdd) {
             Synonym synonym = new Synonym(
-                    name: syn,
+                name: syn,
             ).save(failOnError: true)
             FeatureSynonym featureSynonym = new FeatureSynonym(
-                    feature: feature,
-                    synonym: synonym,
+                feature: feature,
+                synonym: synonym,
             ).save(failOnError: true)
             feature.addToFeatureSynonyms(featureSynonym)
         }
@@ -280,18 +282,18 @@ class AnnotatorController {
         JSONArray newFeaturesJsonArray = new JSONArray()
         newFeaturesJsonArray.add(currentFeatureJsonObject)
         featureEventService.addNewFeatureEvent(featureOperation,
-                feature.name,
-                feature.uniqueName,
-                data,
-                oldFeaturesJsonArray,
-                newFeaturesJsonArray,
-                user)
+            feature.name,
+            feature.uniqueName,
+            data,
+            oldFeaturesJsonArray,
+            newFeaturesJsonArray,
+            user)
 
         AnnotationEvent annotationEvent = new AnnotationEvent(
-                features: updateFeatureContainer
-                , sequence: sequence
-                , operation: AnnotationEvent.Operation.UPDATE
-                , sequenceAlterationEvent: false
+            features: updateFeatureContainer
+            , sequence: sequence
+            , operation: AnnotationEvent.Operation.UPDATE
+            , sequenceAlterationEvent: false
         )
         if (nameChange) {
             requestHandlingService.fireAnnotationEvent(annotationEvent)
@@ -303,12 +305,12 @@ class AnnotatorController {
 
     @ApiOperation(value = "Update exon boundaries", nickname = "/annotator/setExonBoundaries", httpMethod = "POST")
     @ApiImplicitParams([
-            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
-            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
-            , @ApiImplicitParam(name = "uniquename", type = "string", paramType = "query", example = "Uniquename (UUID) of the exon we are editing")
-            , @ApiImplicitParam(name = "fmin", type = "int", paramType = "query", example = "fmin for Exon Location")
-            , @ApiImplicitParam(name = "fmax", type = "int", paramType = "query", example = "fmax for Exon Location")
-            , @ApiImplicitParam(name = "strand", type = "int", paramType = "query", example = "strand for Feature Location 1 or -1")
+        @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+        , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+        , @ApiImplicitParam(name = "uniquename", type = "string", paramType = "query", example = "Uniquename (UUID) of the exon we are editing")
+        , @ApiImplicitParam(name = "fmin", type = "int", paramType = "query", example = "fmin for Exon Location")
+        , @ApiImplicitParam(name = "fmax", type = "int", paramType = "query", example = "fmax for Exon Location")
+        , @ApiImplicitParam(name = "strand", type = "int", paramType = "query", example = "strand for Feature Location 1 or -1")
     ]
     )
     def setExonBoundaries() {
@@ -420,7 +422,7 @@ class AnnotatorController {
                         eq('organism', organism)
                     }
                     if (range) {
-                        Sequence sequenceNameRange = Sequence.findByNameAndOrganism(range.split(":")[0],organism)
+                        Sequence sequenceNameRange = Sequence.findByNameAndOrganism(range.split(":")[0], organism)
                         Integer fmin = Integer.parseInt(range.split(":")[1].split("\\.\\.")[0])
                         Integer fmax = Integer.parseInt(range.split(":")[1].split("\\.\\.")[1])
                         eq('sequence', sequenceNameRange)
@@ -705,7 +707,7 @@ class AnnotatorController {
     }
 
     def about() {
-        log.debug  "about . . . . "
+        log.debug "about . . . . "
     }
 /**
  * This is a very specific method for the GWT interface.
@@ -848,7 +850,13 @@ class AnnotatorController {
         if (permissionService.checkPermissions(PermissionEnum.READ)) {
             log.debug("permissions checked and alive")
             JSONObject a = new JSONObject()
-            a.test = "b"
+            a.test = "c"
+            println "proxyies ${Proxy.count}"
+//            Proxy.findAllByActive(true).each { proxy ->
+            Proxy.all.each { proxy ->
+                println "proxy ${proxy.referenceUrl} ${proxy.targetUrl} ${proxy.active}"
+                a[proxy.targetUrl] = proxy.referenceUrl
+            }
             render a as JSON
         } else {
             log.error("User does not have permissions for the site")
@@ -899,10 +907,10 @@ class AnnotatorController {
 
     @ApiOperation(value = "Get annotators report for group", nickname = "/group/getAnnotatorsReportForGroup", httpMethod = "POST")
     @ApiImplicitParams([
-            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
-            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
-            , @ApiImplicitParam(name = "id", type = "long", paramType = "query", example = "Group ID (or specify the name)")
-            , @ApiImplicitParam(name = "name", type = "string", paramType = "query", example = "Group name")
+        @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+        , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+        , @ApiImplicitParam(name = "id", type = "long", paramType = "query", example = "Group ID (or specify the name)")
+        , @ApiImplicitParam(name = "name", type = "string", paramType = "query", example = "Group name")
     ]
     )
     def getAnnotatorsReportForGroup() {
@@ -945,16 +953,16 @@ class AnnotatorController {
         export()
     }
 
-    private static compareNullToBlank(a,b){
-        if((a==null && b=="") || (a=="" && b==null)) return true
-        return a==b
+    private static compareNullToBlank(a, b) {
+        if ((a == null && b == "") || (a == "" && b == null)) return true
+        return a == b
     }
 
     private FeatureOperation detectFeatureOperation(Feature feature, JSONObject data) {
-        if (!compareNullToBlank(feature.name,data.name)) return FeatureOperation.SET_NAME
-        if (!compareNullToBlank(feature.symbol,data.symbol)) return FeatureOperation.SET_SYMBOL
-        if (!compareNullToBlank(feature.description,data.description)) return FeatureOperation.SET_DESCRIPTION
-        if (!compareNullToBlank(feature.status,data.status)) return FeatureOperation.SET_STATUS
+        if (!compareNullToBlank(feature.name, data.name)) return FeatureOperation.SET_NAME
+        if (!compareNullToBlank(feature.symbol, data.symbol)) return FeatureOperation.SET_SYMBOL
+        if (!compareNullToBlank(feature.description, data.description)) return FeatureOperation.SET_DESCRIPTION
+        if (!compareNullToBlank(feature.status, data.status)) return FeatureOperation.SET_STATUS
 
         log.warn("Updated generic feature")
         null
