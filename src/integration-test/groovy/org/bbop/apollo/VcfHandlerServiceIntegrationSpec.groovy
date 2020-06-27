@@ -3,18 +3,29 @@ package org.bbop.apollo
 import grails.converters.JSON
 import grails.testing.mixin.integration.Integration
 import grails.transaction.Rollback
+import org.grails.datastore.gorm.neo4j.Neo4jDatastore
 
 //import grails.test.spock.IntegrationSpec
 //import org.grails.web.json.JSONObject
 import org.grails.web.json.JSONObject
+import org.springframework.beans.factory.annotation.Autowired
+import spock.lang.AutoCleanup
+import spock.lang.Shared
 
-@Integration
+@Integration(applicationClass = Application)
 @Rollback
 class VcfHandlerServiceIntegrationSpec extends AbstractIntegrationSpec {
 
+
+    @Autowired
     def vcfHandlerService
+    @Autowired
     def requestHandlingService
 
+//    @Shared @AutoCleanup Neo4jDatastore datastore = new Neo4jDatastore(getClass().getPackage())
+
+
+    @Rollback
     void "Add a handful of variants and export as VCF"() {
 
         given: "3 variants"
