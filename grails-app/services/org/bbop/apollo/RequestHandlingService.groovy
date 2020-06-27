@@ -10,7 +10,7 @@ import org.bbop.apollo.sequence.Strand
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONException
 import org.grails.web.json.JSONObject
-import org.hibernate.FetchMode
+//import org.hibernate.FetchMode
 
 /**
  * This class is responsible for handling JSON requests from the AnnotationEditorController and routing
@@ -667,34 +667,36 @@ class RequestHandlingService {
         }
         println "getFeatures for organism -> ${sequence.organism.commonName} and ${sequence.name}"
 
-        def features = Feature.createCriteria().listDistinct {
-            featureLocations {
-                eq('sequence', sequence)
-            }
-            fetchMode 'owners', FetchMode.JOIN
-            fetchMode 'featureLocations', FetchMode.JOIN
-            fetchMode 'featureLocations.sequence', FetchMode.JOIN
-            fetchMode 'featureProperties', FetchMode.JOIN
-            fetchMode 'featureDBXrefs', FetchMode.JOIN
-            fetchMode 'status', FetchMode.JOIN
-            fetchMode 'parentFeatureRelationships', FetchMode.JOIN
-            fetchMode 'childFeatureRelationships', FetchMode.JOIN
-            fetchMode 'childFeatureRelationships.parentFeature', FetchMode.JOIN
-            fetchMode 'childFeatureRelationships.parentFeature.featureLocations', FetchMode.JOIN
-            fetchMode 'childFeatureRelationships.parentFeature.featureLocations.sequence', FetchMode.JOIN
-            fetchMode 'parentFeatureRelationships.parentFeature', FetchMode.JOIN
-            fetchMode 'parentFeatureRelationships.parentFeature.featureLocations', FetchMode.JOIN
-            fetchMode 'parentFeatureRelationships.parentFeature.featureLocations.sequence', FetchMode.JOIN
-            fetchMode 'parentFeatureRelationships.childFeature', FetchMode.JOIN
-            fetchMode 'parentFeatureRelationships.childFeature.parentFeatureRelationships', FetchMode.JOIN
-            fetchMode 'parentFeatureRelationships.childFeature.childFeatureRelationships', FetchMode.JOIN
-            fetchMode 'parentFeatureRelationships.childFeature.featureLocations', FetchMode.JOIN
-            fetchMode 'parentFeatureRelationships.childFeature.featureLocations.sequence', FetchMode.JOIN
-            fetchMode 'parentFeatureRelationships.childFeature.featureProperties', FetchMode.JOIN
-            fetchMode 'parentFeatureRelationships.childFeature.featureDBXrefs', FetchMode.JOIN
-            fetchMode 'parentFeatureRelationships.childFeature.owners', FetchMode.JOIN
-            'in'('class', viewableAnnotationTranscriptList + viewableAnnotationFeatureList + viewableSequenceAlterationList)
-        }
+        // TODO: rewrite this bad boy
+        def features = []
+//        def features = Feature.createCriteria().listDistinct {
+//            featureLocations {
+//                eq('sequence', sequence)
+//            }
+//            fetchMode 'owners', FetchMode.JOIN
+//            fetchMode 'featureLocations', FetchMode.JOIN
+//            fetchMode 'featureLocations.sequence', FetchMode.JOIN
+//            fetchMode 'featureProperties', FetchMode.JOIN
+//            fetchMode 'featureDBXrefs', FetchMode.JOIN
+//            fetchMode 'status', FetchMode.JOIN
+//            fetchMode 'parentFeatureRelationships', FetchMode.JOIN
+//            fetchMode 'childFeatureRelationships', FetchMode.JOIN
+//            fetchMode 'childFeatureRelationships.parentFeature', FetchMode.JOIN
+//            fetchMode 'childFeatureRelationships.parentFeature.featureLocations', FetchMode.JOIN
+//            fetchMode 'childFeatureRelationships.parentFeature.featureLocations.sequence', FetchMode.JOIN
+//            fetchMode 'parentFeatureRelationships.parentFeature', FetchMode.JOIN
+//            fetchMode 'parentFeatureRelationships.parentFeature.featureLocations', FetchMode.JOIN
+//            fetchMode 'parentFeatureRelationships.parentFeature.featureLocations.sequence', FetchMode.JOIN
+//            fetchMode 'parentFeatureRelationships.childFeature', FetchMode.JOIN
+//            fetchMode 'parentFeatureRelationships.childFeature.parentFeatureRelationships', FetchMode.JOIN
+//            fetchMode 'parentFeatureRelationships.childFeature.childFeatureRelationships', FetchMode.JOIN
+//            fetchMode 'parentFeatureRelationships.childFeature.featureLocations', FetchMode.JOIN
+//            fetchMode 'parentFeatureRelationships.childFeature.featureLocations.sequence', FetchMode.JOIN
+//            fetchMode 'parentFeatureRelationships.childFeature.featureProperties', FetchMode.JOIN
+//            fetchMode 'parentFeatureRelationships.childFeature.featureDBXrefs', FetchMode.JOIN
+//            fetchMode 'parentFeatureRelationships.childFeature.owners', FetchMode.JOIN
+//            'in'('class', viewableAnnotationTranscriptList + viewableAnnotationFeatureList + viewableSequenceAlterationList)
+//        }
 
 
         JSONArray jsonFeatures = new JSONArray()

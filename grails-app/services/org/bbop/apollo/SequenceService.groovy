@@ -13,7 +13,6 @@ import org.bbop.apollo.sequence.Strand
 import org.bbop.apollo.sequence.TranslationTable
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
-import org.hibernate.sql.JoinType
 
 import java.util.zip.CRC32
 import java.util.zip.GZIPInputStream
@@ -21,7 +20,6 @@ import java.util.zip.GZIPInputStream
 @Transactional
 class SequenceService {
 
-    def configWrapperService
     def grailsApplication
     def featureService
     def transcriptService
@@ -33,10 +31,6 @@ class SequenceService {
     def organismService
     def trackService
 
-
-    List<FeatureLocation> getFeatureLocations(Sequence sequence) {
-        FeatureLocation.findAllBySequence(sequence)
-    }
 
     /**
      * Get residues from sequence . . . could be multiple locations

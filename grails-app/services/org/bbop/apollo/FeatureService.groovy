@@ -12,7 +12,7 @@ import org.bbop.apollo.sequence.TranslationTable
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONException
 import org.grails.web.json.JSONObject
-import org.hibernate.FlushMode
+//import org.hibernate.FlushMode
 
 @Transactional(readOnly = true)
 class FeatureService {
@@ -2930,10 +2930,10 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
     int fmin = feature.fmin
     int fmax = feature.fmax
     Sequence sequence = feature.featureLocation.sequence
-    sessionFactory.currentSession.flushMode = FlushMode.MANUAL
+//    sessionFactory.currentSession.flushMode = FlushMode.MANUAL
 
     List<SequenceAlterationArtifact> sequenceAlterations = SequenceAlterationArtifact.executeQuery("select distinct sa from SequenceAlterationArtifact sa join sa.featureLocations fl where ((fl.fmin >= :fmin and fl.fmin <= :fmax) or (fl.fmax >= :fmin and fl.fmax <= :fmax)) and fl.sequence = :seqId", [fmin: fmin, fmax: fmax, seqId: sequence])
-    sessionFactory.currentSession.flushMode = FlushMode.AUTO
+//    sessionFactory.currentSession.flushMode = FlushMode.AUTO
 
     return sequenceAlterations
   }

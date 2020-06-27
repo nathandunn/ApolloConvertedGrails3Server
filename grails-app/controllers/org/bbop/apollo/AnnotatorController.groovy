@@ -13,7 +13,6 @@ import org.bbop.apollo.history.FeatureOperation
 import org.bbop.apollo.report.AnnotatorSummary
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
-import org.hibernate.FetchMode
 import io.swagger.annotations.*
 import org.springframework.http.HttpStatus
 
@@ -493,45 +492,47 @@ class AnnotatorController {
             }
 
             //step 2 does a distinct query with extra attributes added in
-            def features = pagination.size() == 0 ? [] : Feature.createCriteria().listDistinct {
-                'in'('id', pagination.collect { it.id })
-                featureLocations {
-                    if (sort == "length") {
-                        order('length', sortorder)
-                    }
-                    sequence {
-                        if (sort == "sequence") {
-                            order('name', sortorder)
-                        }
-                    }
-                }
-                if (sort == "name") {
-                    order('name', sortorder)
-                }
-                if (sort == "date") {
-                    order('lastUpdated', sortorder)
-                }
-                if (showOnlyGoAnnotations) {
-                    fetchMode 'goAnnotations', FetchMode.JOIN
-                }
-                fetchMode 'owners', FetchMode.JOIN
-                fetchMode 'featureSynonyms', FetchMode.JOIN
-                fetchMode 'featureDBXrefs', FetchMode.JOIN
-                fetchMode 'featureProperties', FetchMode.JOIN
-                fetchMode 'featureLocations', FetchMode.JOIN
-                fetchMode 'featureLocations.sequence', FetchMode.JOIN
-                fetchMode 'parentFeatureRelationships', FetchMode.JOIN
-                fetchMode 'parentFeatureRelationships.childFeature', FetchMode.JOIN
-                fetchMode 'parentFeatureRelationships.parentFeature', FetchMode.JOIN
-                fetchMode 'parentFeatureRelationships.childFeature.parentFeatureRelationships', FetchMode.JOIN
-                fetchMode 'parentFeatureRelationships.childFeature.parentFeatureRelationships.childFeature', FetchMode.JOIN
-                fetchMode 'parentFeatureRelationships.childFeature.parentFeatureRelationships.childFeature.featureLocations', FetchMode.JOIN
-                fetchMode 'parentFeatureRelationships.childFeature.parentFeatureRelationships.childFeature.featureLocations.sequence', FetchMode.JOIN
-                fetchMode 'parentFeatureRelationships.childFeature.childFeatureRelationships', FetchMode.JOIN
-                fetchMode 'parentFeatureRelationships.childFeature.featureLocations', FetchMode.JOIN
-                fetchMode 'parentFeatureRelationships.childFeature.featureLocations.sequence', FetchMode.JOIN
-                fetchMode 'parentFeatureRelationships.childFeature.owners', FetchMode.JOIN
-            }
+            // TODO: rewrite this bad boy
+            def features = []
+//            def features = pagination.size() == 0 ? [] : Feature.createCriteria().listDistinct {
+//                'in'('id', pagination.collect { it.id })
+//                featureLocations {
+//                    if (sort == "length") {
+//                        order('length', sortorder)
+//                    }
+//                    sequence {
+//                        if (sort == "sequence") {
+//                            order('name', sortorder)
+//                        }
+//                    }
+//                }
+//                if (sort == "name") {
+//                    order('name', sortorder)
+//                }
+//                if (sort == "date") {
+//                    order('lastUpdated', sortorder)
+//                }
+//                if (showOnlyGoAnnotations) {
+//                    fetchMode 'goAnnotations', FetchMode.JOIN
+//                }
+//                fetchMode 'owners', FetchMode.JOIN
+//                fetchMode 'featureSynonyms', FetchMode.JOIN
+//                fetchMode 'featureDBXrefs', FetchMode.JOIN
+//                fetchMode 'featureProperties', FetchMode.JOIN
+//                fetchMode 'featureLocations', FetchMode.JOIN
+//                fetchMode 'featureLocations.sequence', FetchMode.JOIN
+//                fetchMode 'parentFeatureRelationships', FetchMode.JOIN
+//                fetchMode 'parentFeatureRelationships.childFeature', FetchMode.JOIN
+//                fetchMode 'parentFeatureRelationships.parentFeature', FetchMode.JOIN
+//                fetchMode 'parentFeatureRelationships.childFeature.parentFeatureRelationships', FetchMode.JOIN
+//                fetchMode 'parentFeatureRelationships.childFeature.parentFeatureRelationships.childFeature', FetchMode.JOIN
+//                fetchMode 'parentFeatureRelationships.childFeature.parentFeatureRelationships.childFeature.featureLocations', FetchMode.JOIN
+//                fetchMode 'parentFeatureRelationships.childFeature.parentFeatureRelationships.childFeature.featureLocations.sequence', FetchMode.JOIN
+//                fetchMode 'parentFeatureRelationships.childFeature.childFeatureRelationships', FetchMode.JOIN
+//                fetchMode 'parentFeatureRelationships.childFeature.featureLocations', FetchMode.JOIN
+//                fetchMode 'parentFeatureRelationships.childFeature.featureLocations.sequence', FetchMode.JOIN
+//                fetchMode 'parentFeatureRelationships.childFeature.owners', FetchMode.JOIN
+//            }
             long durationInMilliseconds = System.currentTimeMillis() - start;
             log.debug "criteria query ${durationInMilliseconds}"
 
@@ -843,9 +844,12 @@ class AnnotatorController {
     def ping() {
         log.debug "Ping: Evaluating Saves"
 //        preferenceService.evaluateSaves()
+        println "pinging ingi gin g "
         if (permissionService.checkPermissions(PermissionEnum.READ)) {
             log.debug("permissions checked and alive")
-            render new JSONObject() as JSON
+            JSONObject a = new JSONObject()
+            a.test = "b"
+            render a as JSON
         } else {
             log.error("User does not have permissions for the site")
             redirect(uri: "/auth/login")
