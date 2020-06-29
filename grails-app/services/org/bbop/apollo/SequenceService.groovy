@@ -210,7 +210,7 @@ class SequenceService {
         for(def o in Organism.all){
             println "organisms ${o as JSON}"
         }
-        Organism organism = Organism.findById(sequence.organismId)
+        Organism organism = Organism.findById(sequence.organismId,[fetch:[organism:'join']])
         println "output organism $organism"
 
         if (organism.genomeFasta) {

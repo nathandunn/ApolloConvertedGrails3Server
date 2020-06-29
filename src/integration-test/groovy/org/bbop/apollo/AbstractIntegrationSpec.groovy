@@ -65,6 +65,7 @@ class AbstractIntegrationSpec extends Specification {
         Organism organism = new Organism(
             directory: "src/integration-test/groovy/resources/sequences/honeybee-Group1.10/"
             , commonName: "sampleAnimal"
+            , id: 12313
             , genus: "Sample"
             , species: "animal"
         ).save(failOnError: true, flush: true)
@@ -79,11 +80,12 @@ class AbstractIntegrationSpec extends Specification {
             , name: "Group1.10"
         ).save(failOnError: true, flush: true)
 
+
         println "organism ${organism} abnd ${organism as JSON}"
         println "sequence ${sequence} and ${sequence as JSON}"
         println "sequence organism ${sequence.organism} "
 
-        organism.addToSequences(sequence)
+//        organism.addToSequences(sequence)
         println "2 organism ${organism} abnd ${organism as JSON}"
         println "2 sequence ${sequence} and ${sequence as JSON}"
         println "2 sequence organism ${sequence.organism} "

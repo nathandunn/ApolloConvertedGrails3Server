@@ -424,8 +424,26 @@ class PermissionService {
 //        if (!sequenceName) {
 //            sequence = UserOrganismPreference.findByClientTokenAndOrganism(sequenceName, organism, [max: 1, sort: "lastUpdated", order: "desc"])?.sequence
 //        } else {
-        Sequence sequence = Sequence.findByNameAndOrganism(sequenceName, organism, [fetch: [organism: 'join']])
-        println "seq ${sequence} org ${organism} , sorg ${sequence.organismId}, ${sequence.organism}"
+        println "sequence name ${sequenceName} and ${organism}"
+        for (s in Sequence.all) {
+            println "sequence: ${s as JSON}"
+            println "seq name: ${s.name}"
+            println "seq org: ${s.organism}"
+            println "seq org id: ${s.organismId}"
+        }
+        Sequence sequenceJoin = Sequence.findByNameAndOrganismId(sequenceName, organism.id, [fetch: [organism: 'join']])
+        println "sequence join json ${sequenceJoin as JSON}"
+        Sequence sequence = Sequence.findByNameAndOrganismId(sequenceName, organism.id)
+        println "sequence name ${sequenceName} $sequence"
+        println "sequence json ${sequence as JSON}"
+        println "input ${sequenceName} ${organism.id}"
+        def retrievedSequences = Sequence.createCriteria().list {
+            eq("name", sequenceName)
+            eq("organismId", organism.id as Long)
+//            join("organism")
+        }
+        println "retrieved sequences ${retrievedSequences as JSON}"
+//        println "seq ${sequence} org ${organism} , sorg ${sequence.organismId}, ${sequence.organism}"
 //            if (!sequence) {
 //                throw new AnnotationException("No sequence found for name '${sequenceName}' and organism '${organism?.commonName}'")
 //            }

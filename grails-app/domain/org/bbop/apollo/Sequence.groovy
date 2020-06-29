@@ -7,6 +7,7 @@ class Sequence {
         start nullable: false
         end nullable: false
         organism nullable: true
+        organismId nullable: true
         seqChunkSize nullable: true
     }
 
@@ -29,6 +30,7 @@ class Sequence {
 
     String name
     Organism organism
+    Long organismId
     Integer length
     Integer seqChunkSize
     Integer start
