@@ -5,8 +5,6 @@ import org.bbop.apollo.go.GoAnnotation
 
 class Feature implements Ontological{
 
-    static auditable = true
-
     static constraints = {
         name nullable: false
         uniqueName nullable: false

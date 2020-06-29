@@ -6,8 +6,6 @@ import groovy.transform.EqualsAndHashCode
 @EqualsAndHashCode
 class Organism implements JsonMetadata {
 
-    static auditable = true
-
     static constraints = {
         comment nullable: true
         abbreviation nullable: true

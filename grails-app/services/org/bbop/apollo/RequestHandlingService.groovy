@@ -668,7 +668,7 @@ class RequestHandlingService {
         println "getFeatures for organism -> ${sequence.organism.commonName} and ${sequence.name}"
 
         // TODO: rewrite this bad boy
-        def features = []
+//        def features = []
 //        def features = Feature.createCriteria().listDistinct {
 //            featureLocations {
 //                eq('sequence', sequence)
@@ -697,6 +697,34 @@ class RequestHandlingService {
 //            fetchMode 'parentFeatureRelationships.childFeature.owners', FetchMode.JOIN
 //            'in'('class', viewableAnnotationTranscriptList + viewableAnnotationFeatureList + viewableSequenceAlterationList)
 //        }
+        def features = Feature.createCriteria().listDistinct {
+            featureLocations {
+                eq('sequence', sequence)
+            }
+            join 'owners'
+            join 'featureLocations'
+            join 'featureLocations.sequence'
+            join 'featureProperties'
+            join 'featureDBXrefs'
+            join 'status'
+            join 'parentFeatureRelationships'
+            join 'childFeatureRelationships'
+            join 'childFeatureRelationships.parentFeature'
+            join 'childFeatureRelationships.parentFeature.featureLocations'
+            join 'childFeatureRelationships.parentFeature.featureLocations.sequence'
+            join 'parentFeatureRelationships.parentFeature'
+            join 'parentFeatureRelationships.parentFeature.featureLocations'
+            join 'parentFeatureRelationships.parentFeature.featureLocations.sequence'
+            join 'parentFeatureRelationships.childFeature'
+            join 'parentFeatureRelationships.childFeature.parentFeatureRelationships'
+            join 'parentFeatureRelationships.childFeature.childFeatureRelationships'
+            join 'parentFeatureRelationships.childFeature.featureLocations'
+            join 'parentFeatureRelationships.childFeature.featureLocations.sequence'
+            join 'parentFeatureRelationships.childFeature.featureProperties'
+            join 'parentFeatureRelationships.childFeature.featureDBXrefs'
+            join 'parentFeatureRelationships.childFeature.owners'
+//            'in'('class', viewableAnnotationTranscriptList + viewableAnnotationFeatureList + viewableSequenceAlterationList)
+        }
 
 
         JSONArray jsonFeatures = new JSONArray()
@@ -775,9 +803,10 @@ class RequestHandlingService {
 
         println "addTranscript ${inputObject.toString()}"
         Sequence sequence = permissionService.checkPermissions(inputObject, PermissionEnum.WRITE)
-        println "sequence: ${sequence}"
+        println "sequence: ${sequence as JSON}"
         println "organism: ${sequence.organism}"
         println "number of features: ${featuresArray?.size()}"
+        println "add transcript features array ${featuresArray as JSON}"
 
         boolean useName = false
         boolean useCDS = configWrapperService.useCDS()

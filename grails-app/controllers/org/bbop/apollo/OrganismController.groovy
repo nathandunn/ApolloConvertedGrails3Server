@@ -1535,7 +1535,8 @@ class OrganismController {
               order('name', "asc")
             }
           }
-          'in'('class', requestHandlingService.viewableAnnotationList)
+          // TODO: should be type
+//          'in'('class', requestHandlingService.viewableAnnotationList)
         }
         Integer annotationCount = list.size()
         Integer sequenceCount = Sequence.countByOrganism(organism)

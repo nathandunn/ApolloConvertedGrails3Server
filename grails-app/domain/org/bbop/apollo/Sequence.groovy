@@ -2,8 +2,6 @@ package org.bbop.apollo
 
 class Sequence {
 
-    static auditable = true
-
     static constraints = {
         name nullable: false
         start nullable: false

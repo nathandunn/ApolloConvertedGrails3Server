@@ -40,7 +40,7 @@ class DomainMarshallerService {
             returnArray['directory'] = it.directory
             returnArray['annotationCount'] = it.annotationCount
             returnArray['variantEffectCount'] = it.variantEffectCount
-            returnArray['officialGeneSetTrack'] = it?.officialGeneSetTrack
+//            returnArray['officialGeneSetTrack'] = it?.officialGeneSetTrack
             return returnArray
         }
 
@@ -48,6 +48,7 @@ class DomainMarshallerService {
             def returnArray = [:]
             returnArray['id'] = it.id
             returnArray['name'] = it.name
+            returnArray['organismId'] = it.organismId
             returnArray['length'] = it?.length
             returnArray['start'] = it?.start
             returnArray['end'] = it.end

@@ -32,6 +32,7 @@ class FeatureEventServiceIntegrationSpec extends AbstractIntegrationSpec {
     void "we can undo and redo a transcript split"() {
 
         given: "transcript data"
+        println "pre-setup"
         setupDefaultUserOrg()
         String jsonString = "{${testCredentials} \"track\":\"Group1.10\",\"features\":[{\"location\":{\"fmin\":938708,\"fmax\":939601,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"mRNA\"},\"name\":\"GB40736-RA\",\"children\":[{\"location\":{\"fmin\":938708,\"fmax\":938770,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"exon\"}},{\"location\":{\"fmin\":939570,\"fmax\":939601,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"exon\"}},{\"location\":{\"fmin\":938708,\"fmax\":939601,\"strand\":-1},\"type\":{\"cv\":{\"name\":\"sequence\"},\"name\":\"CDS\"}}]}],\"operation\":\"add_transcript\"}"
         String splitString = "{ ${testCredentials} \"track\": \"Group1.10\", \"features\": [ { \"uniquename\": \"@EXON_1@\" }, { \"uniquename\": \"@EXON_2@\" } ], \"operation\": \"split_transcript\" }"
@@ -42,6 +43,7 @@ class FeatureEventServiceIntegrationSpec extends AbstractIntegrationSpec {
         when: "we insert a transcript"
         println "org count ${Organism.count} and credentials ${getTestCredentials()}"
         JSONObject returnObject = requestHandlingService.addTranscript(JSON.parse(jsonString) as JSONObject)
+        println "return object ${returnObject}"
 
         then: "we have a transcript"
         assert Exon.count == 2
