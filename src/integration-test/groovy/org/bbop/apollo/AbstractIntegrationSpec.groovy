@@ -1,5 +1,6 @@
 package org.bbop.apollo
 
+import grails.converters.JSON
 import grails.testing.mixin.integration.Integration
 import grails.transaction.Rollback
 import org.apache.shiro.SecurityUtils
@@ -67,7 +68,7 @@ class AbstractIntegrationSpec extends Specification{
                 ,commonName: "sampleAnimal"
                 ,genus: "Sample"
                 ,species: "animal"
-        ).save(failOnError: true)
+        ).save(failOnError: true,flush: true)
 
         Sequence sequence = new Sequence(
                 length: 1405242
@@ -76,7 +77,10 @@ class AbstractIntegrationSpec extends Specification{
                 ,end: 1405242
                 ,organism: organism
                 ,name: "Group1.10"
-        ).save(failOnError: true)
+        ).save(failOnError: true,flush: true)
+
+        println "organism ${organism} abnd ${organism as JSON}"
+        println "sequence ${sequence} and ${sequence as JSON}"
 
         organism.addToSequences(sequence)
         organism.save(flush: true, failOnError: true)

@@ -204,7 +204,11 @@ class SequenceService {
     }
 
     String getRawResiduesFromSequence(Sequence sequence, int fmin, int fmax) {
-        if (sequence.organism.genomeFasta) {
+        println "inuput sequence ${sequence}, $sequence.organism , $sequence.organismId "
+        Organism organism = Organism.findById(sequence.organismId)
+        println "output organism $organism"
+
+        if (organism.genomeFasta) {
             getRawResiduesFromSequenceFasta(sequence, fmin, fmax)
         } else {
             getRawResiduesFromSequenceChunks(sequence, fmin, fmax)

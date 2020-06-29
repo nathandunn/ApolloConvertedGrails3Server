@@ -66,11 +66,13 @@ class NameService {
     }
 
 
+    // TODO: add proper criteria query here
     boolean isUniqueGene(Organism organism,String name){
-        Integer numberResults = Gene.findAllByName(name).findAll(){
-            it.featureLocation.sequence.organism == organism
-        }.size()
-        return 0 == numberResults
+//        Integer numberResults = Gene.findAllByName(name).findAll(){
+//            it.featureLocation.sequence.organism == organism
+//        }.size()
+//        return 0 == numberResults
+        return true
     }
 
     boolean isUnique(Organism organism,String name){
