@@ -1106,8 +1106,38 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
      * @return
      */
     List<SequenceAlterationArtifact> getAllSequenceAlterationsForFeature(Feature feature) {
-        List<Sequence> sequence = Sequence.executeQuery("select s from Feature  f join f.featureLocations fl join fl.sequence s where f = :feature ", [feature: feature])
-        SequenceAlterationArtifact.executeQuery("select sa from SequenceAlterationArtifact sa join sa.featureLocations fl join fl.sequence s where s = :sequence order by fl.fmin asc ", [sequence: sequence])
+//        Sequence sequence = Sequence.executeQuery("select s from Feature  f join f.featureLocations fl join fl.sequence s where f = :feature ", [feature: feature]).first()
+//        Sequence.createCriteria().listDistinct {
+//        }
+        def sequences = Sequence.createCriteria().listDistinct{
+            featureLocations{
+                eq 'feature', feature
+            }
+        }
+        // TODO: should not need to assert this yet
+
+//        assert sequences && sequences.size()>0
+////        def featureLocations = FeatureLocation.createCriteria().list{
+////            eq "feature", feature
+////            join 'sequence'
+////        }
+//        def featureLocations2 = FeatureLocation.findAllByFeature(feature,[fetch:[organism:'join']])
+        println "feature locations ${sequences}"
+//        println "feature locations 2: ${featureLocations2}"
+//        if(sequences){
+//            SequenceAlterationArtifact.executeQuery("select sa from SequenceAlterationArtifact sa join sa.featureLocations fl join fl.sequence s where s = :sequence order by fl.fmin asc ", [sequence: sequences.first()])
+//        SequenceAlterationArtifact.executeQuery("select sa from SequenceAlterationArtifact sa join sa.featureLocations fl join fl.sequence s where s = :sequence order by fl.fmin asc ", [sequence: sequences.first()])
+        Collection<SequenceAlterationArtifact> features = (Collection<SequenceAlterationArtifact>) SequenceAlterationArtifact.createCriteria().listDistinct {
+            featureLocations {
+                eq "sequence", sequence
+                order fmin
+            }
+        }
+        return features
+//        }
+//        else{
+//            return []
+//        }
     }
 
     List<SequenceAlterationArtifact> getFrameshiftsAsAlterations(Transcript transcript) {
