@@ -58,7 +58,10 @@ class UserController {
             }
             List<String> allUserGroupsName = allUserGroups.name
             Map<String, List<UserOrganismPermission>> userOrganismPermissionMap = new HashMap<>()
-            List<UserOrganismPermission> userOrganismPermissionList = UserOrganismPermission.findAllByOrganismInList(allowableOrganisms as List)
+            println "D.1 ${allowableOrganisms}"
+            // TODO: fix query
+//            List<UserOrganismPermission> userOrganismPermissionList = UserOrganismPermission.findAllByOrganismInList(allowableOrganisms as List)
+            List<UserOrganismPermission> userOrganismPermissionList = []
             for (UserOrganismPermission userOrganismPermission in userOrganismPermissionList) {
                 List<UserOrganismPermission> userOrganismPermissionListTemp = userOrganismPermissionMap.get(userOrganismPermission.user.username)
                 if (userOrganismPermissionListTemp == null) {
@@ -108,6 +111,7 @@ class UserController {
             }.unique { a, b ->
                 a.id <=> b.id
             }
+            println "G"
 
             int userCount = User.withCriteria {
                 if (dataObject.userId && dataObject.userId in Integer) {
@@ -130,6 +134,8 @@ class UserController {
             }.unique { a, b ->
                 a.id <=> b.id
             }.size()
+
+            println "found uesers ${users}"
 
             users.each {
                 def userObject = new JSONObject()
@@ -220,7 +226,8 @@ class UserController {
         catch (Exception e) {
             response.status = HttpStatus.INTERNAL_SERVER_ERROR.value()
             def error = [error: e.message]
-            log.error error
+            println "error: ${error as JSON}"
+//            log.error error
             render error as JSON
         }
     }

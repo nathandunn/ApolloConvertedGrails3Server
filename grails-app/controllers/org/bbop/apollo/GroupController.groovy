@@ -63,7 +63,9 @@ class GroupController {
 
             Map<String, List<GroupOrganismPermission>> groupOrganismPermissionMap = new HashMap<>()
 
-            List<GroupOrganismPermission> groupOrganismPermissionList = GroupOrganismPermission.findAllByOrganismInList(allowableOrganisms as List)
+//            List<GroupOrganismPermission> groupOrganismPermissionList = GroupOrganismPermission.findAllByOrganismInList(allowableOrganisms as List)
+            // TODO: fix this
+            List<GroupOrganismPermission> groupOrganismPermissionList = []
             for (GroupOrganismPermission groupOrganismPermission in groupOrganismPermissionList) {
                 List<GroupOrganismPermission> groupOrganismPermissionListTemp = groupOrganismPermissionMap.get(groupOrganismPermission.group.name)
                 if (groupOrganismPermissionListTemp == null) {
@@ -157,7 +159,8 @@ class GroupController {
         catch (Exception e) {
             response.status = HttpStatus.INTERNAL_SERVER_ERROR.value()
             def error = [error: e.message]
-            log.error error
+//            log.error error
+            println "Error: ${error as JSON}"
             render error as JSON
         }
     }

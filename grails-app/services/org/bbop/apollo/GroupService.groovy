@@ -29,7 +29,9 @@ class GroupService {
             // assign group creator as group admin
             def creatorId = group.getMetaData(FeatureStringEnum.CREATOR.value)
             User creator = User.findById(creatorId)
-            group.addToAdmin(creator)
+            println "find the creator ID ${creatorId}, ${creator}"
+            GroupPermission.executeQuery("MATCH (g:UserGroup { name: ${name}}), (u:User { id:${creator.id}} ) create (g)-[admin:ADMIN]->(u)")
+//            group.addToAdmin(creator)
             log.debug "Add metadata creator: ${group.getMetaData(FeatureStringEnum.CREATOR.value)}"
 
             log.info "Added group ${group.name}"
