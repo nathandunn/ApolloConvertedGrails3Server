@@ -2,6 +2,12 @@
 // config files can be ConfigSlurper scripts, Java properties files, or classes
 // in the classpath in ConfigSlurper format
 
+grails.gorm.default.mapping = {
+//    cache true
+    id generator:'NATIVE'
+    failOnError: true
+}
+
 // if (System.properties["${appName}.config.location"]) {
 //    grails.config.locations << "file:" + System.properties["${appName}.config.location"]
 // }

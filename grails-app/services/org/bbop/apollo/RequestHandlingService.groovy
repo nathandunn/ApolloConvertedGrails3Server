@@ -801,10 +801,10 @@ class RequestHandlingService {
         JSONArray featuresArray = inputObject.getJSONArray(FeatureStringEnum.FEATURES.value)
         JSONObject returnObject = jsonWebUtilityService.createJSONFeatureContainer()
 
-        println "addTranscript ${inputObject.toString()}"
+        println "addTranscript 0000 ${inputObject.toString()}"
         Sequence sequence = permissionService.checkPermissions(inputObject, PermissionEnum.WRITE)
-        println "sequence: ${sequence as JSON}"
-        println "organism: ${sequence.organism}"
+        println "sequence AAA: ${sequence as JSON}"
+        println "organism BBB: ${sequence.organism}"
         println "number of features: ${featuresArray?.size()}"
         println "add transcript features array ${featuresArray as JSON}"
 
@@ -820,23 +820,30 @@ class RequestHandlingService {
             suppressEvents = inputObject.getBoolean(FeatureStringEnum.SUPPRESS_EVENTS.value)
         }
 
+        println "C"
+
         List<Transcript> transcriptList = new ArrayList<>()
         def transcriptJSONList = []
         for (int i = 0; i < featuresArray.size(); i++) {
             JSONObject jsonTranscript = featuresArray.getJSONObject(i)
+            println "D"
             jsonTranscript = permissionService.copyRequestValues(inputObject, jsonTranscript)
             if (jsonTranscript.has(FeatureStringEnum.USE_CDS.value)) {
                 useCDS = jsonTranscript.getBoolean(FeatureStringEnum.USE_CDS.value)
             }
+            println "E"
             useName = jsonTranscript.has(FeatureStringEnum.USE_NAME.value) ? jsonTranscript.getBoolean(FeatureStringEnum.USE_NAME.value) : false
             Transcript transcript = featureService.generateTranscript(jsonTranscript, sequence, suppressHistory, useCDS, useName)
+            println "F"
 
             // should automatically write to history
             transcript.save(flush: true)
             transcriptList.add(transcript)
+            println "G"
 
             Gene gene = transcriptService.getGene(transcript)
             inputObject.put(FeatureStringEnum.NAME.value, gene.name)
+            println "H"
 
             if (!suppressHistory) {
                 featureService.addOwnersByString(inputObject.username, gene, transcript)
@@ -844,20 +851,29 @@ class RequestHandlingService {
                 featureEventService.addNewFeatureEventWithUser(FeatureOperation.ADD_TRANSCRIPT, transcriptService.getGene(transcript).name, transcript.uniqueName, inputObject, json, permissionService.getCurrentUser(inputObject))
                 transcriptJSONList += json
             }
+
+            println "I"
         }
 
+        println "J"
 
         returnObject.put(FeatureStringEnum.FEATURES.value, transcriptJSONList as JSONArray)
+        println "K"
+
 
         if (!suppressEvents) {
+            println "L"
             AnnotationEvent annotationEvent = new AnnotationEvent(
                 features: returnObject
                 , sequence: sequence
                 , operation: AnnotationEvent.Operation.ADD
             )
+            println "M"
 
             fireAnnotationEvent(annotationEvent)
+            println "N"
         }
+        println "O"
 
         return returnObject
     }
