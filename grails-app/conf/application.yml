@@ -93,6 +93,7 @@ grails:
         username: "neo4j"
         #        password: "movies"
         password: "testpass"
+        flush.mode: 'MANUAL'
 
         #hibernate:
         #    cache:

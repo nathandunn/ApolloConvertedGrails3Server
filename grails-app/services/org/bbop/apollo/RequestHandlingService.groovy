@@ -10,6 +10,7 @@ import org.bbop.apollo.sequence.Strand
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONException
 import org.grails.web.json.JSONObject
+
 //import org.hibernate.FetchMode
 
 /**
@@ -800,12 +801,27 @@ class RequestHandlingService {
     JSONObject addTranscript(JSONObject inputObject) throws Exception {
         JSONArray featuresArray = inputObject.getJSONArray(FeatureStringEnum.FEATURES.value)
         JSONObject returnObject = jsonWebUtilityService.createJSONFeatureContainer()
+        println "addTranscript 0000 ${inputObject as JSON}"
+//        def organisms = Organism.all
+//        for (o in organisms) {
+//            println "o.a -> ${o.commonName}"
+//        }
+//        Organism organism = Organism.createCriteria().listDistinct {
+//            eq("commonName", inputObject.organism)
+//        }.first()
+//        for (o in organisms) {
+//            println "2 - o.a -> ${o.commonName}"
+//        }
 
-        println "addTranscript 0000 ${inputObject.toString()}"
+//        Organism organism = Organism.executeQuery("MATCH (n:Organism) where n.commonName=${inputObject.organism} RETURN n LIMIT 25").first()
+//        Sequence sequence = Sequence.findByNameAndOrganism(inputObject.sequence, organism)
+
         Sequence sequence = permissionService.checkPermissions(inputObject, PermissionEnum.WRITE)
-        println "sequence AAA: ${sequence as JSON}"
-        println "organism BBB: ${sequence.organism}"
-        println "number of features: ${featuresArray?.size()}"
+        println "seuqence ${sequence}"
+        println "organism ${sequence.organism}"
+//        println "sequence AAA: ${sequence as JSON}"
+//        println "organism BBB: ${sequence.organism}"
+//        println "number of features: ${featuresArray?.size()}"
         println "add transcript features array ${featuresArray as JSON}"
 
         boolean useName = false
