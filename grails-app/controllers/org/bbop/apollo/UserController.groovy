@@ -58,7 +58,6 @@ class UserController {
             }
             List<String> allUserGroupsName = allUserGroups.name
             Map<String, List<UserOrganismPermission>> userOrganismPermissionMap = new HashMap<>()
-            println "D.1 ${allowableOrganisms}"
             // TODO: fix query
 //            List<UserOrganismPermission> userOrganismPermissionList = UserOrganismPermission.findAllByOrganismInList(allowableOrganisms as List)
             List<UserOrganismPermission> userOrganismPermissionList = []
