@@ -206,13 +206,15 @@ class SequenceService {
     String getRawResiduesFromSequence(Sequence sequence, int fmin, int fmax) {
         println "inuput sequence ${sequence}, $sequence.organism , $sequence.organismId "
         println "sequence as JSON ${sequence as JSON}"
-        println "org count ${Organism.count}"
+//        println "org count ${Organism.count}"
         for(def o in Organism.all){
             println "organisms ${o as JSON}"
         }
-        Organism organism = Organism.findById(sequence.organismId,[fetch:[organism:'join']])
-        println "output organism $organism"
+        println "INPUT ${sequence as JSON}"
+        Organism organism = Organism.executeQuery("MATCH (o:Organism)--(s:Sequence) where s.name = '${sequence.name}' RETURN o LIMIT 25").first()
+        println "OUTOPUT ORGANISM:  ${organism}"
 
+        // TODO: fix this with a query
         if (organism.genomeFasta) {
             getRawResiduesFromSequenceFasta(sequence, fmin, fmax)
         } else {

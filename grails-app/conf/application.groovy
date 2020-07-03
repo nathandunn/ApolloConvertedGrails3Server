@@ -5,6 +5,7 @@
 grails.gorm.default.mapping = {
 //    cache true
     id generator:'NATIVE'
+//    id generator:'snowflake'
     failOnError: true
 }
 

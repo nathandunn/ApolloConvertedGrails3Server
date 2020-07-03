@@ -806,9 +806,10 @@ class RequestHandlingService {
 //        for (o in organisms) {
 //            println "o.a -> ${o.commonName}"
 //        }
-//        Organism organism = Organism.createCriteria().listDistinct {
-//            eq("commonName", inputObject.organism)
-//        }.first()
+        Organism organism = Organism.createCriteria().listDistinct {
+            eq("commonName", inputObject.organism)
+        }.first()
+        println "the organism is ${organism as JSON}, ${organism.version}"
 //        for (o in organisms) {
 //            println "2 - o.a -> ${o.commonName}"
 //        }
