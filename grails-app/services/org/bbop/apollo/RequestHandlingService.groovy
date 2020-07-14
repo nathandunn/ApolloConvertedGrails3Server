@@ -740,6 +740,8 @@ class RequestHandlingService {
         // this includes the child feature locations
         String query = "MATCH (o:Organism)-[r:SEQUENCES]-(s:Sequence)--(fl:FeatureLocation),(f:Transcript)-[flr:FEATURELOCATIONS]-(fl),(f)-[owner:OWNERS]-(u),(cf)-[]-(fr:FeatureRelationship)-[]-(f),(cfl)-[cflr2:FEATURELOCATIONS]-(cf) OPTIONAL MATCH (f)--(fp:FeatureProperty) where o.id =  '${sequence.organism.id}' and s.name = '${sequence.name}' return f,flr,fl,s,fp,fr,cf,cfl,owner,u "
 
+        // MATCH (o:Organism)-[r:SEQUENCES]-(s:Sequence)--(fl:FeatureLocation),(f:Transcript)-[flr:FEATURELOCATIONS]-(fl),(f)-[owner:OWNERS]-(u),(cf)-[]-(fr:FeatureRelationship)-[]-(f),(cfl)-[cflr2:FEATURELOCATIONS]-(cf) OPTIONAL MATCH (f)--(fp:FeatureProperty) where o.id =  '60' and s.name = 'ctgA' return {feature: f, featureLocations: collect(fl),children: collect({features:  fr,featureLocations: cfl}), owners: collect(u)}
+
 //          features = Transcript.executeQuery("MATCH (o:Organism)-[r:SEQUENCES]-(s:Sequence)--(fl:FeatureLocation),(f:Transcript)-[flr:FEATURELOCATIONS]-(fl),(f)-[owner:OWNERS]-(u),(cf)-[]-(fr:FeatureRelationship)-[]-(f),(cfl)-[cflr2:FEATURELOCATIONS]-(cf) OPTIONAL MATCH (f)--(fp:FeatureProperty) where o.id = '${sequence.organism.id}' and s.name = '${sequence.name}' return { f,flr,fl,s,fp,fr,cf,cfl,owner,u }")
 //        String query = "MATCH (o:Organism)-[r:SEQUENCES]-(s:Sequence)--(fl:FeatureLocation),(f:Transcript)-[flr:FEATURELOCATIONS]-(fl),(f)-[owner:OWNERS]-(u),(cf)-[]-(fr:FeatureRelationship)-[]-(f),(cfl)-[cflr2:FEATURELOCATIONS]-(cf) OPTIONAL MATCH (f)--(fp:FeatureProperty) where o.id = '${sequence.organism.id}' and s.name = '${sequence.name}' return {feature: f}"
         println "query output: ${query}"
