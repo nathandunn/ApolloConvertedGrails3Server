@@ -1,5 +1,6 @@
 package org.bbop.apollo
 
+import grails.converters.JSON
 import grails.gorm.transactions.Transactional
 import org.bbop.apollo.sequence.SequenceTranslationHandler
 import org.bbop.apollo.sequence.Strand
@@ -84,6 +85,7 @@ class NonCanonicalSplitSiteService {
         int fmin=transcript.getFeatureLocation().fmin
         int fmax=transcript.getFeatureLocation().fmax
         Sequence sequence=transcript.getFeatureLocation().sequence
+        println "sequence when getting non-canonical splice sites: ${sequence as JSON}"
         Strand strand=transcript.getFeatureLocation().strand==-1?Strand.NEGATIVE:Strand.POSITIVE
 
         String residues = sequenceService.getGenomicResiduesFromSequenceWithAlterations(sequence,fmin,fmax,strand);

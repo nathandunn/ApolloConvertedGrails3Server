@@ -1963,8 +1963,9 @@ class RequestHandlingService {
     }
 
     def addFeature(JSONObject inputObject) {
+        println "RHS adding feature with input object ${inputObject as JSON}"
         Sequence sequence = permissionService.checkPermissions(inputObject, PermissionEnum.WRITE)
-        println "adding sequence with found sequence ${sequence}"
+        println "adding sequence with found sequence ${sequence as JSON} really? ${inputObject.sequence} ${inputObject.organism} ${sequence.name} ${sequence}"
         User user = permissionService.getCurrentUser(inputObject)
 
         JSONArray featuresArray = inputObject.getJSONArray(FeatureStringEnum.FEATURES.value)

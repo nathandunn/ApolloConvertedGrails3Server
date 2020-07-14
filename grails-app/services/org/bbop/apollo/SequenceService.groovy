@@ -75,23 +75,24 @@ class SequenceService {
         }
 
         StringBuilder residues = new StringBuilder(residueString);
-        List<SequenceAlterationArtifact> sequenceAlterationList = SequenceAlterationArtifact.withCriteria {
-            createAlias('featureLocations', 'fl', JoinType.INNER_JOIN)
-            createAlias('fl.sequence', 's', JoinType.INNER_JOIN)
-            and {
-                or {
-                    and {
-                        ge("fl.fmin", fmin)
-                        le("fl.fmin", fmax)
-                    }
-                    and {
-                        ge("fl.fmax", fmin)
-                        le("fl.fmax", fmax)
-                    }
-                }
-                eq("s.id", sequence.id)
-            }
-        }.unique()
+        List<SequenceAlterationArtifact> sequenceAlterationList = []
+//        List<SequenceAlterationArtifact> sequenceAlterationList = SequenceAlterationArtifact.withCriteria {
+//            createAlias('featureLocations', 'fl' )
+//            createAlias('fl.sequence', 's')
+//            and {
+//                or {
+//                    and {
+//                        ge("fl.fmin", fmin)
+//                        le("fl.fmin", fmax)
+//                    }
+//                    and {
+//                        ge("fl.fmax", fmin)
+//                        le("fl.fmax", fmax)
+//                    }
+//                }
+//                eq("s.id", sequence.id)
+//            }
+//        }.unique()
         log.debug "sequence alterations found ${sequenceAlterationList.size()}"
         List<SequenceAlterationInContext> sequenceAlterationsInContextList = new ArrayList<SequenceAlterationInContext>()
         for (SequenceAlterationArtifact sequenceAlteration : sequenceAlterationList) {
@@ -204,14 +205,16 @@ class SequenceService {
     }
 
     String getRawResiduesFromSequence(Sequence sequence, int fmin, int fmax) {
-        println "inuput sequence ${sequence}, $sequence.organism , $sequence.organismId "
+        println "inuput sequence ${sequence}, $sequence.organism , $sequence.organism.id "
         println "sequence as JSON ${sequence as JSON}"
 //        println "org count ${Organism.count}"
         for(def o in Organism.all){
             println "organisms ${o as JSON}"
         }
         println "INPUT ${sequence as JSON}"
-        Organism organism = Organism.executeQuery("MATCH (o:Organism)--(s:Sequence) where s.name = '${sequence.name}' RETURN o LIMIT 25").first()
+//        String query = "MATCH (o:Organism)--(s:Sequence) where s.name = '${sequence.name}' and o.id = '${sequence.organism.id}' RETURN o LIMIT 25"
+        Organism organism = Organism.findById(sequence.organism.id)
+//        Organism organism = Organism.executeQuery("MATCH (o:Organism)--(s:Sequence) where s.name = '${sequence.name}' and o.id = '${sequence.organism.id}' RETURN o LIMIT 25").first()
         println "OUTOPUT ORGANISM:  ${organism}"
 
         // TODO: fix this with a query

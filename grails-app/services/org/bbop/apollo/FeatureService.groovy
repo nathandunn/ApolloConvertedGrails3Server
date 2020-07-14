@@ -1136,11 +1136,11 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
 //        Sequence sequence = Sequence.executeQuery("select s from Feature  f join f.featureLocations fl join fl.sequence s where f = :feature ", [feature: feature]).first()
 //        Sequence.createCriteria().listDistinct {
 //        }
-        def sequences = Sequence.createCriteria().listDistinct{
-            featureLocations{
-                eq 'feature', feature
-            }
-        }
+//        def sequences = Sequence.createCriteria().listDistinct{
+//            featureLocations{
+//                eq 'feature', feature
+//            }
+//        }
         // TODO: should not need to assert this yet
 
 //        assert sequences && sequences.size()>0
@@ -1149,21 +1149,21 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
 ////            join 'sequence'
 ////        }
 //        def featureLocations2 = FeatureLocation.findAllByFeature(feature,[fetch:[organism:'join']])
-        println "feature locations ${sequences}"
+//        println "feature locations ${sequences}"
 //        println "feature locations 2: ${featureLocations2}"
 //        if(sequences){
 //            SequenceAlterationArtifact.executeQuery("select sa from SequenceAlterationArtifact sa join sa.featureLocations fl join fl.sequence s where s = :sequence order by fl.fmin asc ", [sequence: sequences.first()])
 //        SequenceAlterationArtifact.executeQuery("select sa from SequenceAlterationArtifact sa join sa.featureLocations fl join fl.sequence s where s = :sequence order by fl.fmin asc ", [sequence: sequences.first()])
-        Collection<SequenceAlterationArtifact> features = (Collection<SequenceAlterationArtifact>) SequenceAlterationArtifact.createCriteria().listDistinct {
-            featureLocations {
-                eq "sequence", sequence
-                order fmin
-            }
-        }
-        return features
+//        Collection<SequenceAlterationArtifact> features = (Collection<SequenceAlterationArtifact>) SequenceAlterationArtifact.createCriteria().listDistinct {
+//            featureLocations {
+//                eq "sequence", sequence
+//                order fmin
+//            }
+//        }
+//        return features
 //        }
 //        else{
-//            return []
+            return []
 //        }
     }
 
@@ -3506,6 +3506,8 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
 
     def addFeature(JSONObject jsonFeature, Sequence sequence, User user, boolean suppressHistory, boolean useName = false) {
         Feature returnFeature = null
+
+        println "adding feature with sequence ${sequence as JSON}"
 
         if (RNA_FEATURE_TYPES.contains(jsonFeature.get(FeatureStringEnum.TYPE.value).name)) {
             Gene gene = jsonFeature.has(FeatureStringEnum.PARENT_ID.value) ? (Gene) Feature.findByUniqueName(jsonFeature.getString(FeatureStringEnum.PARENT_ID.value)) : null

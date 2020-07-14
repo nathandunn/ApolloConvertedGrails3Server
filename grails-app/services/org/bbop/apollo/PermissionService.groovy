@@ -406,9 +406,11 @@ class PermissionService {
     Sequence checkPermissions(JSONObject inputObject, PermissionEnum requiredPermissionEnum) {
         Organism organism
         String sequenceName = getSequenceNameFromInput(inputObject)
+        println "sequewnce name ? ${sequenceName}"
 
         User user = getCurrentUser(inputObject)
         organism = getOrganismFromInput(inputObject)
+        println "organism name ? ${organism} ${organism.commonName}"
 //        println "organism ${organism} from input ${inputObject as JSON}"
 
 //        if (!organism) {
@@ -438,8 +440,11 @@ class PermissionService {
 //        println "sequence name ${sequenceName} $sequence"
 //        println "sequence json ${sequence as JSON}"
 //        println "input ${sequenceName} ${organism.id}"
-        Sequence sequence = Sequence.executeQuery("MATCH (o:Organism)-[r:SEQUENCES]-(s:Sequence) where o.commonName = ${organism.commonName} RETURN o,r,s LIMIT 1")?.first()
-        println "returning sequence as ${sequence as JSON}"
+//        def sequences = Sequence.executeQuery("MATCH (o:Organism)-[r:SEQUENCES]-(s:Sequence) where o.commonName = ${organism.commonName} and s.name = ${sequenceName} RETURN o,r,s LIMIT 1")?.first()
+        def sequences = Sequence.executeQuery("MATCH (o:Organism)-[r:SEQUENCES]-(s:Sequence) where o.commonName = ${organism.commonName} and s.name = ${sequenceName} RETURN { sequence: s} LIMIT 1").first()
+        Sequence sequence = sequences.sequence as Sequence
+//        println "returning sequence as cast ${sequence}"
+//        println "returning sequence as JSON ${sequence as JSON}"
 //        def retrievedSequences = Sequence.createCriteria().listDistinct {
 //            eq("name", sequenceName)
 //            eq("organismId", organism.id as Long)
