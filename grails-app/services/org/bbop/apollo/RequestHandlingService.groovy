@@ -698,6 +698,7 @@ class RequestHandlingService {
 //            fetchMode 'parentFeatureRelationships.childFeature.owners', FetchMode.JOIN
 //            'in'('class', viewableAnnotationTranscriptList + viewableAnnotationFeatureList + viewableSequenceAlterationList)
 //        }
+
         def features = Feature.createCriteria().listDistinct {
             featureLocations {
                 eq('sequence', sequence)
@@ -727,12 +728,51 @@ class RequestHandlingService {
 //            'in'('class', viewableAnnotationTranscriptList + viewableAnnotationFeatureList + viewableSequenceAlterationList)
         }
 
+//        MATCH (o:Organism)-[r:SEQUENCES]-(s:Sequence)--(fl:FeatureLocation),(f:Transcript)-[flr:FEATURELOCATIONS]-(fl),(f)-[owner:OWNERS]-(u) OPTIONAL MATCH (f)--(fp:FeatureProperty),(f)-[cfr:PARENTFEATURERELATIONSHIPS]-(cf) where o.commonName = 'bob' and s.name = 'ctgA' return f,flr,fl,s,fp,cfr,cf,owner,u LIMIT 1
+
+        // THIS includes the child feature
+//        MATCH (o:Organism)-[r:SEQUENCES]-(s:Sequence)--(fl:FeatureLocation),(f:Transcript)-[flr:FEATURELOCATIONS]-(fl),(f)-[owner:OWNERS]-(u),(cf)-[]-(fr:FeatureRelationship)-[]-(f) OPTIONAL MATCH (f)--(fp:FeatureProperty) where o.commonName = 'bob' and s.name = 'ctgA' return f,flr,fl,s,fp,fr,cf,owner,u LIMIT 1
+
+        // TODO: make it return real results, minimally with locations
+
+        // TODO: do for both single-level and multi-level and return genes
+
+        // this includes the child feature locations
+        String query = "MATCH (o:Organism)-[r:SEQUENCES]-(s:Sequence)--(fl:FeatureLocation),(f:Transcript)-[flr:FEATURELOCATIONS]-(fl),(f)-[owner:OWNERS]-(u),(cf)-[]-(fr:FeatureRelationship)-[]-(f),(cfl)-[cflr2:FEATURELOCATIONS]-(cf) OPTIONAL MATCH (f)--(fp:FeatureProperty) where o.id =  '${sequence.organism.id}' and s.name = '${sequence.name}' return f,flr,fl,s,fp,fr,cf,cfl,owner,u "
+
+//          features = Transcript.executeQuery("MATCH (o:Organism)-[r:SEQUENCES]-(s:Sequence)--(fl:FeatureLocation),(f:Transcript)-[flr:FEATURELOCATIONS]-(fl),(f)-[owner:OWNERS]-(u),(cf)-[]-(fr:FeatureRelationship)-[]-(f),(cfl)-[cflr2:FEATURELOCATIONS]-(cf) OPTIONAL MATCH (f)--(fp:FeatureProperty) where o.id = '${sequence.organism.id}' and s.name = '${sequence.name}' return { f,flr,fl,s,fp,fr,cf,cfl,owner,u }")
+//        String query = "MATCH (o:Organism)-[r:SEQUENCES]-(s:Sequence)--(fl:FeatureLocation),(f:Transcript)-[flr:FEATURELOCATIONS]-(fl),(f)-[owner:OWNERS]-(u),(cf)-[]-(fr:FeatureRelationship)-[]-(f),(cfl)-[cflr2:FEATURELOCATIONS]-(cf) OPTIONAL MATCH (f)--(fp:FeatureProperty) where o.id = '${sequence.organism.id}' and s.name = '${sequence.name}' return {feature: f}"
+        println "query output: ${query}"
+        def nodes = Transcript.executeQuery(query).unique()
+        println "actual returned nodes ${nodes} ${nodes.size()}"
+//        features = GeneMemberRegion.all
 
         JSONArray jsonFeatures = new JSONArray()
-        features.each { feature ->
-            JSONObject jsonObject = featureService.convertFeatureToJSON(feature, false)
+        nodes.each{
+            println "forist node ${it} "
+            println "feature node ${it.f}"
+            println "feature node name ${it.f.name}"
+            println "feature node locations ${it.f.featureLocations}"
+//            println "feature node label ${it.feature}"
+//            def feature = it.feature as Transcript
+//            println "as feature ${feature}"
+//            println "as feature as JSON ${feature as JSON}"
+
+            JSONObject jsonObject = featureService.convertNeo4jFeatureToJSON(it, false)
             jsonFeatures.put(jsonObject)
+
+//            println "as JSON ${it.feature as JSON}"
         }
+
+//
+        println "outputs ${nodes}"
+        println "lazy returned features ${nodes as JSON}"
+
+
+//        features.each { feature ->
+//            JSONObject jsonObject = featureService.convertFeatureToJSON(feature, false)
+//            jsonFeatures.put(jsonObject)
+//        }
 
         inputObject.put(AnnotationEditorController.REST_FEATURES, jsonFeatures)
         println "getFeatures ${System.currentTimeMillis() - start}ms"
