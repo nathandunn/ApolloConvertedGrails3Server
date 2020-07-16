@@ -3909,6 +3909,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
                     jsonFeature.put(FeatureStringEnum.NAME.value, childArray.getJSONObject(0).getString(FeatureStringEnum.NAME.value))
                 }
             }
+            println "input JSON ${jsonFeature}"
             Feature feature = convertJSONToFeature(jsonFeature, sequence)
             if (!suppressHistory) {
                 String name = nameService.generateUniqueName(feature, feature.name)
@@ -3922,7 +3923,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
             }
 
             setOwner(feature, user);
-            feature.save(insert: true, flush: true)
+            feature.save(insert: true, flush: true,failOnError: true)
             if (jsonFeature.get(FeatureStringEnum.TYPE.value).name == Gene.cvTerm ||
                 PSEUDOGENIC_FEATURE_TYPES.contains(jsonFeature.get(FeatureStringEnum.TYPE.value).name)) {
                 Transcript transcript = transcriptService.getTranscripts(feature).iterator().next()
