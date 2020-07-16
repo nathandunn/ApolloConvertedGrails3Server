@@ -2172,6 +2172,9 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
         def neo4jChildren = neo4jObject.children
         println "children ${neo4jChildren} "
 
+        def neo4jParent = neo4jObject.parent
+        println "parent ${neo4jParent} "
+
 
         JSONObject jsonFeature = new JSONObject()
         println "A"
@@ -2187,10 +2190,10 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
         String type = types.last() // TODO: find a better way for this to get the most specific type
 //        jsonFeature.put(FeatureStringEnum.TYPE.value, generateJSONFeatureStringForType(neo4jFeature.ontologyId))
         println "C ${type}"
-        jsonFeature.put(FeatureStringEnum.UNIQUENAME.value, neo4jFeature.get(FeatureStringEnum.UNIQUENAME.value))
+        jsonFeature.put(FeatureStringEnum.UNIQUENAME.value, neo4jFeature.get(FeatureStringEnum.UNIQUENAME.value).asString())
         println "D"
         if (neo4jFeature.get(FeatureStringEnum.NAME.value) != null) {
-            jsonFeature.put(FeatureStringEnum.NAME.value, neo4jFeature.get(FeatureStringEnum.NAME.value))
+            jsonFeature.put(FeatureStringEnum.NAME.value, neo4jFeature.get(FeatureStringEnum.NAME.value).asString())
         }
 //        if (neo4jFeature.symbol) {
 //            jsonFeature.put(FeatureStringEnum.SYMBOL.value, neo4jFeature.symbol)
@@ -2207,7 +2210,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
 
         long start = System.currentTimeMillis()
 //        String finalOwnerString = generateOwnerString(neo4jObject)
-        String finalOwnerString = neo4jOwners.collect{ it.get(FeatureStringEnum.USERNAME.value)}.join(" ")
+        String finalOwnerString = neo4jOwners.collect{ it.get(FeatureStringEnum.USERNAME.value).asString()}.join(" ")
 //        String finalOwnerString = "asdfasdf"
         for(def owner in neo4jOwners){
             println "owner ${owner} "
@@ -2227,9 +2230,9 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
 
 //        if (neo4jObject.featureLocation) {
 //            Sequence sequence = neo4jObject.featureLocation.sequence
-            jsonFeature.put(FeatureStringEnum.SEQUENCE.value, neo4jSequence.get(FeatureStringEnum.NAME.value))
+            jsonFeature.put(FeatureStringEnum.SEQUENCE.value, neo4jSequence.get(FeatureStringEnum.NAME.value).asString())
 //        }
-        println "works to go annotations: . . . ${neo4jLocation}"
+        println "added sequence name : . . . ${jsonFeature.sequence}"
 
 //        if (neo4jObject.goAnnotations) {
 //            JSONArray goAnnotationsArray = goAnnotationService.convertAnnotationsToJson(neo4jObject.goAnnotations)
@@ -2242,88 +2245,99 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
         start = System.currentTimeMillis();
 
         // get children
-        List<Feature> childFeatures = featureRelationshipService.getChildrenForFeatureAndTypes(neo4jObject)
+//        List<Feature> childFeatures = featureRelationshipService.getChildrenForFeatureAndTypes(neo4jObject)
 
 
         durationInMilliseconds = System.currentTimeMillis() - start;
-        if (childFeatures) {
+        if (neo4jChildren) {
             JSONArray children = new JSONArray();
             jsonFeature.put(FeatureStringEnum.CHILDREN.value, children);
-            for (Feature f : childFeatures) {
-                Feature childFeature = f
-                children.put(convertFeatureToJSON(childFeature, includeSequence));
+            for (def child : neo4jChildren) {
+                println "each child ${child}"
+//                println "each child labels ${child.labels().join(", ")}"
+//                println "each child keys ${child.keys().join(", ")}"
+////                Feature childFeature = f
+////                children.put(convertFeatureToJSON(childFeature, includeSequence));
+//                children.put(convertNeo4jFeatureToJSON(child, includeSequence));
             }
         }
 
 
         start = System.currentTimeMillis()
         // get parents
-        List<Feature> parentFeatures = featureRelationshipService.getParentsForFeature(neo4jObject)
+        println "neo4j parents ${neo4jParent}"
+//        List<Feature> parentFeatures = featureRelationshipService.getParentsForFeature(neo4jObject)
 
         durationInMilliseconds = System.currentTimeMillis() - start;
         //println "parents ${durationInMilliseconds}"
-        if (parentFeatures?.size() == 1) {
-            Feature parent = parentFeatures.iterator().next();
-            jsonFeature.put(FeatureStringEnum.PARENT_ID.value, parent.getUniqueName());
-            jsonFeature.put(FeatureStringEnum.PARENT_NAME.value, parent.getName());
-            jsonFeature.put(FeatureStringEnum.PARENT_TYPE.value, generateJSONFeatureStringForType(parent.ontologyId));
+        if (neo4jParent) {
+//            Feature parent = parentFeatures.iterator().next();
+            println "finding lagbels ${neo4jParent}"
+            def parentTypes = neo4jParent.feature.labels()
+            println "FOUND labels ${parentTypes}"
+            def parentType = parentTypes.last()
+            println "FINAL label ${parentType}"
+            jsonFeature.put(FeatureStringEnum.PARENT_ID.value, neo4jParent.feature.get(FeatureStringEnum.ID.value).asString());
+            jsonFeature.put(FeatureStringEnum.PARENT_NAME.value, neo4jParent.feature.get(FeatureStringEnum.NAME.value).asString());
+//            jsonFeature.put(FeatureStringEnum.PARENT_TYPE.value, generateJSONFeatureStringForType(parent.ontologyId));
+            jsonFeature.put(FeatureStringEnum.PARENT_TYPE.value, parentType);
         }
 
 
         start = System.currentTimeMillis()
 
-        Collection<FeatureLocation> featureLocations = neo4jObject.getFeatureLocations();
-        if (featureLocations) {
-            FeatureLocation gsolFeatureLocation = featureLocations.iterator().next();
-            if (gsolFeatureLocation != null) {
+//        Collection<FeatureLocation> featureLocations = neo4jObject.getFeatureLocations();
+        if (neo4jLocation) {
+//            FeatureLocation gsolFeatureLocation = neo4jLocation.iterator().next();
+//            if (gsolFeatureLocation != null) {
                 jsonFeature.put(FeatureStringEnum.LOCATION.value, convertFeatureLocationToJSON(gsolFeatureLocation));
-            }
+//            }
         }
 
         durationInMilliseconds = System.currentTimeMillis() - start;
         //println "featloc ${durationInMilliseconds}"
 
-        if (neo4jObject instanceof SequenceAlteration) {
-            JSONArray alternateAllelesArray = new JSONArray()
-            neo4jObject.alleles.each { allele ->
-                JSONObject alleleObject = new JSONObject()
-                alleleObject.put(FeatureStringEnum.BASES.value, allele.bases)
-//                if (allele.alleleFrequency) {
-//                    alternateAlleleObject.put(FeatureStringEnum.ALLELE_FREQUENCY.value, String.valueOf(allele.alleleFrequency))
+//        if (neo4jObject instanceof SequenceAlteration) {
+//            JSONArray alternateAllelesArray = new JSONArray()
+//            neo4jObject.alleles.each { allele ->
+//                JSONObject alleleObject = new JSONObject()
+//                alleleObject.put(FeatureStringEnum.BASES.value, allele.bases)
+////                if (allele.alleleFrequency) {
+////                    alternateAlleleObject.put(FeatureStringEnum.ALLELE_FREQUENCY.value, String.valueOf(allele.alleleFrequency))
+////                }
+////                if (allele.provenance) {
+////                    alternateAlleleObject.put(FeatureStringEnum.PROVENANCE.value, allele.provenance);
+////                }
+//                if (allele.alleleInfo) {
+//                    JSONArray alleleInfoArray = new JSONArray()
+//                    allele.alleleInfo.each { alleleInfo ->
+//                        JSONObject alleleInfoObject = new JSONObject()
+//                        alleleInfoObject.put(FeatureStringEnum.TAG.value, alleleInfo.tag)
+//                        alleleInfoObject.put(FeatureStringEnum.VALUE.value, alleleInfo.value)
+//                        alleleInfoArray.add(alleleInfoObject)
+//                    }
+//                    alleleObject.put(FeatureStringEnum.ALLELE_INFO.value, alleleInfoArray)
 //                }
-//                if (allele.provenance) {
-//                    alternateAlleleObject.put(FeatureStringEnum.PROVENANCE.value, allele.provenance);
+//                if (allele.reference) {
+//                    jsonFeature.put(FeatureStringEnum.REFERENCE_ALLELE.value, alleleObject)
+//                } else {
+//                    alternateAllelesArray.add(alleleObject)
 //                }
-                if (allele.alleleInfo) {
-                    JSONArray alleleInfoArray = new JSONArray()
-                    allele.alleleInfo.each { alleleInfo ->
-                        JSONObject alleleInfoObject = new JSONObject()
-                        alleleInfoObject.put(FeatureStringEnum.TAG.value, alleleInfo.tag)
-                        alleleInfoObject.put(FeatureStringEnum.VALUE.value, alleleInfo.value)
-                        alleleInfoArray.add(alleleInfoObject)
-                    }
-                    alleleObject.put(FeatureStringEnum.ALLELE_INFO.value, alleleInfoArray)
-                }
-                if (allele.reference) {
-                    jsonFeature.put(FeatureStringEnum.REFERENCE_ALLELE.value, alleleObject)
-                } else {
-                    alternateAllelesArray.add(alleleObject)
-                }
-            }
-
-            jsonFeature.put(FeatureStringEnum.ALTERNATE_ALLELES.value, alternateAllelesArray)
-
-            if (neo4jObject.variantInfo) {
-                JSONArray variantInfoArray = new JSONArray()
-                neo4jObject.variantInfo.each { variantInfo ->
-                    JSONObject variantInfoObject = new JSONObject()
-                    variantInfoObject.put(FeatureStringEnum.TAG.value, variantInfo.tag)
-                    variantInfoObject.put(FeatureStringEnum.VALUE.value, variantInfo.value)
-                    variantInfoArray.add(variantInfoObject)
-                }
-                jsonFeature.put(FeatureStringEnum.VARIANT_INFO.value, variantInfoArray)
-            }
-        }
+//            }
+//
+//            jsonFeature.put(FeatureStringEnum.ALTERNATE_ALLELES.value, alternateAllelesArray)
+//
+//            if (neo4jObject.variantInfo) {
+//                JSONArray variantInfoArray = new JSONArray()
+//                neo4jObject.variantInfo.each { variantInfo ->
+//                    JSONObject variantInfoObject = new JSONObject()
+//                    variantInfoObject.put(FeatureStringEnum.TAG.value, variantInfo.tag)
+//                    variantInfoObject.put(FeatureStringEnum.VALUE.value, variantInfo.value)
+//                    variantInfoArray.add(variantInfoObject)
+//                }
+//                jsonFeature.put(FeatureStringEnum.VARIANT_INFO.value, variantInfoArray)
+//            }
+//        }
 
         if (neo4jObject instanceof SequenceAlterationArtifact) {
             SequenceAlterationArtifact sequenceAlteration = (SequenceAlterationArtifact) neo4jObject
