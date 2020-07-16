@@ -2288,11 +2288,14 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
 
 //        Collection<FeatureLocation> featureLocations = neo4jObject.getFeatureLocations();
         if (neo4jLocation) {
+
 //            FeatureLocation gsolFeatureLocation = neo4jLocation.iterator().next();
 //            if (gsolFeatureLocation != null) {
-                jsonFeature.put(FeatureStringEnum.LOCATION.value, convertFeatureLocationToJSON(gsolFeatureLocation));
+            println "loading location"
+                jsonFeature.put(FeatureStringEnum.LOCATION.value, convertNeo4jFeatureLocationToJSON(neo4jLocation))
 //            }
         }
+        println "LOADED location ${jsonFeature as JSON}"
 
         durationInMilliseconds = System.currentTimeMillis() - start;
         //println "featloc ${durationInMilliseconds}"
@@ -2686,6 +2689,24 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
         return jsonObject
     }
 
+    JSONObject convertNeo4jFeatureLocationToJSON(def featureLocationNode) throws JSONException {
+        JSONObject jsonFeatureLocation = new JSONObject();
+//        println " "
+//        if (featureLocationNode.id) {
+//            jsonFeatureLocation.put(FeatureStringEnum.ID.value, featureLocationNode.id);
+//        }
+        println "got an fmin ${featureLocationNode.get(FeatureStringEnum.FMIN.value).asLong()}"
+        jsonFeatureLocation.put(FeatureStringEnum.FMIN.value, featureLocationNode.get(FeatureStringEnum.FMIN.value).asLong())
+        jsonFeatureLocation.put(FeatureStringEnum.FMAX.value, featureLocationNode.get(FeatureStringEnum.FMAX.value).asLong())
+//        if (featureLocationNode.isIsFminPartial()) {
+//            jsonFeatureLocation.put(FeatureStringEnum.IS_FMIN_PARTIAL.value, true);
+//        }
+//        if (featureLocationNode.isIsFmaxPartial()) {
+//            jsonFeatureLocation.put(FeatureStringEnum.IS_FMAX_PARTIAL.value, true);
+//        }
+        jsonFeatureLocation.put(FeatureStringEnum.STRAND.value, featureLocationNode.get(FeatureStringEnum.STRAND.value).asInt())
+        return jsonFeatureLocation;
+    }
 
     JSONObject convertFeatureLocationToJSON(FeatureLocation gsolFeatureLocation) throws JSONException {
         JSONObject jsonFeatureLocation = new JSONObject();
