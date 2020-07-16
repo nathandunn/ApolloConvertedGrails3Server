@@ -2163,7 +2163,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
         def neo4jFeature = neo4jObject.feature
         println "feature ${neo4jFeature} "
         println "feature as JSON ${neo4jFeature} "
-        def neo4jLocation = neo4jObject.featureLocations[0]
+        def neo4jLocation = neo4jObject.location
         println "locaitons ${neo4jLocation} "
         def neo4jOwners = neo4jObject.owners
         println "owners ${neo4jOwners} "
@@ -2210,18 +2210,20 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
 
         long start = System.currentTimeMillis()
 //        String finalOwnerString = generateOwnerString(neo4jObject)
-        String finalOwnerString = neo4jOwners.collect{ it.get(FeatureStringEnum.USERNAME.value).asString()}.join(" ")
+        if(neo4jOwners){
+            String finalOwnerString = neo4jOwners.collect{ it.get(FeatureStringEnum.USERNAME.value).asString()}.join(" ")
 //        String finalOwnerString = "asdfasdf"
-        for(def owner in neo4jOwners){
-            println "owner ${owner} "
-            println "value ${owner.get(FeatureStringEnum.USERNAME.value)} "
-        }
+            for(def owner in neo4jOwners){
+                println "owner ${owner} "
+                println "value ${owner.get(FeatureStringEnum.USERNAME.value)} "
+            }
 //        neo4jOwners.each {
 //            println it
 //        }
 
-        println "final owner string ${finalOwnerString}"
-        jsonFeature.put(FeatureStringEnum.OWNER.value.toLowerCase(), finalOwnerString)
+            println "final owner string ${finalOwnerString}"
+            jsonFeature.put(FeatureStringEnum.OWNER.value.toLowerCase(), finalOwnerString)
+        }
 
         long durationInMilliseconds = System.currentTimeMillis() - start
 
@@ -2230,7 +2232,9 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
 
 //        if (neo4jObject.featureLocation) {
 //            Sequence sequence = neo4jObject.featureLocation.sequence
+        if(neo4jSequence){
             jsonFeature.put(FeatureStringEnum.SEQUENCE.value, neo4jSequence.get(FeatureStringEnum.NAME.value).asString())
+        }
 //        }
         println "added sequence name : . . . ${jsonFeature.sequence}"
 
@@ -2258,7 +2262,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
 //                println "each child keys ${child.keys().join(", ")}"
 ////                Feature childFeature = f
 ////                children.put(convertFeatureToJSON(childFeature, includeSequence));
-//                children.put(convertNeo4jFeatureToJSON(child, includeSequence));
+                children.put(convertNeo4jFeatureToJSON(child, includeSequence));
             }
         }
 
@@ -2412,11 +2416,9 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
 //                dbxrefs.put(dbxref)
 //            }
 //        }
-        println "adding dateq "
 //        println "date . . . ${neo4jFeature.lastUpdated} ${neo4jFeature.lastUpdated.time}"
         jsonFeature.put(FeatureStringEnum.DATE_LAST_MODIFIED.value, neo4jFeature.get("lastUpdated").asLong())
         jsonFeature.put(FeatureStringEnum.DATE_CREATION.value, neo4jFeature.get("dateCreated").asLong())
-        println "ADDED dateq "
         return jsonFeature
     }
 

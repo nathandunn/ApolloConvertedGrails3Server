@@ -750,15 +750,14 @@ class RequestHandlingService {
 //            "RETURN {sequence: s,feature: f, featureLocations: collect(fl),children: {location: collect(cl),r1: fr,feature: child}, owners: collect(u)}\n" +
 //            "\n"
 
-        String query = "MATCH (o:Organism)-[r:SEQUENCES]-(s:Sequence)--(fl:FeatureLocation),\n" +
-            "(f:Transcript)-[flr:FEATURELOCATIONS]-(fl),\n" +
+        String query = "MATCH (o:Organism)-[r:SEQUENCES]-(s:Sequence)--(fl:FeatureLocation)-[flr:FEATURELOCATIONS]-(f:Transcript),\n" +
             "(f)-[owner:OWNERS]-(u)\n" +
             "OPTIONAL MATCH (cl)-[childlocations:FEATURELOCATIONS]-(child)-[CHILDFEATURERELATIONSHIPS]-(fr:FeatureRelationship)-[pr:PARENTFEATURERELATIONSHIPS]-(f)\n" +
             "OPTIONAL MATCH (pl)-[FEATURELOCATIONS]-(parent)-[PARENTFEATURERELATIONSHIPS]-(gfr:FeatureRelationship)-[generelationship:CHILDFEATURERELATIONSHIPS]-(f)\n" +
             "OPTIONAL MATCH (f)--(fp:FeatureProperty) \n" +
 //            "WHERE o.id =  '60' and s.name = 'ctgA' \n" +
             "WHERE o.id='${sequence.organism.id}' and s.name = '${sequence.name}'\n"  +
-            "RETURN {sequence: s,feature: f,featureLocations: collect(fl),children: {location: collect(cl),r1: fr,feature: child}, owners: collect(u),parent: { location: collect(pl),r2:gfr,feature:parent }}"
+            "RETURN {sequence: s,feature: f,location: fl,children: collect(DISTINCT {location: cl,r1: fr,feature: child}), owners: collect(u),parent: { location: collect(pl),r2:gfr,feature:parent }}"
 
         // MATCH (o:Organism)-[r:SEQUENCES]-(s:Sequence)--(fl:FeatureLocation),(f:Transcript)-[flr:FEATURELOCATIONS]-(fl),(f)-[owner:OWNERS]-(u),(cf)-[]-(fr:FeatureRelationship)-[]-(f),(cfl)-[cflr2:FEATURELOCATIONS]-(cf) OPTIONAL MATCH (f)--(fp:FeatureProperty) where o.id =  '60' and s.name = 'ctgA' return {feature: f, featureLocations: collect(fl),children: collect({features:  fr,featureLocations: cfl}), owners: collect(u)}
 
