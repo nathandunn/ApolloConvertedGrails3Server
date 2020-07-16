@@ -2154,50 +2154,87 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
     }
 
     /**
-     * @param neo4jFeature
+     * @param neo4jObject
      * @param includeSequence
      * @return
      */
-    JSONObject convertNeo4jFeatureToJSON(def neo4jFeature, boolean includeSequence = false) {
-        println "converting features to json ${neo4jFeature}"
+    JSONObject convertNeo4jFeatureToJSON(def neo4jObject, boolean includeSequence = false) {
+        println "converting features to json ${neo4jObject}"
+        def neo4jFeature = neo4jObject.feature
+        println "feature ${neo4jFeature} "
+        println "feature as JSON ${neo4jFeature} "
+        def neo4jLocation = neo4jObject.featureLocations[0]
+        println "locaitons ${neo4jLocation} "
+        def neo4jOwners = neo4jObject.owners
+        println "owners ${neo4jOwners} "
+        def neo4jSequence= neo4jObject.sequence
+
+        def neo4jChildren = neo4jObject.children
+        println "children ${neo4jChildren} "
+
+
         JSONObject jsonFeature = new JSONObject()
-        if (neo4jFeature.id) {
-            jsonFeature.put(FeatureStringEnum.ID.value, neo4jFeature.id)
+        println "A"
+        println "ID ${neo4jFeature.id()}"
+        println "labels ${neo4jFeature.labels().join(",")}"
+        println "keys ${neo4jFeature.keys().join(",")}"
+        if (neo4jFeature.id()!=null) {
+            println "A.1: ${neo4jFeature.id()}"
+            jsonFeature.put(FeatureStringEnum.ID.value, neo4jFeature.id())
         }
-        jsonFeature.put(FeatureStringEnum.TYPE.value, generateJSONFeatureStringForType(neo4jFeature.ontologyId))
-        jsonFeature.put(FeatureStringEnum.UNIQUENAME.value, neo4jFeature.getUniqueName())
-        if (neo4jFeature.getName() != null) {
-            jsonFeature.put(FeatureStringEnum.NAME.value, neo4jFeature.getName())
+        println "B"
+        def types = neo4jFeature.labels()
+        String type = types.last() // TODO: find a better way for this to get the most specific type
+//        jsonFeature.put(FeatureStringEnum.TYPE.value, generateJSONFeatureStringForType(neo4jFeature.ontologyId))
+        println "C ${type}"
+        jsonFeature.put(FeatureStringEnum.UNIQUENAME.value, neo4jFeature.get(FeatureStringEnum.UNIQUENAME.value))
+        println "D"
+        if (neo4jFeature.get(FeatureStringEnum.NAME.value) != null) {
+            jsonFeature.put(FeatureStringEnum.NAME.value, neo4jFeature.get(FeatureStringEnum.NAME.value))
         }
-        if (neo4jFeature.symbol) {
-            jsonFeature.put(FeatureStringEnum.SYMBOL.value, neo4jFeature.symbol)
-        }
-        if (neo4jFeature.status) {
-            jsonFeature.put(FeatureStringEnum.STATUS.value, neo4jFeature.status.value)
-        }
-        if (neo4jFeature.description) {
-            jsonFeature.put(FeatureStringEnum.DESCRIPTION.value, neo4jFeature.description)
-        }
-        if (neo4jFeature.featureSynonyms) {
-            jsonFeature.put(FeatureStringEnum.SYNONYMS.value, neo4jFeature.featureSynonyms.synonym.name)
-        }
+//        if (neo4jFeature.symbol) {
+//            jsonFeature.put(FeatureStringEnum.SYMBOL.value, neo4jFeature.symbol)
+//        }
+//        if (neo4jFeature.status) {
+//            jsonFeature.put(FeatureStringEnum.STATUS.value, neo4jFeature.status.value)
+//        }
+//        if (neo4jFeature.description) {
+//            jsonFeature.put(FeatureStringEnum.DESCRIPTION.value, neo4jFeature.description)
+//        }
+//        if (neo4jFeature.featureSynonyms) {
+//            jsonFeature.put(FeatureStringEnum.SYNONYMS.value, neo4jFeature.featureSynonyms.synonym.name)
+//        }
 
         long start = System.currentTimeMillis()
-        String finalOwnerString = generateOwnerString(neo4jFeature)
+//        String finalOwnerString = generateOwnerString(neo4jObject)
+        String finalOwnerString = neo4jOwners.collect{ it.get(FeatureStringEnum.USERNAME.value)}.join(" ")
+//        String finalOwnerString = "asdfasdf"
+        for(def owner in neo4jOwners){
+            println "owner ${owner} "
+            println "value ${owner.get(FeatureStringEnum.USERNAME.value)} "
+        }
+//        neo4jOwners.each {
+//            println it
+//        }
+
+        println "final owner string ${finalOwnerString}"
         jsonFeature.put(FeatureStringEnum.OWNER.value.toLowerCase(), finalOwnerString)
 
         long durationInMilliseconds = System.currentTimeMillis() - start
 
         start = System.currentTimeMillis()
-        if (neo4jFeature.featureLocation) {
-            Sequence sequence = neo4jFeature.featureLocation.sequence
-            jsonFeature.put(FeatureStringEnum.SEQUENCE.value, sequence.name)
-        }
 
-        if (neo4jFeature.goAnnotations) {
-            JSONArray goAnnotationsArray = goAnnotationService.convertAnnotationsToJson(neo4jFeature.goAnnotations)
-            jsonFeature.put(FeatureStringEnum.GO_ANNOTATIONS.value, goAnnotationsArray)
-        }
+
+//        if (neo4jObject.featureLocation) {
+//            Sequence sequence = neo4jObject.featureLocation.sequence
+            jsonFeature.put(FeatureStringEnum.SEQUENCE.value, neo4jSequence.get(FeatureStringEnum.NAME.value))
+//        }
+        println "works to go annotations: . . . ${neo4jLocation}"
+
+//        if (neo4jObject.goAnnotations) {
+//            JSONArray goAnnotationsArray = goAnnotationService.convertAnnotationsToJson(neo4jObject.goAnnotations)
+//            jsonFeature.put(FeatureStringEnum.GO_ANNOTATIONS.value, goAnnotationsArray)
+//        }
 
         durationInMilliseconds = System.currentTimeMillis() - start
 
@@ -2205,7 +2242,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
         start = System.currentTimeMillis();
 
         // get children
-        List<Feature> childFeatures = featureRelationshipService.getChildrenForFeatureAndTypes(neo4jFeature)
+        List<Feature> childFeatures = featureRelationshipService.getChildrenForFeatureAndTypes(neo4jObject)
 
 
         durationInMilliseconds = System.currentTimeMillis() - start;
@@ -2221,7 +2258,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
 
         start = System.currentTimeMillis()
         // get parents
-        List<Feature> parentFeatures = featureRelationshipService.getParentsForFeature(neo4jFeature)
+        List<Feature> parentFeatures = featureRelationshipService.getParentsForFeature(neo4jObject)
 
         durationInMilliseconds = System.currentTimeMillis() - start;
         //println "parents ${durationInMilliseconds}"
@@ -2235,7 +2272,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
 
         start = System.currentTimeMillis()
 
-        Collection<FeatureLocation> featureLocations = neo4jFeature.getFeatureLocations();
+        Collection<FeatureLocation> featureLocations = neo4jObject.getFeatureLocations();
         if (featureLocations) {
             FeatureLocation gsolFeatureLocation = featureLocations.iterator().next();
             if (gsolFeatureLocation != null) {
@@ -2246,9 +2283,9 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
         durationInMilliseconds = System.currentTimeMillis() - start;
         //println "featloc ${durationInMilliseconds}"
 
-        if (neo4jFeature instanceof SequenceAlteration) {
+        if (neo4jObject instanceof SequenceAlteration) {
             JSONArray alternateAllelesArray = new JSONArray()
-            neo4jFeature.alleles.each { allele ->
+            neo4jObject.alleles.each { allele ->
                 JSONObject alleleObject = new JSONObject()
                 alleleObject.put(FeatureStringEnum.BASES.value, allele.bases)
 //                if (allele.alleleFrequency) {
@@ -2276,9 +2313,9 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
 
             jsonFeature.put(FeatureStringEnum.ALTERNATE_ALLELES.value, alternateAllelesArray)
 
-            if (neo4jFeature.variantInfo) {
+            if (neo4jObject.variantInfo) {
                 JSONArray variantInfoArray = new JSONArray()
-                neo4jFeature.variantInfo.each { variantInfo ->
+                neo4jObject.variantInfo.each { variantInfo ->
                     JSONObject variantInfoObject = new JSONObject()
                     variantInfoObject.put(FeatureStringEnum.TAG.value, variantInfo.tag)
                     variantInfoObject.put(FeatureStringEnum.VALUE.value, variantInfo.value)
@@ -2288,20 +2325,20 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
             }
         }
 
-        if (neo4jFeature instanceof SequenceAlterationArtifact) {
-            SequenceAlterationArtifact sequenceAlteration = (SequenceAlterationArtifact) neo4jFeature
+        if (neo4jObject instanceof SequenceAlterationArtifact) {
+            SequenceAlterationArtifact sequenceAlteration = (SequenceAlterationArtifact) neo4jObject
             if (sequenceAlteration.alterationResidue) {
                 jsonFeature.put(FeatureStringEnum.RESIDUES.value, sequenceAlteration.alterationResidue);
             }
         } else if (includeSequence) {
-            String residues = sequenceService.getResiduesFromFeature(neo4jFeature)
+            String residues = sequenceService.getResiduesFromFeature(neo4jObject)
             if (residues) {
                 jsonFeature.put(FeatureStringEnum.RESIDUES.value, residues);
             }
         }
 
         //e.g. properties: [{value: "demo", type: {name: "owner", cv: {name: "feature_property"}}}]
-        Collection<FeatureProperty> gsolFeatureProperties = neo4jFeature.getFeatureProperties();
+        Collection<FeatureProperty> gsolFeatureProperties = neo4jObject.getFeatureProperties();
 
         JSONArray properties = new JSONArray();
         jsonFeature.put(FeatureStringEnum.PROPERTIES.value, properties);
@@ -2346,7 +2383,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
 //        properties.put(ownerProperty)
 
 
-        Collection<DBXref> gsolFeatureDbxrefs = neo4jFeature.getFeatureDBXrefs()
+        Collection<DBXref> gsolFeatureDbxrefs = neo4jObject.getFeatureDBXrefs()
         if (gsolFeatureDbxrefs) {
             JSONArray dbxrefs = new JSONArray();
             jsonFeature.put(FeatureStringEnum.DBXREFS.value, dbxrefs)
@@ -2357,8 +2394,8 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
                 dbxrefs.put(dbxref)
             }
         }
-        jsonFeature.put(FeatureStringEnum.DATE_LAST_MODIFIED.value, neo4jFeature.lastUpdated.time)
-        jsonFeature.put(FeatureStringEnum.DATE_CREATION.value, neo4jFeature.dateCreated.time)
+        jsonFeature.put(FeatureStringEnum.DATE_LAST_MODIFIED.value, neo4jObject.lastUpdated.time)
+        jsonFeature.put(FeatureStringEnum.DATE_CREATION.value, neo4jObject.dateCreated.time)
         return jsonFeature
     }
 

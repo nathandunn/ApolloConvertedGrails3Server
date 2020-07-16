@@ -738,7 +738,17 @@ class RequestHandlingService {
         // TODO: do for both single-level and multi-level and return genes
 
         // this includes the child feature locations
-        String query = "MATCH (o:Organism)-[r:SEQUENCES]-(s:Sequence)--(fl:FeatureLocation),(f:Transcript)-[flr:FEATURELOCATIONS]-(fl),(f)-[owner:OWNERS]-(u),(cf)-[]-(fr:FeatureRelationship)-[]-(f),(cfl)-[cflr2:FEATURELOCATIONS]-(cf) OPTIONAL MATCH (f)--(fp:FeatureProperty) where o.id =  '${sequence.organism.id}' and s.name = '${sequence.name}' return f,flr,fl,s,fp,fr,cf,cfl,owner,u "
+//        String query = "MATCH (o:Organism)-[r:SEQUENCES]-(s:Sequence)--(fl:FeatureLocation),(f:Transcript)-[flr:FEATURELOCATIONS]-(fl),(f)-[owner:OWNERS]-(u),(cf)-[]-(fr:FeatureRelationship)-[]-(f),(cfl)-[cflr2:FEATURELOCATIONS]-(cf) OPTIONAL MATCH (f)--(fp:FeatureProperty) where o.id =  '${sequence.organism.id}' and s.name = '${sequence.name}' return f,flr,fl,s,fp,fr,cf,cfl,owner,u "
+
+        String query = "\n" +
+            "MATCH (o:Organism)-[r:SEQUENCES]-(s:Sequence)--(fl:FeatureLocation),\n" +
+            "(f:Transcript)-[flr:FEATURELOCATIONS]-(fl),\n" +
+            "(f)-[owner:OWNERS]-(u),\n" +
+            "(cl)-[childlocations:FEATURELOCATIONS]-(child)-[cr:CHILDFEATURERELATIONSHIPS]-(fr:FeatureRelationship)-[pr:PARENTFEATURERELATIONSHIPS]-(f)\n" +
+            "OPTIONAL MATCH (f)--(fp:FeatureProperty) \n" +
+            "WHERE o.id =  '60' and s.name = 'ctgA' \n" +
+            "RETURN {sequence: s,feature: f, featureLocations: collect(fl),children: {location: collect(cl),r1: fr,feature: child}, owners: collect(u)}\n" +
+            "\n"
 
         // MATCH (o:Organism)-[r:SEQUENCES]-(s:Sequence)--(fl:FeatureLocation),(f:Transcript)-[flr:FEATURELOCATIONS]-(fl),(f)-[owner:OWNERS]-(u),(cf)-[]-(fr:FeatureRelationship)-[]-(f),(cfl)-[cflr2:FEATURELOCATIONS]-(cf) OPTIONAL MATCH (f)--(fp:FeatureProperty) where o.id =  '60' and s.name = 'ctgA' return {feature: f, featureLocations: collect(fl),children: collect({features:  fr,featureLocations: cfl}), owners: collect(u)}
 
@@ -752,9 +762,10 @@ class RequestHandlingService {
         JSONArray jsonFeatures = new JSONArray()
         nodes.each{
             println "forist node ${it} "
-            println "feature node ${it.f}"
-            println "feature node name ${it.f.name}"
-            println "feature node locations ${it.f.featureLocations}"
+            println "class of it ${it.getClass()}"
+//            println "feature node ${it.f}"
+//            println "feature node name ${it.f.name}"
+//            println "feature node locations ${it.f.featureLocations}"
 //            println "feature node label ${it.feature}"
 //            def feature = it.feature as Transcript
 //            println "as feature ${feature}"
