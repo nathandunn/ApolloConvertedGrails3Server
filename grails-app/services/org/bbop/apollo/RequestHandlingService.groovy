@@ -2032,6 +2032,7 @@ class RequestHandlingService {
 
         JSONArray featuresArray = inputObject.getJSONArray(FeatureStringEnum.FEATURES.value)
         JSONObject returnObject = jsonWebUtilityService.createJSONFeatureContainer()
+        println "RHS return object ${returnObject as JSON}"
 
         boolean useName = false
         boolean suppressHistory = false
@@ -2042,25 +2043,46 @@ class RequestHandlingService {
         if (inputObject.has(FeatureStringEnum.SUPPRESS_EVENTS.value)) {
             suppressEvents = inputObject.getBoolean(FeatureStringEnum.SUPPRESS_EVENTS.value)
         }
+        println "RHS pre-loop"
 
         for (int i = 0; i < featuresArray.size(); i++) {
             JSONObject jsonFeature = featuresArray.getJSONObject(i)
             useName = jsonFeature.has(FeatureStringEnum.USE_NAME.value) ? jsonFeature.get(FeatureStringEnum.USE_NAME.value) : false
+            println "doing useName ${useName} as JSON ${jsonFeature as JSON}"
+            println "has type ${jsonFeature.get(FeatureStringEnum.TYPE.value)}"
             if (jsonFeature.get(FeatureStringEnum.TYPE.value).name == Gene.cvTerm ||
                 FeatureService.PSEUDOGENIC_FEATURE_TYPES.contains(jsonFeature.get(FeatureStringEnum.TYPE.value).name)) {
+                println "is gene or pseudogene "
                 // if jsonFeature is of type gene or pseudogene
                 JSONObject jsonGene = JSON.parse(jsonFeature.toString())
                 jsonGene.remove(FeatureStringEnum.CHILDREN.value)
                 if (jsonFeature.containsKey(FeatureStringEnum.CHILDREN.value)) {
+                    println "handling children"
                     for (JSONObject transcriptJsonFeature in jsonFeature.getJSONArray(FeatureStringEnum.CHILDREN.value)) {
                         // look at its children JSON Array to get the features at the *RNA level
                         // adding jsonGene to each individual transcript
                         transcriptJsonFeature.put(FeatureStringEnum.PARENT.value, jsonGene)
+                        println "in gene, handling children ${transcriptJsonFeature}"
                         Feature newFeature = featureService.addFeature(transcriptJsonFeature, sequence, user, suppressHistory, useName)
-                        JSONObject newFeatureJsonObject = featureService.convertFeatureToJSON(newFeature)
+                        println "found new feature for gene ${newFeature}"
+//                        JSONObject newFeatureJsonObject = featureService.convertFeatureToJSON(newFeature)
+
+//                        String query = "MATCH (o:Organism)-[r:SEQUENCES]-(s:Sequence)--(fl:FeatureLocation)-[flr:FEATURELOCATIONS]-(f:Transcript),\n" +
+//                            "(f)-[owner:OWNERS]-(u)\n" +
+//                            "OPTIONAL MATCH (cl)-[childlocations:FEATURELOCATIONS]-(child)-[CHILDFEATURERELATIONSHIPS]-(fr:FeatureRelationship)-[pr:PARENTFEATURERELATIONSHIPS]-(f)\n" +
+//                            "OPTIONAL MATCH (pl)-[FEATURELOCATIONS]-(parent)-[PARENTFEATURERELATIONSHIPS]-(gfr:FeatureRelationship)-[generelationship:CHILDFEATURERELATIONSHIPS]-(f)\n" +
+//                            "OPTIONAL MATCH (f)--(fp:FeatureProperty) \n" +
+////            "WHERE o.id =  '60' and s.name = 'ctgA' \n" +
+//                            "WHERE o.id='${sequence.organism.id}' and s.name = '${sequence.name}'\n"  +
+//                            "RETURN {sequence: s,feature: f,location: fl,children: collect(DISTINCT {location: cl,r1: fr,feature: child}), owners: collect(u),parent: { location: collect(pl),r2:gfr,feature:parent }}"
+
+                        JSONObject newFeatureJsonObject = featureService.convertNeo4jFeatureToJSON(newFeature)
                         JSONObject jsonObject = newFeatureJsonObject
 
+                        prinltn "adding the owner ${inputObject as JSON}"
                         featureService.addOwnersByString(inputObject.username, newFeature)
+                        prinltn "ADDED owner ${inputObject as JSON}"
+
                         if (!suppressHistory) {
                             featureEventService.addNewFeatureEvent(FeatureOperation.ADD_FEATURE, newFeature.name, newFeature.uniqueName, inputObject, newFeatureJsonObject, user)
                         }
@@ -2069,8 +2091,24 @@ class RequestHandlingService {
                 }
             } else {
                 // jsonFeature is of type transposable_element or repeat_region
-                Feature newFeature = featureService.addFeature(jsonFeature, sequence, user, suppressHistory, true)
-                JSONObject newFeatureJsonObject = featureService.convertFeatureToJSON(newFeature)
+                println "not a gene type level, so adding feature "
+                def newFeature = featureService.addFeature(jsonFeature, sequence, user, suppressHistory, true)
+                println "got a feature back ${newFeature as JSON}"
+
+                String query = "MATCH (o:Organism)-[r:SEQUENCES]-(s:Sequence)--(fl:FeatureLocation)-[flr:FEATURELOCATIONS]-(f:RepeatRegion),\n" +
+                    "(f)-[owner:OWNERS]-(u)\n" +
+                    "OPTIONAL MATCH (cl)-[childlocations:FEATURELOCATIONS]-(child)-[CHILDFEATURERELATIONSHIPS]-(fr:FeatureRelationship)-[pr:PARENTFEATURERELATIONSHIPS]-(f)\n" +
+                    "OPTIONAL MATCH (pl)-[FEATURELOCATIONS]-(parent)-[PARENTFEATURERELATIONSHIPS]-(gfr:FeatureRelationship)-[generelationship:CHILDFEATURERELATIONSHIPS]-(f)\n" +
+                    "OPTIONAL MATCH (f)--(fp:FeatureProperty) \n" +
+                    "WHERE f.id='${newFeature.id}'\n"  +
+                    "RETURN {sequence: s,feature: f,location: fl,children: collect(DISTINCT {location: cl,r1: fr,feature: child}), owners: collect(u),parent: { location: collect(pl),r2:gfr,feature:parent }}"
+                println "query output ${query}"
+
+                def nodes = Transcript.executeQuery(query).unique()
+                println "nodes ${nodes}"
+                JSONObject newFeatureJsonObject = featureService.convertNeo4jFeatureToJSON(nodes.first())
+//                JSONObject newFeatureJsonObject = featureService.convertFeatureToJSON(newFeature)
+                println "got a json object back "
                 JSONObject jsonObject = newFeatureJsonObject
 
                 if (!suppressHistory) {

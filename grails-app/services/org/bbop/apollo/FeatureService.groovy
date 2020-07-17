@@ -195,12 +195,18 @@ class FeatureService {
 
     @Transactional
     def addOwnersByString(def username, Feature... features) {
-        User owner = User.findByUsername(username as String)
+        println "username ${username}, features ${features}"
+//        User owner = User.findByUsername(username as String)
+        String query = "MATCH (f)-[r:OWNERS]-(u:User) where u.username ='${username}' RETURN {user:u,feature:f} LIMIT 1"
+        println "output query ${query}"
+        def owner = User.executeQuery(query)
+        println "found user ? ${owner}"
         if (owner && features) {
             println "setting owner for feature ${features} to ${owner}"
-            features.each {
-                it.addToOwners(owner)
-            }
+            // TODO: make this setting here
+//            features.each {
+//                it.addToOwners(owner)
+//            }
         } else {
             log.warn "user ${owner} or feature ${features} is null so not setting"
         }
@@ -1383,6 +1389,356 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
         }
     }
 
+    @Transactional
+    def convertJSONToNeo4jNode(JSONObject jsonFeature, Sequence sequence) {
+        def returnFeature
+        try {
+            JSONObject type = jsonFeature.getJSONObject(FeatureStringEnum.TYPE.value);
+            String ontologyId = convertJSONToOntologyId(type)
+            if (!ontologyId) {
+                log.warn "Feature type not set for ${type}"
+                return null
+            }
+
+            returnFeature = generateFeatureForType(ontologyId)
+            if (jsonFeature.has(FeatureStringEnum.ID.value)) {
+                returnFeature.setId(jsonFeature.getLong(FeatureStringEnum.ID.value));
+            }
+
+            println "C"
+
+            if (jsonFeature.has(FeatureStringEnum.UNIQUENAME.value)) {
+                returnFeature.setUniqueName(jsonFeature.getString(FeatureStringEnum.UNIQUENAME.value));
+            } else {
+                returnFeature.setUniqueName(nameService.generateUniqueName());
+            }
+            println "D"
+            if (jsonFeature.has(FeatureStringEnum.NAME.value)) {
+                returnFeature.setName(jsonFeature.getString(FeatureStringEnum.NAME.value));
+            } else {
+                // since name attribute cannot be null, using the feature's own uniqueName
+                returnFeature.name = returnFeature.uniqueName
+            }
+            println "E"
+            if (jsonFeature.has(FeatureStringEnum.SYMBOL.value)) {
+                returnFeature.setSymbol(jsonFeature.getString(FeatureStringEnum.SYMBOL.value));
+            }
+            if (jsonFeature.has(FeatureStringEnum.DESCRIPTION.value)) {
+                returnFeature.setDescription(jsonFeature.getString(FeatureStringEnum.DESCRIPTION.value));
+            }
+            if (returnFeature instanceof DeletionArtifact) {
+                int deletionLength = jsonFeature.location.fmax - jsonFeature.location.fmin
+                returnFeature.deletionLength = deletionLength
+            }
+            println "F"
+
+//            if (returnFeature instanceof SequenceAlteration) {
+//                if (jsonFeature.has(FeatureStringEnum.REFERENCE_ALLELE.value)) {
+//                    Allele allele = new Allele(bases: jsonFeature.getString(FeatureStringEnum.REFERENCE_ALLELE.value), reference: true)
+//                    allele.save()
+//                    returnFeature.addToAlleles(allele)
+//                    returnFeature.save(failOnError: true)
+//                    allele.variant = returnFeature
+//                    allele.save()
+//                }
+//                if (jsonFeature.has(FeatureStringEnum.ALTERNATE_ALLELES.value)) {
+//                    JSONArray alternateAllelesArray = jsonFeature.getJSONArray(FeatureStringEnum.ALTERNATE_ALLELES.value)
+//                    for (int i = 0; i < alternateAllelesArray.length(); i++) {
+//                        JSONObject alternateAlleleJsonObject = alternateAllelesArray.getJSONObject(i)
+//                        String bases = alternateAlleleJsonObject.getString(FeatureStringEnum.BASES.value)
+//                        Allele allele = new Allele(bases: bases, variant: returnFeature)
+//                        allele.save()
+//
+//                        // Processing properties of an Allele
+//                        if (alternateAllelesArray.getJSONObject(i).has(FeatureStringEnum.ALLELE_INFO.value)) {
+//                            JSONArray alleleInfoArray = alternateAllelesArray.getJSONObject(i).getJSONArray(FeatureStringEnum.ALLELE_INFO.value)
+//                            for (int j = 0; j < alleleInfoArray.length(); j++) {
+//                                JSONObject info = alleleInfoArray.getJSONObject(j)
+//                                String tag = info.getString(FeatureStringEnum.TAG.value)
+//                                String value = info.getString(FeatureStringEnum.VALUE.value)
+//                                AlleleInfo alleleInfo = new AlleleInfo(tag: tag, value: value, allele: allele).save()
+//                                allele.addToAlleleInfo(alleleInfo)
+//                            }
+//                        }
+//
+//                        returnFeature.addToAlleles(allele)
+//                    }
+//                }
+//                returnFeature.save(flush: true)
+//
+//                // Processing proerties of a variant
+//                if (jsonFeature.has(FeatureStringEnum.VARIANT_INFO.value)) {
+//                    JSONArray variantInfoArray = jsonFeature.getJSONArray(FeatureStringEnum.VARIANT_INFO.value)
+//                    for (int i = 0; i < variantInfoArray.size(); i++) {
+//                        JSONObject variantInfoObject = variantInfoArray.get(i)
+//                        VariantInfo variantInfo = new VariantInfo(tag: variantInfoObject.get(FeatureStringEnum.TAG.value), value: variantInfoObject.get(FeatureStringEnum.VALUE.value))
+//                        variantInfo.variant = returnFeature
+//                        variantInfo.save()
+//                        returnFeature.addToVariantInfo(variantInfo)
+//                    }
+//                }
+//            }
+
+            returnFeature.save(flush: true)
+            println "G"
+
+            if (jsonFeature.has(FeatureStringEnum.LOCATION.value)) {
+                JSONObject jsonLocation = jsonFeature.getJSONObject(FeatureStringEnum.LOCATION.value);
+                FeatureLocation featureLocation
+                println "G.1"
+                if (SINGLETON_FEATURE_TYPES.contains(type.getString(FeatureStringEnum.NAME.value))) {
+                    featureLocation = convertJSONToFeatureLocation(jsonLocation, sequence, Strand.NONE.value)
+                } else {
+                    featureLocation = convertJSONToFeatureLocation(jsonLocation, sequence)
+                }
+                println "G.2"
+                featureLocation.sequence = sequence
+//                featureLocation.feature = returnFeature
+                println "G.3"
+                featureLocation.save()
+                println "G.4"
+                returnFeature.addToFeatureLocations(featureLocation);
+                println "G.5"
+            }
+
+//            if (returnFeature instanceof DeletionArtifact) {
+//                sequenceService.setResiduesForFeatureFromLocation((DeletionArtifact) returnFeature)
+//            } else if (jsonFeature.has(FeatureStringEnum.RESIDUES.value) && returnFeature instanceof SequenceAlterationArtifact) {
+//                sequenceService.setResiduesForFeature(returnFeature, jsonFeature.getString(FeatureStringEnum.RESIDUES.value))
+//            }
+            println "H"
+
+            if (jsonFeature.has(FeatureStringEnum.CHILDREN.value)) {
+                JSONArray children = jsonFeature.getJSONArray(FeatureStringEnum.CHILDREN.value);
+                println "jsonFeature ${jsonFeature} has ${children?.size()} children"
+                for (int i = 0; i < children.length(); ++i) {
+                    JSONObject childObject = children.getJSONObject(i)
+                    Feature child = convertJSONToFeature(childObject, sequence);
+                    // if it retuns null, we ignore it
+                    if (child) {
+                        child.save(failOnError: true)
+                        FeatureRelationship fr = new FeatureRelationship();
+                        fr.setParentFeature(returnFeature);
+                        fr.setChildFeature(child);
+                        fr.save(failOnError: true)
+                        returnFeature.addToParentFeatureRelationships(fr);
+                        child.addToChildFeatureRelationships(fr);
+                        child.save()
+                    }
+                    returnFeature.save()
+                }
+            }
+            println "I"
+            if (jsonFeature.has(FeatureStringEnum.TIMEACCESSION.value)) {
+                returnFeature.setDateCreated(new Date(jsonFeature.getInt(FeatureStringEnum.TIMEACCESSION.value)));
+            } else {
+                returnFeature.setDateCreated(new Date());
+            }
+            if (jsonFeature.has(FeatureStringEnum.TIMELASTMODIFIED.value)) {
+                returnFeature.setLastUpdated(new Date(jsonFeature.getInt(FeatureStringEnum.TIMELASTMODIFIED.value)));
+            } else {
+                returnFeature.setLastUpdated(new Date());
+            }
+            println "J"
+            if (jsonFeature.has(FeatureStringEnum.EXPORT_ALIAS.value.toLowerCase())) {
+                for (String synonymString in jsonFeature.getJSONArray(FeatureStringEnum.EXPORT_ALIAS.value.toLowerCase())) {
+                    Synonym synonym = new Synonym(
+                        name: synonymString
+                    ).save()
+                    FeatureSynonym featureSynonym = new FeatureSynonym(
+                        feature: returnFeature,
+                        synonym: synonym
+                    ).save()
+                    returnFeature.addToFeatureSynonyms(featureSynonym)
+                }
+            }
+            println "K"
+            if (configWrapperService.storeOrigId()) {
+                if (jsonFeature.has(FeatureStringEnum.ORIG_ID.value)) {
+                    FeatureProperty gsolProperty = new FeatureProperty()
+                    gsolProperty.setTag(FeatureStringEnum.ORIG_ID.value)
+                    gsolProperty.setValue(jsonFeature.getString(FeatureStringEnum.ORIG_ID.value))
+                    gsolProperty.setFeature(returnFeature)
+                    gsolProperty.save()
+                    returnFeature.addToFeatureProperties(gsolProperty)
+                }
+            }
+
+            // push notes into comment field if at the top-level
+            if (jsonFeature.has(FeatureStringEnum.EXPORT_NOTE.value.toLowerCase())) {
+                JSONArray exportNoteArray = jsonFeature.getJSONArray(FeatureStringEnum.EXPORT_NOTE.value.toLowerCase())
+//                String propertyValue = property.get(FeatureStringEnum.VALUE.value)
+                int rank = 0
+                for (String noteString in exportNoteArray) {
+                    Comment comment = new Comment(
+                        feature: returnFeature,
+                        rank: rank++,
+                        value: noteString
+                    ).save()
+                    returnFeature.addToFeatureProperties(comment)
+                }
+            }
+            println "L"
+
+
+            // handle status here
+            if (jsonFeature.has(FeatureStringEnum.STATUS.value)) {
+                String propertyValue = jsonFeature.get(FeatureStringEnum.STATUS.value)
+//                String propertyValue = property.get(FeatureStringEnum.VALUE.value)
+                AvailableStatus availableStatus = AvailableStatus.findByValue(propertyValue)
+                if (availableStatus) {
+                    Status status = new Status(
+                        value: availableStatus.value,
+                        feature: returnFeature
+                    ).save(failOnError: true)
+                    returnFeature.status = status
+                    returnFeature.save()
+                } else {
+                    log.warn "Ignoring status ${propertyValue} as its not defined."
+                }
+            }
+            println "M"
+
+            if (jsonFeature.has(FeatureStringEnum.PROPERTIES.value)) {
+                JSONArray properties = jsonFeature.getJSONArray(FeatureStringEnum.PROPERTIES.value)
+                for (int i = 0; i < properties.length(); ++i) {
+                    JSONObject property = properties.getJSONObject(i);
+                    JSONObject propertyType = property.getJSONObject(FeatureStringEnum.TYPE.value)
+                    String propertyName = null
+                    if (property.has(FeatureStringEnum.NAME.value)) {
+                        propertyName = property.get(FeatureStringEnum.NAME.value)
+                    } else if (propertyType.has(FeatureStringEnum.NAME.value)) {
+                        propertyName = propertyType.get(FeatureStringEnum.NAME.value)
+                    }
+                    String propertyValue = property.get(FeatureStringEnum.VALUE.value)
+
+                    FeatureProperty gsolProperty = null
+                    if (propertyName == FeatureStringEnum.STATUS.value) {
+                        // property of type 'Status'
+                        AvailableStatus availableStatus = AvailableStatus.findByValue(propertyValue)
+                        if (availableStatus) {
+                            Status status = new Status(
+                                value: availableStatus.value,
+                                feature: returnFeature
+                            ).save(failOnError: true)
+                            returnFeature.status = status
+                            returnFeature.save()
+                        } else {
+                            log.warn "Ignoring status ${propertyValue} as its not defined."
+                        }
+                    } else if (propertyName) {
+                        if (propertyName == FeatureStringEnum.COMMENT.value) {
+                            // property of type 'Comment'
+                            gsolProperty = new Comment();
+                        } else {
+                            gsolProperty = new FeatureProperty();
+                        }
+
+                        if (propertyType.has(FeatureStringEnum.NAME.value)) {
+                            CV cv = CV.findByName(propertyType.getJSONObject(FeatureStringEnum.CV.value).getString(FeatureStringEnum.NAME.value))
+                            CVTerm cvTerm = CVTerm.findByNameAndCv(propertyType.getString(FeatureStringEnum.NAME.value), cv)
+                            gsolProperty.setType(cvTerm);
+                        } else {
+                            log.warn "No proper type for the CV is set ${propertyType as JSON}"
+                        }
+                        gsolProperty.setTag(propertyName)
+                        gsolProperty.setValue(propertyValue)
+                        gsolProperty.setFeature(returnFeature);
+
+                        int rank = 0;
+                        for (FeatureProperty fp : returnFeature.getFeatureProperties()) {
+                            if (fp.getType().equals(gsolProperty.getType())) {
+                                if (fp.getRank() > rank) {
+                                    rank = fp.getRank();
+                                }
+                            }
+                        }
+                        gsolProperty.setRank(rank + 1);
+                        gsolProperty.save()
+                        returnFeature.addToFeatureProperties(gsolProperty);
+                    }
+                }
+            }
+            println "N"
+            // from a GFF3 OGS
+            if (jsonFeature.has(FeatureStringEnum.EXPORT_DBXREF.value.toLowerCase())) {
+                JSONArray dbxrefs = jsonFeature.getJSONArray(FeatureStringEnum.EXPORT_DBXREF.value.toLowerCase());
+                for (String dbxrefString in dbxrefs) {
+                    def (dbString, accessionString) = dbxrefString.split(":")
+//                    JSONObject db = dbxref.getJSONObject(FeatureStringEnum.DB.value);
+                    DB newDB = DB.findOrSaveByName(dbString)
+                    DBXref newDBXref = DBXref.findOrSaveByDbAndAccession(newDB, accessionString).save()
+                    returnFeature.addToFeatureDBXrefs(newDBXref)
+                    returnFeature.save()
+                }
+            }
+            println "O"
+
+            if (jsonFeature.has(FeatureStringEnum.DBXREFS.value)) {
+                JSONArray dbxrefs = jsonFeature.getJSONArray(FeatureStringEnum.DBXREFS.value);
+                for (int i = 0; i < dbxrefs.length(); ++i) {
+                    JSONObject dbxref = dbxrefs.getJSONObject(i);
+                    JSONObject db = dbxref.getJSONObject(FeatureStringEnum.DB.value);
+
+
+                    DB newDB = DB.findOrSaveByName(db.getString(FeatureStringEnum.NAME.value))
+                    DBXref newDBXref = DBXref.findOrSaveByDbAndAccession(
+                        newDB,
+                        dbxref.getString(FeatureStringEnum.ACCESSION.value)
+                    ).save()
+                    returnFeature.addToFeatureDBXrefs(newDBXref)
+                    returnFeature.save()
+                }
+            }
+            // TODO: gene_product
+            // only coming from GFF3
+            println "P"
+//            if (jsonFeature.has(FeatureStringEnum.GENE_PRODUCT.value)) {
+//                String geneProductString = jsonFeature.getString(FeatureStringEnum.GENE_PRODUCT.value)
+//                println "gene product array ${geneProductString}"
+//                List<GeneProduct> geneProducts = geneProductService.convertGff3StringToGeneProducts(geneProductString)
+//                println "gene products outputs ${geneProducts}: ${geneProducts.size()}"
+//                geneProducts.each {
+//                    it.feature = returnFeature
+//                    it.save()
+//                    returnFeature.addToGeneProducts(it)
+//                }
+//                returnFeature.save()
+//            }
+//            // TODO: provenance
+//            if (jsonFeature.has(FeatureStringEnum.PROVENANCE.value)) {
+//                String provenanceString = jsonFeature.getString(FeatureStringEnum.PROVENANCE.value)
+//                println "provenance array ${provenanceString}"
+//                List<Provenance> listOfProvenances = provenanceService.convertGff3StringToProvenances(provenanceString)
+//                println "gene products outputs ${listOfProvenances}: ${listOfProvenances.size()}"
+//                listOfProvenances.each {
+//                    it.feature = returnFeature
+//                    it.save()
+//                    returnFeature.addToProvenances(it)
+//                }
+//                returnFeature.save()
+//            }
+//            // TODO: go_annotation
+//            if (jsonFeature.has(FeatureStringEnum.GO_ANNOTATIONS.value)) {
+//                String goAnnotationString = jsonFeature.getString(FeatureStringEnum.GO_ANNOTATIONS.value)
+//                println "go annotations array ${goAnnotationString}"
+//                List<GoAnnotation> goAnnotations = goAnnotationService.convertGff3StringToGoAnnotations(goAnnotationString)
+//                println "gene products outputs ${goAnnotations}: ${goAnnotations.size()}"
+//                goAnnotations.each {
+//                    it.feature = returnFeature
+//                    it.save()
+//                    returnFeature.addToGoAnnotations(it)
+//                }
+//                returnFeature.save()
+//            }
+        }
+        catch (JSONException e) {
+            log.error("Exception creating Feature from JSON ${jsonFeature}", e)
+            return null;
+        }
+        return returnFeature;
+    }
+
 
     @Transactional
     Feature convertJSONToFeature(JSONObject jsonFeature, Sequence sequence) {
@@ -2253,7 +2609,9 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
 
 
         durationInMilliseconds = System.currentTimeMillis() - start;
-        if (neo4jChildren) {
+        println"has a child ${neo4jChildren} . . ${neo4jChildren == null} ${neo4jChildren[0].feature}"
+        if (neo4jChildren!= null && neo4jChildren[0].feature!=null) {
+            println "finding children"
             JSONArray children = new JSONArray();
             jsonFeature.put(FeatureStringEnum.CHILDREN.value, children);
             for (def child : neo4jChildren) {
@@ -2274,7 +2632,8 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
 
         durationInMilliseconds = System.currentTimeMillis() - start;
         //println "parents ${durationInMilliseconds}"
-        if (neo4jParent) {
+        println "neo4j parent ${neo4jParent}"
+        if (neo4jParent!=null && neo4jParent.feature!=null) {
 //            Feature parent = parentFeatures.iterator().next();
             println "finding lagbels ${neo4jParent}"
             def parentTypes = neo4jParent.feature.labels()
@@ -3910,12 +4269,20 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
                 }
             }
             println "input JSON ${jsonFeature}"
-            Feature feature = convertJSONToFeature(jsonFeature, sequence)
+//            Feature feature = convertJSONToFeature(jsonFeature, sequence)
+            def feature = convertJSONToNeo4jNode(jsonFeature, sequence)
+            println "outpuf feature ${feature}"
             if (!suppressHistory) {
-                String name = nameService.generateUniqueName(feature, feature.name)
+                println "new name A"
+//                String name = nameService.generateUniqueName(feature, feature.name)
+                String name = UUID.randomUUID().toString()
+                println "new name B"
                 feature.name = name
+                println "new name C"
             }
+            println "pre gsol"
             updateNewGsolFeatureAttributes(feature, sequence)
+            println "POST gsol"
 
             // setting back the original name for feature
             if (useName && jsonFeature.has(FeatureStringEnum.NAME.value)) {
@@ -3923,7 +4290,9 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
             }
 
             setOwner(feature, user);
-            feature.save(insert: true, flush: true,failOnError: true)
+            println "setting the owner"
+//            feature.save()
+            println "post save feature 1"
             if (jsonFeature.get(FeatureStringEnum.TYPE.value).name == Gene.cvTerm ||
                 PSEUDOGENIC_FEATURE_TYPES.contains(jsonFeature.get(FeatureStringEnum.TYPE.value).name)) {
                 Transcript transcript = transcriptService.getTranscripts(feature).iterator().next()
@@ -3941,6 +4310,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
             } else {
                 returnFeature = feature
             }
+            println "output the feature type"
         }
 
         return returnFeature
