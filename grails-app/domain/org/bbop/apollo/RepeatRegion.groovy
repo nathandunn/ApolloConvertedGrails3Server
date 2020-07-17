@@ -4,6 +4,10 @@ package org.bbop.apollo
  * From Scaffold
  */
 class RepeatRegion extends BiologicalRegion{
+//
+//    static mapping = {
+//        labels "RepeatRegion", "Feature"
+//    }
 
     static constraints = {
     }
