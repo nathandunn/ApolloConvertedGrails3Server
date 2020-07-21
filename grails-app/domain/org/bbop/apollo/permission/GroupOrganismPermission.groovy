@@ -2,6 +2,7 @@ package org.bbop.apollo.permission
 
 import grails.converters.JSON
 import org.bbop.apollo.organism.Organism
+import org.bbop.apollo.user.UserGroup
 import org.grails.web.json.JSONArray
 
 class GroupOrganismPermission extends GroupPermission{

@@ -1,5 +1,6 @@
 package org.bbop.apollo.user
 
+import org.bbop.apollo.JsonMetadata
 import org.bbop.apollo.Ontological
 
 /**

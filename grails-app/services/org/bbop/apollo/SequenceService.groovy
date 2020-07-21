@@ -223,7 +223,11 @@ class SequenceService {
             println "organisms ${o as JSON}"
         }
         println "INPUT ${sequence as JSON}"
-        Organism organism = Organism.executeQuery("MATCH (o:Organism)--(s:Sequence) where s.name = '${sequence.name}' RETURN o LIMIT 25").first()
+        String query = "MATCH (o:Organism)--(s:Sequence) where s.name = '${sequence.name}' RETURN o LIMIT 25"
+        println "query ${query}"
+        def organisms = Organism.executeQuery(query)
+        println "organism ${organisms}"
+        Organism organism = organisms[0]
         println "OUTOPUT ORGANISM:  ${organism}"
 
         // TODO: fix this with a query
