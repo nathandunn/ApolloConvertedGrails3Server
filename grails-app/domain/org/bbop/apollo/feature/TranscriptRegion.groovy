@@ -1,11 +1,10 @@
 package org.bbop.apollo.feature
 
-import org.bbop.apollo.feature.BiologicalRegion
 
 /**
  * Inherited from here:
  */
-class TranscriptRegion extends BiologicalRegion{
+class TranscriptRegion extends Feature{
 
     static constraints = {
     }

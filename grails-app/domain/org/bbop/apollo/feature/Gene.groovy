@@ -1,12 +1,11 @@
 package org.bbop.apollo.feature
 
-import org.bbop.apollo.feature.BiologicalRegion
 
 /**
  * Inherited from here:
  * AbstractSingleLocationBioFeature
  */
-class Gene extends BiologicalRegion{
+class Gene extends Feature{
 
 
     static constraints = {

@@ -1,8 +1,7 @@
 package org.bbop.apollo.feature
 
-import org.bbop.apollo.feature.BiologicalRegion
 
-class TransposableElement extends BiologicalRegion{
+class TransposableElement extends Feature{
 
 
     static constraints = {

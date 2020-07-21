@@ -1,8 +1,7 @@
 package org.bbop.apollo.feature
 
-import org.bbop.apollo.feature.BiologicalRegion
 
-class ShineDalgarnoSequence extends BiologicalRegion{
+class ShineDalgarnoSequence extends Feature{
     static constraints = {
     }
     static String cvTerm  = "Shine_Dalgarno_sequence"

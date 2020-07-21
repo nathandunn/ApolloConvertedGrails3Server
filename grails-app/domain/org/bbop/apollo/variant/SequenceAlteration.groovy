@@ -1,8 +1,9 @@
 package org.bbop.apollo.variant
 
-import org.bbop.apollo.feature.SequenceFeature
+import org.bbop.apollo.feature.Feature
 
-class SequenceAlteration extends SequenceFeature{
+
+class SequenceAlteration extends Feature{
 
 
     String alterationResidue

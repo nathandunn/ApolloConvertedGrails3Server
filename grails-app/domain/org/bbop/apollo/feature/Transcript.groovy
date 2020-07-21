@@ -1,12 +1,11 @@
 package org.bbop.apollo.feature
 
-import org.bbop.apollo.feature.GeneMemberRegion
 
 /**
  * Inherited from here:
  * AbstractSingleLocationBioFeature
  */
-class Transcript extends GeneMemberRegion{
+class Transcript extends Feature{
 
     static constraints = {
     }

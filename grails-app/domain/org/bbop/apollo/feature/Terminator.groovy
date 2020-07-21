@@ -1,8 +1,7 @@
 package org.bbop.apollo.feature
 
-import org.bbop.apollo.feature.BiologicalRegion
 
-class Terminator extends BiologicalRegion{
+class Terminator extends Feature{
     static constraints = {
     }
     static String cvTerm  = "terminator"

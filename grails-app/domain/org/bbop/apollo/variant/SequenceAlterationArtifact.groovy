@@ -1,8 +1,9 @@
 package org.bbop.apollo.variant
 
-import org.bbop.apollo.feature.SequenceFeature
+import org.bbop.apollo.feature.Feature
 
-class SequenceAlterationArtifact extends SequenceFeature {
+
+class SequenceAlterationArtifact extends Feature {
 
     static constraints = {
         alterationResidue nullable: true
