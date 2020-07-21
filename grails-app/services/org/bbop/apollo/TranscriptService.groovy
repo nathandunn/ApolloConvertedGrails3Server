@@ -1,6 +1,37 @@
 package org.bbop.apollo
 
 import grails.gorm.transactions.Transactional
+import org.bbop.apollo.attributes.Comment
+import org.bbop.apollo.attributes.DBXref
+import org.bbop.apollo.attributes.Frameshift
+import org.bbop.apollo.attributes.Minus1Frameshift
+import org.bbop.apollo.attributes.Minus2Frameshift
+import org.bbop.apollo.attributes.Plus1Frameshift
+import org.bbop.apollo.attributes.Plus2Frameshift
+import org.bbop.apollo.feature.CDS
+import org.bbop.apollo.feature.EnzymaticRNA
+import org.bbop.apollo.feature.Exon
+import org.bbop.apollo.feature.Feature
+import org.bbop.apollo.feature.Gene
+import org.bbop.apollo.feature.GuideRNA
+import org.bbop.apollo.feature.LncRNA
+import org.bbop.apollo.feature.MRNA
+import org.bbop.apollo.feature.MiRNA
+import org.bbop.apollo.feature.NcRNA
+import org.bbop.apollo.feature.PiRNA
+import org.bbop.apollo.feature.Pseudogene
+import org.bbop.apollo.feature.PseudogenicRegion
+import org.bbop.apollo.feature.RNaseMRPRNA
+import org.bbop.apollo.feature.RNasePRNA
+import org.bbop.apollo.feature.RRNA
+import org.bbop.apollo.feature.ScRNA
+import org.bbop.apollo.feature.SnRNA
+import org.bbop.apollo.feature.SnoRNA
+import org.bbop.apollo.feature.SrpRNA
+import org.bbop.apollo.feature.TRNA
+import org.bbop.apollo.feature.TelomeraseRNA
+import org.bbop.apollo.feature.TmRNA
+import org.bbop.apollo.feature.Transcript
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
 
 
@@ -8,10 +39,10 @@ import org.bbop.apollo.gwt.shared.FeatureStringEnum
 class TranscriptService {
 
     List<String> ontologyIds = [
-      Transcript.ontologyId, SnRNA.ontologyId, MRNA.ontologyId, SnoRNA.ontologyId,
-      MiRNA.ontologyId, TRNA.ontologyId, NcRNA.ontologyId, RRNA.ontologyId,
-      GuideRNA.ontologyId, RNasePRNA.ontologyId, TelomeraseRNA.ontologyId, SrpRNA.ontologyId, LncRNA.ontologyId,
-      RNaseMRPRNA.ontologyId, ScRNA.ontologyId, PiRNA.ontologyId, TmRNA.ontologyId, EnzymaticRNA.ontologyId,
+        Transcript.ontologyId, SnRNA.ontologyId, MRNA.ontologyId, SnoRNA.ontologyId,
+        MiRNA.ontologyId, TRNA.ontologyId, NcRNA.ontologyId, RRNA.ontologyId,
+        GuideRNA.ontologyId, RNasePRNA.ontologyId, TelomeraseRNA.ontologyId, SrpRNA.ontologyId, LncRNA.ontologyId,
+        RNaseMRPRNA.ontologyId, ScRNA.ontologyId, PiRNA.ontologyId, TmRNA.ontologyId, EnzymaticRNA.ontologyId,
     ]
 
     // services
@@ -56,7 +87,7 @@ class TranscriptService {
      * @return Gene that this Transcript is associated with
      */
     Gene getGene(Transcript transcript) {
-        return (Gene) featureRelationshipService.getParentForFeature(transcript, Gene.ontologyId, Pseudogene.ontologyId,PseudogenicRegion.ontologyId,ProcessedPseudogene.ontologyId)
+        return (Gene) featureRelationshipService.getParentForFeature(transcript, Gene.ontologyId, Pseudogene.ontologyId, PseudogenicRegion.ontologyId,ProcessedPseudogene.ontologyId)
     }
 
     Pseudogene getPseudogene(Transcript transcript) {
@@ -314,7 +345,7 @@ class TranscriptService {
           splitTranscript.addToFeaturePublications(fp)
         }
         transcript.featureDBXrefs.each { fp ->
-          DBXref featureDbxref = new DBXref(
+            DBXref featureDbxref = new DBXref(
              feature:splitTranscript,
             accession: fp.accession,
             description: fp.description,

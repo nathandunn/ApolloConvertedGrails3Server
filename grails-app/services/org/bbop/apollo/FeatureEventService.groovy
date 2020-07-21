@@ -3,8 +3,12 @@ package org.bbop.apollo
 import grails.converters.JSON
 import grails.gorm.transactions.Transactional
 import org.bbop.apollo.event.AnnotationEvent
+import org.bbop.apollo.feature.Feature
+import org.bbop.apollo.feature.Transcript
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
 import org.bbop.apollo.history.FeatureOperation
+import org.bbop.apollo.organism.Sequence
+import org.bbop.apollo.user.User
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
 

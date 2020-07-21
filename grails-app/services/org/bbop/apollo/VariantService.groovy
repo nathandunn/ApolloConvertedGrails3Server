@@ -1,7 +1,15 @@
 package org.bbop.apollo
 
 import grails.gorm.transactions.Transactional
+import org.bbop.apollo.feature.Feature
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
+import org.bbop.apollo.organism.Organism
+import org.bbop.apollo.organism.Sequence
+import org.bbop.apollo.user.User
+import org.bbop.apollo.variant.Allele
+import org.bbop.apollo.variant.AlleleInfo
+import org.bbop.apollo.variant.SequenceAlteration
+import org.bbop.apollo.variant.SequenceAlterationArtifact
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
 

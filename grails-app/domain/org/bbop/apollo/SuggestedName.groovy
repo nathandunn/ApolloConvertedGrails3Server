@@ -1,5 +1,7 @@
 package org.bbop.apollo
 
+import org.bbop.apollo.attributes.FeatureType
+
 class SuggestedName {
 
     static constraints = {

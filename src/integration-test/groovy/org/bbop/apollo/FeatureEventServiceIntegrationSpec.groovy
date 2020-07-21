@@ -3,10 +3,19 @@ package org.bbop.apollo
 import grails.converters.JSON
 import grails.testing.mixin.integration.Integration
 import grails.transaction.Rollback
+import org.bbop.apollo.feature.CDS
+import org.bbop.apollo.feature.Exon
+import org.bbop.apollo.feature.Feature
+import org.bbop.apollo.feature.Gene
+import org.bbop.apollo.feature.MRNA
+import org.bbop.apollo.feature.NonCanonicalFivePrimeSpliceSite
+import org.bbop.apollo.feature.NonCanonicalThreePrimeSpliceSite
+import org.bbop.apollo.feature.Transcript
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
 import org.bbop.apollo.history.FeatureOperation
+import org.bbop.apollo.organism.Organism
+import org.bbop.apollo.organism.Sequence
 import org.grails.web.json.JSONArray
-import org.grails.web.json.JSONException
 import org.grails.web.json.JSONObject
 
 @Integration

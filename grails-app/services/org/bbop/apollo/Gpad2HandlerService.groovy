@@ -1,7 +1,9 @@
 package org.bbop.apollo
 
 import groovy.json.JsonSlurper
+import org.bbop.apollo.feature.Feature
 import org.bbop.apollo.go.GoAnnotation
+import org.bbop.apollo.user.User
 import org.grails.web.json.JSONArray
 import java.text.SimpleDateFormat
 

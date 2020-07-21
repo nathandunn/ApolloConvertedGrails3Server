@@ -1,5 +1,8 @@
 package org.bbop.apollo
 
+import org.bbop.apollo.feature.Feature
+import org.bbop.apollo.user.User
+
 class Provenance {
 
   static constraints = {
@@ -19,7 +22,7 @@ class Provenance {
     owners: User
   ]
 
-  Feature feature
+    Feature feature
   String field // this is new
   String reference
   Date lastUpdated

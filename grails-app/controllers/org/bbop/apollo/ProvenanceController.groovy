@@ -2,8 +2,10 @@ package org.bbop.apollo
 
 import grails.converters.JSON
 import grails.gorm.transactions.Transactional
+import org.bbop.apollo.feature.Feature
 import org.bbop.apollo.gwt.shared.PermissionEnum
 import org.bbop.apollo.history.FeatureOperation
+import org.bbop.apollo.user.User
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
 import io.swagger.annotations.*
@@ -29,7 +31,7 @@ class ProvenanceController {
   def index() {
     JSONObject dataObject = permissionService.handleInput(request, params)
     permissionService.checkPermissions(dataObject, PermissionEnum.READ)
-    Feature feature = Feature.findByUniqueName(dataObject.uniqueName as String)
+      Feature feature = Feature.findByUniqueName(dataObject.uniqueName as String)
     if (feature) {
       JSONObject annotations = provenanceService.getAnnotations(feature)
       // TODO: register with marshaller

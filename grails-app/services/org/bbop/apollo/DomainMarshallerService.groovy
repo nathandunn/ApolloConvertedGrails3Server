@@ -3,9 +3,12 @@ package org.bbop.apollo
 import grails.converters.JSON
 import grails.gorm.transactions.Transactional
 import org.bbop.apollo.go.GoAnnotation
+import org.bbop.apollo.organism.Organism
+import org.bbop.apollo.organism.Sequence
 import org.bbop.apollo.preference.OrganismDTO
 import org.bbop.apollo.preference.SequenceDTO
 import org.bbop.apollo.preference.UserOrganismPreferenceDTO
+import org.bbop.apollo.user.User
 
 @Transactional
 class DomainMarshallerService {

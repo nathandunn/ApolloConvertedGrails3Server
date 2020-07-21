@@ -1,6 +1,7 @@
 package org.bbop.apollo
 
 import org.bbop.apollo.history.FeatureOperation
+import org.bbop.apollo.user.User
 
 //import org.bbop.apollo.history.FeatureOperation
 

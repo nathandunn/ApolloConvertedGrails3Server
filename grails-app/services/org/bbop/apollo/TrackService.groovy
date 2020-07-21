@@ -6,7 +6,14 @@ import grails.gorm.transactions.Transactional
 import org.bbop.apollo.gwt.shared.PermissionEnum
 import org.bbop.apollo.gwt.shared.track.TrackIndex
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
+import org.bbop.apollo.organism.Organism
+import org.bbop.apollo.permission.GroupPermission
+import org.bbop.apollo.permission.GroupTrackPermission
+import org.bbop.apollo.permission.UserPermission
+import org.bbop.apollo.preference.ApplicationPreference
 import org.bbop.apollo.sequence.SequenceDTO
+import org.bbop.apollo.user.User
+import org.bbop.apollo.user.UserGroup
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONElement
 import org.grails.web.json.JSONObject

@@ -11,10 +11,17 @@ import org.apache.shiro.subject.Subject
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
 import org.bbop.apollo.gwt.shared.GlobalPermissionEnum
 import org.bbop.apollo.gwt.shared.PermissionEnum
+import org.bbop.apollo.organism.Organism
+import org.bbop.apollo.organism.Sequence
+import org.bbop.apollo.permission.GroupOrganismPermission
+import org.bbop.apollo.permission.UserOrganismPermission
 import org.bbop.apollo.preference.OrganismDTO
 import org.bbop.apollo.preference.SequenceDTO
 import org.bbop.apollo.preference.UserDTO
 import org.bbop.apollo.preference.UserOrganismPreferenceDTO
+import org.bbop.apollo.user.Role
+import org.bbop.apollo.user.User
+import org.bbop.apollo.user.UserGroup
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
 

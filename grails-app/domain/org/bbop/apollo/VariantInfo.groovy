@@ -1,5 +1,7 @@
 package org.bbop.apollo
 
+import org.bbop.apollo.variant.SequenceAlteration
+
 class VariantInfo {
 
     String tag

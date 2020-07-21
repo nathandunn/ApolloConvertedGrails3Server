@@ -1,5 +1,8 @@
 package org.bbop.apollo
 
+import org.bbop.apollo.cv.CVTerm
+import org.bbop.apollo.feature.Feature
+
 class FeatureProperty implements Ontological {
 
     static auditable = true

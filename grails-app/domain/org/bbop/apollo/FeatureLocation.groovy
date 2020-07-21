@@ -1,5 +1,8 @@
 package org.bbop.apollo
 
+import org.bbop.apollo.feature.Feature
+import org.bbop.apollo.organism.Sequence
+
 class FeatureLocation {
     static mapping = {
         length formula: 'FMAX-FMIN'

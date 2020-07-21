@@ -5,9 +5,11 @@ import grails.gorm.transactions.NotTransactional
 import grails.gorm.transactions.Transactional
 import org.apache.shiro.SecurityUtils
 import org.apache.shiro.session.Session
+import org.bbop.apollo.feature.Feature
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
 import org.bbop.apollo.gwt.shared.PermissionEnum
-import org.bbop.apollo.preference.UserOrganismPreferenceDTO
+import org.bbop.apollo.organism.Organism
+import org.bbop.apollo.organism.Sequence
 import org.bbop.apollo.report.SequenceSummary
 import org.bbop.apollo.sequence.Strand
 import org.grails.web.json.JSONArray

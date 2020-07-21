@@ -6,11 +6,21 @@ import groovy.json.JsonSlurper
 import htsjdk.samtools.reference.FastaSequenceIndex
 import htsjdk.samtools.reference.IndexedFastaSequenceFile
 import org.bbop.apollo.alteration.SequenceAlterationInContext
+import org.bbop.apollo.feature.CDS
+import org.bbop.apollo.feature.Exon
+import org.bbop.apollo.feature.Feature
+import org.bbop.apollo.feature.Transcript
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
+import org.bbop.apollo.organism.Organism
+import org.bbop.apollo.organism.Sequence
 import org.bbop.apollo.sequence.SequenceTranslationHandler
 import org.bbop.apollo.sequence.StandardTranslationTable
 import org.bbop.apollo.sequence.Strand
 import org.bbop.apollo.sequence.TranslationTable
+import org.bbop.apollo.variant.DeletionArtifact
+import org.bbop.apollo.variant.InsertionArtifact
+import org.bbop.apollo.variant.SequenceAlterationArtifact
+import org.bbop.apollo.variant.SubstitutionArtifact
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
 

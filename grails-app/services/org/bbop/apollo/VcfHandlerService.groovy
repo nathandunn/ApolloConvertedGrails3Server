@@ -1,6 +1,11 @@
 package org.bbop.apollo
 
 import grails.gorm.transactions.Transactional
+import org.bbop.apollo.organism.Organism
+import org.bbop.apollo.organism.Sequence
+import org.bbop.apollo.variant.Allele
+import org.bbop.apollo.variant.SequenceAlteration
+
 import java.text.SimpleDateFormat
 
 @Transactional

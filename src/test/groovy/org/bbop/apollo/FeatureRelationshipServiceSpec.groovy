@@ -2,13 +2,16 @@ package org.bbop.apollo
 
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
+import org.bbop.apollo.feature.Feature
+import org.bbop.apollo.feature.Gene
+import org.bbop.apollo.feature.MRNA
 import spock.lang.Specification
 
 /**
  * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
  */
 @TestFor(FeatureRelationshipService)
-@Mock([FeatureRelationship,Feature,Gene,MRNA])
+@Mock([FeatureRelationship, Feature, Gene, MRNA])
 class FeatureRelationshipServiceSpec extends Specification {
 
     def setup() {

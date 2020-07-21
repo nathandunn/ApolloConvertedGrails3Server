@@ -1,6 +1,16 @@
 package org.bbop.apollo
 
 import grails.gorm.transactions.Transactional
+import org.bbop.apollo.feature.CDS
+import org.bbop.apollo.feature.Exon
+import org.bbop.apollo.feature.Feature
+import org.bbop.apollo.feature.Gene
+import org.bbop.apollo.feature.NonCanonicalFivePrimeSpliceSite
+import org.bbop.apollo.feature.NonCanonicalThreePrimeSpliceSite
+import org.bbop.apollo.feature.Transcript
+import org.bbop.apollo.organism.Organism
+import org.bbop.apollo.variant.Allele
+import org.bbop.apollo.variant.SequenceAlteration
 
 @Transactional(readOnly = true)
 class NameService {
@@ -15,7 +25,7 @@ class NameService {
         UUID.randomUUID().toString()
     }
 
-    String generateUniqueName(Feature thisFeature,String principalName = null ) {
+    String generateUniqueName(Feature thisFeature, String principalName = null ) {
         Organism organism = thisFeature?.featureLocation?.sequence?.organism
         if(thisFeature.name) {
             if (thisFeature instanceof Transcript) {
@@ -162,7 +172,7 @@ class NameService {
         String position = variant.featureLocation.fmin + 1
         def alternateAlleles = []
         String referenceAllele
-        for (Allele allele : variant.alleles.sort { a,b -> a.id <=> b.id }) {
+        for (Allele allele : variant.alleles.sort { a, b -> a.id <=> b.id }) {
             if (allele.reference) {
                 referenceAllele = allele.bases
             }

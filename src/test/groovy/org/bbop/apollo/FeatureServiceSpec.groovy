@@ -3,7 +3,11 @@ package org.bbop.apollo
 import grails.converters.JSON
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
+import org.bbop.apollo.feature.Exon
+import org.bbop.apollo.feature.Feature
+import org.bbop.apollo.feature.MRNA
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
+import org.bbop.apollo.organism.Sequence
 import org.bbop.apollo.sequence.Strand
 import org.grails.web.json.JSONObject
 import spock.lang.Specification
@@ -12,7 +16,7 @@ import spock.lang.Specification
  * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
  */
 @TestFor(FeatureService)
-@Mock([Sequence, FeatureLocation, Feature,MRNA])
+@Mock([Sequence, FeatureLocation, Feature, MRNA])
 class FeatureServiceSpec extends Specification {
 
     def setup() {

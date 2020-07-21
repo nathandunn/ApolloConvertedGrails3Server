@@ -1,5 +1,7 @@
 package org.bbop.apollo
 
+import org.bbop.apollo.attributes.DBXref
+
 class PublicationDBXref {
 
     static constraints = {

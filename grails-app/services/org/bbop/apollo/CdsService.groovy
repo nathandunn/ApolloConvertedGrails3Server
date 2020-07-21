@@ -1,5 +1,11 @@
 package org.bbop.apollo
 
+import org.bbop.apollo.attributes.Comment
+import org.bbop.apollo.feature.CDS
+import org.bbop.apollo.feature.Exon
+import org.bbop.apollo.feature.Feature
+import org.bbop.apollo.feature.StopCodonReadThrough
+import org.bbop.apollo.feature.Transcript
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
 
 import grails.gorm.transactions.Transactional

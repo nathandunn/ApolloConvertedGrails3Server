@@ -1,11 +1,19 @@
 package org.bbop.apollo
 
 import org.apache.commons.lang.WordUtils
-import org.bbop.apollo.geneProduct.GeneProduct
-import org.bbop.apollo.go.GoAnnotation
+import org.bbop.apollo.attributes.Comment
+import org.bbop.apollo.attributes.DBXref
+import org.bbop.apollo.feature.CDS
+import org.bbop.apollo.feature.Exon
+import org.bbop.apollo.feature.Feature
+import org.bbop.apollo.feature.Transcript
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
+import org.bbop.apollo.organism.Sequence
 import org.bbop.apollo.sequence.Strand
-import org.springframework.format.datetime.DateFormatter
+import org.bbop.apollo.variant.InsertionArtifact
+import org.bbop.apollo.variant.SequenceAlterationArtifact
+import org.bbop.apollo.variant.SubstitutionArtifact
+
 import java.text.SimpleDateFormat
 
 

@@ -2,10 +2,15 @@ package org.bbop.apollo
 
 import com.google.common.base.Splitter
 import grails.converters.JSON
+import org.bbop.apollo.feature.Feature
+import org.bbop.apollo.feature.Gene
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
 import org.bbop.apollo.gwt.shared.PermissionEnum
+import org.bbop.apollo.organism.Organism
+import org.bbop.apollo.organism.Sequence
 import org.bbop.apollo.sequence.DownloadFile
 import org.bbop.apollo.sequence.Strand
+import org.bbop.apollo.variant.SequenceAlteration
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
 import io.swagger.annotations.*

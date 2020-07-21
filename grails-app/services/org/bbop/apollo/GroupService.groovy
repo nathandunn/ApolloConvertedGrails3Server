@@ -4,6 +4,10 @@ import grails.converters.JSON
 import grails.gorm.transactions.Transactional
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
 import org.bbop.apollo.gwt.shared.GlobalPermissionEnum
+import org.bbop.apollo.permission.GroupOrganismPermission
+import org.bbop.apollo.permission.GroupPermission
+import org.bbop.apollo.user.User
+import org.bbop.apollo.user.UserGroup
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
 
@@ -12,7 +16,7 @@ class GroupService {
 
     def permissionService
 
-    List<UserGroup> createGroups(String metadata,User currentUser,String[] names) {
+    List<UserGroup> createGroups(String metadata, User currentUser, String[] names) {
         List<UserGroup> groups = []
         for(name in names){
             UserGroup group = new UserGroup(

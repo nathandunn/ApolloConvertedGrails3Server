@@ -3,16 +3,12 @@ package org.bbop.apollo
 import grails.gorm.transactions.NotTransactional
 import grails.gorm.transactions.Transactional
 import groovy.io.FileType
+import org.bbop.apollo.feature.Feature
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
+import org.bbop.apollo.organism.Organism
+import org.bbop.apollo.organism.Sequence
 import org.bbop.apollo.sequence.SequenceTranslationHandler
 import org.bbop.apollo.sequence.TranslationTable
-
-import java.nio.file.FileSystemException
-import java.nio.file.Files
-import java.nio.file.StandardCopyOption
-import java.util.zip.ZipEntry
-import java.util.zip.ZipFile
-import java.util.zip.ZipInputStream
 
 @Transactional
 class OrganismService {

@@ -1,9 +1,15 @@
 package org.bbop.apollo
 
+import org.bbop.apollo.attributes.Comment
+import org.bbop.apollo.attributes.DBXref
+import org.bbop.apollo.feature.Feature
+import org.bbop.apollo.feature.Gene
+import org.bbop.apollo.feature.Pseudogene
+import org.bbop.apollo.feature.PseudogenicRegion
+import org.bbop.apollo.feature.Transcript
 import org.bbop.apollo.sequence.Strand
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
-import java.io.*;
-import java.util.*;
+
 import java.util.zip.GZIPOutputStream;
 
 
@@ -38,7 +44,7 @@ public class FastaHandlerService {
         }
     }
     
-    public void writeFeatures(Collection<Feature> features, String seqType, Set<String> metaDataToExport, String path, Mode mode, Format format,String region = null ) throws IOException {
+    public void writeFeatures(Collection<Feature> features, String seqType, Set<String> metaDataToExport, String path, Mode mode, Format format, String region = null ) throws IOException {
         this.mode = mode
         file = new File(path)
         file.createNewFile()
@@ -72,7 +78,7 @@ public class FastaHandlerService {
         }
         while (iterator.hasNext()) {
             Feature feature = iterator.next();
-            if(feature.class.name in [Gene.class.name, Pseudogene.class.name,PseudogenicRegion.class.name,ProcessedPseudogene.class.name]) {
+            if(feature.class.name in [Gene.class.name, Pseudogene.class.name, PseudogenicRegion.class.name, ProcessedPseudogene.class.name]) {
                 def transcriptList = transcriptService.getTranscripts(feature)
                 for (Transcript transcript in transcriptList) {
                     writeFeature(transcript, seqType, metaDataToExport);

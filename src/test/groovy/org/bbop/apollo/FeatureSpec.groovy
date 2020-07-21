@@ -2,13 +2,15 @@ package org.bbop.apollo
 
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
+import org.bbop.apollo.feature.Feature
+import org.bbop.apollo.organism.Sequence
 import spock.lang.Specification
 
 /**
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
  */
 @TestFor(Feature)
-@Mock([Feature,FeatureLocation,Sequence])
+@Mock([Feature,FeatureLocation, Sequence])
 class FeatureSpec extends Specification {
 
     def setup() {

@@ -1,5 +1,7 @@
 package org.bbop.apollo
 
+import org.bbop.apollo.cv.CVTerm
+
 class PublicationRelationship {
 
     static constraints = {

@@ -1,8 +1,15 @@
 package org.bbop.apollo
 
 import grails.gorm.transactions.Transactional
+import org.bbop.apollo.feature.Exon
+import org.bbop.apollo.feature.NonCanonicalFivePrimeSpliceSite
+import org.bbop.apollo.feature.NonCanonicalThreePrimeSpliceSite
+import org.bbop.apollo.feature.Transcript
+import org.bbop.apollo.organism.Sequence
 import org.bbop.apollo.sequence.SequenceTranslationHandler
 import org.bbop.apollo.sequence.Strand
+import org.bbop.apollo.variant.SequenceAlterationArtifact
+
 //@GrailsCompileStatic
 @Transactional
 class NonCanonicalSplitSiteService {

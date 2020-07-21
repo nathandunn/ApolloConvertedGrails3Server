@@ -3,10 +3,12 @@ package org.bbop.apollo
 
 
 import grails.test.mixin.*
+import org.bbop.apollo.attributes.FeatureType
+import org.bbop.apollo.feature.MRNA
 import spock.lang.*
 
 @TestFor(FeatureTypeController)
-@Mock([FeatureType,MRNA])
+@Mock([FeatureType, MRNA])
 class FeatureTypeControllerSpec extends Specification {
 
     def populateValidParams(params) {

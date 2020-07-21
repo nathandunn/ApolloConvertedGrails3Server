@@ -2,6 +2,10 @@ package org.bbop.apollo
 
 
 import grails.gorm.transactions.Transactional
+import org.bbop.apollo.feature.CDS
+import org.bbop.apollo.feature.Exon
+import org.bbop.apollo.feature.Gene
+import org.bbop.apollo.feature.Transcript
 
 //import grails.compiler.GrailsCompileStatic
 import org.bbop.apollo.sequence.SequenceTranslationHandler

@@ -3,6 +3,14 @@ package org.bbop.apollo
 import grails.converters.JSON
 import grails.testing.mixin.integration.Integration
 import grails.transaction.Rollback
+import org.bbop.apollo.feature.CDS
+import org.bbop.apollo.feature.Exon
+import org.bbop.apollo.feature.Gene
+import org.bbop.apollo.feature.MRNA
+import org.bbop.apollo.feature.Pseudogene
+import org.bbop.apollo.feature.RepeatRegion
+import org.bbop.apollo.variant.InsertionArtifact
+import org.bbop.apollo.variant.SequenceAlterationArtifact
 
 @Integration
 @Rollback

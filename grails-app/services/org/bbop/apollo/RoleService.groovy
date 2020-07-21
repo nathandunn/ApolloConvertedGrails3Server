@@ -3,6 +3,7 @@ package org.bbop.apollo
 
 import grails.gorm.transactions.Transactional
 import org.bbop.apollo.gwt.shared.GlobalPermissionEnum
+import org.bbop.apollo.user.Role
 
 @Transactional
 class RoleService {

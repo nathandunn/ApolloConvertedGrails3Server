@@ -2,13 +2,13 @@ package org.bbop.apollo
 
 import grails.converters.JSON
 import grails.gorm.transactions.Transactional
+import org.bbop.apollo.attributes.AvailableStatus
+import org.bbop.apollo.feature.Feature
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
 import org.bbop.apollo.gwt.shared.PermissionEnum
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
 import io.swagger.annotations.*
-
-import static org.springframework.http.HttpStatus.*
 
 @Api(value = "History Services: Methods for querying history")
 @Transactional(readOnly = true)

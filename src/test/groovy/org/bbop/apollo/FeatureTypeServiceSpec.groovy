@@ -2,14 +2,16 @@ package org.bbop.apollo
 
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
-import groovy.mock.interceptor.MockFor
+import org.bbop.apollo.attributes.FeatureType
+import org.bbop.apollo.feature.Feature
+import org.bbop.apollo.feature.Gene
 import spock.lang.Specification
 
 /**
  * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
  */
 @TestFor(FeatureTypeService)
-@Mock([Feature,FeatureType])
+@Mock([Feature, FeatureType])
 class FeatureTypeServiceSpec extends Specification {
 
     def setup() {
