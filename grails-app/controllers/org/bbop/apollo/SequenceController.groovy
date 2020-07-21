@@ -10,6 +10,7 @@ import org.bbop.apollo.gwt.shared.FeatureStringEnum
 import org.bbop.apollo.gwt.shared.PermissionEnum
 import org.bbop.apollo.organism.Organism
 import org.bbop.apollo.organism.Sequence
+import org.bbop.apollo.organism.SequenceCache
 import org.bbop.apollo.report.SequenceSummary
 import org.bbop.apollo.sequence.Strand
 import org.grails.web.json.JSONArray

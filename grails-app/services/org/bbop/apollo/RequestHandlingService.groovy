@@ -6,6 +6,8 @@ import org.bbop.apollo.attributes.AvailableStatus
 import org.bbop.apollo.attributes.Comment
 import org.bbop.apollo.attributes.DB
 import org.bbop.apollo.attributes.DBXref
+import org.bbop.apollo.attributes.FeatureProperty
+import org.bbop.apollo.attributes.Status
 import org.bbop.apollo.event.AnnotationEvent
 import org.bbop.apollo.feature.CDS
 import org.bbop.apollo.feature.EnzymaticRNA
@@ -18,6 +20,7 @@ import org.bbop.apollo.feature.MRNA
 import org.bbop.apollo.feature.MiRNA
 import org.bbop.apollo.feature.NcRNA
 import org.bbop.apollo.feature.PiRNA
+import org.bbop.apollo.feature.ProcessedPseudogene
 import org.bbop.apollo.feature.Pseudogene
 import org.bbop.apollo.feature.PseudogenicRegion
 import org.bbop.apollo.feature.RNaseMRPRNA
@@ -35,7 +38,9 @@ import org.bbop.apollo.feature.Transcript
 import org.bbop.apollo.feature.TransposableElement
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
 import org.bbop.apollo.gwt.shared.PermissionEnum
+import org.bbop.apollo.history.FeatureEvent
 import org.bbop.apollo.history.FeatureOperation
+import org.bbop.apollo.location.FeatureLocation
 import org.bbop.apollo.organism.Organism
 import org.bbop.apollo.organism.Sequence
 import org.bbop.apollo.sequence.Strand

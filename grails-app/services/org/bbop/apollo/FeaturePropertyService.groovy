@@ -2,6 +2,7 @@ package org.bbop.apollo
 
 import grails.gorm.transactions.Transactional
 import org.bbop.apollo.attributes.Comment
+import org.bbop.apollo.attributes.FeatureProperty
 import org.bbop.apollo.feature.Feature
 import org.bbop.apollo.feature.StopCodonReadThrough
 

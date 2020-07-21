@@ -9,7 +9,9 @@ import org.bbop.apollo.feature.Gene
 import org.bbop.apollo.feature.MRNA
 import org.bbop.apollo.feature.Transcript
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
+import org.bbop.apollo.location.FeatureLocation
 import org.bbop.apollo.organism.Sequence
+import org.bbop.apollo.relationship.FeatureRelationship
 import org.grails.web.json.JSONObject
 
 import java.util.zip.CRC32

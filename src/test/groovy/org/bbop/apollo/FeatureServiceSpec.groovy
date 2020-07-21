@@ -7,6 +7,7 @@ import org.bbop.apollo.feature.Exon
 import org.bbop.apollo.feature.Feature
 import org.bbop.apollo.feature.MRNA
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
+import org.bbop.apollo.location.FeatureLocation
 import org.bbop.apollo.organism.Sequence
 import org.bbop.apollo.sequence.Strand
 import org.grails.web.json.JSONObject

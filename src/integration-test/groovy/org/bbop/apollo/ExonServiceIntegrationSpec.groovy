@@ -4,8 +4,10 @@ import grails.testing.mixin.integration.Integration
 import grails.transaction.Rollback
 import org.bbop.apollo.feature.Exon
 import org.bbop.apollo.feature.MRNA
+import org.bbop.apollo.location.FeatureLocation
 import org.bbop.apollo.organism.Organism
 import org.bbop.apollo.organism.Sequence
+import org.bbop.apollo.relationship.FeatureRelationship
 import org.bbop.apollo.sequence.Strand
 
 @Integration

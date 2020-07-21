@@ -1,16 +1,15 @@
 package org.bbop.apollo.feature
 
-import org.bbop.apollo.cv.FeatureCVTerm
 
-import org.bbop.apollo.FeatureLocation
-import org.bbop.apollo.FeatureProperty
-import org.bbop.apollo.FeatureRelationship
-import org.bbop.apollo.FeatureSynonym
+import org.bbop.apollo.location.FeatureLocation
+import org.bbop.apollo.attributes.FeatureProperty
+import org.bbop.apollo.relationship.FeatureRelationship
+import org.bbop.apollo.attributes.FeatureSynonym
 import org.bbop.apollo.Ontological
 
-import org.bbop.apollo.Provenance
-import org.bbop.apollo.Publication
-import org.bbop.apollo.Status
+import org.bbop.apollo.provenance.Provenance
+//import org.bbop.apollo.Publication
+import org.bbop.apollo.attributes.Status
 import org.bbop.apollo.user.User
 import org.bbop.apollo.attributes.DBXref
 import org.bbop.apollo.geneProduct.GeneProduct
@@ -51,10 +50,10 @@ class Feature implements Ontological{
 //            ,featureGenotypes: FeatureGenotype
             ,parentFeatureRelationships: FeatureRelationship  // relationships where I am the parent feature relationship
             ,childFeatureRelationships: FeatureRelationship // relationships where I am the child feature relationship
-            ,featureCVTerms: FeatureCVTerm
+//            ,featureCVTerms: FeatureCVTerm
             ,featureSynonyms: FeatureSynonym // remove?
             ,featureDBXrefs: DBXref
-            ,featurePublications: Publication
+//            ,featurePublications: Publication
 //            ,featurePhenotypes: Phenotype
             ,featureProperties: FeatureProperty
             ,owners: User
@@ -66,7 +65,7 @@ class Feature implements Ontological{
     static mappedBy = [
             parentFeatureRelationships: "parentFeature",
             childFeatureRelationships: "childFeature",
-            featureGenotypes: "feature",
+//            featureGenotypes: "feature",
             featureLocations: "feature"
     ]
 

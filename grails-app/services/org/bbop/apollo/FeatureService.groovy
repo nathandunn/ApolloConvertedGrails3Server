@@ -7,7 +7,11 @@ import org.bbop.apollo.attributes.AvailableStatus
 import org.bbop.apollo.attributes.Comment
 import org.bbop.apollo.attributes.DB
 import org.bbop.apollo.attributes.DBXref
+import org.bbop.apollo.attributes.FeatureProperty
+import org.bbop.apollo.attributes.FeatureSynonym
 import org.bbop.apollo.attributes.Frameshift
+import org.bbop.apollo.attributes.Status
+import org.bbop.apollo.attributes.Synonym
 import org.bbop.apollo.cv.CV
 import org.bbop.apollo.cv.CVTerm
 import org.bbop.apollo.feature.CDS
@@ -24,6 +28,7 @@ import org.bbop.apollo.feature.NcRNA
 import org.bbop.apollo.feature.NonCanonicalFivePrimeSpliceSite
 import org.bbop.apollo.feature.NonCanonicalThreePrimeSpliceSite
 import org.bbop.apollo.feature.PiRNA
+import org.bbop.apollo.feature.ProcessedPseudogene
 import org.bbop.apollo.feature.Pseudogene
 import org.bbop.apollo.feature.PseudogenicRegion
 import org.bbop.apollo.feature.RNaseMRPRNA
@@ -46,8 +51,11 @@ import org.bbop.apollo.feature.TransposableElement
 import org.bbop.apollo.geneProduct.GeneProduct
 import org.bbop.apollo.go.GoAnnotation
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
+import org.bbop.apollo.location.FeatureLocation
 import org.bbop.apollo.organism.Organism
 import org.bbop.apollo.organism.Sequence
+import org.bbop.apollo.provenance.Provenance
+import org.bbop.apollo.relationship.FeatureRelationship
 import org.bbop.apollo.sequence.SequenceTranslationHandler
 import org.bbop.apollo.sequence.Strand
 import org.bbop.apollo.sequence.TranslationTable
@@ -67,6 +75,7 @@ import org.bbop.apollo.variant.SequenceAlteration
 import org.bbop.apollo.variant.SequenceAlterationArtifact
 import org.bbop.apollo.variant.Substitution
 import org.bbop.apollo.variant.SubstitutionArtifact
+import org.bbop.apollo.variant.VariantInfo
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONException
 import org.grails.web.json.JSONObject

@@ -6,8 +6,10 @@ import org.apache.shiro.crypto.hash.Sha256Hash
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
 import org.bbop.apollo.gwt.shared.GlobalPermissionEnum
 import org.bbop.apollo.gwt.shared.PermissionEnum
+import org.bbop.apollo.history.FeatureEvent
 import org.bbop.apollo.organism.Organism
 import org.bbop.apollo.permission.UserOrganismPermission
+import org.bbop.apollo.permission.UserTrackPermission
 import org.bbop.apollo.user.Role
 import org.bbop.apollo.user.User
 import org.bbop.apollo.user.UserGroup

@@ -1,9 +1,11 @@
 package org.bbop.apollo
 
 import grails.gorm.transactions.Transactional
+import org.bbop.apollo.attributes.FeatureProperty
 import org.bbop.apollo.attributes.Frameshift
 import org.bbop.apollo.feature.Feature
 import org.bbop.apollo.feature.Transcript
+import org.bbop.apollo.relationship.FeatureRelationship
 
 @Transactional(readOnly = true)
 class FeatureRelationshipService {

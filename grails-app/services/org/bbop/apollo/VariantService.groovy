@@ -10,6 +10,7 @@ import org.bbop.apollo.variant.Allele
 import org.bbop.apollo.variant.AlleleInfo
 import org.bbop.apollo.variant.SequenceAlteration
 import org.bbop.apollo.variant.SequenceAlterationArtifact
+import org.bbop.apollo.variant.VariantInfo
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
 

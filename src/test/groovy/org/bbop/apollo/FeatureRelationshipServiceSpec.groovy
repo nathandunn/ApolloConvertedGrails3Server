@@ -5,6 +5,7 @@ import grails.test.mixin.TestFor
 import org.bbop.apollo.feature.Feature
 import org.bbop.apollo.feature.Gene
 import org.bbop.apollo.feature.MRNA
+import org.bbop.apollo.relationship.FeatureRelationship
 import spock.lang.Specification
 
 /**

@@ -3,6 +3,8 @@ package org.bbop.apollo
 import org.apache.commons.lang.WordUtils
 import org.bbop.apollo.attributes.Comment
 import org.bbop.apollo.attributes.DBXref
+import org.bbop.apollo.attributes.FeatureProperty
+import org.bbop.apollo.attributes.FeatureSynonym
 import org.bbop.apollo.feature.CDS
 import org.bbop.apollo.feature.Exon
 import org.bbop.apollo.feature.Feature

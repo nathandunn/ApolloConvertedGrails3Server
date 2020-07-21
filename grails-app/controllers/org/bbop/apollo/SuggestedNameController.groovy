@@ -3,6 +3,8 @@ package org.bbop.apollo
 import grails.converters.JSON
 import grails.gorm.transactions.Transactional
 import org.bbop.apollo.attributes.FeatureType
+import org.bbop.apollo.attributes.SuggestedName
+import org.bbop.apollo.attributes.SuggestedNameOrganismFilter
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
 import org.bbop.apollo.gwt.shared.GlobalPermissionEnum
 import org.bbop.apollo.organism.Organism

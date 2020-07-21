@@ -13,19 +13,19 @@ class CVTerm {
     int isObsolete;
     int isRelationshipType;
 
-    static hasMany = [
-            childCVTermRelationships   : CVTermRelationship
-            , parentCVTermRelationships: CVTermRelationship
-            , parentCVTermPaths        : CVTermPath
-            , childCVTermPaths         : CVTermPath
-    ]
-
-    static mappedBy = [
-            parentCVTermRelationships : "objectCVTerm"
-            , childCVTermRelationships: "subjectCVTerm"
-            , parentCVTermPaths       : "subjectCVTerm"
-            , childCVTermPaths        : "objectCVTerm"
-    ]
+//    static hasMany = [
+//            childCVTermRelationships   : CVTermRelationship
+//            , parentCVTermRelationships: CVTermRelationship
+//            , parentCVTermPaths        : CVTermPath
+//            , childCVTermPaths         : CVTermPath
+//    ]
+//
+//    static mappedBy = [
+//            parentCVTermRelationships : "objectCVTerm"
+//            , childCVTermRelationships: "subjectCVTerm"
+//            , parentCVTermPaths       : "subjectCVTerm"
+//            , childCVTermPaths        : "objectCVTerm"
+//    ]
 
 
     public boolean equals(Object other) {

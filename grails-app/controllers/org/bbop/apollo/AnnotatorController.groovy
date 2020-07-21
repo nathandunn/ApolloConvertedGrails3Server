@@ -8,9 +8,13 @@ import io.swagger.annotations.Api
 import io.swagger.annotations.ApiImplicitParam
 import io.swagger.annotations.ApiImplicitParams
 import io.swagger.annotations.ApiOperation
+import org.bbop.apollo.attributes.FeatureSynonym
+import org.bbop.apollo.attributes.Status
+import org.bbop.apollo.attributes.Synonym
 import org.bbop.apollo.event.AnnotationEvent
 import org.bbop.apollo.feature.Feature
 import org.bbop.apollo.feature.Gene
+import org.bbop.apollo.feature.ProcessedPseudogene
 import org.bbop.apollo.feature.Pseudogene
 import org.bbop.apollo.feature.PseudogenicRegion
 import org.bbop.apollo.feature.RepeatRegion
@@ -21,9 +25,11 @@ import org.bbop.apollo.gwt.shared.FeatureStringEnum
 import org.bbop.apollo.gwt.shared.GlobalPermissionEnum
 import org.bbop.apollo.gwt.shared.PermissionEnum
 import org.bbop.apollo.history.FeatureOperation
+import org.bbop.apollo.location.FeatureLocation
 import org.bbop.apollo.organism.Organism
 import org.bbop.apollo.organism.Sequence
 import org.bbop.apollo.report.AnnotatorSummary
+import org.bbop.apollo.system.Proxy
 import org.bbop.apollo.user.Role
 import org.bbop.apollo.user.User
 import org.bbop.apollo.user.UserGroup

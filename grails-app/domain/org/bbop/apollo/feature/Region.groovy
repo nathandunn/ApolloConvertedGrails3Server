@@ -1,7 +1,4 @@
 package org.bbop.apollo.feature
-
-import org.bbop.apollo.SequenceFeature
-
 /**
  * In the ontology, this is a "is_a" relationship . .. not sure if it makes sense to keep it that way, though
  */

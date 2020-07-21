@@ -6,6 +6,7 @@ import org.bbop.apollo.event.AnnotationEvent
 import org.bbop.apollo.feature.Feature
 import org.bbop.apollo.feature.Transcript
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
+import org.bbop.apollo.history.FeatureEvent
 import org.bbop.apollo.history.FeatureOperation
 import org.bbop.apollo.organism.Sequence
 import org.bbop.apollo.user.User

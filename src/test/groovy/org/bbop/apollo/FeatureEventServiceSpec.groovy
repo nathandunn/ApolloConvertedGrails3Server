@@ -1,9 +1,9 @@
 package org.bbop.apollo
 
-import grails.test.mixin.Mock
-import grails.test.mixin.TestFor
+
 import grails.testing.gorm.DomainUnitTest
 import grails.testing.services.ServiceUnitTest
+import org.bbop.apollo.history.FeatureEvent
 import org.bbop.apollo.history.FeatureOperation
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject

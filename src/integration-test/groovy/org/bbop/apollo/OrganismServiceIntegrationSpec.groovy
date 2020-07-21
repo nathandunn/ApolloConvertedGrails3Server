@@ -8,8 +8,11 @@ import org.bbop.apollo.feature.Exon
 import org.bbop.apollo.feature.Feature
 import org.bbop.apollo.feature.Gene
 import org.bbop.apollo.feature.MRNA
+import org.bbop.apollo.history.FeatureEvent
+import org.bbop.apollo.location.FeatureLocation
 import org.bbop.apollo.organism.Organism
 import org.bbop.apollo.organism.Sequence
+import org.bbop.apollo.relationship.FeatureRelationship
 import org.grails.web.json.JSONObject
 import spock.lang.Ignore
 
@@ -59,7 +62,7 @@ class OrganismServiceIntegrationSpec extends AbstractIntegrationSpec{
         assert 1==Organism.count
         assert null==Sequence.first()?.featureLocations
         assert 0==FeatureLocation.count
-        assert 0==FeatureRelationship.count
+        assert 0== FeatureRelationship.count
         assert 0==Feature.count
         assert 0==FeatureEvent.count
 

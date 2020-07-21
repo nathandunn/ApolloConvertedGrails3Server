@@ -10,6 +10,7 @@ import org.bbop.apollo.feature.MRNA
 import org.bbop.apollo.feature.MiRNA
 import org.bbop.apollo.feature.NcRNA
 import org.bbop.apollo.feature.PiRNA
+import org.bbop.apollo.feature.ProcessedPseudogene
 import org.bbop.apollo.feature.Pseudogene
 import org.bbop.apollo.feature.PseudogenicRegion
 import org.bbop.apollo.feature.RNaseMRPRNA

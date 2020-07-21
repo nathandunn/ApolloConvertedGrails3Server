@@ -3,11 +3,13 @@ package org.bbop.apollo
 import grails.gorm.transactions.Transactional
 import org.bbop.apollo.attributes.Comment
 import org.bbop.apollo.attributes.DBXref
+import org.bbop.apollo.attributes.FeatureProperty
 import org.bbop.apollo.attributes.Frameshift
 import org.bbop.apollo.attributes.Minus1Frameshift
 import org.bbop.apollo.attributes.Minus2Frameshift
 import org.bbop.apollo.attributes.Plus1Frameshift
 import org.bbop.apollo.attributes.Plus2Frameshift
+import org.bbop.apollo.attributes.Status
 import org.bbop.apollo.feature.CDS
 import org.bbop.apollo.feature.EnzymaticRNA
 import org.bbop.apollo.feature.Exon
@@ -19,6 +21,7 @@ import org.bbop.apollo.feature.MRNA
 import org.bbop.apollo.feature.MiRNA
 import org.bbop.apollo.feature.NcRNA
 import org.bbop.apollo.feature.PiRNA
+import org.bbop.apollo.feature.ProcessedPseudogene
 import org.bbop.apollo.feature.Pseudogene
 import org.bbop.apollo.feature.PseudogenicRegion
 import org.bbop.apollo.feature.RNaseMRPRNA
@@ -33,6 +36,8 @@ import org.bbop.apollo.feature.TelomeraseRNA
 import org.bbop.apollo.feature.TmRNA
 import org.bbop.apollo.feature.Transcript
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
+import org.bbop.apollo.location.FeatureLocation
+import org.bbop.apollo.relationship.FeatureRelationship
 
 
 @Transactional(readOnly = true)
@@ -87,7 +92,7 @@ class TranscriptService {
      * @return Gene that this Transcript is associated with
      */
     Gene getGene(Transcript transcript) {
-        return (Gene) featureRelationshipService.getParentForFeature(transcript, Gene.ontologyId, Pseudogene.ontologyId, PseudogenicRegion.ontologyId,ProcessedPseudogene.ontologyId)
+        return (Gene) featureRelationshipService.getParentForFeature(transcript, Gene.ontologyId, Pseudogene.ontologyId, PseudogenicRegion.ontologyId, ProcessedPseudogene.ontologyId)
     }
 
     Pseudogene getPseudogene(Transcript transcript) {
@@ -338,12 +343,12 @@ class TranscriptService {
              splitTranscript.addToFeatureProperties(featureProperty)
            }
          }
-        transcript.featurePublications.each { fp ->
-          // to do: duplicate
-          Publication publication = new Publication()
-          publication.properties = fp.properties
-          splitTranscript.addToFeaturePublications(fp)
-        }
+//        transcript.featurePublications.each { fp ->
+//          // to do: duplicate
+//          Publication publication = new Publication()
+//          publication.properties = fp.properties
+//          splitTranscript.addToFeaturePublications(fp)
+//        }
         transcript.featureDBXrefs.each { fp ->
             DBXref featureDbxref = new DBXref(
              feature:splitTranscript,

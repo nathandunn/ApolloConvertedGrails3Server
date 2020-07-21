@@ -1,6 +1,7 @@
 package org.bbop.apollo
 
 import org.bbop.apollo.feature.Feature
+import org.bbop.apollo.location.FeatureLocation
 
 /**
  * Created by ndunn on 10/29/14.

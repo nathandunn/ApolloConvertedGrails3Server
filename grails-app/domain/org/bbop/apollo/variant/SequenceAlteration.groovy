@@ -1,8 +1,6 @@
 package org.bbop.apollo.variant
 
-import org.bbop.apollo.SequenceFeature
-import org.bbop.apollo.VariantInfo
-import org.bbop.apollo.variant.Allele
+import org.bbop.apollo.feature.SequenceFeature
 
 class SequenceAlteration extends SequenceFeature{
 

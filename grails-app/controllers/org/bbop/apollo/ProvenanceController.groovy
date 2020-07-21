@@ -5,6 +5,7 @@ import grails.gorm.transactions.Transactional
 import org.bbop.apollo.feature.Feature
 import org.bbop.apollo.gwt.shared.PermissionEnum
 import org.bbop.apollo.history.FeatureOperation
+import org.bbop.apollo.provenance.Provenance
 import org.bbop.apollo.user.User
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
@@ -66,7 +67,7 @@ class ProvenanceController {
     JSONObject dataObject = permissionService.handleInput(request, params)
     permissionService.checkPermissions(dataObject, PermissionEnum.WRITE)
     User user = permissionService.getCurrentUser(dataObject)
-    Provenance provenance = new Provenance()
+      Provenance provenance = new Provenance()
     Feature feature = Feature.findByUniqueName(dataObject.feature)
 
     JSONObject originalFeatureJsonObject = featureService.convertFeatureToJSON(feature)

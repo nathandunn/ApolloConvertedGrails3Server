@@ -5,6 +5,7 @@ import grails.testing.mixin.integration.Integration
 import grails.transaction.Rollback
 import org.bbop.apollo.attributes.Comment
 import org.bbop.apollo.attributes.DBXref
+import org.bbop.apollo.attributes.FeatureProperty
 import org.bbop.apollo.feature.CDS
 import org.bbop.apollo.feature.Exon
 import org.bbop.apollo.feature.Feature
@@ -20,8 +21,10 @@ import org.bbop.apollo.feature.Terminator
 import org.bbop.apollo.feature.Transcript
 import org.bbop.apollo.feature.TransposableElement
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
+import org.bbop.apollo.location.FeatureLocation
 import org.bbop.apollo.organism.Organism
 import org.bbop.apollo.organism.Sequence
+import org.bbop.apollo.relationship.FeatureRelationship
 import org.bbop.apollo.sequence.Strand
 import org.bbop.apollo.variant.Allele
 import org.bbop.apollo.variant.AlleleInfo
@@ -32,6 +35,7 @@ import org.bbop.apollo.variant.InsertionArtifact
 import org.bbop.apollo.variant.SNV
 import org.bbop.apollo.variant.SequenceAlterationArtifact
 import org.bbop.apollo.variant.SubstitutionArtifact
+import org.bbop.apollo.variant.VariantInfo
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
 

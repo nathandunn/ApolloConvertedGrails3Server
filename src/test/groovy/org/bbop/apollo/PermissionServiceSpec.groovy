@@ -7,6 +7,7 @@ import org.bbop.apollo.organism.Organism
 import org.bbop.apollo.permission.GroupOrganismPermission
 import org.bbop.apollo.permission.GroupTrackPermission
 import org.bbop.apollo.permission.UserOrganismPermission
+import org.bbop.apollo.permission.UserTrackPermission
 import org.bbop.apollo.user.User
 import org.bbop.apollo.user.UserGroup
 import spock.lang.Specification
@@ -15,7 +16,7 @@ import spock.lang.Specification
  * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
  */
 @TestFor(PermissionService)
-@Mock([User, Organism, UserGroup, GroupOrganismPermission, UserOrganismPermission,UserTrackPermission,UserOrganismPermission, GroupTrackPermission])
+@Mock([User, Organism, UserGroup, GroupOrganismPermission, UserOrganismPermission, UserTrackPermission,UserOrganismPermission, GroupTrackPermission])
 class PermissionServiceSpec extends Specification {
 
     def setup() {

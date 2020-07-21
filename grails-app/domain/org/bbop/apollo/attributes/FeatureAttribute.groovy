@@ -1,7 +1,4 @@
 package org.bbop.apollo.attributes
-
-import org.bbop.apollo.SequenceAttribute
-
 /**
  * Note: top-level in the sequence ontology
  */

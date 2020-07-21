@@ -1,6 +1,6 @@
 package org.bbop.apollo.attributes
 
-import org.bbop.apollo.FeatureProperty
+
 import org.bbop.apollo.Ontological
 
 class Comment extends FeatureProperty implements Ontological{

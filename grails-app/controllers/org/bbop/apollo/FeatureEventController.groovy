@@ -6,6 +6,7 @@ import org.bbop.apollo.attributes.AvailableStatus
 import org.bbop.apollo.feature.Feature
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
 import org.bbop.apollo.gwt.shared.PermissionEnum
+import org.bbop.apollo.history.FeatureEvent
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
 import io.swagger.annotations.*

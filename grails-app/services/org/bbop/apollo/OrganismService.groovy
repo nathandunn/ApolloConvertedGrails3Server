@@ -5,6 +5,7 @@ import grails.gorm.transactions.Transactional
 import groovy.io.FileType
 import org.bbop.apollo.feature.Feature
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
+import org.bbop.apollo.history.FeatureEvent
 import org.bbop.apollo.organism.Organism
 import org.bbop.apollo.organism.Sequence
 import org.bbop.apollo.sequence.SequenceTranslationHandler

@@ -1,7 +1,6 @@
 package org.bbop.apollo.history
 
 import org.bbop.apollo.feature.Feature
-import org.bbop.apollo.FeatureEvent
 
 /**
  * Created by nathandunn on 7/21/15.

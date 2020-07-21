@@ -1,6 +1,6 @@
 package org.bbop.apollo.variant
 
-import org.bbop.apollo.SequenceFeature
+import org.bbop.apollo.feature.SequenceFeature
 
 class SequenceAlterationArtifact extends SequenceFeature {
 

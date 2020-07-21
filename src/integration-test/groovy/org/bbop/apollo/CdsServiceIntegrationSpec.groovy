@@ -11,6 +11,7 @@ import org.bbop.apollo.feature.StopCodonReadThrough
 import org.bbop.apollo.feature.Transcript
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
 import org.bbop.apollo.organism.Sequence
+import org.bbop.apollo.relationship.FeatureRelationship
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
 

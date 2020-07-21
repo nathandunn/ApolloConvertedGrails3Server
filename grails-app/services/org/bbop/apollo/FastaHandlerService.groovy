@@ -2,8 +2,10 @@ package org.bbop.apollo
 
 import org.bbop.apollo.attributes.Comment
 import org.bbop.apollo.attributes.DBXref
+import org.bbop.apollo.attributes.FeatureProperty
 import org.bbop.apollo.feature.Feature
 import org.bbop.apollo.feature.Gene
+import org.bbop.apollo.feature.ProcessedPseudogene
 import org.bbop.apollo.feature.Pseudogene
 import org.bbop.apollo.feature.PseudogenicRegion
 import org.bbop.apollo.feature.Transcript

@@ -6,6 +6,7 @@ import org.bbop.apollo.feature.Exon
 import org.bbop.apollo.feature.Feature
 import org.bbop.apollo.feature.Gene
 import org.bbop.apollo.feature.MRNA
+import org.bbop.apollo.relationship.FeatureRelationship
 
 @Integration
 @Rollback

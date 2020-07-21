@@ -7,14 +7,16 @@ import org.bbop.apollo.feature.Exon
 import org.bbop.apollo.feature.Feature
 import org.bbop.apollo.feature.Gene
 import org.bbop.apollo.feature.MRNA
+import org.bbop.apollo.location.FeatureLocation
 import org.bbop.apollo.organism.Sequence
+import org.bbop.apollo.relationship.FeatureRelationship
 import spock.lang.Specification
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
 @TestFor(Gff3HandlerService)
-@Mock([Sequence, Gene, MRNA, Exon, CDS, Feature,FeatureLocation,FeatureRelationship,FeatureRelationshipService ])
+@Mock([Sequence, Gene, MRNA, Exon, CDS, Feature, FeatureLocation, FeatureRelationship,FeatureRelationshipService ])
 class Gff3HandlerServiceSpec extends Specification {
     
 

@@ -4,6 +4,7 @@ import grails.converters.JSON
 import grails.gorm.transactions.NotTransactional
 import grails.gorm.transactions.Transactional
 import htsjdk.samtools.reference.FastaSequenceIndexCreator
+import org.bbop.apollo.attributes.OrganismFilter
 import org.bbop.apollo.feature.Feature
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
 import org.bbop.apollo.gwt.shared.GlobalPermissionEnum

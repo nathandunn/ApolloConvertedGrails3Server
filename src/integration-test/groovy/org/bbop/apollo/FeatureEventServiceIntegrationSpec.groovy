@@ -12,7 +12,9 @@ import org.bbop.apollo.feature.NonCanonicalFivePrimeSpliceSite
 import org.bbop.apollo.feature.NonCanonicalThreePrimeSpliceSite
 import org.bbop.apollo.feature.Transcript
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
+import org.bbop.apollo.history.FeatureEvent
 import org.bbop.apollo.history.FeatureOperation
+import org.bbop.apollo.location.FeatureLocation
 import org.bbop.apollo.organism.Organism
 import org.bbop.apollo.organism.Sequence
 import org.grails.web.json.JSONArray

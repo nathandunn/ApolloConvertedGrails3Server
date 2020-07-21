@@ -1,6 +1,6 @@
 package org.bbop.apollo.organism
 
-import org.bbop.apollo.FeatureLocation
+import org.bbop.apollo.location.FeatureLocation
 
 class Sequence {
 

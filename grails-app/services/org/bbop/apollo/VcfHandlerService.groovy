@@ -5,6 +5,7 @@ import org.bbop.apollo.organism.Organism
 import org.bbop.apollo.organism.Sequence
 import org.bbop.apollo.variant.Allele
 import org.bbop.apollo.variant.SequenceAlteration
+import org.bbop.apollo.variant.VariantInfo
 
 import java.text.SimpleDateFormat
 

@@ -7,6 +7,7 @@ import org.bbop.apollo.feature.Feature
 import org.bbop.apollo.feature.Gene
 import org.bbop.apollo.feature.Pseudogene
 import org.bbop.apollo.feature.Transcript
+import org.bbop.apollo.location.FeatureLocation
 import org.bbop.apollo.organism.Sequence
 import org.bbop.apollo.sequence.Overlapper
 import org.bbop.apollo.sequence.Strand
