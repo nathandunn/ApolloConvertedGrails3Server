@@ -3,51 +3,10 @@ package org.bbop.apollo
 import grails.converters.JSON
 import grails.gorm.transactions.Transactional
 import org.bbop.apollo.alteration.SequenceAlterationInContext
-import org.bbop.apollo.attributes.AvailableStatus
-import org.bbop.apollo.attributes.Comment
-import org.bbop.apollo.attributes.DB
-import org.bbop.apollo.attributes.DBXref
-import org.bbop.apollo.attributes.FeatureProperty
-import org.bbop.apollo.attributes.FeatureSynonym
-import org.bbop.apollo.attributes.Frameshift
-import org.bbop.apollo.attributes.Status
-import org.bbop.apollo.attributes.Synonym
+import org.bbop.apollo.attributes.*
 import org.bbop.apollo.cv.CV
 import org.bbop.apollo.cv.CVTerm
-import org.bbop.apollo.feature.CDS
-import org.bbop.apollo.feature.EnzymaticRNA
-import org.bbop.apollo.feature.Exon
-import org.bbop.apollo.feature.Feature
-import org.bbop.apollo.feature.Gene
-import org.bbop.apollo.feature.GuideRNA
-import org.bbop.apollo.feature.Intron
-import org.bbop.apollo.feature.LncRNA
-import org.bbop.apollo.feature.MRNA
-import org.bbop.apollo.feature.MiRNA
-import org.bbop.apollo.feature.NcRNA
-import org.bbop.apollo.feature.NonCanonicalFivePrimeSpliceSite
-import org.bbop.apollo.feature.NonCanonicalThreePrimeSpliceSite
-import org.bbop.apollo.feature.PiRNA
-import org.bbop.apollo.feature.ProcessedPseudogene
-import org.bbop.apollo.feature.Pseudogene
-import org.bbop.apollo.feature.PseudogenicRegion
-import org.bbop.apollo.feature.RNaseMRPRNA
-import org.bbop.apollo.feature.RNasePRNA
-import org.bbop.apollo.feature.RRNA
-import org.bbop.apollo.feature.RepeatRegion
-import org.bbop.apollo.feature.ScRNA
-import org.bbop.apollo.feature.ShineDalgarnoSequence
-import org.bbop.apollo.feature.SnRNA
-import org.bbop.apollo.feature.SnoRNA
-import org.bbop.apollo.feature.SpliceSite
-import org.bbop.apollo.feature.SrpRNA
-import org.bbop.apollo.feature.StopCodonReadThrough
-import org.bbop.apollo.feature.TRNA
-import org.bbop.apollo.feature.TelomeraseRNA
-import org.bbop.apollo.feature.Terminator
-import org.bbop.apollo.feature.TmRNA
-import org.bbop.apollo.feature.Transcript
-import org.bbop.apollo.feature.TransposableElement
+import org.bbop.apollo.feature.*
 import org.bbop.apollo.geneProduct.GeneProduct
 import org.bbop.apollo.go.GoAnnotation
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
@@ -60,22 +19,7 @@ import org.bbop.apollo.sequence.SequenceTranslationHandler
 import org.bbop.apollo.sequence.Strand
 import org.bbop.apollo.sequence.TranslationTable
 import org.bbop.apollo.user.User
-import org.bbop.apollo.variant.Allele
-import org.bbop.apollo.variant.AlleleInfo
-import org.bbop.apollo.variant.Deletion
-import org.bbop.apollo.variant.DeletionArtifact
-import org.bbop.apollo.variant.Indel
-import org.bbop.apollo.variant.Insertion
-import org.bbop.apollo.variant.InsertionArtifact
-import org.bbop.apollo.variant.MNP
-import org.bbop.apollo.variant.MNV
-import org.bbop.apollo.variant.SNP
-import org.bbop.apollo.variant.SNV
-import org.bbop.apollo.variant.SequenceAlteration
-import org.bbop.apollo.variant.SequenceAlterationArtifact
-import org.bbop.apollo.variant.Substitution
-import org.bbop.apollo.variant.SubstitutionArtifact
-import org.bbop.apollo.variant.VariantInfo
+import org.bbop.apollo.variant.*
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONException
 import org.grails.web.json.JSONObject
@@ -1203,8 +1147,8 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
 //        Sequence sequence = Sequence.executeQuery("select s from Feature  f join f.featureLocations fl join fl.sequence s where f = :feature ", [feature: feature]).first()
 //        Sequence.createCriteria().listDistinct {
 //        }
-        def sequences = Sequence.createCriteria().listDistinct{
-            featureLocations{
+        def sequences = Sequence.createCriteria().listDistinct {
+            featureLocations {
                 eq 'feature', feature
             }
         }
@@ -2087,6 +2031,278 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
     }
 
     /**
+     * @param neo4jObject
+     * @param includeSequence
+     * @return
+     */
+    JSONObject convertNeo4jFeatureToJSON(def neo4jObject, boolean includeSequence = false) {
+        println "converting features to json ${neo4jObject}"
+        def neo4jFeature = neo4jObject.feature
+        println "feature ${neo4jFeature} "
+        println "feature as JSON ${neo4jFeature} "
+        def neo4jLocation = neo4jObject.location
+        println "locaitons ${neo4jLocation} "
+        def neo4jOwners = neo4jObject.owners
+        println "owners ${neo4jOwners} "
+        def neo4jSequence= neo4jObject.sequence
+
+        def neo4jChildren = neo4jObject.children
+        println "children ${neo4jChildren} "
+
+        def neo4jParent = neo4jObject.parent
+        println "parent ${neo4jParent} "
+
+
+        JSONObject jsonFeature = new JSONObject()
+        println "A"
+        println "ID ${neo4jFeature.id()}"
+        println "labels ${neo4jFeature.labels().join(",")}"
+        println "keys ${neo4jFeature.keys().join(",")}"
+        if (neo4jFeature.id()!=null) {
+            println "A.1: ${neo4jFeature.id()}"
+            jsonFeature.put(FeatureStringEnum.ID.value, neo4jFeature.id())
+        }
+        println "B"
+        def types = neo4jFeature.labels()
+        String type = types.last() // TODO: find a better way for this to get the most specific type
+//        jsonFeature.put(FeatureStringEnum.TYPE.value, generateJSONFeatureStringForType(neo4jFeature.ontologyId))
+        println "C ${type}"
+        jsonFeature.put(FeatureStringEnum.UNIQUENAME.value, neo4jFeature.get(FeatureStringEnum.UNIQUENAME.value).asString())
+        println "D"
+        if (neo4jFeature.get(FeatureStringEnum.NAME.value) != null) {
+            jsonFeature.put(FeatureStringEnum.NAME.value, neo4jFeature.get(FeatureStringEnum.NAME.value).asString())
+        }
+//        if (neo4jFeature.symbol) {
+//            jsonFeature.put(FeatureStringEnum.SYMBOL.value, neo4jFeature.symbol)
+//        }
+//        if (neo4jFeature.status) {
+//            jsonFeature.put(FeatureStringEnum.STATUS.value, neo4jFeature.status.value)
+//        }
+//        if (neo4jFeature.description) {
+//            jsonFeature.put(FeatureStringEnum.DESCRIPTION.value, neo4jFeature.description)
+//        }
+//        if (neo4jFeature.featureSynonyms) {
+//            jsonFeature.put(FeatureStringEnum.SYNONYMS.value, neo4jFeature.featureSynonyms.synonym.name)
+//        }
+
+        long start = System.currentTimeMillis()
+//        String finalOwnerString = generateOwnerString(neo4jObject)
+        if(neo4jOwners){
+            String finalOwnerString = neo4jOwners.collect{ it.get(FeatureStringEnum.USERNAME.value).asString()}.join(" ")
+//        String finalOwnerString = "asdfasdf"
+            for(def owner in neo4jOwners){
+                println "owner ${owner} "
+                println "value ${owner.get(FeatureStringEnum.USERNAME.value)} "
+            }
+//        neo4jOwners.each {
+//            println it
+//        }
+
+            println "final owner string ${finalOwnerString}"
+            jsonFeature.put(FeatureStringEnum.OWNER.value.toLowerCase(), finalOwnerString)
+        }
+
+        long durationInMilliseconds = System.currentTimeMillis() - start
+
+        start = System.currentTimeMillis()
+
+
+//        if (neo4jObject.featureLocation) {
+//            Sequence sequence = neo4jObject.featureLocation.sequence
+        if(neo4jSequence){
+            jsonFeature.put(FeatureStringEnum.SEQUENCE.value, neo4jSequence.get(FeatureStringEnum.NAME.value).asString())
+        }
+//        }
+        println "added sequence name : . . . ${jsonFeature.sequence}"
+
+//        if (neo4jObject.goAnnotations) {
+//            JSONArray goAnnotationsArray = goAnnotationService.convertAnnotationsToJson(neo4jObject.goAnnotations)
+//            jsonFeature.put(FeatureStringEnum.GO_ANNOTATIONS.value, goAnnotationsArray)
+//        }
+
+        durationInMilliseconds = System.currentTimeMillis() - start
+
+
+        start = System.currentTimeMillis();
+
+        // get children
+//        List<Feature> childFeatures = featureRelationshipService.getChildrenForFeatureAndTypes(neo4jObject)
+
+
+        durationInMilliseconds = System.currentTimeMillis() - start;
+        println"has a child ${neo4jChildren} . . ${neo4jChildren == null} ${neo4jChildren[0].feature}"
+        if (neo4jChildren!= null && neo4jChildren[0].feature!=null) {
+            println "finding children"
+            JSONArray children = new JSONArray();
+            jsonFeature.put(FeatureStringEnum.CHILDREN.value, children);
+            for (def child : neo4jChildren) {
+                println "each child ${child}"
+//                println "each child labels ${child.labels().join(", ")}"
+//                println "each child keys ${child.keys().join(", ")}"
+////                Feature childFeature = f
+////                children.put(convertFeatureToJSON(childFeature, includeSequence));
+                children.put(convertNeo4jFeatureToJSON(child, includeSequence));
+            }
+        }
+
+
+        start = System.currentTimeMillis()
+        // get parents
+        println "neo4j parents ${neo4jParent}"
+//        List<Feature> parentFeatures = featureRelationshipService.getParentsForFeature(neo4jObject)
+
+        durationInMilliseconds = System.currentTimeMillis() - start;
+        //println "parents ${durationInMilliseconds}"
+        println "neo4j parent ${neo4jParent}"
+        if (neo4jParent!=null && neo4jParent.feature!=null) {
+//            Feature parent = parentFeatures.iterator().next();
+            println "finding lagbels ${neo4jParent}"
+            def parentTypes = neo4jParent.feature.labels()
+            println "FOUND labels ${parentTypes}"
+            def parentType = parentTypes.last()
+            println "FINAL label ${parentType}"
+            jsonFeature.put(FeatureStringEnum.PARENT_ID.value, neo4jParent.feature.get(FeatureStringEnum.ID.value).asString());
+            jsonFeature.put(FeatureStringEnum.PARENT_NAME.value, neo4jParent.feature.get(FeatureStringEnum.NAME.value).asString());
+//            jsonFeature.put(FeatureStringEnum.PARENT_TYPE.value, generateJSONFeatureStringForType(parent.ontologyId));
+            jsonFeature.put(FeatureStringEnum.PARENT_TYPE.value, parentType);
+        }
+
+
+        start = System.currentTimeMillis()
+
+//        Collection<FeatureLocation> featureLocations = neo4jObject.getFeatureLocations();
+        if (neo4jLocation) {
+
+//            FeatureLocation gsolFeatureLocation = neo4jLocation.iterator().next();
+//            if (gsolFeatureLocation != null) {
+            println "loading location"
+            jsonFeature.put(FeatureStringEnum.LOCATION.value, convertNeo4jFeatureLocationToJSON(neo4jLocation))
+//            }
+        }
+        println "LOADED location ${jsonFeature as JSON}"
+
+        durationInMilliseconds = System.currentTimeMillis() - start;
+        //println "featloc ${durationInMilliseconds}"
+
+//        if (neo4jObject instanceof SequenceAlteration) {
+//            JSONArray alternateAllelesArray = new JSONArray()
+//            neo4jObject.alleles.each { allele ->
+//                JSONObject alleleObject = new JSONObject()
+//                alleleObject.put(FeatureStringEnum.BASES.value, allele.bases)
+////                if (allele.alleleFrequency) {
+////                    alternateAlleleObject.put(FeatureStringEnum.ALLELE_FREQUENCY.value, String.valueOf(allele.alleleFrequency))
+////                }
+////                if (allele.provenance) {
+////                    alternateAlleleObject.put(FeatureStringEnum.PROVENANCE.value, allele.provenance);
+////                }
+//                if (allele.alleleInfo) {
+//                    JSONArray alleleInfoArray = new JSONArray()
+//                    allele.alleleInfo.each { alleleInfo ->
+//                        JSONObject alleleInfoObject = new JSONObject()
+//                        alleleInfoObject.put(FeatureStringEnum.TAG.value, alleleInfo.tag)
+//                        alleleInfoObject.put(FeatureStringEnum.VALUE.value, alleleInfo.value)
+//                        alleleInfoArray.add(alleleInfoObject)
+//                    }
+//                    alleleObject.put(FeatureStringEnum.ALLELE_INFO.value, alleleInfoArray)
+//                }
+//                if (allele.reference) {
+//                    jsonFeature.put(FeatureStringEnum.REFERENCE_ALLELE.value, alleleObject)
+//                } else {
+//                    alternateAllelesArray.add(alleleObject)
+//                }
+//            }
+//
+//            jsonFeature.put(FeatureStringEnum.ALTERNATE_ALLELES.value, alternateAllelesArray)
+//
+//            if (neo4jObject.variantInfo) {
+//                JSONArray variantInfoArray = new JSONArray()
+//                neo4jObject.variantInfo.each { variantInfo ->
+//                    JSONObject variantInfoObject = new JSONObject()
+//                    variantInfoObject.put(FeatureStringEnum.TAG.value, variantInfo.tag)
+//                    variantInfoObject.put(FeatureStringEnum.VALUE.value, variantInfo.value)
+//                    variantInfoArray.add(variantInfoObject)
+//                }
+//                jsonFeature.put(FeatureStringEnum.VARIANT_INFO.value, variantInfoArray)
+//            }
+//        }
+
+//        if (neo4jObject instanceof SequenceAlterationArtifact) {
+//            SequenceAlterationArtifact sequenceAlteration = (SequenceAlterationArtifact) neo4jObject
+//            if (sequenceAlteration.alterationResidue) {
+//                jsonFeature.put(FeatureStringEnum.RESIDUES.value, sequenceAlteration.alterationResidue);
+//            }
+//        } else
+        if (includeSequence) {
+            String residues = sequenceService.getResiduesFromFeature(neo4jObject)
+            if (residues) {
+                jsonFeature.put(FeatureStringEnum.RESIDUES.value, residues);
+            }
+        }
+
+        //e.g. properties: [{value: "demo", type: {name: "owner", cv: {name: "feature_property"}}}]
+//        Collection<FeatureProperty> gsolFeatureProperties = neo4jObject.getFeatureProperties();
+//
+//        JSONArray properties = new JSONArray();
+//        jsonFeature.put(FeatureStringEnum.PROPERTIES.value, properties);
+//        if (gsolFeatureProperties) {
+//            for (FeatureProperty property : gsolFeatureProperties) {
+//                JSONObject jsonProperty = new JSONObject();
+//                JSONObject jsonPropertyType = new JSONObject()
+//                if (property instanceof Comment) {
+//                    JSONObject jsonPropertyTypeCv = new JSONObject()
+//                    jsonPropertyTypeCv.put(FeatureStringEnum.NAME.value, FeatureStringEnum.FEATURE_PROPERTY.value)
+//                    jsonPropertyType.put(FeatureStringEnum.CV.value, jsonPropertyTypeCv)
+//
+//                    jsonProperty.put(FeatureStringEnum.TYPE.value, jsonPropertyType);
+//                    jsonProperty.put(FeatureStringEnum.NAME.value, FeatureStringEnum.COMMENT.value);
+//                    jsonProperty.put(FeatureStringEnum.VALUE.value, property.getValue());
+//                    properties.put(jsonProperty);
+//                    continue
+//                }
+//                if (property.tag == "justification") {
+//                    JSONObject jsonPropertyTypeCv = new JSONObject()
+//                    jsonPropertyTypeCv.put(FeatureStringEnum.NAME.value, FeatureStringEnum.FEATURE_PROPERTY.value)
+//                    jsonPropertyType.put(FeatureStringEnum.CV.value, jsonPropertyTypeCv)
+//
+//                    jsonProperty.put(FeatureStringEnum.TYPE.value, jsonPropertyType);
+//                    jsonProperty.put(FeatureStringEnum.NAME.value, "justification");
+//                    jsonProperty.put(FeatureStringEnum.VALUE.value, property.getValue());
+//                    properties.put(jsonProperty);
+//                    continue
+//                }
+//                jsonPropertyType.put(FeatureStringEnum.NAME.value, property.type)
+//                JSONObject jsonPropertyTypeCv = new JSONObject()
+//                jsonPropertyTypeCv.put(FeatureStringEnum.NAME.value, FeatureStringEnum.FEATURE_PROPERTY.value)
+//                jsonPropertyType.put(FeatureStringEnum.CV.value, jsonPropertyTypeCv)
+//
+//                jsonProperty.put(FeatureStringEnum.TYPE.value, jsonPropertyType)
+//                jsonProperty.put(FeatureStringEnum.NAME.value, property.getTag())
+//                jsonProperty.put(FeatureStringEnum.VALUE.value, property.getValue())
+//                properties.put(jsonProperty)
+//            }
+//        }
+//        JSONObject ownerProperty = JSON.parse("{value: ${finalOwnerString}, type: {name: 'owner', cv: {name: 'feature_property'}}}") as JSONObject
+//        properties.put(ownerProperty)
+
+
+//        Collection<DBXref> gsolFeatureDbxrefs = neo4jObject.getFeatureDBXrefs()
+//        if (gsolFeatureDbxrefs) {
+//            JSONArray dbxrefs = new JSONArray();
+//            jsonFeature.put(FeatureStringEnum.DBXREFS.value, dbxrefs)
+//            for (DBXref gsolDbxref : gsolFeatureDbxrefs) {
+//                JSONObject dbxref = new JSONObject()
+//                dbxref.put(FeatureStringEnum.ACCESSION.value, gsolDbxref.getAccession())
+//                dbxref.put(FeatureStringEnum.DB.value, new JSONObject().put(FeatureStringEnum.NAME.value, gsolDbxref.getDb().getName()))
+//                dbxrefs.put(dbxref)
+//            }
+//        }
+//        println "date . . . ${neo4jFeature.lastUpdated} ${neo4jFeature.lastUpdated.time}"
+        jsonFeature.put(FeatureStringEnum.DATE_LAST_MODIFIED.value, neo4jFeature.get("lastUpdated").asLong())
+        jsonFeature.put(FeatureStringEnum.DATE_CREATION.value, neo4jFeature.get("dateCreated").asLong())
+        return jsonFeature
+    }
+
+    /**
      * @param gsolFeature
      * @param includeSequence
      * @return
@@ -2491,6 +2707,25 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
         jsonObject.put(FeatureStringEnum.CV.value, cvObject)
 
         return jsonObject
+    }
+
+    JSONObject convertNeo4jFeatureLocationToJSON(def featureLocationNode) throws JSONException {
+        JSONObject jsonFeatureLocation = new JSONObject();
+//        println " "
+//        if (featureLocationNode.id) {
+//            jsonFeatureLocation.put(FeatureStringEnum.ID.value, featureLocationNode.id);
+//        }
+        println "got an fmin ${featureLocationNode.get(FeatureStringEnum.FMIN.value).asLong()}"
+        jsonFeatureLocation.put(FeatureStringEnum.FMIN.value, featureLocationNode.get(FeatureStringEnum.FMIN.value).asLong())
+        jsonFeatureLocation.put(FeatureStringEnum.FMAX.value, featureLocationNode.get(FeatureStringEnum.FMAX.value).asLong())
+//        if (featureLocationNode.isIsFminPartial()) {
+//            jsonFeatureLocation.put(FeatureStringEnum.IS_FMIN_PARTIAL.value, true);
+//        }
+//        if (featureLocationNode.isIsFmaxPartial()) {
+//            jsonFeatureLocation.put(FeatureStringEnum.IS_FMAX_PARTIAL.value, true);
+//        }
+        jsonFeatureLocation.put(FeatureStringEnum.STRAND.value, featureLocationNode.get(FeatureStringEnum.STRAND.value).asInt())
+        return jsonFeatureLocation;
     }
 
 

@@ -749,41 +749,63 @@ class RequestHandlingService {
 //            fetchMode 'parentFeatureRelationships.childFeature.owners', FetchMode.JOIN
 //            'in'('class', viewableAnnotationTranscriptList + viewableAnnotationFeatureList + viewableSequenceAlterationList)
 //        }
-        def features = Feature.createCriteria().listDistinct {
-            featureLocations {
-                eq('sequence', sequence)
-            }
-            join 'owners'
-            join 'featureLocations'
-            join 'featureLocations.sequence'
-            join 'featureProperties'
-            join 'featureDBXrefs'
-            join 'status'
-            join 'parentFeatureRelationships'
-            join 'childFeatureRelationships'
-            join 'childFeatureRelationships.parentFeature'
-            join 'childFeatureRelationships.parentFeature.featureLocations'
-            join 'childFeatureRelationships.parentFeature.featureLocations.sequence'
-            join 'parentFeatureRelationships.parentFeature'
-            join 'parentFeatureRelationships.parentFeature.featureLocations'
-            join 'parentFeatureRelationships.parentFeature.featureLocations.sequence'
-            join 'parentFeatureRelationships.childFeature'
-            join 'parentFeatureRelationships.childFeature.parentFeatureRelationships'
-            join 'parentFeatureRelationships.childFeature.childFeatureRelationships'
-            join 'parentFeatureRelationships.childFeature.featureLocations'
-            join 'parentFeatureRelationships.childFeature.featureLocations.sequence'
-            join 'parentFeatureRelationships.childFeature.featureProperties'
-            join 'parentFeatureRelationships.childFeature.featureDBXrefs'
-            join 'parentFeatureRelationships.childFeature.owners'
-//            'in'('class', viewableAnnotationTranscriptList + viewableAnnotationFeatureList + viewableSequenceAlterationList)
-        }
+//        def features = Feature.createCriteria().listDistinct {
+//            featureLocations {
+//                eq('sequence', sequence)
+//            }
+//            join 'owners'
+//            join 'featureLocations'
+//            join 'featureLocations.sequence'
+//            join 'featureProperties'
+//            join 'featureDBXrefs'
+//            join 'status'
+//            join 'parentFeatureRelationships'
+//            join 'childFeatureRelationships'
+//            join 'childFeatureRelationships.parentFeature'
+//            join 'childFeatureRelationships.parentFeature.featureLocations'
+//            join 'childFeatureRelationships.parentFeature.featureLocations.sequence'
+//            join 'parentFeatureRelationships.parentFeature'
+//            join 'parentFeatureRelationships.parentFeature.featureLocations'
+//            join 'parentFeatureRelationships.parentFeature.featureLocations.sequence'
+//            join 'parentFeatureRelationships.childFeature'
+//            join 'parentFeatureRelationships.childFeature.parentFeatureRelationships'
+//            join 'parentFeatureRelationships.childFeature.childFeatureRelationships'
+//            join 'parentFeatureRelationships.childFeature.featureLocations'
+//            join 'parentFeatureRelationships.childFeature.featureLocations.sequence'
+//            join 'parentFeatureRelationships.childFeature.featureProperties'
+//            join 'parentFeatureRelationships.childFeature.featureDBXrefs'
+//            join 'parentFeatureRelationships.childFeature.owners'
+////            'in'('class', viewableAnnotationTranscriptList + viewableAnnotationFeatureList + viewableSequenceAlterationList)
+//        }
+//        println "output features ${features}"
+
+        String query = "MATCH (o:Organism)-[r:SEQUENCES]-(s:Sequence)--(fl:FeatureLocation)-[flr:FEATURELOCATIONS]-(f:Feature),\n" +
+            "(f)-[owner:OWNERS]-(u)\n" +
+            "OPTIONAL MATCH (cl)-[childlocations:FEATURELOCATIONS]-(child)-[CHILDFEATURERELATIONSHIPS]-(fr:FeatureRelationship)-[pr:PARENTFEATURERELATIONSHIPS]-(f)\n" +
+            "OPTIONAL MATCH (pl)-[FEATURELOCATIONS]-(parent)-[PARENTFEATURERELATIONSHIPS]-(gfr:FeatureRelationship)-[generelationship:CHILDFEATURERELATIONSHIPS]-(f)\n" +
+            "OPTIONAL MATCH (f)--(fp:FeatureProperty) \n" +
+//            "WHERE o.id =  '60' and s.name = 'ctgA' \n" +
+            "WHERE o.id='${sequence.organism.id}' and s.name = '${sequence.name}'\n"  +
+            "RETURN {sequence: s,feature: f,location: fl,children: collect(DISTINCT {location: cl,r1: fr,feature: child}), owners: collect(u),parent: { location: collect(pl),r2:gfr,feature:parent }}"
+
+        println "query output: ${query}"
+        def nodes = Feature.executeQuery(query).unique()
+        println "actual returned nodes ${nodes} ${nodes.size()}"
 
 
         JSONArray jsonFeatures = new JSONArray()
-        features.each { feature ->
-            JSONObject jsonObject = featureService.convertFeatureToJSON(feature, false)
+        nodes.each{
+            println "forist node ${it} "
+            println "class of it ${it.getClass()}"
+//            JSONObject jsonObject = featureService.convertFeatureToJSON(feature, false)
+//        features.each { feature ->
+//            JSONObject jsonObject = featureService.convertFeatureToJSON(feature, false)
+            JSONObject jsonObject = featureService.convertNeo4jFeatureToJSON(it, false)
             jsonFeatures.put(jsonObject)
         }
+
+        println "outputs ${nodes}"
+        println "lazy returned features ${nodes as JSON}"
 
         inputObject.put(AnnotationEditorController.REST_FEATURES, jsonFeatures)
         println "getFeatures ${System.currentTimeMillis() - start}ms"
