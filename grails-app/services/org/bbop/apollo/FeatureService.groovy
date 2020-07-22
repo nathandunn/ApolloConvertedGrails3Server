@@ -462,15 +462,23 @@ class FeatureService {
 
             gene = (Gene) convertJSONToFeature(jsonGene, sequence);
             updateNewGsolFeatureAttributes(gene, sequence);
-            println "55"
+            println "55 ${gene}"
+            println "fmin"
+            println "fmin -> ${gene.fmin}"
+
 
             if (gene.getFmin() < 0 || gene.getFmax() < 0) {
+                println "55.0"
                 throw new AnnotationException("Feature cannot have negative coordinates");
             }
             transcript = transcriptService.getTranscripts(gene).iterator().next();
+            println "55.1"
             CDS cds = transcriptService.getCDS(transcript)
+            println "55.2"
             if (cds) {
+                println "55.3"
                 readThroughStopCodon = cdsService.getStopCodonReadThrough(cds) ? true : false
+                println "55.4"
             }
             println "66"
 
