@@ -1165,16 +1165,16 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
 //        if(sequences){
 //            SequenceAlterationArtifact.executeQuery("select sa from SequenceAlterationArtifact sa join sa.featureLocations fl join fl.sequence s where s = :sequence order by fl.fmin asc ", [sequence: sequences.first()])
 //        SequenceAlterationArtifact.executeQuery("select sa from SequenceAlterationArtifact sa join sa.featureLocations fl join fl.sequence s where s = :sequence order by fl.fmin asc ", [sequence: sequences.first()])
-        Collection<SequenceAlterationArtifact> features = (Collection<SequenceAlterationArtifact>) SequenceAlterationArtifact.createCriteria().listDistinct {
-            featureLocations {
-                eq "sequence", sequence
-                order fmin
-            }
-        }
-        return features
+//        Collection<SequenceAlterationArtifact> features = (Collection<SequenceAlterationArtifact>) SequenceAlterationArtifact.createCriteria().listDistinct {
+//            featureLocations {
+//                eq "sequence", sequence
+//                order fmin
+//            }
+//        }
+//        return features
 //        }
 //        else{
-//            return []
+            return []
 //        }
     }
 
