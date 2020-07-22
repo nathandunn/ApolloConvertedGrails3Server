@@ -197,7 +197,6 @@ class AnnotationEditorController extends AbstractApolloController implements Ann
             , @ApiImplicitParam(name = "features", type = "JSONArray", paramType = "query", example = "JSONArray of JSON feature objects described by https://github.com/GMOD/Apollo/blob/master/grails-app/domain/org/bbop/apollo/Feature.groovy")
     ])
     def addFeature() {
-        println "ADDING FEATURE? ${params}"
         JSONObject inputObject = permissionService.handleInput(request, params)
         if (permissionService.hasPermissions(inputObject, PermissionEnum.WRITE)) {
             render requestHandlingService.addFeature(inputObject)
@@ -339,13 +338,9 @@ class AnnotationEditorController extends AbstractApolloController implements Ann
     ])
     def addTranscript() {
         try {
-            println "ADDING TRANSCRIPT ${params}"
             JSONObject inputObject = permissionService.handleInput(request, params)
-            println "INPUT OBJECT ${inputObject as JSON}"
             if (permissionService.hasPermissions(inputObject, PermissionEnum.WRITE)) {
-                println "A"
                 render requestHandlingService.addTranscript(inputObject)
-                println "B"
             } else {
                 render status: HttpStatus.UNAUTHORIZED
             }
