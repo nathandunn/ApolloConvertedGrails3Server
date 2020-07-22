@@ -76,7 +76,8 @@ class FeatureService {
         } else {
             gsolLocation.setStrand(defaultStrand)
         }
-        gsolLocation.setSequence(sequence)
+        gsolLocation.to = sequence
+//        gsolLocation.setSequence(sequence)
         return gsolLocation;
     }
 
@@ -110,30 +111,32 @@ class FeatureService {
 //    if (compareStrands) {
 //      //Feature.executeQuery("select distinct f from Feature f join f.featureLocations fl where fl.sequence = :sequence and fl.strand = :strand and ((fl.fmin <= :fmin and fl.fmax > :fmin) or (fl.fmin <= :fmax and fl.fmax >= :fmax ))",[fmin:location.fmin,fmax:location.fmax,strand:location.strand,sequence:location.sequence])
 //      Feature.executeQuery("select distinct f from Feature f join f.featureLocations fl where fl.sequence = :sequence and fl.strand = :strand and ((fl.fmin <= :fmin and fl.fmax > :fmin) or (fl.fmin <= :fmax and fl.fmax >= :fmax) or (fl.fmin >= :fmin and fl.fmax <= :fmax))", [fmin: location.fmin, fmax: location.fmax, strand: location.strand, sequence: location.sequence])
-        println "input location ${location}"
-        Collection<Feature> features = (Collection<Feature>) Feature.createCriteria().listDistinct {
-            featureLocations {
-                eq "sequence", location.sequence
-                if (compareStrands) {
-                    eq "strand", location.strand
-                }
-                or {
-                    and {
-                        lte "fmin", location.fmin
-                        gt "fmax", location.fmax
-                    }
-                    and {
-                        lte "fmin", location.fmax
-                        gte "fmax", location.fmax
-                    }
-                    and {
-                        gte "fmin", location.fmax
-                        lte "fmax", location.fmax
-                    }
-                }
-            }
-        }
-        return features
+
+        return []
+//        println "input location ${location}"
+//        Collection<Feature> features = (Collection<Feature>) Feature.createCriteria().listDistinct {
+//            featureLocations {
+//                eq "sequence", location.sequence
+//                if (compareStrands) {
+//                    eq "strand", location.strand
+//                }
+//                or {
+//                    and {
+//                        lte "fmin", location.fmin
+//                        gt "fmax", location.fmax
+//                    }
+//                    and {
+//                        lte "fmin", location.fmax
+//                        gte "fmax", location.fmax
+//                    }
+//                    and {
+//                        gte "fmin", location.fmax
+//                        lte "fmax", location.fmax
+//                    }
+//                }
+//            }
+//        }
+//        return features
 //    } else {
 //      //Feature.executeQuery("select distinct f from Feature f join f.featureLocations fl where fl.sequence = :sequence and ((fl.fmin <= :fmin and fl.fmax > :fmin) or (fl.fmin <= :fmax and fl.fmax >= :fmax ))",[fmin:location.fmin,fmax:location.fmax,sequence:location.sequence])
 //      Feature.executeQuery("select distinct f from Feature f join f.featureLocations fl where fl.sequence = :sequence and ((fl.fmin <= :fmin and fl.fmax > :fmin) or (fl.fmin <= :fmax and fl.fmax >= :fmax) or (fl.fmin >= :fmin and fl.fmax <= :fmax))", [fmin: location.fmin, fmax: location.fmax, sequence: location.sequence])
@@ -573,7 +576,8 @@ class FeatureService {
             featureLocation.properties = transcriptFeatureLocation.properties
             featureLocation.id = null
             featureLocation.save()
-            gene.addToFeatureLocations(featureLocation);
+            featureLocation.from = gene
+//            gene.addToFeatureLocations(featureLocation);
         } else {
             // if the transcript's bounds are beyond the gene's bounds, need to adjust the gene's bounds
             if (transcript.getFeatureLocation().getFmin() < gene.getFeatureLocation().getFmin()) {
@@ -1498,8 +1502,8 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
                 } else {
                     featureLocation = convertJSONToFeatureLocation(jsonLocation, sequence)
                 }
-                featureLocation.sequence = sequence
-                featureLocation.feature = gsolFeature
+                featureLocation.to = sequence
+                featureLocation.from = gsolFeature
                 featureLocation.save()
                 gsolFeature.addToFeatureLocations(featureLocation);
             }

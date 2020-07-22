@@ -66,7 +66,7 @@ class Feature implements Ontological{
             parentFeatureRelationships: "parentFeature",
             childFeatureRelationships: "childFeature",
 //            featureGenotypes: "feature",
-            featureLocations: "feature"
+//            featureLocations: "feature"
     ]
 
     static mapping = {
@@ -122,14 +122,10 @@ class Feature implements Ontological{
         cloned.dateCreated = this.dateCreated;
         cloned.lastUpdated = this.lastUpdated;
         cloned.featureLocations = this.featureLocations;
-        cloned.featureGenotypes = this.featureGenotypes;
         cloned.parentFeatureRelationships = this.parentFeatureRelationships;
         cloned.childFeatureRelationships = this.childFeatureRelationships;
-        cloned.featureCVTerms = this.featureCVTerms;
         cloned.featureSynonyms = this.featureSynonyms;
         cloned.featureDBXrefs = this.featureDBXrefs;
-        cloned.featurePublications = this.featurePublications;
-        cloned.featurePhenotypes = this.featurePhenotypes;
         cloned.featureProperties = this.featureProperties;
         return cloned;
     }

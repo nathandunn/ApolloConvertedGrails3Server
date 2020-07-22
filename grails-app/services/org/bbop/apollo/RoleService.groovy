@@ -25,7 +25,7 @@ class RoleService {
         }
 
         def userRole = Role.findByName(GlobalPermissionEnum.USER.name())
-        if (!userRole.rank) {
+        if (!userRole?.rank) {
             userRole.rank = GlobalPermissionEnum.USER.rank
             userRole.save()
         }
