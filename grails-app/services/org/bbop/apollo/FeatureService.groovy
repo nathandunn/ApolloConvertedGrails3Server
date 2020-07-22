@@ -2130,7 +2130,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
 
 
         durationInMilliseconds = System.currentTimeMillis() - start;
-        println"has a child ${neo4jChildren} . . ${neo4jChildren == null} ${neo4jChildren[0].feature}"
+//        println"has a child ${neo4jChildren} . . ${neo4jChildren == null} ${neo4jChildren[0].feature}"
         if (neo4jChildren!= null && neo4jChildren[0].feature!=null) {
             println "finding children"
             JSONArray children = new JSONArray();
