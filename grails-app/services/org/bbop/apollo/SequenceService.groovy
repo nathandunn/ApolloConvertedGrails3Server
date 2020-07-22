@@ -217,7 +217,8 @@ class SequenceService {
     }
 
     String getRawResiduesFromSequence(Sequence sequence, int fmin, int fmax) {
-        println "inuput sequence ${sequence}, $sequence.organism , $sequence.organismId "
+        println "inuput sequence ${sequence}"
+        println "with orgs $sequence.organism , $sequence.organismId "
         println "sequence as JSON ${sequence as JSON}"
 //        println "org count ${Organism.count}"
 //        for(def o in Organism.all){

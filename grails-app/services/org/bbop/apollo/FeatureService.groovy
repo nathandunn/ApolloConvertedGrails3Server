@@ -185,9 +185,9 @@ class FeatureService {
         gsolFeature.setIsAnalysis(false);
         gsolFeature.setIsObsolete(false);
 
-        if (sequence) {
-            gsolFeature.getFeatureLocations().iterator().next().sequence = sequence;
-        }
+//        if (sequence) {
+//            gsolFeature.getFeatureLocations().iterator().next().sequence = sequence;
+//        }
 
         // TODO: this may be a mistake, is different than the original code
         // you are iterating through all of the children in order to set the SourceFeature and analysis
@@ -1159,11 +1159,12 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
 //        Sequence sequence = Sequence.executeQuery("select s from Feature  f join f.featureLocations fl join fl.sequence s where f = :feature ", [feature: feature]).first()
 //        Sequence.createCriteria().listDistinct {
 //        }
-        def sequences = Sequence.createCriteria().listDistinct {
-            featureLocations {
-                eq 'feature', feature
-            }
-        }
+//        def sequences = Sequence.createCriteria().listDistinct {
+//            featureLocations {
+//                eq 'feature', feature
+//            }
+//        }
+//        def sequence = []
         // TODO: should not need to assert this yet
 
 //        assert sequences && sequences.size()>0
@@ -1172,7 +1173,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
 ////            join 'sequence'
 ////        }
 //        def featureLocations2 = FeatureLocation.findAllByFeature(feature,[fetch:[organism:'join']])
-        println "feature locations ${sequences}"
+//        println "feature locations ${sequences}"
 //        println "feature locations 2: ${featureLocations2}"
 //        if(sequences){
 //            SequenceAlterationArtifact.executeQuery("select sa from SequenceAlterationArtifact sa join sa.featureLocations fl join fl.sequence s where s = :sequence order by fl.fmin asc ", [sequence: sequences.first()])
@@ -2486,7 +2487,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
 
         start = System.currentTimeMillis()
         if (gsolFeature.featureLocation) {
-            Sequence sequence = gsolFeature.featureLocation.sequence
+            Sequence sequence = gsolFeature.featureLocation.to
             jsonFeature.put(FeatureStringEnum.SEQUENCE.value, sequence.name)
         }
 
@@ -3828,6 +3829,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
             if (gene) {
                 // Scenario I - if 'parent_id' attribute is given then find the gene
                 transcript = (Transcript) convertJSONToFeature(jsonFeature, sequence)
+                transcript.save()
                 if (transcript.fmin < 0 || transcript.fmax < 0) {
                     throw new AnnotationException("Feature cannot have negative coordinates")
                 }
@@ -3844,6 +3846,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
                 if (useName && jsonFeature.has(FeatureStringEnum.NAME.value)) {
                     transcript.name = jsonFeature.get(FeatureStringEnum.NAME.value)
                 }
+                transcript.save()
 
             } else {
                 // Scenario II - find and overlapping isoform and if present, add current transcript to its gene.
@@ -3893,13 +3896,17 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
                 jsonGene.put(FeatureStringEnum.NAME.value, geneName)
 
                 gene = (Gene) convertJSONToFeature(jsonGene, sequence)
+                gene.save(flush: true)
                 updateNewGsolFeatureAttributes(gene, sequence)
+                gene.save(flush: true)
 
                 if (gene.fmin < 0 || gene.fmax < 0) {
                     throw new AnnotationException("Feature cannot have negative coordinates")
                 }
 
                 transcript = transcriptService.getTranscripts(gene).first()
+//                transcript.save()
+                transcript.save(flush: true)
                 removeExonOverlapsAndAdjacenciesForFeature(gene)
                 if (!suppressHistory) {
                     String name = nameService.generateUniqueName(transcript, geneName)

@@ -98,9 +98,10 @@ class NameService {
 
     String makeUniqueTranscriptName(Organism organism,String principalName){
         String name
-
         name = principalName + leftPaddingStrategy.pad(0)
-        if(Transcript.countByName(name)==0){
+        def queryResults =  Transcript.executeQuery("MATCH (t:Transcript) where t.name='bob' RETURN count(t)").first()
+        int tCount = Transcript.executeQuery("MATCH (t:Transcript) where t.name='bob' RETURN count(t)").first()
+        if(tCount==0){
             return name
         }
 
