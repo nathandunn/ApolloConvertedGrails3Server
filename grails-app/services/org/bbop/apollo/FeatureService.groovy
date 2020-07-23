@@ -1348,10 +1348,15 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
         println "bestStartIndex: ${bestStartIndex} bestStopIndex: ${bestStopIndex}; partialStart: ${partialStart} partialStop: ${partialStop}"
 
         if (transcript instanceof MRNA) {
+            println "is an MRNA"
             CDS cds = transcriptService.getCDS(transcript)
+            println "cds ${cds}"
             if (cds == null) {
+                println "creating CDS "
                 cds = transcriptService.createCDS(transcript);
+                println "created a CDS ${cds}"
                 transcriptService.setCDS(transcript, cds);
+                println "set CDS ${cds} on transcript ${transcript}"
             }
 
             int fmin = convertModifiedLocalCoordinateToSourceCoordinate(transcript, bestStartIndex)
@@ -1377,7 +1382,9 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
                 setFmin(cds, fmin)
                 setFmax(cds, fmax)
             }
+            println "looking at strands for ${cds}"
 
+            println "c${cds}"
             if (cds.featureLocation.strand == Strand.NEGATIVE.value) {
                 cds.featureLocation.setIsFminPartial(partialStop)
                 cds.featureLocation.setIsFmaxPartial(partialStart)
