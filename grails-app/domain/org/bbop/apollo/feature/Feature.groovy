@@ -62,12 +62,12 @@ class Feature implements Ontological{
             ,provenances: Provenance
     ]
 
-    static mappedBy = [
-            parentFeatureRelationships: "parentFeature",
-            childFeatureRelationships: "childFeature",
-//            featureGenotypes: "feature",
-//            featureLocations: "feature"
-    ]
+//    static mappedBy = [
+//            parentFeatureRelationships: "parentFeature",
+//            childFeatureRelationships: "childFeature",
+////            featureGenotypes: "feature",
+////            featureLocations: "feature"
+//    ]
 
     static mapping = {
             featureSynonyms cascade: 'all-delete-orphan'

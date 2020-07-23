@@ -255,7 +255,7 @@ class RequestHandlingService {
 
         // only pass in transcript
         if (feature instanceof Gene) {
-            feature.parentFeatureRelationships.childFeature.each { childFeature ->
+            feature.parentFeatureRelationships.to.each { childFeature ->
                 jsonObject.getJSONArray(FeatureStringEnum.FEATURES.value).put(featureService.convertFeatureToJSON(childFeature))
             }
         } else {

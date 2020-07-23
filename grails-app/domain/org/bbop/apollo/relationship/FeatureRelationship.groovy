@@ -1,21 +1,19 @@
 package org.bbop.apollo.relationship
 
-import org.bbop.apollo.attributes.FeatureProperty
+import grails.neo4j.Relationship
 import org.bbop.apollo.Ontological
-//import org.bbop.apollo.Publication
 import org.bbop.apollo.feature.Feature
 
-class FeatureRelationship implements  Ontological{
+class FeatureRelationship implements  Ontological,  Relationship<Feature, Feature> {
 
-    static auditable =  true
 
     static constraints = {
         rank nullable: true
         value nullable: true
     }
 
-    Feature parentFeature;
-    Feature childFeature;
+//    Feature from;
+//    Feature to;
     String value; // unused, but could be used like metadata (strength / quality of connection)
     int rank;
     static String ontologyId = "part_of"
@@ -26,32 +24,30 @@ class FeatureRelationship implements  Ontological{
 //    ]
 
 
-    public boolean equals(Object other) {
+    boolean equals(Object other) {
         if (this.is(other)) return true
         if (getClass() != other.class) return false
         FeatureRelationship castOther = ( FeatureRelationship ) other;
         if(this?.id == castOther?.id) return true
 
-        return  this.parentFeature ==castOther.parentFeature  \
-                && this.childFeature ==  castOther.childFeature
+        return  this.from ==castOther.from  \
+                && this.to ==  castOther.to
     }
 
-    public int hashCode() {
+    int hashCode() {
         int result = 17;
-        result = 37 * result + ( parentFeature == null ? 0 : this.parentFeature.hashCode() );
-        result = 37 * result + ( childFeature == null ? 0 : this.childFeature.hashCode() );
+        result = 37 * result + ( from == null ? 0 : this.from.hashCode() );
+        result = 37 * result + ( to == null ? 0 : this.to.hashCode() );
         result = 37 * result + this.rank;
         return result;
     }
 
     public FeatureRelationship generateClone() {
         FeatureRelationship cloned = new FeatureRelationship();
-        cloned.parentFeature = this.parentFeature;
-        cloned.childFeature = this.childFeature;
+        cloned.from = this.from;
+        cloned.to = this.to;
         cloned.value = this.value;
         cloned.rank = this.rank;
-        cloned.featureRelationshipProperties = this.featureRelationshipProperties;
-        cloned.featureRelationshipPublications = this.featureRelationshipPublications;
         return cloned;
     }
 }

@@ -546,7 +546,7 @@ class FeatureService {
      */
 
     Feature getTopLevelFeature(Feature feature) {
-        Collection<Feature> parents = feature?.childFeatureRelationships*.parentFeature
+        Collection<Feature> parents = feature?.childFeatureRelationships*.from
         if (parents) {
             return getTopLevelFeature(parents.iterator().next());
         } else {
