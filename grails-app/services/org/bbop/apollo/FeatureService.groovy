@@ -193,7 +193,7 @@ class FeatureService {
         // you are iterating through all of the children in order to set the SourceFeature and analysis
         // for (FeatureRelationship fr : gsolFeature.getChildFeatureRelationships()) {
         for (FeatureRelationship fr : gsolFeature.getParentFeatureRelationships()) {
-            updateNewGsolFeatureAttributes(fr.getChildFeature(), sequence);
+            updateNewGsolFeatureAttributes(fr.to, sequence);
         }
     }
 
@@ -1524,9 +1524,9 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
                     // if it retuns null, we ignore it
                     if (child) {
                         child.save(failOnError: true)
-                        FeatureRelationship fr = new FeatureRelationship();
-                        fr.setParentFeature(gsolFeature);
-                        fr.setChildFeature(child);
+                        FeatureRelationship fr = new FeatureRelationship()
+                        fr.from = gsolFeature
+                        fr.to = child
                         fr.save(failOnError: true)
                         gsolFeature.addToParentFeatureRelationships(fr);
                         child.addToChildFeatureRelationships(fr);
