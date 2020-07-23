@@ -546,15 +546,21 @@ class TranscriptService {
     }
 
     String getResiduesFromTranscript(Transcript transcript) {
+        println "input residues from transcript ${transcript}"
         def exons = getSortedExons(transcript, true)
+        println "output exons ${exons}"
         if (!exons) {
             return null
         }
 
         StringBuilder residues = new StringBuilder()
+        println "input residues for exon ${exons}"
         for (Exon exon in exons) {
+            println "get residue for feature ${exon}"
             residues.append(sequenceService.getResiduesFromFeature(exon))
+            println "GOT residue for feature ${exon} -> ${residues}"
         }
+        println "residues ${residues}"
         return residues.size() > 0 ? residues.toString() : null
     }
 

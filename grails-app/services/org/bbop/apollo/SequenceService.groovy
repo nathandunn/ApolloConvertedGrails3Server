@@ -51,13 +51,21 @@ class SequenceService {
      */
     String getResiduesFromFeature(Feature feature) {
         String returnResidues = ""
+        println "input residue from feature ${feature}"
         def orderedFeatureLocations = feature.featureLocations.sort { it.fmin }
+        println "ordered features ${orderedFeatureLocations}"
         for (FeatureLocation featureLocation in orderedFeatureLocations) {
+            println "ordered FL ${featureLocation}"
             String residues = getResidueFromFeatureLocation(featureLocation)
+            println "RESIDUES  ${residues}"
             if (featureLocation.strand == Strand.NEGATIVE.value) {
                 returnResidues += SequenceTranslationHandler.reverseComplementSequence(residues)
-            } else returnResidues += residues
+            } else {
+                returnResidues += residues
+            }
+            println "output return RESIDUES  ${returnResidues}"
         }
+        println "final RESIDUES ${returnResidues}"
 
 
         return returnResidues
@@ -233,11 +241,17 @@ class SequenceService {
 //        println "OUTOPUT ORGANISM:  ${organism}"
 
         // TODO: fix this with a query
+        String outputSequence
         if (sequence.organism.genomeFasta) {
-            getRawResiduesFromSequenceFasta(sequence, fmin, fmax)
+            println "getting fastA genome "
+            outputSequence = getRawResiduesFromSequenceFasta(sequence, fmin, fmax)
+            println "getting fastA genome $outputSequence"
         } else {
-            getRawResiduesFromSequenceChunks(sequence, fmin, fmax)
+            println "getting non-fast genome "
+            outputSequence = getRawResiduesFromSequenceChunks(sequence, fmin, fmax)
+            println "GOT raw residues from chucksn $outputSequence "
         }
+        return outputSequence
     }
 
     String getRawResiduesFromSequenceFasta(Sequence sequence, int fmin, int fmax) {
@@ -257,12 +271,15 @@ class SequenceService {
         int startChunkNumber = fmin / sequence.seqChunkSize;
         int endChunkNumber = (fmax - 1) / sequence.seqChunkSize;
 
+        println "loading chunks? "
 
         for (int i = startChunkNumber; i <= endChunkNumber; i++) {
             sequenceString.append(loadResidueForSequence(sequence, i))
         }
+        println "LOADED chunks? "
 
         int startPosition = fmin - (startChunkNumber * sequence.seqChunkSize);
+        println "going to return ? "
         return sequenceString.substring(startPosition, startPosition + (fmax - fmin))
     }
 

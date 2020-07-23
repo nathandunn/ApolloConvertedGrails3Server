@@ -3262,6 +3262,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
         if (feature instanceof Transcript) {
             println "println getting residues for transcripr ${feature}"
             residueString = transcriptService.getResiduesFromTranscript((Transcript) feature)
+            println "reside string  ${residueString}"
             // sequence from exons, with UTRs too
             sequenceAlterationInContextList = getSequenceAlterationsInContext(feature, sequenceAlterations)
             println "GOT getting residues for transcripr ${feature}"
