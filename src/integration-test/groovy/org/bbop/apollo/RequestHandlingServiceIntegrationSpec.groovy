@@ -3847,8 +3847,8 @@ class RequestHandlingServiceIntegrationSpec extends AbstractIntegrationSpec {
         assert SequenceAlterationArtifact.count == 3
 
         when: "do a GFF3 export"
-        Organism organism = Gene.all.get(0).featureLocation.sequence.organism
-        Sequence sequence = Gene.all.get(0).featureLocation.sequence
+        Organism organism = Gene.all.get(0).featureLocation.to.organism
+        Sequence sequence = Gene.all.get(0).featureLocation.to
         File tempFile = File.createTempFile("round-trip-output", ".gff3")
         String filePath = tempFile.absolutePath
         tempFile.deleteOnExit()

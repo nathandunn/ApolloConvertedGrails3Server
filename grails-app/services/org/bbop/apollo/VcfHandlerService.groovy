@@ -56,8 +56,8 @@ class VcfHandlerService {
         writer.write("##reference=${reference}\n")
         def sequences = []
         for (SequenceAlteration variant : variants) {
-            if (!sequences.contains(variant.featureLocation.sequence)) {
-                sequences.add(variant.featureLocation.sequence)
+            if (!sequences.contains(variant.featureLocation.to)) {
+                sequences.add(variant.featureLocation.to)
             }
         }
         sequences.sort({ a,b -> a.name <=> b.name })
@@ -76,7 +76,7 @@ class VcfHandlerService {
     public void writeVariants(PrintWriter writer, def variants) {
         def variantsBySequence = [:]
         for (SequenceAlteration variant : variants) {
-            Sequence sequence = variant.featureLocation.sequence
+            Sequence sequence = variant.featureLocation.to
             if (variantsBySequence.containsKey(sequence)) {
                 variantsBySequence.get(sequence).add(variant)
             }
@@ -100,7 +100,7 @@ class VcfHandlerService {
     public void writeVariants(PrintWriter writer, SequenceAlteration variant) {
         Allele referenceAllele = variantService.getReferenceAllele(variant)
         def alternateAlleles = variantService.getAlternateAlleles(variant)
-        def record = [variant.featureLocation.sequence.name, variant.featureLocation.fmin + 1, variant.uniqueName, referenceAllele ? referenceAllele.bases : "."]
+        def record = [variant.featureLocation.to.name, variant.featureLocation.fmin + 1, variant.uniqueName, referenceAllele ? referenceAllele.bases : "."]
         def alleleInfoMap = [:]
         alternateAlleles.each { allele ->
             if (alleleInfoMap.containsKey('allele_order')) {

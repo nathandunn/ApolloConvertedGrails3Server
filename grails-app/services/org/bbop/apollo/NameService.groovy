@@ -79,7 +79,7 @@ class NameService {
     // TODO: add proper criteria query here
     boolean isUniqueGene(Organism organism,String name){
 //        Integer numberResults = Gene.findAllByName(name).findAll(){
-//            it.featureLocation.sequence.organism == organism
+//            it.featureLocation.to.organism == organism
 //        }.size()
 //        return 0 == numberResults
         return true
@@ -91,7 +91,7 @@ class NameService {
 //        }
 //        List results = (Feature.executeQuery("select count(f) from Feature f join f.featureLocations fl join fl.sequence s where s.organism = :org and f.name = :name ",[org:organism,name:name]))
         Integer numberResults = Feature.findAllByName(name).findAll(){
-            it.featureLocation.sequence.organism == organism
+            it.featureLocation.to.organism == organism
         }.size()
         return 0 == numberResults
     }
@@ -134,7 +134,7 @@ class NameService {
         String name = principalName + letterPaddingStrategy.pad(0)
 
         List<String> results= Gene.findAllByNameLike(principalName+"%").findAll(){
-            it.featureLocation.sequence.organism == organism
+            it.featureLocation.to.organism == organism
         }.name
         int count = results.size()
         while(results.contains(name)){

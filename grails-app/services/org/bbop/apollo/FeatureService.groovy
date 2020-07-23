@@ -758,7 +758,7 @@ class FeatureService {
     @Transactional
     void setTranslationStart(Transcript transcript, int translationStart, boolean setTranslationEnd, boolean readThroughStopCodon) throws AnnotationException {
         println "setTranslationStart(transcript,translationStart,translationEnd,readThroughStopCodon)"
-        setTranslationStart(transcript, translationStart, setTranslationEnd, setTranslationEnd ? organismService.getTranslationTable(transcript.featureLocation.sequence.organism) : null, readThroughStopCodon);
+        setTranslationStart(transcript, translationStart, setTranslationEnd, setTranslationEnd ? organismService.getTranslationTable(transcript.featureLocation.to.organism) : null, readThroughStopCodon);
     }
 
     /** Convert local coordinate to source feature coordinate.
@@ -995,7 +995,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
     @Transactional
     void setTranslationEnd(Transcript transcript, int translationEnd, boolean setTranslationStart) throws AnnotationException {
         setTranslationEnd(transcript, translationEnd, setTranslationStart,
-            setTranslationStart ? organismService.getTranslationTable(transcript.featureLocation.sequence.organism) : null
+            setTranslationStart ? organismService.getTranslationTable(transcript.featureLocation.to.organism) : null
         );
     }
 
@@ -1286,7 +1286,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
     @Transactional
     void setLongestORF(Transcript transcript, boolean readThroughStopCodon) {
         println "A - set longest ORF"
-        Organism organism = transcript.featureLocation.sequence.organism
+        Organism organism = transcript.featureLocation.to.organism
         println "B - set longest ORF"
         TranslationTable translationTable = organismService.getTranslationTable(organism)
         println "C - set longest ORF"
@@ -2121,7 +2121,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
 
 
 //        if (neo4jObject.featureLocation) {
-//            Sequence sequence = neo4jObject.featureLocation.sequence
+//            Sequence sequence = neo4jObject.featureLocation.to
         if(neo4jSequence){
             jsonFeature.put(FeatureStringEnum.SEQUENCE.value, neo4jSequence.get(FeatureStringEnum.NAME.value).asString())
         }
@@ -2412,7 +2412,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
         }
 
         if (gsolFeature.featureLocation) {
-            jsonFeature.put(FeatureStringEnum.SEQUENCE.value, gsolFeature.featureLocation.sequence.name);
+            jsonFeature.put(FeatureStringEnum.SEQUENCE.value, gsolFeature.featureLocation.to.name);
             jsonFeature.put(FeatureStringEnum.LOCATION.value, convertFeatureLocationToJSON(gsolFeature.featureLocation));
         }
 
@@ -3025,7 +3025,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
                             fmin: firstTranscript.fmin,
                             fmax: firstTranscript.fmax,
                             strand: firstTranscript.strand,
-                            sequence: firstTranscript.featureLocation.sequence,
+                            sequence: firstTranscript.featureLocation.to,
                             residueInfo: firstTranscript.featureLocation.residueInfo,
                             locgroup: firstTranscript.featureLocation.locgroup,
                             rank: firstTranscript.featureLocation.rank
@@ -3153,7 +3153,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
             fmin: transcript.fmin,
             fmax: transcript.fmax,
             strand: transcript.strand,
-            sequence: transcript.featureLocation.sequence,
+            sequence: transcript.featureLocation.to,
             residueInfo: transcript.featureLocation.residueInfo,
             locgroup: transcript.featureLocation.locgroup,
             rank: transcript.featureLocation.rank
@@ -3338,7 +3338,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
     List<SequenceAlterationArtifact> getSequenceAlterationsForFeature(Feature feature) {
         int fmin = feature.fmin
         int fmax = feature.fmax
-        Sequence sequence = feature.featureLocation.sequence
+        Sequence sequence = feature.featureLocation.to
         println "fmin ${fmin}"
         println "fmax ${fmax}"
         println "sequence ${sequence}"

@@ -44,7 +44,7 @@ class FeatureServiceSpec extends Specification {
 
         then: "We should return a valid FeatureLocation"
         FeatureLocation featureLocation = service.convertJSONToFeatureLocation(jsonObject, sequence)
-        assert featureLocation.sequence.name == "Chr3"
+        assert featureLocation.to.name == "Chr3"
         assert featureLocation.fmin == 73
         assert featureLocation.fmax == 113
         assert featureLocation.strand == Strand.POSITIVE.value

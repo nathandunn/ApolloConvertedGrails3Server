@@ -382,7 +382,7 @@ class TranscriptService {
                     fmin: featureLocation.fmin
                     , fmax: featureLocation.fmax
                     , rank: featureLocation.rank
-                    , sequence: featureLocation.sequence
+                    , sequence: featureLocation.to
                     , strand: featureLocation.strand
 
                     , feature: splitTranscript
@@ -407,7 +407,7 @@ class TranscriptService {
                 fmin: splitTranscript.fmin,
                 fmax: splitTranscript.fmax,
                 strand: splitTranscript.strand,
-                sequence: splitTranscript.featureLocation.sequence,
+                sequence: splitTranscript.featureLocation.to,
                 residueInfo: splitTranscript.featureLocation.residueInfo,
                 locgroup: splitTranscript.featureLocation.locgroup,
                 rank: splitTranscript.featureLocation.rank

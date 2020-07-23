@@ -98,8 +98,8 @@ class AnnotatorController {
             if (params.uuid) {
                 Feature feature = Feature.findByUniqueName(params.uuid)
                 FeatureLocation featureLocation = feature.featureLocation
-                params.loc = featureLocation.sequence.name + ":" + featureLocation.fmin + ".." + featureLocation.fmax
-                organism = featureLocation.sequence.organism
+                params.loc = featureLocation.to.name + ":" + featureLocation.fmin + ".." + featureLocation.fmax
+                organism = featureLocation.to.organism
             }
 
             if (!allowedOrganisms.contains(organism)) {

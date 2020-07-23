@@ -112,7 +112,7 @@ class CdsService {
                 , isObsolete: cds.isIsObsolete()
         ).save(failOnError: true)
         FeatureLocation featureLocation = new FeatureLocation(
-                sequence: cds.featureLocation.sequence
+                sequence: cds.featureLocation.to
                 , feature: stopCodonReadThrough
                 ,fmin: cds.featureLocation.fmin
                 ,fmax: cds.featureLocation.fmax

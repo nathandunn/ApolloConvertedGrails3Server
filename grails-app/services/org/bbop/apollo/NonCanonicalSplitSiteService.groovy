@@ -219,7 +219,7 @@ class NonCanonicalSplitSiteService {
                 ).save()
         spliceSite.addToFeatureLocations(new FeatureLocation(
                 strand: transcript.strand
-                ,sequence: transcript.featureLocation.sequence
+                ,sequence: transcript.featureLocation.to
                 ,fmin: position
                 ,fmax: position
                 ,feature: spliceSite
@@ -239,7 +239,7 @@ class NonCanonicalSplitSiteService {
         ).save()
         spliceSite.addToFeatureLocations(new FeatureLocation(
                 strand: transcript.strand
-                ,sequence: transcript.featureLocation.sequence
+                ,sequence: transcript.featureLocation.to
                 ,fmin: position
                 ,fmax: position
                 ,feature: spliceSite

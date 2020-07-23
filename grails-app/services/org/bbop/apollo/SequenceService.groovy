@@ -64,7 +64,7 @@ class SequenceService {
     }
 
     String getResidueFromFeatureLocation(FeatureLocation featureLocation) {
-        return getRawResiduesFromSequence(featureLocation.sequence, featureLocation.fmin, featureLocation.fmax)
+        return getRawResiduesFromSequence(featureLocation.to, featureLocation.fmin, featureLocation.fmax)
     }
 
 
@@ -534,7 +534,7 @@ class SequenceService {
         // Method returns the sequence for a single feature
         // Directly called for FASTA Export
         String featureResidues = null
-        Organism organism = gbolFeature.featureLocation.sequence.organism
+        Organism organism = gbolFeature.featureLocation.to.organism
         TranslationTable translationTable = organismService.getTranslationTable(organism)
 
         if (type.equals(FeatureStringEnum.TYPE_PEPTIDE.value)) {
@@ -630,7 +630,7 @@ class SequenceService {
                 }
 
             }
-            featureResidues = getGenomicResiduesFromSequenceWithAlterations(gbolFeature.featureLocation.sequence, fmin, fmax, Strand.getStrandForValue(gbolFeature.strand))
+            featureResidues = getGenomicResiduesFromSequenceWithAlterations(gbolFeature.featureLocation.to, fmin, fmax, Strand.getStrandForValue(gbolFeature.strand))
         }
         return featureResidues
     }
@@ -696,7 +696,7 @@ class SequenceService {
             int fmin = gbolFeature.fmin
             int fmax = gbolFeature.fmax
 
-            Sequence sequence = gbolFeature.featureLocation.sequence
+            Sequence sequence = gbolFeature.featureLocation.to
 
             // TODO: does strand and alteration length matter here?
             List<Feature> listOfSequenceAlterations = Feature.executeQuery("select distinct f from Feature f join f.featureLocations fl join fl.sequence s where s = :sequence and f.class in :sequenceTypes and fl.fmin >= :fmin and fl.fmax <= :fmax ", [sequence: sequence, sequenceTypes: requestHandlingService.viewableAlterations, fmin: fmin, fmax: fmax])
