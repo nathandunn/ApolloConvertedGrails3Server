@@ -76,7 +76,8 @@ class FeatureService {
         } else {
             gsolLocation.setStrand(defaultStrand)
         }
-        gsolLocation.setSequence(sequence)
+        gsolLocation.to = sequence
+//        gsolLocation.setSequence(sequence)
         return gsolLocation;
     }
 
@@ -110,30 +111,32 @@ class FeatureService {
 //    if (compareStrands) {
 //      //Feature.executeQuery("select distinct f from Feature f join f.featureLocations fl where fl.sequence = :sequence and fl.strand = :strand and ((fl.fmin <= :fmin and fl.fmax > :fmin) or (fl.fmin <= :fmax and fl.fmax >= :fmax ))",[fmin:location.fmin,fmax:location.fmax,strand:location.strand,sequence:location.sequence])
 //      Feature.executeQuery("select distinct f from Feature f join f.featureLocations fl where fl.sequence = :sequence and fl.strand = :strand and ((fl.fmin <= :fmin and fl.fmax > :fmin) or (fl.fmin <= :fmax and fl.fmax >= :fmax) or (fl.fmin >= :fmin and fl.fmax <= :fmax))", [fmin: location.fmin, fmax: location.fmax, strand: location.strand, sequence: location.sequence])
-        println "input location ${location}"
-        Collection<Feature> features = (Collection<Feature>) Feature.createCriteria().listDistinct {
-            featureLocations {
-                eq "sequence", location.sequence
-                if (compareStrands) {
-                    eq "strand", location.strand
-                }
-                or {
-                    and {
-                        lte "fmin", location.fmin
-                        gt "fmax", location.fmax
-                    }
-                    and {
-                        lte "fmin", location.fmax
-                        gte "fmax", location.fmax
-                    }
-                    and {
-                        gte "fmin", location.fmax
-                        lte "fmax", location.fmax
-                    }
-                }
-            }
-        }
-        return features
+
+        return []
+//        println "input location ${location}"
+//        Collection<Feature> features = (Collection<Feature>) Feature.createCriteria().listDistinct {
+//            featureLocations {
+//                eq "sequence", location.sequence
+//                if (compareStrands) {
+//                    eq "strand", location.strand
+//                }
+//                or {
+//                    and {
+//                        lte "fmin", location.fmin
+//                        gt "fmax", location.fmax
+//                    }
+//                    and {
+//                        lte "fmin", location.fmax
+//                        gte "fmax", location.fmax
+//                    }
+//                    and {
+//                        gte "fmin", location.fmax
+//                        lte "fmax", location.fmax
+//                    }
+//                }
+//            }
+//        }
+//        return features
 //    } else {
 //      //Feature.executeQuery("select distinct f from Feature f join f.featureLocations fl where fl.sequence = :sequence and ((fl.fmin <= :fmin and fl.fmax > :fmin) or (fl.fmin <= :fmax and fl.fmax >= :fmax ))",[fmin:location.fmin,fmax:location.fmax,sequence:location.sequence])
 //      Feature.executeQuery("select distinct f from Feature f join f.featureLocations fl where fl.sequence = :sequence and ((fl.fmin <= :fmin and fl.fmax > :fmin) or (fl.fmin <= :fmax and fl.fmax >= :fmax) or (fl.fmin >= :fmin and fl.fmax <= :fmax))", [fmin: location.fmin, fmax: location.fmax, sequence: location.sequence])
@@ -182,9 +185,9 @@ class FeatureService {
         gsolFeature.setIsAnalysis(false);
         gsolFeature.setIsObsolete(false);
 
-        if (sequence) {
-            gsolFeature.getFeatureLocations().iterator().next().sequence = sequence;
-        }
+//        if (sequence) {
+//            gsolFeature.getFeatureLocations().iterator().next().sequence = sequence;
+//        }
 
         // TODO: this may be a mistake, is different than the original code
         // you are iterating through all of the children in order to set the SourceFeature and analysis
@@ -543,7 +546,7 @@ class FeatureService {
      */
 
     Feature getTopLevelFeature(Feature feature) {
-        Collection<Feature> parents = feature?.childFeatureRelationships*.parentFeature
+        Collection<Feature> parents = feature?.childFeatureRelationships*.from
         if (parents) {
             return getTopLevelFeature(parents.iterator().next());
         } else {
@@ -573,7 +576,8 @@ class FeatureService {
             featureLocation.properties = transcriptFeatureLocation.properties
             featureLocation.id = null
             featureLocation.save()
-            gene.addToFeatureLocations(featureLocation);
+            featureLocation.from = gene
+//            gene.addToFeatureLocations(featureLocation);
         } else {
             // if the transcript's bounds are beyond the gene's bounds, need to adjust the gene's bounds
             if (transcript.getFeatureLocation().getFmin() < gene.getFeatureLocation().getFmin()) {
@@ -754,7 +758,7 @@ class FeatureService {
     @Transactional
     void setTranslationStart(Transcript transcript, int translationStart, boolean setTranslationEnd, boolean readThroughStopCodon) throws AnnotationException {
         println "setTranslationStart(transcript,translationStart,translationEnd,readThroughStopCodon)"
-        setTranslationStart(transcript, translationStart, setTranslationEnd, setTranslationEnd ? organismService.getTranslationTable(transcript.featureLocation.sequence.organism) : null, readThroughStopCodon);
+        setTranslationStart(transcript, translationStart, setTranslationEnd, setTranslationEnd ? organismService.getTranslationTable(transcript.featureLocation.to.organism) : null, readThroughStopCodon);
     }
 
     /** Convert local coordinate to source feature coordinate.
@@ -991,7 +995,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
     @Transactional
     void setTranslationEnd(Transcript transcript, int translationEnd, boolean setTranslationStart) throws AnnotationException {
         setTranslationEnd(transcript, translationEnd, setTranslationStart,
-            setTranslationStart ? organismService.getTranslationTable(transcript.featureLocation.sequence.organism) : null
+            setTranslationStart ? organismService.getTranslationTable(transcript.featureLocation.to.organism) : null
         );
     }
 
@@ -1155,11 +1159,12 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
 //        Sequence sequence = Sequence.executeQuery("select s from Feature  f join f.featureLocations fl join fl.sequence s where f = :feature ", [feature: feature]).first()
 //        Sequence.createCriteria().listDistinct {
 //        }
-        def sequences = Sequence.createCriteria().listDistinct {
-            featureLocations {
-                eq 'feature', feature
-            }
-        }
+//        def sequences = Sequence.createCriteria().listDistinct {
+//            featureLocations {
+//                eq 'feature', feature
+//            }
+//        }
+//        def sequence = []
         // TODO: should not need to assert this yet
 
 //        assert sequences && sequences.size()>0
@@ -1168,7 +1173,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
 ////            join 'sequence'
 ////        }
 //        def featureLocations2 = FeatureLocation.findAllByFeature(feature,[fetch:[organism:'join']])
-        println "feature locations ${sequences}"
+//        println "feature locations ${sequences}"
 //        println "feature locations 2: ${featureLocations2}"
 //        if(sequences){
 //            SequenceAlterationArtifact.executeQuery("select sa from SequenceAlterationArtifact sa join sa.featureLocations fl join fl.sequence s where s = :sequence order by fl.fmin asc ", [sequence: sequences.first()])
@@ -1281,7 +1286,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
     @Transactional
     void setLongestORF(Transcript transcript, boolean readThroughStopCodon) {
         println "A - set longest ORF"
-        Organism organism = transcript.featureLocation.sequence.organism
+        Organism organism = transcript.featureLocation.to.organism
         println "B - set longest ORF"
         TranslationTable translationTable = organismService.getTranslationTable(organism)
         println "C - set longest ORF"
@@ -1498,8 +1503,8 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
                 } else {
                     featureLocation = convertJSONToFeatureLocation(jsonLocation, sequence)
                 }
-                featureLocation.sequence = sequence
-                featureLocation.feature = gsolFeature
+                featureLocation.to = sequence
+                featureLocation.from = gsolFeature
                 featureLocation.save()
                 gsolFeature.addToFeatureLocations(featureLocation);
             }
@@ -2116,7 +2121,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
 
 
 //        if (neo4jObject.featureLocation) {
-//            Sequence sequence = neo4jObject.featureLocation.sequence
+//            Sequence sequence = neo4jObject.featureLocation.to
         if(neo4jSequence){
             jsonFeature.put(FeatureStringEnum.SEQUENCE.value, neo4jSequence.get(FeatureStringEnum.NAME.value).asString())
         }
@@ -2407,7 +2412,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
         }
 
         if (gsolFeature.featureLocation) {
-            jsonFeature.put(FeatureStringEnum.SEQUENCE.value, gsolFeature.featureLocation.sequence.name);
+            jsonFeature.put(FeatureStringEnum.SEQUENCE.value, gsolFeature.featureLocation.to.name);
             jsonFeature.put(FeatureStringEnum.LOCATION.value, convertFeatureLocationToJSON(gsolFeature.featureLocation));
         }
 
@@ -2482,7 +2487,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
 
         start = System.currentTimeMillis()
         if (gsolFeature.featureLocation) {
-            Sequence sequence = gsolFeature.featureLocation.sequence
+            Sequence sequence = gsolFeature.featureLocation.to
             jsonFeature.put(FeatureStringEnum.SEQUENCE.value, sequence.name)
         }
 
@@ -3020,7 +3025,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
                             fmin: firstTranscript.fmin,
                             fmax: firstTranscript.fmax,
                             strand: firstTranscript.strand,
-                            sequence: firstTranscript.featureLocation.sequence,
+                            sequence: firstTranscript.featureLocation.to,
                             residueInfo: firstTranscript.featureLocation.residueInfo,
                             locgroup: firstTranscript.featureLocation.locgroup,
                             rank: firstTranscript.featureLocation.rank
@@ -3148,7 +3153,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
             fmin: transcript.fmin,
             fmax: transcript.fmax,
             strand: transcript.strand,
-            sequence: transcript.featureLocation.sequence,
+            sequence: transcript.featureLocation.to,
             residueInfo: transcript.featureLocation.residueInfo,
             locgroup: transcript.featureLocation.locgroup,
             rank: transcript.featureLocation.rank
@@ -3333,7 +3338,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
     List<SequenceAlterationArtifact> getSequenceAlterationsForFeature(Feature feature) {
         int fmin = feature.fmin
         int fmax = feature.fmax
-        Sequence sequence = feature.featureLocation.sequence
+        Sequence sequence = feature.featureLocation.to
         println "fmin ${fmin}"
         println "fmax ${fmax}"
         println "sequence ${sequence}"
@@ -3824,6 +3829,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
             if (gene) {
                 // Scenario I - if 'parent_id' attribute is given then find the gene
                 transcript = (Transcript) convertJSONToFeature(jsonFeature, sequence)
+                transcript.save()
                 if (transcript.fmin < 0 || transcript.fmax < 0) {
                     throw new AnnotationException("Feature cannot have negative coordinates")
                 }
@@ -3840,6 +3846,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
                 if (useName && jsonFeature.has(FeatureStringEnum.NAME.value)) {
                     transcript.name = jsonFeature.get(FeatureStringEnum.NAME.value)
                 }
+                transcript.save()
 
             } else {
                 // Scenario II - find and overlapping isoform and if present, add current transcript to its gene.
@@ -3889,13 +3896,17 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
                 jsonGene.put(FeatureStringEnum.NAME.value, geneName)
 
                 gene = (Gene) convertJSONToFeature(jsonGene, sequence)
+                gene.save(flush: true)
                 updateNewGsolFeatureAttributes(gene, sequence)
+                gene.save(flush: true)
 
                 if (gene.fmin < 0 || gene.fmax < 0) {
                     throw new AnnotationException("Feature cannot have negative coordinates")
                 }
 
                 transcript = transcriptService.getTranscripts(gene).first()
+//                transcript.save()
+                transcript.save(flush: true)
                 removeExonOverlapsAndAdjacenciesForFeature(gene)
                 if (!suppressHistory) {
                     String name = nameService.generateUniqueName(transcript, geneName)
@@ -3930,7 +3941,10 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
                     jsonFeature.put(FeatureStringEnum.NAME.value, childArray.getJSONObject(0).getString(FeatureStringEnum.NAME.value))
                 }
             }
+            println "input sequence ${sequence}"
+            println "as JSON ${sequence as JSON}"
             Feature feature = convertJSONToFeature(jsonFeature, sequence)
+            feature.save(flush: true)
             if (!suppressHistory) {
                 String name = nameService.generateUniqueName(feature, feature.name)
                 feature.name = name
@@ -3943,7 +3957,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
             }
 
             setOwner(feature, user);
-            feature.save(insert: true, flush: true)
+            feature.save(flush: true)
             if (jsonFeature.get(FeatureStringEnum.TYPE.value).name == Gene.cvTerm ||
                 PSEUDOGENIC_FEATURE_TYPES.contains(jsonFeature.get(FeatureStringEnum.TYPE.value).name)) {
                 Transcript transcript = transcriptService.getTranscripts(feature).iterator().next()

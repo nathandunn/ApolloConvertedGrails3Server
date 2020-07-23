@@ -98,8 +98,8 @@ class AnnotatorController {
             if (params.uuid) {
                 Feature feature = Feature.findByUniqueName(params.uuid)
                 FeatureLocation featureLocation = feature.featureLocation
-                params.loc = featureLocation.sequence.name + ":" + featureLocation.fmin + ".." + featureLocation.fmax
-                organism = featureLocation.sequence.organism
+                params.loc = featureLocation.to.name + ":" + featureLocation.fmin + ".." + featureLocation.fmax
+                organism = featureLocation.to.organism
             }
 
             if (!allowedOrganisms.contains(organism)) {
@@ -281,7 +281,7 @@ class AnnotatorController {
 
         JSONObject updateFeatureContainer = jsonWebUtilityService.createJSONFeatureContainer();
         if (feature instanceof Gene) {
-            List<Feature> childFeatures = feature.parentFeatureRelationships*.childFeature
+            List<Feature> childFeatures = feature.parentFeatureRelationships*.to
             for (childFeature in childFeatures) {
                 JSONObject jsonFeature = featureService.convertFeatureToJSON(childFeature, false)
                 updateFeatureContainer.getJSONArray(FeatureStringEnum.FEATURES.value).put(jsonFeature)
@@ -291,7 +291,7 @@ class AnnotatorController {
             updateFeatureContainer.getJSONArray(FeatureStringEnum.FEATURES.value).put(jsonFeature)
         }
 
-        Sequence sequence = feature?.featureLocation?.sequence
+        Sequence sequence = feature?.featureLocation?.to
         User user = permissionService.getCurrentUser(data)
         JSONObject currentFeatureJsonObject = featureService.convertFeatureToJSON(feature)
 

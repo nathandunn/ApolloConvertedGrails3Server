@@ -79,7 +79,7 @@ class NameService {
     // TODO: add proper criteria query here
     boolean isUniqueGene(Organism organism,String name){
 //        Integer numberResults = Gene.findAllByName(name).findAll(){
-//            it.featureLocation.sequence.organism == organism
+//            it.featureLocation.to.organism == organism
 //        }.size()
 //        return 0 == numberResults
         return true
@@ -91,16 +91,17 @@ class NameService {
 //        }
 //        List results = (Feature.executeQuery("select count(f) from Feature f join f.featureLocations fl join fl.sequence s where s.organism = :org and f.name = :name ",[org:organism,name:name]))
         Integer numberResults = Feature.findAllByName(name).findAll(){
-            it.featureLocation.sequence.organism == organism
+            it.featureLocation.to.organism == organism
         }.size()
         return 0 == numberResults
     }
 
     String makeUniqueTranscriptName(Organism organism,String principalName){
         String name
-
         name = principalName + leftPaddingStrategy.pad(0)
-        if(Transcript.countByName(name)==0){
+        def queryResults =  Transcript.executeQuery("MATCH (t:Transcript) where t.name='bob' RETURN count(t)").first()
+        int tCount = Transcript.executeQuery("MATCH (t:Transcript) where t.name='bob' RETURN count(t)").first()
+        if(tCount==0){
             return name
         }
 
@@ -133,7 +134,7 @@ class NameService {
         String name = principalName + letterPaddingStrategy.pad(0)
 
         List<String> results= Gene.findAllByNameLike(principalName+"%").findAll(){
-            it.featureLocation.sequence.organism == organism
+            it.featureLocation.to.organism == organism
         }.name
         int count = results.size()
         while(results.contains(name)){

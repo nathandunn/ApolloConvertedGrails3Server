@@ -382,7 +382,7 @@ class TranscriptService {
                     fmin: featureLocation.fmin
                     , fmax: featureLocation.fmax
                     , rank: featureLocation.rank
-                    , sequence: featureLocation.sequence
+                    , sequence: featureLocation.to
                     , strand: featureLocation.strand
 
                     , feature: splitTranscript
@@ -407,7 +407,7 @@ class TranscriptService {
                 fmin: splitTranscript.fmin,
                 fmax: splitTranscript.fmax,
                 strand: splitTranscript.strand,
-                sequence: splitTranscript.featureLocation.sequence,
+                sequence: splitTranscript.featureLocation.to,
                 residueInfo: splitTranscript.featureLocation.residueInfo,
                 locgroup: splitTranscript.featureLocation.locgroup,
                 rank: splitTranscript.featureLocation.rank
@@ -458,7 +458,7 @@ class TranscriptService {
      * @param transcript - Transcript to be duplicated
      */
     @Transactional
-    public Transcript duplicateTranscript(Transcript transcript) {
+    Transcript duplicateTranscript(Transcript transcript) {
         Transcript duplicate = (Transcript) transcript.generateClone();
         duplicate.name = transcript.name + "-copy"
         duplicate.uniqueName = nameService.generateUniqueName(transcript)

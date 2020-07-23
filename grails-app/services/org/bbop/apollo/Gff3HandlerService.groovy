@@ -84,7 +84,7 @@ class Gff3HandlerService {
     void writeFeatures(WriteObject writeObject, Collection<? extends Feature> features, String source) throws IOException {
         Map<Sequence, Collection<Feature>> featuresBySource = new HashMap<Sequence, Collection<Feature>>();
         for (Feature feature : features) {
-            Sequence sourceFeature = feature.featureLocation.sequence
+            Sequence sourceFeature = feature.featureLocation.to
             Collection<Feature> featureList = featuresBySource.get(sourceFeature);
             if (!featureList) {
                 featureList = new ArrayList<Feature>();
@@ -107,7 +107,7 @@ class Gff3HandlerService {
         while (iterator.hasNext()) {
             Feature feature = iterator.next();
             if (needDirectives) {
-                writeGroupDirectives(writeObject, feature.featureLocation.sequence)
+                writeGroupDirectives(writeObject, feature.featureLocation.to)
                 needDirectives = false;
             }
             writeFeature(writeObject, feature, source);
@@ -224,7 +224,7 @@ class Gff3HandlerService {
 
         //log.debug "converting feature to ${feature.name} entry of # of entries ${gffEntries.size()}"
 
-        String seqId = feature.featureLocation.sequence.name
+        String seqId = feature.featureLocation.to.name
         String type = featureService.getCvTermFromFeature(feature);
         int start = feature.getFmin() + 1;
         int end = feature.getFmax().equals(feature.getFmin()) ? feature.getFmax() + 1 : feature.getFmax();
@@ -256,7 +256,7 @@ class Gff3HandlerService {
     private void convertToEntry(WriteObject writeObject, CDS cds, String source, Collection<GFF3Entry> gffEntries) {
         //log.debug "converting CDS to ${cds.name} entry of # of entries ${gffEntries.size()}"
 
-        String seqId = cds.featureLocation.sequence.name
+        String seqId = cds.featureLocation.to.name
         String type = cds.cvTerm
         String score = ".";
         String strand;

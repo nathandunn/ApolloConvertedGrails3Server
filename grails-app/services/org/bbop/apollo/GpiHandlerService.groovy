@@ -34,7 +34,7 @@ class GpiHandlerService {
         def goAnnotations = GoAnnotation.findAllByFeatureInList(features as List<Feature>)
 
         if (features) {
-            writeObject.organismString = features.first().featureLocation.sequence.organism.commonName
+            writeObject.organismString = features.first().featureLocation.to.organism.commonName
         }
 
         for (GoAnnotation goAnnotation in goAnnotations) {

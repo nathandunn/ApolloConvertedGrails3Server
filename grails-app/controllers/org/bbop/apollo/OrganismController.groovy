@@ -1532,19 +1532,20 @@ class OrganismController {
       JSONArray jsonArray = new JSONArray()
       for (Organism organism in organismList) {
 
-        def c = Feature.createCriteria()
-
-        def list = c.list {
-          featureLocations {
-            sequence {
-              eq('organism', organism)
-              order('name', "asc")
-            }
-          }
-          // TODO: should be type
-//          'in'('class', requestHandlingService.viewableAnnotationList)
-        }
-        Integer annotationCount = list.size()
+//        def c = Feature.createCriteria()
+//
+//        def list = c.list {
+//          featureLocations {
+//            sequence {
+//              eq('organism', organism)
+//              order('name', "asc")
+//            }
+//          }
+//          // TODO: should be type
+////          'in'('class', requestHandlingService.viewableAnnotationList)
+//        }
+//        Integer annotationCount = list.size()
+        Integer annotationCount = 0
         Integer sequenceCount = Sequence.countByOrganism(organism)
 
         JSONObject jsonObject = [

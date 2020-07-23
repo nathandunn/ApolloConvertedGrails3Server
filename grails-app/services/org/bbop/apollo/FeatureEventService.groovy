@@ -539,7 +539,7 @@ class FeatureEventService {
             it.uniqueName
         }
 
-        Sequence sequence = Feature.findByUniqueNameInList(newUniqueNames).featureLocation.sequence
+        Sequence sequence = Feature.findByUniqueNameInList(newUniqueNames).featureLocation.to
         log.debug "sequence: ${sequence}"
 
 

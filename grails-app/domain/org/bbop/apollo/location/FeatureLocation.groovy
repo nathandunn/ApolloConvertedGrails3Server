@@ -1,18 +1,18 @@
 package org.bbop.apollo.location
 
-
+import grails.neo4j.Relationship
 import org.bbop.apollo.feature.Feature
 import org.bbop.apollo.organism.Sequence
 
-class FeatureLocation {
+class FeatureLocation implements Relationship<Feature,Sequence>{
     static mapping = {
         length formula: 'FMAX-FMIN'
     }
     static constraints = {
-        feature nullable: false
+//        feature nullable: false
         fmin nullable: false
         fmax nullable: false
-        sequence nullable: false
+//        sequence nullable: false
         length nullable: true
         isFminPartial nullable: true
         isFmaxPartial nullable: true
@@ -23,7 +23,7 @@ class FeatureLocation {
         rank nullable: true
     }
 
-    Feature feature
+//    Feature feature
     Integer fmin
     Integer length
     boolean isFminPartial
@@ -34,9 +34,9 @@ class FeatureLocation {
     String residueInfo
     int locgroup
     int rank
-    Sequence sequence
+//    Sequence sequence
 
-    static belongsTo = [Feature]
+//    static belongsTo = [Feature]
 
 
 //    static hasMany = [
@@ -44,48 +44,48 @@ class FeatureLocation {
 //    ]
 
 
-    public boolean equals(Object other) {
-        if (this.is(other)) return true
-        if (getClass() != other.class) return false
-        FeatureLocation castOther = (FeatureLocation) other;
-
-        return ((this.getFeature() == castOther.getFeature()) || (this.getFeature() != null && castOther.getFeature() != null && this.getFeature().equals(castOther.getFeature()))) && (this.getLocgroup() == castOther.getLocgroup()) && (this.getRank() == castOther.getRank());
-    }
-
-    public int hashCode() {
-        int result = 17;
-
-        result = 37 * result + (getFeature() == null ? 0 : this.getFeature().hashCode());
-
-        result = 37 * result + this.getLocgroup();
-        result = 37 * result + this.getRank();
-
-        return result;
-    }
-
+//    boolean equals(Object other) {
+//        if (this.is(other)) return true
+//        if (getClass() != other.class) return false
+//        FeatureLocation castOther = (FeatureLocation) other;
+//
+//        return ((this.getFeature() == castOther.getFeature()) || (this.getFeature() != null && castOther.getFeature() != null && this.getFeature().equals(castOther.getFeature()))) && (this.getLocgroup() == castOther.getLocgroup()) && (this.getRank() == castOther.getRank());
+//    }
+//
+//    int hashCode() {
+//        int result = 17;
+//
+//        result = 37 * result + (getFeature() == null ? 0 : this.getFeature().hashCode());
+//
+//        result = 37 * result + this.getLocgroup();
+//        result = 37 * result + this.getRank();
+//
+//        return result;
+//    }
+//
     /**
      * We use this as an artificial accessor in case the property has not been calculatd
      * @return
      */
-    public Integer calculateLength() {
+    Integer calculateLength() {
         return fmax - fmin
     }
 
-    public FeatureLocation generateClone() {
-        FeatureLocation cloned = new FeatureLocation();
-        cloned.sequence = this.sequence;
-        cloned.feature = this.feature;
-        cloned.fmin = this.fmin;
-        cloned.isFminPartial = this.isFminPartial;
-        cloned.fmax = this.fmax;
-        cloned.isFmaxPartial = this.isFmaxPartial;
-        cloned.strand = this.strand;
-        cloned.phase = this.phase;
-        cloned.residueInfo = this.residueInfo;
-        cloned.locgroup = this.locgroup;
-        cloned.rank = this.rank;
-        cloned.featureLocationPublications = this.featureLocationPublications;
-        return cloned;
-    }
+//    FeatureLocation generateClone() {
+//        FeatureLocation cloned = new FeatureLocation();
+//        cloned.sequence = this.sequence;
+//        cloned.feature = this.feature;
+//        cloned.fmin = this.fmin;
+//        cloned.isFminPartial = this.isFminPartial;
+//        cloned.fmax = this.fmax;
+//        cloned.isFmaxPartial = this.isFmaxPartial;
+//        cloned.strand = this.strand;
+//        cloned.phase = this.phase;
+//        cloned.residueInfo = this.residueInfo;
+//        cloned.locgroup = this.locgroup;
+//        cloned.rank = this.rank;
+//        cloned.featureLocationPublications = this.featureLocationPublications;
+//        return cloned;
+//    }
 
 }

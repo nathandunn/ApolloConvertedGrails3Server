@@ -389,6 +389,6 @@ class VariantService {
     def getSequenceAlterationEffectsForFeature(Feature feature) {
         Integer fmin = feature.fmin
         Integer fmax = feature.fmax
-        return getSequenceAlterationEffectsForLocation(fmin,fmax,feature.featureLocation.sequence)
+        return getSequenceAlterationEffectsForLocation(fmin,fmax,feature.featureLocation.to)
     }
 }

@@ -313,8 +313,8 @@ class SequenceController {
 
             for (int i = 0; i < features.size() && !feature; i++) {
                 Feature f = features.get(i)
-                Sequence s = f.featureLocation.sequence
-                if (f.featureLocation.sequence.name == sequenceName
+                Sequence s = f.featureLocation.to
+                if (f.featureLocation.to.name == sequenceName
                         && (s.organism.commonName == organismString || s.organism.id == organismString)
                 ) {
                     feature = f

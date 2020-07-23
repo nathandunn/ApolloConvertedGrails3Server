@@ -255,7 +255,7 @@ class RequestHandlingService {
 
         // only pass in transcript
         if (feature instanceof Gene) {
-            feature.parentFeatureRelationships.childFeature.each { childFeature ->
+            feature.parentFeatureRelationships.to.each { childFeature ->
                 jsonObject.getJSONArray(FeatureStringEnum.FEATURES.value).put(featureService.convertFeatureToJSON(childFeature))
             }
         } else {
@@ -779,18 +779,18 @@ class RequestHandlingService {
 //        }
 //        log.debug "output features ${features}"
 
-        String query = "MATCH (o:Organism)-[r:SEQUENCES]-(s:Sequence)--(fl:FeatureLocation)-[flr:FEATURELOCATIONS]-(f:Feature),\n" +
+        String query = "MATCH (o:Organism)-[r:SEQUENCES]-(s:Sequence)-[fl:FEATURELOCATION]-(f:Feature),\n" +
             "(f)-[owner:OWNERS]-(u)\n" +
-            "OPTIONAL MATCH (cl)-[childlocations:FEATURELOCATIONS]-(child)-[CHILDFEATURERELATIONSHIPS]-(fr:FeatureRelationship)-[pr:PARENTFEATURERELATIONSHIPS]-(f)\n" +
-            "OPTIONAL MATCH (pl)-[FEATURELOCATIONS]-(parent)-[PARENTFEATURERELATIONSHIPS]-(gfr:FeatureRelationship)-[generelationship:CHILDFEATURERELATIONSHIPS]-(f)\n" +
+            "OPTIONAL MATCH (s)-[cl:FEATURELOCATION]-(child)-[CHILDFEATURERELATIONSHIPS]-(fr:FeatureRelationship)-[pr:PARENTFEATURERELATIONSHIPS]-(f)\n" +
+            "OPTIONAL MATCH (s)-[pl:FEATURELOCATION]-(parent)-[PARENTFEATURERELATIONSHIPS]-(gfr:FeatureRelationship)-[generelationship:CHILDFEATURERELATIONSHIPS]-(f)\n" +
             "OPTIONAL MATCH (f)--(fp:FeatureProperty) \n" +
 //            "WHERE o.id =  '60' and s.name = 'ctgA' \n" +
             "WHERE o.id='${sequence.organism.id}' and s.name = '${sequence.name}'\n"  +
             "RETURN {sequence: s,feature: f,location: fl,children: collect(DISTINCT {location: cl,r1: fr,feature: child}), owners: collect(u),parent: { location: collect(pl),r2:gfr,feature:parent }}"
 
-        log.debug "query output: ${query}"
+        println "query output: ${query}"
         def nodes = Feature.executeQuery(query).unique()
-        log.debug "actual returned nodes ${nodes} ${nodes.size()}"
+        println "actual returned nodes ${nodes} ${nodes.size()}"
 
 
         JSONArray jsonFeatures = new JSONArray()
