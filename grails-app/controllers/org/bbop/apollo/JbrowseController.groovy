@@ -396,7 +396,7 @@ class JbrowseController {
 
      * @param tracksArray
      */
-    def pruneTracks(JSONArray tracksArray){
+    def pruneTracks(def tracksArray){
         JSONArray returnArray = new JSONArray()
 
         for(track in tracksArray){
