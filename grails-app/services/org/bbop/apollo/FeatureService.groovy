@@ -575,6 +575,7 @@ class FeatureService {
             FeatureLocation featureLocation = new FeatureLocation()
             featureLocation.properties = transcriptFeatureLocation.properties
             featureLocation.id = null
+            featureLocation.to = transcript.featureLocation.to
             featureLocation.save()
             featureLocation.from = gene
 //            gene.addToFeatureLocations(featureLocation);
@@ -590,8 +591,8 @@ class FeatureService {
 
         // add transcript
         FeatureRelationship featureRelationship = new FeatureRelationship(
-            parentFeature: gene
-            , childFeature: transcript
+            from: gene
+            , to: transcript
         ).save(failOnError: true)
         gene.addToParentFeatureRelationships(featureRelationship)
         transcript.addToChildFeatureRelationships(featureRelationship)
@@ -1197,7 +1198,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
         if (cds == null) {
             return frameshifts;
         }
-        Sequence sequence = cds.getFeatureLocation().sequence
+        Sequence sequence = cds.getFeatureLocation().to
         List<Frameshift> frameshiftList = transcriptService.getFrameshifts(transcript)
         for (Frameshift frameshift : frameshiftList) {
             if (frameshift.isPlusFrameshift()) {
@@ -1210,7 +1211,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
                     fmin: frameshift.coordinate
                     , fmax: frameshift.coordinate + frameshift.frameshiftValue
                     , strand: cds.featureLocation.strand
-                    , sequence: sequence
+                    , to: sequence
                 )
 
                 DeletionArtifact deletion = new DeletionArtifact(
@@ -1219,7 +1220,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
                     , isAnalysis: false
                 )
 
-                featureLocation.feature = deletion
+                featureLocation.from = deletion
                 deletion.addToFeatureLocations(featureLocation)
 
                 frameshifts.add(deletion);
@@ -3028,11 +3029,11 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
                         newGene.save(flush: true)
 
                         FeatureLocation newGeneFeatureLocation = new FeatureLocation(
-                            feature: newGene,
+                            from: newGene,
                             fmin: firstTranscript.fmin,
                             fmax: firstTranscript.fmax,
                             strand: firstTranscript.strand,
-                            sequence: firstTranscript.featureLocation.to,
+                            to: firstTranscript.featureLocation.to,
                             residueInfo: firstTranscript.featureLocation.residueInfo,
                             locgroup: firstTranscript.featureLocation.locgroup,
                             rank: firstTranscript.featureLocation.rank
@@ -3156,11 +3157,11 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
         }
 
         FeatureLocation newGeneFeatureLocation = new FeatureLocation(
-            feature: newGene,
+            from: newGene,
             fmin: transcript.fmin,
             fmax: transcript.fmax,
             strand: transcript.strand,
-            sequence: transcript.featureLocation.to,
+            to: transcript.featureLocation.to,
             residueInfo: transcript.featureLocation.residueInfo,
             locgroup: transcript.featureLocation.locgroup,
             rank: transcript.featureLocation.rank

@@ -33,8 +33,8 @@ class ExonServiceIntegrationSpec extends AbstractIntegrationSpec{
         FeatureLocation leftFeatureLocation = new FeatureLocation(
                 fmin: 5
                 ,fmax: 10
-                ,feature: leftExon
-                ,sequence: Sequence.first()
+                ,from: leftExon
+                ,to: Sequence.first()
                 ,strand: Strand.POSITIVE.value
         ).save()
         leftExon.addToFeatureLocations(leftFeatureLocation)
@@ -42,8 +42,8 @@ class ExonServiceIntegrationSpec extends AbstractIntegrationSpec{
         FeatureLocation rightFeatureLocation = new FeatureLocation(
                 fmin: 15
                 ,fmax: 20
-                ,feature: rightExon
-                ,sequence: Sequence.first()
+                ,from: rightExon
+                ,to: Sequence.first()
                 ,strand: Strand.POSITIVE.value
         ).save()
         rightExon.addToFeatureLocations(rightFeatureLocation)
@@ -51,18 +51,18 @@ class ExonServiceIntegrationSpec extends AbstractIntegrationSpec{
         FeatureLocation transcriptFeatureLocation = new FeatureLocation(
                 fmin: 2
                 ,fmax: 25
-                ,feature: mrna
-                ,sequence: Sequence.first()
+                ,from: mrna
+                ,to: Sequence.first()
                 ,strand: Strand.POSITIVE.value
         ).save()
         mrna.addToFeatureLocations(transcriptFeatureLocation)
         FeatureRelationship leftExonFeatureRelationship = new FeatureRelationship(
-                parentFeature: mrna
-                ,childFeature: leftExon
+                from: mrna
+                ,to: leftExon
         ).save()
         FeatureRelationship rightExonFeatureRelationship = new FeatureRelationship(
-                parentFeature: mrna
-                ,childFeature: rightExon
+                from: mrna
+                ,to: rightExon
         ).save()
 
         when: "we add the proper relationships"

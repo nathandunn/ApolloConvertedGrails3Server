@@ -33,8 +33,8 @@ class FeatureSpec extends Specification {
         FeatureLocation featureLocation = new FeatureLocation(
                 fmin: 13
                 ,fmax: 77
-                ,feature: feature1
-                ,sequence: sequence
+                ,from: feature1
+                ,to: sequence
         ).save()
 
         feature1.addToFeatureLocations(featureLocation)

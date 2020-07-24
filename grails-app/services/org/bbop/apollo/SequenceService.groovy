@@ -89,9 +89,13 @@ class SequenceService {
      * @return
      */
     String getGenomicResiduesFromSequenceWithAlterations(Sequence sequence, int fmin, int fmax, Strand strand) {
+        println "input A - getGenomicResiduesFromSequenceWithAlterations ${sequence} as ${strand}"
         String residueString = getRawResiduesFromSequence(sequence, fmin, fmax)
+        println "input B - getGenomicResiduesFromSequenceWithAlterations ${sequence} as ${strand}"
         if (strand == Strand.NEGATIVE) {
+            println "input C - getGenomicResiduesFromSequenceWithAlterations ${sequence} as ${strand}"
             residueString = SequenceTranslationHandler.reverseComplementSequence(residueString)
+            println "input D - ${residueString}"
         }
 
         StringBuilder residues = new StringBuilder(residueString);
@@ -113,7 +117,7 @@ class SequenceService {
 //            }
 //        }.unique()
         List<SequenceAlterationArtifact> sequenceAlterationList = []
-        log.debug "sequence alterations found ${sequenceAlterationList.size()}"
+        println "sequence alterations found ${sequenceAlterationList.size()}"
         List<SequenceAlterationInContext> sequenceAlterationsInContextList = new ArrayList<SequenceAlterationInContext>()
         for (SequenceAlterationArtifact sequenceAlteration : sequenceAlterationList) {
             int alterationFmin = sequenceAlteration.fmin
@@ -397,7 +401,7 @@ class SequenceService {
                             , end: refSeq.end
                             , name: refSeq.name
                     ).save(failOnError: true)
-                    log.debug "added sequence ${sequence}"
+                    println "added sequence ${sequence}"
                 }
                 else if (seqsMap[refSeq.name] != length) {
                   Sequence sequence = Sequence.findByNameAndOrganism(refSeq.name,organism)
@@ -418,10 +422,10 @@ class SequenceService {
 //                            , end: refSeq.end
 //                            , name: refSeq.name
 //                    ).save(failOnError: true)
-                    log.debug "uddated sequence ${sequence}"
+                    println "uddated sequence ${sequence}"
                 }
                 else {
-                    log.debug "skipped existing unchanged sequence ${refSeq.name}"
+                    println "skipped existing unchanged sequence ${refSeq.name}"
                 }
             }
 
@@ -464,7 +468,7 @@ class SequenceService {
                                 end: entry.size,
                                 name: entry.contig
                         ).save(failOnError: true,insert: true)
-                        log.debug "added sequence ${sequence}"
+                        println "added sequence ${sequence}"
                     }
                     else if (seqsMap[entry.contig] != entry.size) {
 //                      def preferences = Preference.executeQuery("select p from UserOrganismPreference  p join p.sequence s where s = :sequence",[sequence:sequence])
@@ -482,10 +486,10 @@ class SequenceService {
                       sequence.start = 0
                       sequence.end = entry.size as Integer
                       sequence.save(failOnError: true,insert:false)
-                    log.debug "replaced sequence ${sequence}"
+                    println "replaced sequence ${sequence}"
                     }
                     else {
-                        log.debug "skipped existing unchanged sequence ${entry.contig}"
+                        println "skipped existing unchanged sequence ${entry.contig}"
                     }
                 }
 
@@ -525,14 +529,14 @@ class SequenceService {
     def getReferenceTrackObject(Organism organism) {
         JSONObject referenceTrackObject = new JSONObject()
         File directory = new File(organism.directory)
-        log.debug "Getting reference track for ${organism} ${organism?.directory} ${directory.exists()}"
+        println "Getting reference track for ${organism} ${organism?.directory} ${directory.exists()}"
         if (directory.exists()) {
             File trackListFile = new File(organism.trackList)
-            log.debug "trackList.json file exists ${trackListFile} ${organism.trackList}"
+            println "trackList.json file exists ${trackListFile} ${organism.trackList}"
             JSONObject trackListJsonObject = JSON.parse(trackListFile.text) as JSONObject
             referenceTrackObject = trackService.findTrackFromArrayByLabel(trackListJsonObject.getJSONArray(FeatureStringEnum.TRACKS.value), "DNA")
             referenceTrackObject = referenceTrackObject ? referenceTrackObject : trackService.findTrackFromArrayByKey(trackListJsonObject.getJSONArray(FeatureStringEnum.TRACKS.value),"Reference sequence", "key")
-            log.debug "finding trackList.json object ${trackListJsonObject} -> ${referenceTrackObject}"
+            println "finding trackList.json object ${trackListJsonObject} -> ${referenceTrackObject}"
         }
         return referenceTrackObject
     }
@@ -575,7 +579,7 @@ class SequenceService {
                     }
                 }
             } else if (gbolFeature instanceof Exon && transcriptService.isProteinCoding(exonService.getTranscript((Exon) gbolFeature))) {
-                log.debug "Fetching peptide sequence for selected exon: ${gbolFeature}"
+                println "Fetching peptide sequence for selected exon: ${gbolFeature}"
                 String rawSequence = exonService.getCodingSequenceInPhase((Exon) gbolFeature, true)
                 Boolean readThroughStop = false
                 if (cdsService.getStopCodonReadThrough(transcriptService.getCDS(exonService.getTranscript((Exon) gbolFeature))).size() > 0) {
@@ -606,7 +610,7 @@ class SequenceService {
                 String verifiedResidues = checkForInFrameStopCodon(featureResidues, 0, hasStopCodonReadThrough, translationTable)
                 featureResidues = verifiedResidues
             } else if (gbolFeature instanceof Exon && transcriptService.isProteinCoding(exonService.getTranscript((Exon) gbolFeature))) {
-                log.debug "Fetching CDS sequence for selected exon: ${gbolFeature}"
+                println "Fetching CDS sequence for selected exon: ${gbolFeature}"
                 featureResidues = exonService.getCodingSequenceInPhase((Exon) gbolFeature, false)
                 boolean hasStopCodonReadThrough = false
                 def stopCodonReadThroughList = cdsService.getStopCodonReadThrough(transcriptService.getCDS(exonService.getTranscript((Exon) gbolFeature)))
@@ -676,13 +680,13 @@ class SequenceService {
     def getSequenceForFeatures(JSONObject inputObject) {
         // Method returns a JSONObject
         // Suitable for 'get sequence' operation from AEC
-        log.debug "input at getSequenceForFeature: ${inputObject}"
+        println "input at getSequenceForFeature: ${inputObject}"
         JSONArray featuresArray = inputObject.getJSONArray(FeatureStringEnum.FEATURES.value)
         String type = inputObject.getString(FeatureStringEnum.TYPE.value)
         int flank
         if (inputObject.has('flank')) {
             flank = inputObject.getInt("flank")
-            log.debug "flank from request object: ${flank}"
+            println "flank from request object: ${flank}"
         } else {
             flank = 0
         }

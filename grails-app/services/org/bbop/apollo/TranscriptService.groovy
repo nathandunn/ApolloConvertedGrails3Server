@@ -101,11 +101,10 @@ class TranscriptService {
 
         FeatureLocation featureLocation = new FeatureLocation(
             strand: transcriptFeatureLocation.strand
-            , sequence: transcriptFeatureLocation.to
             , fmin: transcriptFeatureLocation.fmin
             , fmax: transcriptFeatureLocation.fmax
             , from: cds
-            , to: transcript.featureLocation.to
+            , to: transcriptFeatureLocation.to
         ).save(failOnError: true)
         println "set feature location  ${transcriptFeatureLocation}"
         cds.addToFeatureLocations(featureLocation);

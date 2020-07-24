@@ -394,7 +394,7 @@ class ExonService {
 
 
         FeatureLocation rightFeatureLocation = new FeatureLocation(
-                feature: rightExon
+                from: rightExon
                 ,fmin: leftFeatureLocation.fmin
                 ,isFminPartial: leftFeatureLocation.isFminPartial
                 ,fmax: leftFeatureLocation.fmax
@@ -404,7 +404,7 @@ class ExonService {
                 ,residueInfo: leftFeatureLocation.residueInfo
                 ,locgroup: leftFeatureLocation.locgroup
                 ,rank: leftFeatureLocation.rank
-                ,sequence: leftFeatureLocation.sequence
+                ,to: leftFeatureLocation.to
         ).save(insert:true)
         rightExon.addToFeatureLocations(rightFeatureLocation)
 

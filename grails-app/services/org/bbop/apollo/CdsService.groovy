@@ -112,8 +112,8 @@ class CdsService {
                 , isObsolete: cds.isIsObsolete()
         ).save(failOnError: true)
         FeatureLocation featureLocation = new FeatureLocation(
-                sequence: cds.featureLocation.to
-                , feature: stopCodonReadThrough
+                to: cds.featureLocation.to
+                , from: stopCodonReadThrough
                 ,fmin: cds.featureLocation.fmin
                 ,fmax: cds.featureLocation.fmax
         ).save(failOnError: true)
@@ -132,8 +132,8 @@ class CdsService {
         }
 
         FeatureRelationship fr = new FeatureRelationship(
-                parentFeature: cds
-                , childFeature: stopCodonReadThrough
+                from: cds
+                , to: stopCodonReadThrough
                 , rank: 0 // TODO: Do we need to rank the order of any other transcripts?
         ).save(insert: true,failOnError: true)
         cds.addToParentFeatureRelationships(fr);

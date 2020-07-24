@@ -2,7 +2,7 @@ package org.bbop.apollo.feature
 
 import org.bbop.apollo.feature.TranscriptRegion
 
-class SpliceSite extends TranscriptRegion{
+class SpliceSite extends Feature{
 
 
     static constraints = {

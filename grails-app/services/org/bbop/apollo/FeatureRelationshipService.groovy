@@ -158,8 +158,8 @@ class FeatureRelationshipService {
 
 
         FeatureRelationship fr = new FeatureRelationship(
-                parentFeature: parent
-                , childFeature: child
+                from: parent
+                , to: child
         ).save(flush: true);
         parent.addToParentFeatureRelationships(fr)
         child.addToChildFeatureRelationships(fr)
