@@ -86,7 +86,6 @@ class TranscriptService {
     CDS createCDS(Transcript transcript) {
         String uniqueName = transcript.getUniqueName() + FeatureStringEnum.CDS_SUFFIX.value;
 
-        println "unique name ${uniqueName}"
         CDS cds = new CDS(
             uniqueName: uniqueName
             , isAnalysis: transcript.isAnalysis
@@ -94,10 +93,7 @@ class TranscriptService {
             , name: uniqueName
         ).save(failOnError: true)
 
-        println "set cds ${cds}"
-
         FeatureLocation transcriptFeatureLocation = FeatureLocation.findByFrom(transcript)
-        println "set tfl ${transcriptFeatureLocation}"
 
         FeatureLocation featureLocation = new FeatureLocation(
             strand: transcriptFeatureLocation.strand
@@ -106,10 +102,8 @@ class TranscriptService {
             , from: cds
             , to: transcriptFeatureLocation.to
         ).save(failOnError: true)
-        println "set feature location  ${transcriptFeatureLocation}"
         cds.addToFeatureLocations(featureLocation);
         cds.save(flush: true)
-        println "final cds $cds"
         return cds;
     }
 
@@ -545,21 +539,15 @@ class TranscriptService {
     }
 
     String getResiduesFromTranscript(Transcript transcript) {
-        println "input residues from transcript ${transcript}"
         def exons = getSortedExons(transcript, true)
-        println "output exons ${exons}"
         if (!exons) {
             return null
         }
 
         StringBuilder residues = new StringBuilder()
-        println "input residues for exon ${exons}"
         for (Exon exon in exons) {
-            println "get residue for feature ${exon}"
             residues.append(sequenceService.getResiduesFromFeature(exon))
-            println "GOT residue for feature ${exon} -> ${residues}"
         }
-        println "residues ${residues}"
         return residues.size() > 0 ? residues.toString() : null
     }
 

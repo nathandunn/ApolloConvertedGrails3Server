@@ -96,31 +96,22 @@ class NonCanonicalSplitSiteService {
         Sequence sequence = transcript.featureLocations.first().to
         Strand strand = transcript.getFeatureLocation().strand == -1 ? Strand.NEGATIVE : Strand.POSITIVE
 
-        println "finding donor sites ${transcript as JSON}"
         String residues = sequenceService.getGenomicResiduesFromSequenceWithAlterations(sequence, fmin, fmax, strand);
-        println "found RESIDUES ${residues}"
 
         if (transcript.getStrand() == -1) {
             residues = residues.reverse()
         }
-        println "handled reversals"
 
         List<SequenceAlterationArtifact> sequenceAlterationList = new ArrayList<>()
         sequenceAlterationList.addAll(featureService.getAllSequenceAlterationsForFeature(transcript))
-        println "add all alterations ${sequenceAlterationList}"
-
-        println "iterating over exons ${exons}"
 
         for (Exon exon : exons) {
             int fivePrimeSpliceSitePosition = -1;
             int threePrimeSpliceSitePosition = -1;
             boolean validFivePrimeSplice = false;
             boolean validThreePrimeSplice = false;
-            println "handling donor for exon ${exon}"
             for (String donor : SequenceTranslationHandler.getSpliceDonorSites()) {
-                println "donor .. . ${donor}"
                 for (String acceptor : SequenceTranslationHandler.getSpliceAcceptorSites()) {
-                    println "acceptor .. . ${acceptor}"
                     int local11 = exon.fmin - donor.length() - transcript.fmin
                     int local22 = exon.fmin - transcript.fmin
                     int local33 = exon.fmax - transcript.fmin
@@ -143,7 +134,6 @@ class NonCanonicalSplitSiteService {
                     if (local1 >= 0 && local2 < residues.length()) {
                         String acceptorSpliceSiteSequence = residues.substring(local1, local2)
                         acceptorSpliceSiteSequence = transcript.getStrand() == -1 ? acceptorSpliceSiteSequence.reverse() : acceptorSpliceSiteSequence
-                        println "acceptor ${local1} ${local2} ${acceptorSpliceSiteSequence} ${acceptor}"
                         if (acceptorSpliceSiteSequence.toLowerCase() == acceptor) {
                             validThreePrimeSplice = true
                         } else {
@@ -154,7 +144,6 @@ class NonCanonicalSplitSiteService {
                     if (local3 >= 0 && local4 < residues.length()) {
                         String donorSpliceSiteSequence = residues.substring(local3, local4)
                         donorSpliceSiteSequence = transcript.getStrand() == -1 ? donorSpliceSiteSequence.reverse() : donorSpliceSiteSequence
-                        println "donor ${local3} ${local4} ${donorSpliceSiteSequence} ${donor}"
                         if (donorSpliceSiteSequence.toLowerCase() == donor) {
                             validFivePrimeSplice = true
                         } else {
@@ -163,39 +152,28 @@ class NonCanonicalSplitSiteService {
                     }
                 }
             }
-            println "output for donor ${exon}"
             if (!validFivePrimeSplice && fivePrimeSpliceSitePosition != -1) {
                 def loc = fivePrimeSpliceSitePosition + transcript.fmin
-                println "adding a noncanonical five prime splice site at ${fivePrimeSpliceSitePosition} ${loc}"
                 addNonCanonicalFivePrimeSpliceSite(transcript, createNonCanonicalFivePrimeSpliceSite(transcript, loc));
-                println "ADDED a noncanonical five prime splice site at ${fivePrimeSpliceSitePosition} ${loc}"
             }
             if (!validThreePrimeSplice && threePrimeSpliceSitePosition != -1) {
                 def loc = threePrimeSpliceSitePosition + transcript.fmin
-                println "adding a noncanonical three prime splice site at ${threePrimeSpliceSitePosition} ${loc}"
                 addNonCanonicalThreePrimeSpliceSite(transcript, createNonCanonicalThreePrimeSpliceSite(transcript, loc));
-                println "ADDED a noncanonical three prime splice site at ${threePrimeSpliceSitePosition} ${loc}"
             }
         }
 
-        println "finished exons ${exons}"
-
-        println "handling 5'"
         for (NonCanonicalFivePrimeSpliceSite spliceSite : getNonCanonicalFivePrimeSpliceSites(transcript)) {
             if (spliceSite.getDateCreated() == null) {
                 spliceSite.setDateCreated(new Date());
             }
             spliceSite.setLastUpdated(new Date());
         }
-        println "HANDLED 5'"
-        println "handling 3'"
         for (NonCanonicalThreePrimeSpliceSite spliceSite : getNonCanonicalThreePrimeSpliceSites(transcript)) {
             if (spliceSite.getDateCreated() == null) {
                 spliceSite.setDateCreated(new Date());
             }
             spliceSite.setLastUpdated(new Date());
         }
-        println "HANDLED 3'"
     }
 
     /** Add a non canonical 5' splice site.  Sets the splice site's transcript to this transcript object.
@@ -206,16 +184,13 @@ class NonCanonicalSplitSiteService {
 //        CVTerm partOfCvterm = cvTermService.partOf
 
         // add non canonical 5' splice site
-        println "adding ${transcript} and ${nonCanonicalFivePrimeSpliceSite}"
         FeatureRelationship fr = new FeatureRelationship(
 //                type: cvTermService.partOf
             from: transcript
             , to: nonCanonicalFivePrimeSpliceSite
             , rank: 0 // TODO: Do we need to rank the order of any other transcripts?
         ).save();
-        println "ADDED ${transcript} and ${nonCanonicalFivePrimeSpliceSite}"
         transcript.addToParentFeatureRelationships(fr);
-        println "adding ${transcript} to parent ${fr}"
         nonCanonicalFivePrimeSpliceSite.addToChildFeatureRelationships(fr);
     }
 
@@ -237,7 +212,6 @@ class NonCanonicalSplitSiteService {
     }
 
     private NonCanonicalFivePrimeSpliceSite createNonCanonicalFivePrimeSpliceSite(Transcript transcript, int position) {
-        println "creating a non-caonical 5 splice site  ${transcript} ${position}"
         String uniqueName = transcript.getUniqueName() + "-non_canonical_five_prime_splice_site-" + position;
         NonCanonicalFivePrimeSpliceSite spliceSite = new NonCanonicalFivePrimeSpliceSite(
             uniqueName: uniqueName
@@ -245,7 +219,6 @@ class NonCanonicalSplitSiteService {
             , isObsolete: transcript.isObsolete
             , name: uniqueName
         ).save()
-        println "CREATED a non-canonical 5 splice site   ${spliceSite}"
 
         spliceSite.addToFeatureLocations(new FeatureLocation(
             strand: transcript.strand
@@ -254,14 +227,12 @@ class NonCanonicalSplitSiteService {
             , fmax: position
             , from: spliceSite
         ).save());
-        println "add FL ${spliceSite}"
         return spliceSite;
     }
 
 
     private NonCanonicalThreePrimeSpliceSite createNonCanonicalThreePrimeSpliceSite(Transcript transcript, int position) {
         String uniqueName = transcript.getUniqueName() + "-non_canonical_three_prime_splice_site-" + position;
-        println "creating a non-caonical 3 splice site  ${transcript} ${position}"
         NonCanonicalThreePrimeSpliceSite spliceSite = new NonCanonicalThreePrimeSpliceSite(
             uniqueName: uniqueName
             , name: uniqueName
@@ -269,7 +240,6 @@ class NonCanonicalSplitSiteService {
             , isObsolete: transcript.isObsolete
 //                ,timeAccessioned: new Date()
         ).save()
-        println "CXRAETED a non-caonical 3 splice site  ${transcript} ${position}"
         spliceSite.addToFeatureLocations(new FeatureLocation(
             strand: transcript.strand
             , to: transcript.featureLocation.to
@@ -277,7 +247,6 @@ class NonCanonicalSplitSiteService {
             , fmax: position
             , from: spliceSite
         ).save());
-        println "add FL for 3' ${spliceSite}"
         return spliceSite;
     }
 
