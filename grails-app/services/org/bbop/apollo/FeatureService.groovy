@@ -1249,11 +1249,11 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
                     fmin: frameshift.coordinate
                     , fmax: frameshift.coordinate + frameshift.frameshiftValue
                     , strand: cds.featureLocation.strand
-                    , sequence: sequence
+                    , to: sequence
                 ).save()
 
                 insertion.addToFeatureLocations(featureLocation)
-                featureLocation.feature = insertion
+                featureLocation.from = insertion
 
 //                insertion.setFeatureLocation(frameshift.getCoordinate() + frameshift.getFrameshiftValue(),
 //                        frameshift.getCoordinate() + frameshift.getFrameshiftValue(),
