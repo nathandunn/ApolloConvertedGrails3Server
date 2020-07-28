@@ -788,9 +788,9 @@ class RequestHandlingService {
             "WHERE o.id='${sequence.organism.id}' and s.name = '${sequence.name}'\n"  +
             "RETURN {sequence: s,feature: f,location: fl,children: collect(DISTINCT {location: cl,r1: fr,feature: child}), owners: collect(u),parent: { location: collect(pl),r2:gfr,feature:parent }}"
 
-        println "query output: ${query}"
+        log.debug "query output: ${query}"
         def nodes = Feature.executeQuery(query).unique()
-        println "actual returned nodes ${nodes} ${nodes.size()}"
+        log.debug "actual returned nodes ${nodes} ${nodes.size()}"
 
 
         JSONArray jsonFeatures = new JSONArray()
