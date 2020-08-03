@@ -446,9 +446,9 @@ class PermissionService {
 //        println "input ${sequenceName} ${organism.id}"
 //        Sequence sequence = Sequence.executeQuery("MATCH (o:Organism)-[r:SEQUENCES]-(s:Sequence) where o.commonName = ${organism.commonName} RETURN o,r,s LIMIT 1")?.first()
         Sequence sequence = null
-        if(organism){
+        if(organism && sequenceName){
             String query = "MATCH (o:Organism)-[r:SEQUENCES]-(s:Sequence) where o.commonName = '${organism.commonName}' and s.name = '${sequenceName}' RETURN { sequence: s} LIMIT 1"
-            sequences = Sequence.executeQuery(query)
+            def sequences = Sequence.executeQuery(query)
             sequence = sequences ? sequences.first().sequence as Sequence : null
         }
 //        def retrievedSequences = Sequence.createCriteria().listDistinct {

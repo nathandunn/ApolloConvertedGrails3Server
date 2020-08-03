@@ -208,7 +208,7 @@ class OrganismController {
       Organism organism = Organism.findByCommonName(organismJson.organism)
 
       if (!organism) {
-        organism = Organism.findById(organismJson.organism)
+        organism = Organism.findById(organismJson.organism as Long)
       }
 
       if (!organism) {
@@ -1211,7 +1211,7 @@ class OrganismController {
     try {
       organism = Organism.findByCommonName(organismJson.organism)
       if (!organism) {
-        organism = Organism.findById(organismJson.organism)
+        organism = Organism.findById(organismJson.organism as Long)
       }
     } catch (e) {
       log.error("Problem finding organism ${organismJson.organism}: ${e}")
@@ -1438,7 +1438,7 @@ class OrganismController {
     try {
       JSONObject organismJson = permissionService.handleInput(request, params)
       permissionService.checkPermissions(organismJson, PermissionEnum.ADMINISTRATE)
-      Organism organism = Organism.findById(organismJson.id)
+      Organism organism = Organism.findById(organismJson.id as Long)
       if (organism) {
         println "Updating organism metadata ${organismJson as JSON}"
         organism.metadata = organismJson.metadata?.toString()
@@ -1498,7 +1498,7 @@ class OrganismController {
         Organism organism = null
         try {
           organism = Organism.findByCommonName(requestObject.organism)
-          if (!organism) organism = Organism.findById(requestObject.organism)
+          if (!organism) organism = Organism.findById(requestObject.organism as Long)
         } catch (e) {
           log.warn("Unable to find organism for ${requestObject.organism}")
           organism = null
