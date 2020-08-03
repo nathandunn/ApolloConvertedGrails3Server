@@ -374,6 +374,7 @@ class UserController {
         try {
             log.info "Creating user"
             JSONObject dataObject = permissionService.handleInput(request, params)
+            println "input object ${dataObject as JSON}"
             // allow instructor to create user
             if (!permissionService.hasGlobalPermissions(dataObject, GlobalPermissionEnum.INSTRUCTOR)) {
                 render status: HttpStatus.UNAUTHORIZED
@@ -394,28 +395,44 @@ class UserController {
                     , metadata: dataObject.metadata ? dataObject.metadata.toString() : null
                     , passwordHash: new Sha256Hash(dataObject.newPassword ?: dataObject.password).toHex()
             )
-            user.save(insert: true)
+            user.save(insert: true,failOnError: true)
+            println "created user ${user as JSON}"
             // to support webservice, get current user from session or input object
             def currentUser = permissionService.getCurrentUser(dataObject)
+            println "current user ${currentUser}"
             // allow specify the metadata creator through webservice, if not specified, take current user as the creator
             if (!user.getMetaData(FeatureStringEnum.CREATOR.value)) {
-                log.debug "creator does not exist, set current user as the creator"
+                println "creator does not exist, set current user as the creator"
                 user.addMetaData(FeatureStringEnum.CREATOR.value, currentUser.id.toString())
+                println "C"
             }
+            println "creator does not exist, set current user as the creator"
             String roleString = dataObject.role ?: GlobalPermissionEnum.USER.name()
+            println "D"
             Role role = Role.findByName(roleString.toUpperCase())
+            println "# of roles ${Role.count}"
+            println "E ${role}"
             if (!role) {
+                println "F"
                 role = Role.findByName(GlobalPermissionEnum.USER.name())
+                println "G"
             }
-            log.debug "adding role: ${role}"
+            println "adding role: ${role}"
             user.addToRoles(role)
             role.addToUsers(user)
             role.save()
             user.save(flush: true)
 
-            log.info "Added user ${user.username} with role ${role.name}"
-
-            render new JSONObject() as JSON
+            println "Added user ${user.username} with role ${role.name}"
+            JSONObject jsonObject = new JSONObject()
+            jsonObject = user.properties
+            println "json object ${jsonObject as JSON}"
+            jsonObject.email = user.username
+            jsonObject.username = user.username
+            jsonObject.id = user.id
+            jsonObject.userId = user.id
+            println "return object ${jsonObject as  JSON}"
+            render jsonObject as JSON
         } catch (e) {
             log.error(e.toString())
             JSONObject jsonObject = new JSONObject()
@@ -560,7 +577,7 @@ class UserController {
             if (!user && dataObject.has("userToDelete")) {
                 user = User.findByUsername(dataObject.userToDelete)
             }
-
+//
             if (!user) {
                 def error = [error: 'The user does not exist']
                 log.error(error.error)
@@ -568,11 +585,11 @@ class UserController {
                 return
             }
             String creatorMetaData = user.getMetaData(FeatureStringEnum.CREATOR.value)
-            // to support webservice, get current user from session or input object
+//            // to support webservice, get current user from session or input object
             def currentUser = permissionService.getCurrentUser(dataObject)
-
-            // instead of using !permissionService.isAdmin() because it only works for login user but doesn't work for webservice
-            // allow delete a user if the current user is global admin or the current user is the creator of the user
+//
+//            // instead of using !permissionService.isAdmin() because it only works for login user but doesn't work for webservice
+//            // allow delete a user if the current user is global admin or the current user is the creator of the user
             if (!permissionService.hasGlobalPermissions(dataObject, GlobalPermissionEnum.ADMIN) && !(creatorMetaData && currentUser.id.toString() == creatorMetaData)) {
                 //render status: HttpStatus.UNAUTHORIZED
                 def error = [error: 'not authorized to delete the user']
@@ -581,14 +598,21 @@ class UserController {
                 return
             }
 
-            user.userGroups.each { it ->
-                it.removeFromUsers(user)
-            }
-            FeatureEvent.deleteAll(FeatureEvent.findAllByEditor(user))
-            UserTrackPermission.deleteAll(UserTrackPermission.findAllByUser(user))
-            UserOrganismPermission.deleteAll(UserOrganismPermission.findAllByUser(user))
-//            UserOrganismPreference.deleteAll(UserOrganismPreference.findAllByUser(user))
-            user.delete(flush: true)
+//            user.userGroups.each { it ->
+//                it.removeFromUsers(user)
+//            }
+//            FeatureEvent.deleteAll(FeatureEvent.findAllByEditor(user))
+//            UserTrackPermission.deleteAll(UserTrackPermission.findAllByUser(user))
+//            UserOrganismPermission.deleteAll(UserOrganismPermission.findAllByUser(user))
+////            UserOrganismPreference.deleteAll(UserOrganismPreference.findAllByUser(user))
+//            user.delete(flush: true)
+
+            println "input object ${dataObject as JSON}"
+            String query = "match (u:User)-[r]-() where (u.username = '${dataObject.userToDelete}' or u.id=${dataObject.userId ?: Math.random()}) delete u,r"
+            println "input query"
+            println query
+            def updates = User.executeUpdate(query)
+            println "updates ${updates}"
 
             log.info "Removed user ${user.username}"
 

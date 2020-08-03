@@ -8,7 +8,8 @@ class Role {
     Integer rank
 
     static hasMany = [ users: User, permissions: String ]
-    static belongsTo = User
+    // I think this might inflict a cascade we don't wnat
+//    static belongsTo = User
 
     static constraints = {
         name(nullable: false, blank: false, unique: true)
