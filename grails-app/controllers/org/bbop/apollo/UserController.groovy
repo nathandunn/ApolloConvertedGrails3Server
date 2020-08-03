@@ -424,8 +424,8 @@ class UserController {
             user.save(flush: true)
 
             println "Added user ${user.username} with role ${role.name}"
-            JSONObject jsonObject = new JSONObject()
-            jsonObject = user.properties
+            JSONObject jsonObject = user.properties
+//            jsonObject = user.properties
             println "json object ${jsonObject as JSON}"
             jsonObject.email = user.username
             jsonObject.username = user.username

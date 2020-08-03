@@ -34,13 +34,19 @@ class GroupService {
             def creatorId = group.getMetaData(FeatureStringEnum.CREATOR.value)
             User creator = User.findById(creatorId)
             println "find the creator ID ${creatorId}, ${creator}"
-            GroupPermission.executeQuery("MATCH (g:UserGroup { name: ${name}}), (u:User { id:${creator.id}} ) create (g)-[admin:ADMIN]->(u)")
+            String query = "MATCH (g:UserGroup ), (u:User) where g.name= '${name}' and (u.id = ${creator.id} OR u.username = '${creator.username}') create (g)-[admin:ADMIN]->(u)"
+            println "query ${query }"
+            def updates = GroupPermission.executeUpdate(query)
+            println "updestae ${updates}"
 //            group.addToAdmin(creator)
-            log.debug "Add metadata creator: ${group.getMetaData(FeatureStringEnum.CREATOR.value)}"
+            println "Add metadata creator: ${group.getMetaData(FeatureStringEnum.CREATOR.value)}"
 
             log.info "Added group ${group.name}"
+//            groupIds.add(group.id)
+//            group.addToAdmin(creator)
             groups.add(group)
         }
+
         return groups
     }
 

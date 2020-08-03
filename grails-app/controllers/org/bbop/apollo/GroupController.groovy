@@ -114,15 +114,31 @@ class GroupController {
                 groupObject.users = userArray
 
                 JSONArray adminArray = new JSONArray()
-                it.admin.each { user ->
+
+                String otherQuery = "MATCH (g:UserGroup)-[admin:ADMIN]-(u:User) where g.name = '${it.name}' return { admin: u } limit 1"
+                def admins = User.executeQuery(otherQuery)
+                println "admins ${admins}"
+                if(admins){
+                    def admin = admins.first().admin
+                    println "admin ${admin.keys()}"
+//                    println "admin keys ${firstAdmin.keys()}"
                     JSONObject userObject = new JSONObject()
-                    userObject.id = user.id
-                    userObject.email = user.username
-                    userObject.firstName = user.firstName
-                    userObject.lastName = user.lastName
+//                    userObject.id = user.id
+                    userObject.email = admin.get(FeatureStringEnum.USERNAME.value).asString()
+                    userObject.username = admin.get(FeatureStringEnum.USERNAME.value).asString()
+                    userObject.firstName =admin.get("firstName")
+                    userObject.lastName =admin.get("lastName")
                     adminArray.add(userObject)
+                    groupObject.admin = adminArray
                 }
-                groupObject.admin = adminArray
+//                it.admin.each { user ->
+//                    JSONObject userObject = new JSONObject()
+//                    userObject.id = user.id
+//                    userObject.email = user.username
+//                    userObject.firstName = user.firstName
+//                    userObject.lastName = user.lastName
+//                    adminArray.add(userObject)
+//                }
 
                 // add organism permissions
                 JSONArray organismPermissionsArray = new JSONArray()
@@ -169,6 +185,12 @@ class GroupController {
         }
     }
 
+    private JSONObject convertGroup(UserGroup userGroup){
+        JSONObject jsonObject = userGroup.properties
+        println "user grou pproperly ${jsonObject as JSON}"
+        return jsonObject
+    }
+
     @ApiOperation(value = "Create group", nickname = "/group/createGroup", httpMethod = "POST")
     @ApiImplicitParams([
             @ApiImplicitParam(name = "username", type = "email", paramType = "query")
@@ -192,13 +214,36 @@ class GroupController {
         log.info( "adding groups ${names as JSON}")
 
         List<UserGroup> groups = groupService.createGroups(dataObject?.metadata?.toString(), currentUser, names)
-        println "usring add groups ${groups as JSON}"
 
-        if(groups.size()==1){
-            render groups[0] as JSON
+        String groupNames = groups.name.collect {  "'${it}'" }
+        String otherQuery = "MATCH (g:UserGroup)-[admin:ADMIN]-(u:User) where g.name in ${groupNames} return { group: g, admin: u } "
+        def userGroups = UserGroup.executeQuery(otherQuery)
+
+        JSONArray returnArray = new JSONArray()
+        for(def userGroup in userGroups){
+            JSONObject jsonObject = new JSONObject()
+            returnArray.add(jsonObject)
+            def group = userGroup.group
+            def admin= userGroup.admin
+            jsonObject.name = group.get(FeatureStringEnum.NAME.value).asString()
+            JSONObject adminObject = new JSONObject()
+            adminObject.firstName = admin.get("firstName")?.asString()
+            adminObject.lastName = admin.get("lastName")?.asString()
+            adminObject.username= admin.get("username").asString()
+            adminObject.email = admin.get("username").asString()
+            jsonObject.admin = adminObject
+        }
+
+        if(returnArray.size()==1){
+//            JSONObject jsonObject = userGroups.g.properties
+//            println "group json objectd ${jsonObject as JSON}"
+//            render convertGroup(groups[0]) as JSON
+            render returnArray[0] as JSON
         }
         else{
-            render groups as JSON
+            // TODO
+            render returnArray as JSON
+//            render groups as JSON
         }
     }
 
