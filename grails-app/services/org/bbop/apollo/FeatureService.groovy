@@ -633,7 +633,7 @@ class FeatureService {
                         ++inc;
                     } catch (AnnotationException e) {
                         // we should probably just re-throw this
-                        log.error(e)
+                        log.error(e.toString())
                         throw e
                     }
                 }

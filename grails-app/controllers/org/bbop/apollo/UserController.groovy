@@ -255,7 +255,7 @@ class UserController {
 //                // sets it by default
 //                userOrganismPreference = preferenceService.getCurrentOrganismPreferenceInDB(params[FeatureStringEnum.CLIENT_TOKEN.value])
 //            } catch (e) {
-//                log.error(e)
+//                log.error(e.toString())
 //            }
 
             def userObject = userService.convertUserToJson(currentUser)
@@ -417,7 +417,7 @@ class UserController {
 
             render new JSONObject() as JSON
         } catch (e) {
-            log.error(e.fillInStackTrace())
+            log.error(e.toString())
             JSONObject jsonObject = new JSONObject()
             jsonObject.put(FeatureStringEnum.ERROR.value, "Failed to add the user " + e.message)
             render jsonObject as JSON
@@ -479,7 +479,7 @@ class UserController {
 
             render new JSONObject() as JSON
         } catch (e) {
-            log.error(e.fillInStackTrace())
+            log.error(e.toString())
             JSONObject jsonObject = new JSONObject()
             jsonObject.put(FeatureStringEnum.ERROR.value, "Failed to inactivate the user " + e.message+". Remove users and groups first.")
             render jsonObject as JSON
@@ -533,7 +533,7 @@ class UserController {
 
             render new JSONObject() as JSON
         } catch (e) {
-            log.error(e.fillInStackTrace())
+            log.error(e.toString())
             JSONObject jsonObject = new JSONObject()
             jsonObject.put(FeatureStringEnum.ERROR.value, "Failed to activate the user " + e.message)
             render jsonObject as JSON
@@ -594,7 +594,7 @@ class UserController {
 
             render new JSONObject() as JSON
         } catch (e) {
-            log.error(e.fillInStackTrace())
+            log.error(e.toString())
             JSONObject jsonObject = new JSONObject()
             jsonObject.put(FeatureStringEnum.ERROR.value, "Failed to delete the user " + e.message)
             render jsonObject as JSON
@@ -675,7 +675,7 @@ class UserController {
             user.save(flush: true)
             render new JSONObject() as JSON
         } catch (e) {
-            log.error(e.fillInStackTrace())
+            log.error(e.toString())
             JSONObject jsonObject = new JSONObject()
             jsonObject.put(FeatureStringEnum.ERROR.value, "Failed to update the user " + e.message)
             render jsonObject as JSON
