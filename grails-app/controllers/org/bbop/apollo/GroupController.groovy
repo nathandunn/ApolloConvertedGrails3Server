@@ -528,16 +528,38 @@ class GroupController {
             return
         }
         JSONArray returnArray = new JSONArray()
-        def adminList = groupInstance.admin
-        println "admin = ${adminList}"
-        adminList.each {
-            JSONObject user = new JSONObject()
-            user.id = it.id
-            user.firstName = it.firstName
-            user.lastName = it.lastName
-            user.username = it.username
-            returnArray.put(user)
+//        def adminList = groupInstance.admin
+//        println "admin = ${adminList}"
+//        adminList.each {
+//            JSONObject user = new JSONObject()
+//            user.id = it.id
+//            user.firstName = it.firstName
+//            user.lastName = it.lastName
+//            user.username = it.username
+//            returnArray.put(user)
+//        }
+
+
+        JSONArray adminList = new JSONArray()
+        String otherQuery = "MATCH (g:UserGroup)-[admin:ADMIN]-(u:User) where g.name = '${dataObject.name}' return { admin: u } limit 1"
+        def admins = User.executeQuery(otherQuery)
+        println "admins ${admins}"
+        if(admins){
+            def admin = admins.first().admin
+            println "admin ${admin.keys()}"
+//                    println "admin keys ${firstAdmin.keys()}"
+            JSONObject userObject = new JSONObject()
+//                    userObject.id = user.id
+            userObject.email = admin.get(FeatureStringEnum.USERNAME.value).asString()
+            userObject.username = admin.get(FeatureStringEnum.USERNAME.value).asString()
+            userObject.firstName =admin.get("firstName")
+            userObject.lastName =admin.get("lastName")
+//            adminList.add(userObject)
+            returnArray.add(userObject)
+//            groupObject.admin = adminList
         }
+
+
 
         render returnArray as JSON
 
