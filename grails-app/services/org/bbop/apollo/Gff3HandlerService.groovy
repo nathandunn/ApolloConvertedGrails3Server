@@ -1,5 +1,6 @@
 package org.bbop.apollo
 
+import grails.converters.JSON
 import org.apache.commons.lang.WordUtils
 import org.bbop.apollo.attributes.Comment
 import org.bbop.apollo.attributes.DBXref
@@ -38,7 +39,7 @@ class Gff3HandlerService {
 
     static final def unusedStandardAttributes = ["Alias", "Target", "Gap", "Derives_from", "Ontology_term", "Is_circular"];
 
-    void writeFeaturesToText(String path, Collection<? extends Feature> features, String source, Boolean exportSequence = false, Collection<Sequence> sequences = null) throws IOException {
+    void writeFeaturesToText(String path, List<Feature> features, String source, Boolean exportSequence = false, Collection<Sequence> sequences = null) throws IOException {
         WriteObject writeObject = new WriteObject()
 
         writeObject.mode = Mode.WRITE
@@ -83,7 +84,9 @@ class Gff3HandlerService {
 
     void writeFeatures(WriteObject writeObject, Collection<? extends Feature> features, String source) throws IOException {
         Map<Sequence, Collection<Feature>> featuresBySource = new HashMap<Sequence, Collection<Feature>>();
+        println("writing features "+features)
         for (Feature feature : features) {
+            println "a feature ${feature.properties}"
             Sequence sourceFeature = feature.featureLocation.to
             Collection<Feature> featureList = featuresBySource.get(sourceFeature);
             if (!featureList) {
