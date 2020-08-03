@@ -711,13 +711,16 @@ class RequestHandlingService {
     JSONObject getFeatures(JSONObject inputObject) {
         long start = System.currentTimeMillis()
 
+        println "input json object ${inputObject as JSON}"
+
+
         String sequenceName = permissionService.getSequenceNameFromInput(inputObject)
         Sequence sequence = permissionService.checkPermissions(inputObject, PermissionEnum.READ)
         if (sequenceName != sequence.name) {
             sequence = Sequence.findByNameAndOrganism(sequenceName, sequence.organism)
 //            preferenceService.setCurrentSequence(permissionService.getCurrentUser(inputObject), sequence, inputObject.getString(FeatureStringEnum.CLIENT_TOKEN.value))
         }
-        log.debug "getFeatures for organism -> ${sequence.organism.commonName} and ${sequence.name}"
+        println "getFeatures for organism -> ${sequence.organism.commonName} ${sequence.organism.id} and ${sequence.name}"
 
         // TODO: rewrite this bad boy
 //        def features = []
@@ -779,24 +782,35 @@ class RequestHandlingService {
 //        }
 //        log.debug "output features ${features}"
 
+//        String query2 = "MATCH (o:Organism)-[r:SEQUENCES]-(s:Sequence)-[fl:FEATURELOCATION]-(f:Feature),\n" +
+//            "(f)-[owner:OWNERS]-(u)\n" +
+//            "OPTIONAL MATCH (s)-[cl:FEATURELOCATION]-(child)-[CHILDFEATURERELATIONSHIPS]-(fr:FeatureRelationship)-[pr:PARENTFEATURERELATIONSHIPS]-(f)\n" +
+//            "OPTIONAL MATCH (s)-[pl:FEATURELOCATION]-(parent)-[PARENTFEATURERELATIONSHIPS]-(gfr:FeatureRelationship)-[generelationship:CHILDFEATURERELATIONSHIPS]-(f)\n" +
+//            "OPTIONAL MATCH (f)--(fp:FeatureProperty) \n" +
+////            "WHERE o.id =  '60' and s.name = 'ctgA' \n" +
+//            "WHERE o.id='${sequence.organism.id}' and s.name = '${sequence.name}'\n"  +
+//            "RETURN {sequence: s,feature: f,location: fl,children: collect(DISTINCT {location: cl,r1: fr,feature: child}), owners: collect(u),parent: { location: collect(pl),r2:gfr,feature:parent }}"
+
         String query = "MATCH (o:Organism)-[r:SEQUENCES]-(s:Sequence)-[fl:FEATURELOCATION]-(f:Feature),\n" +
             "(f)-[owner:OWNERS]-(u)\n" +
-            "OPTIONAL MATCH (s)-[cl:FEATURELOCATION]-(child)-[CHILDFEATURERELATIONSHIPS]-(fr:FeatureRelationship)-[pr:PARENTFEATURERELATIONSHIPS]-(f)\n" +
-            "OPTIONAL MATCH (s)-[pl:FEATURELOCATION]-(parent)-[PARENTFEATURERELATIONSHIPS]-(gfr:FeatureRelationship)-[generelationship:CHILDFEATURERELATIONSHIPS]-(f)\n" +
-            "OPTIONAL MATCH (f)--(fp:FeatureProperty) \n" +
-//            "WHERE o.id =  '60' and s.name = 'ctgA' \n" +
-            "WHERE o.id='${sequence.organism.id}' and s.name = '${sequence.name}'\n"  +
-            "RETURN {sequence: s,feature: f,location: fl,children: collect(DISTINCT {location: cl,r1: fr,feature: child}), owners: collect(u),parent: { location: collect(pl),r2:gfr,feature:parent }}"
+            "WHERE (o.id=${sequence.organism.id} or o.commonName='${sequence.organism.commonName}') and s.name = '${sequence.name}'\n"  +
+            "OPTIONAL MATCH (o)--(s)-[cl:FEATURELOCATION]-(parent:Feature)<-[gfr]-(f) \n" +
+            "WHERE (o.id=${sequence.organism.id} or o.commonName='${sequence.organism.commonName}') and s.name = '${sequence.name}'\n"  +
+            "OPTIONAL MATCH (o)--(s)-[pl:FEATURELOCATION]-(f)-[fr]->(child:Feature) \n" +
+            "WHERE (o.id=${sequence.organism.id} or o.commonName='${sequence.organism.commonName}') and s.name = '${sequence.name}'\n"  +
+            "RETURN {sequence: s,feature: f,location: fl,children: collect(DISTINCT {location: cl,r1: fr,feature: child}), " +
+            "owners: collect(u),parent: { location: collect(pl),r2:gfr,feature:parent }}"
 
-        log.debug "query output: ${query}"
+
+        println "query output: ${query}"
         def nodes = Feature.executeQuery(query).unique()
-        log.debug "actual returned nodes ${nodes} ${nodes.size()}"
+        println "actual returned nodes ${nodes} ${nodes.size()}"
 
 
         JSONArray jsonFeatures = new JSONArray()
         nodes.each{
-            log.debug "forist node ${it} "
-            log.debug "class of it ${it.getClass()}"
+            println "forist node ${it} "
+            println "class of it ${it.getClass()}"
 //            JSONObject jsonObject = featureService.convertFeatureToJSON(feature, false)
 //        features.each { feature ->
 //            JSONObject jsonObject = featureService.convertFeatureToJSON(feature, false)
@@ -804,11 +818,11 @@ class RequestHandlingService {
             jsonFeatures.put(jsonObject)
         }
 
-        log.debug "outputs ${nodes}"
-        log.debug "lazy returned features ${nodes as JSON}"
+        println "outputs ${nodes}"
+        println "lazy returned features ${nodes as JSON}"
 
         inputObject.put(AnnotationEditorController.REST_FEATURES, jsonFeatures)
-        log.debug "getFeatures ${System.currentTimeMillis() - start}ms"
+        println "getFeatures ${System.currentTimeMillis() - start}ms"
         return inputObject
 
     }
