@@ -119,12 +119,13 @@ class OrganismService {
 //        def query = "MATCH (f:Feature)-[r]-(s:Sequence)--(o:Organism), (f)-[owners:OWNERS]-(),(f)-[fr]-(fg:Feature)-[other]-() where (o.commonName = ${organism.commonName} or o.id = ${organism.id})   return count(f) "
         println "deletion query"
             println query
-            def deletionResults = Feature.executeCypher(query)
+            def deletionResults = Feature.executeUpdate(query,[flush: true,failOnError: true])
             println "deletion results ${deletionResults}"
 
 
 
             // maximum transaction size  30
+        if(featurePairs){
             log.debug "feature sublists created ${featurePairs.size()}"
             def featureSubLists = featurePairs.collate(TRANSACTION_SIZE)
             if (!featureSubLists) {
@@ -139,7 +140,7 @@ class OrganismService {
             featureSubLists.each { featureList ->
 
                 println "input feature list: ${featureList}"
-                def featureEventQuery = FeatureEvent.executeQuery("MATCH (n:FeatureEvent)-[editor:EDITOR]-(u:User) where n.uniqueName in ${featureList} delete n,editor")
+                def featureEventQuery = FeatureEvent.executeUpdate("MATCH (n:FeatureEvent)-[editor:EDITOR]-(u:User) where n.uniqueName in ${featureList} delete n,editor")
                 println "output query ${featureEventQuery}"
 //                if (featureList) {
 //                    def ids = featureList.collect() {
@@ -170,14 +171,17 @@ class OrganismService {
                 startTime = System.currentTimeMillis()
                 double rate = featureList.size() / totalTime
                 log.info "Deleted ${rate} features / sec"
+
+        }
             }
             totalDeleted += featurePairs.size()
+        organism.save(flush:true)
 
 //            featureCount = Feature.executeQuery("select count(f) from Feature f join f.featureLocations fl join fl.sequence s join s.organism o where o=:organism", [organism: organism])[0]
             featureCount = Feature.executeQuery("MATCH (f:Feature)--(s:Sequence)--(o:Organism) where (o.commonName = ${organism.commonName} or o.id = ${organism.id}) return count(f) ")[0]
             println "features remaining to delete ${featureCount} vs deleted ${totalDeleted}"
 //        }
-        return totalDeleted
+        return deletionResults
 
     }
 
