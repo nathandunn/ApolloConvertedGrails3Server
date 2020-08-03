@@ -417,6 +417,7 @@ class GroupController {
             return
         }
 
+        println "input data object ${dataObject} -> ${permissionsArray}"
 
         groupOrganismPermission.permissions = permissionsArray.toString()
         groupOrganismPermission.save(flush: true)
@@ -490,8 +491,11 @@ class GroupController {
         List<User> usersToAdd = newUsers - oldUsers
         List<User> usersToRemove = oldUsers - newUsers
         usersToAdd.each {
-            groupInstance.addToAdmin(it)
-            it.addToGroupAdmins(groupInstance)
+            String query = "MATCH (g:UserGroup ), (u:User) where g.name= '${groupInstance.name}' and (u.id = ${it.id} OR u.username = '${it.username}') create (g)-[admin:ADMIN]->(u)"
+            def updates = User.executeUpdate(query)
+            println "updates ${updates}"
+//            groupInstance.addToAdmin(it)
+//            it.addToGroupAdmins(groupInstance)
             it.save()
         }
         usersToRemove.each {
