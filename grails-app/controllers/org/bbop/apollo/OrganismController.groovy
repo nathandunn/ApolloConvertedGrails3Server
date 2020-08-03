@@ -205,10 +205,14 @@ class OrganismController {
         return
       }
 
+      println "A"
       Organism organism = Organism.findByCommonName(organismJson.organism)
+      println "B"
 
       if (!organism) {
+        println "C"
         organism = Organism.findById(organismJson.organism as Long)
+        println "D"
       }
 
       if (!organism) {
@@ -220,7 +224,9 @@ class OrganismController {
         List<Sequence> sequences = Sequence.findAllByOrganismAndNameInList(organism, sequenceNames)
         organismService.deleteAllFeaturesForSequences(sequences)
       } else {
+        println "E ${organism} ${organism as JSON}"
         organismService.deleteAllFeaturesForOrganism(organism)
+        println "F"
       }
 
       render [:] as JSON

@@ -107,10 +107,23 @@ class OrganismService {
 
         int totalDeleted = 0
         println "organism ${organism}"
-        def featureCount = Feature.executeQuery("select count(f) from Feature f join f.featureLocations fl join fl.sequence s join s.organism o where o=:organism", [organism: organism])[0]
+//        def featureCount = Feature.executeQuery("select count(f) from Feature f join f.featureLocations fl join fl.sequence s join s.organism o where o=:organism", [organism: organism])[0]
+        def featureCount = Feature.executeQuery("MATCH (f:Feature)--(s:Sequence)--(o:Organism) where (o.commonName = ${organism.commonName} or o.id = ${organism.id}) return count(f) ")[0]
         println "features to delete ${featureCount}"
-        while(featureCount>0){
-            def featurePairs = Feature.executeQuery("select f.id,f.uniqueName from Feature f join f.featureLocations fl join fl.sequence s join s.organism o where o=:organism", [max:MAX_DELETE_SIZE,organism: organism])
+//        while(featureCount>0){
+//            def featurePairs = Feature.executeQuery("select f.id,f.uniqueName from Feature f join f.featureLocations fl join fl.sequence s join s.organism o where o=:organism", [max:MAX_DELETE_SIZE,organism: organism])
+            def featurePairs = Feature.executeQuery("MATCH (f:Feature)--(s:Sequence)--(o:Organism) where (o.commonName = ${organism.commonName} or o.id = ${organism.id}) return f.id,f.uniqueName ")
+            println "features pairs ${featurePairs}"
+            // use the same to delete organisms, as well
+            def query = "MATCH (f:Feature)-[r]-(s:Sequence)--(o:Organism), (f)-[owners:OWNERS]-(),(f)-[fr]-(fg:Feature)-[other]-() where (o.commonName = ${organism.commonName} or o.id = ${organism.id})  delete owners,fr,f,fg,r,other return count(f)"
+//        def query = "MATCH (f:Feature)-[r]-(s:Sequence)--(o:Organism), (f)-[owners:OWNERS]-(),(f)-[fr]-(fg:Feature)-[other]-() where (o.commonName = ${organism.commonName} or o.id = ${organism.id})   return count(f) "
+        println "deletion query"
+            println query
+            def deletionResults = Feature.executeCypher(query)
+            println "deletion results ${deletionResults}"
+
+
+
             // maximum transaction size  30
             log.debug "feature sublists created ${featurePairs.size()}"
             def featureSubLists = featurePairs.collate(TRANSACTION_SIZE)
@@ -124,30 +137,34 @@ class OrganismService {
             long endTime
             double totalTime
             featureSubLists.each { featureList ->
-                if (featureList) {
-                    def ids = featureList.collect() {
-                        it[0]
-                    }
-                    log.info"ids ${ids.size()}"
-                    def uniqueNames = featureList.collect() {
-                        it[1]
-                    }
-                    log.debug "uniqueNames ${uniqueNames.size()}"
-                    Feature.withNewTransaction{
-                        def features = Feature.findAllByIdInList(ids)
-                        features.each { f ->
-                            f.delete()
-                        }
-                        def featureEvents = FeatureEvent.findAllByUniqueNameInList(uniqueNames)
-                        featureEvents.each { fe ->
-                            fe.delete()
-                        }
-                        organism.save(flush: true)
-                        count += featureList.size()
-                        log.info "${count} / ${featurePairs.size()}  =  ${100 * count / featurePairs.size()}% "
-                    }
-                    log.info "deleted ${featurePairs.size()}"
-                }
+
+                println "input feature list: ${featureList}"
+                def featureEventQuery = FeatureEvent.executeQuery("MATCH (n:FeatureEvent)-[editor:EDITOR]-(u:User) where n.uniqueName in ${featureList} delete n,editor")
+                println "output query ${featureEventQuery}"
+//                if (featureList) {
+//                    def ids = featureList.collect() {
+//                        it[0]
+//                    }
+//                    log.info"ids ${ids.size()}"
+//                    def uniqueNames = featureList.collect() {
+//                        it[1]
+//                    }
+//                    log.debug "uniqueNames ${uniqueNames.size()}"
+//                    Feature.withNewTransaction{
+//                        def features = Feature.findAllByIdInList(ids)
+//                        features.each { f ->
+//                            f.delete()
+//                        }
+//                        def featureEvents = FeatureEvent.findAllByUniqueNameInList(uniqueNames)
+//                        featureEvents.each { fe ->
+//                            fe.delete()
+//                        }
+//                        organism.save(flush: true)
+//                        count += featureList.size()
+//                        log.info "${count} / ${featurePairs.size()}  =  ${100 * count / featurePairs.size()}% "
+//                    }
+//                    log.info "deleted ${featurePairs.size()}"
+//                }
                 endTime = System.currentTimeMillis()
                 totalTime = (endTime - startTime) / 1000.0f
                 startTime = System.currentTimeMillis()
@@ -156,9 +173,10 @@ class OrganismService {
             }
             totalDeleted += featurePairs.size()
 
-            featureCount = Feature.executeQuery("select count(f) from Feature f join f.featureLocations fl join fl.sequence s join s.organism o where o=:organism", [organism: organism])[0]
+//            featureCount = Feature.executeQuery("select count(f) from Feature f join f.featureLocations fl join fl.sequence s join s.organism o where o=:organism", [organism: organism])[0]
+            featureCount = Feature.executeQuery("MATCH (f:Feature)--(s:Sequence)--(o:Organism) where (o.commonName = ${organism.commonName} or o.id = ${organism.id}) return count(f) ")[0]
             println "features remaining to delete ${featureCount} vs deleted ${totalDeleted}"
-        }
+//        }
         return totalDeleted
 
     }
