@@ -1298,7 +1298,7 @@ class OrganismController {
     try {
       JSONObject organismJson = permissionService.handleInput(request, params)
       permissionService.checkPermissions(organismJson, PermissionEnum.ADMINISTRATE)
-      Organism organism = Organism.findById(organismJson.id)
+      Organism organism = Organism.findById(organismJson.id as Long)
       Boolean madeObsolete
       Boolean noReloadSequencesIfOrganismChanges = organismJson.noReloadSequences ? Boolean.valueOf(organismJson.noReloadSequences as String) : false
       if (organism) {

@@ -445,9 +445,12 @@ class PermissionService {
 //        println "sequence json ${sequence as JSON}"
 //        println "input ${sequenceName} ${organism.id}"
 //        Sequence sequence = Sequence.executeQuery("MATCH (o:Organism)-[r:SEQUENCES]-(s:Sequence) where o.commonName = ${organism.commonName} RETURN o,r,s LIMIT 1")?.first()
-        String query = "MATCH (o:Organism)-[r:SEQUENCES]-(s:Sequence) where o.commonName = '${organism.commonName}' and s.name = '${sequenceName}' RETURN { sequence: s} LIMIT 1"
-        def sequences = Sequence.executeQuery(query)
-        Sequence sequence = sequences ? sequences.first().sequence as Sequence : null
+        Sequence sequence = null
+        if(organism){
+            String query = "MATCH (o:Organism)-[r:SEQUENCES]-(s:Sequence) where o.commonName = '${organism.commonName}' and s.name = '${sequenceName}' RETURN { sequence: s} LIMIT 1"
+            sequences = Sequence.executeQuery(query)
+            sequence = sequences ? sequences.first().sequence as Sequence : null
+        }
 //        def retrievedSequences = Sequence.createCriteria().listDistinct {
 //            eq("name", sequenceName)
 //            eq("organismId", organism.id as Long)
