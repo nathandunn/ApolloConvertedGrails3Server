@@ -174,7 +174,7 @@ class Feature implements Ontological{
                 ", name='" + name + '\'' +
                 ", uniqueName='" + uniqueName + '\'' +
                 ", sequenceLength=" + sequenceLength +
-                ", status=" + status +
+//                ", status=" + status +
                 ", dateCreated=" + dateCreated +
                 ", lastUpdated=" + lastUpdated +
                 '}';
