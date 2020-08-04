@@ -2,6 +2,10 @@ package org.bbop.apollo
 
 import grails.converters.JSON
 import grails.gorm.transactions.Transactional
+import io.swagger.annotations.Api
+import io.swagger.annotations.ApiImplicitParam
+import io.swagger.annotations.ApiImplicitParams
+import io.swagger.annotations.ApiOperation
 import org.bbop.apollo.gwt.shared.FeatureStringEnum
 import org.bbop.apollo.gwt.shared.GlobalPermissionEnum
 import org.bbop.apollo.gwt.shared.PermissionEnum
@@ -11,7 +15,6 @@ import org.bbop.apollo.user.User
 import org.bbop.apollo.user.UserGroup
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
-import io.swagger.annotations.*
 import org.springframework.http.HttpStatus
 
 @Api(value = "Group Services: Methods for managing groups")
@@ -22,10 +25,10 @@ class GroupController {
 
     @ApiOperation(value = "Get organism permissions for group", nickname = "/group/getOrganismPermissionsForGroup", httpMethod = "POST")
     @ApiImplicitParams([
-            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
-            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
-            , @ApiImplicitParam(name = "id", type = "long", paramType = "query", example = "Group ID (or specify the name)")
-            , @ApiImplicitParam(name = "name", type = "string", paramType = "query", example = "Group name")
+        @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+        , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+        , @ApiImplicitParam(name = "id", type = "long", paramType = "query", example = "Group ID (or specify the name)")
+        , @ApiImplicitParam(name = "name", type = "string", paramType = "query", example = "Group name")
     ]
     )
     def getOrganismPermissionsForGroup() {
@@ -41,15 +44,34 @@ class GroupController {
             return
         }
 
-        List<GroupOrganismPermission> groupOrganismPermissions = GroupOrganismPermission.findAllByGroup(group)
-        render groupOrganismPermissions as JSON
+//        String query = "MATCH (p:GroupOrganismPermission)--(g:UserGroup) where g.name = '${group.name}' return p"
+        String query = "MATCH (p:GroupOrganismPermission)--(g:UserGroup) where g.name = '${group.name}' return { permission: p }"
+//        List<GroupOrganismPermission> groupOrganismPermissions = GroupOrganismPermission.executeQuery(query)
+        def groupOrganismPermissions = GroupOrganismPermission.executeQuery(query)
+        if (groupOrganismPermissions) {
+//            println "post-save found permissions ${groupOrganismPermissions} ... ${groupOrganismPermissions as JSON}"
+            JSONObject permissionsJSONObject = new JSONObject()
+            def permissionObject = groupOrganismPermissions.first().permission
+            println "keys ${permissionObject.keys()}"
+            permissionsJSONObject.permissions = permissionObject.get(FeatureStringEnum.PERMISSIONS.value).asString()
+
+            println "keys object ${permissionsJSONObject as JSON}"
+            JSONArray jsonArray = new JSONArray()
+            jsonArray.add(permissionsJSONObject)
+            render jsonArray as JSON
+        }
+        else{
+//        List<GroupOrganismPermission> groupOrganismPermissions = GroupOrganismPermission.findAllByGroup(group)
+            println "found NO permissions ${groupOrganismPermissions} ??"
+            render groupOrganismPermissions as JSON
+        }
     }
 
     @ApiOperation(value = "Load all groups", nickname = "/group/loadGroups", httpMethod = "POST")
     @ApiImplicitParams([
-            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
-            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
-            , @ApiImplicitParam(name = "groupId", type = "long", paramType = "query", example = "Optional only load a specific groupId")
+        @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+        , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+        , @ApiImplicitParam(name = "groupId", type = "long", paramType = "query", example = "Optional only load a specific groupId")
     ])
     def loadGroups() {
         try {
@@ -81,7 +103,7 @@ class GroupController {
 
             // restricted groups
             def groups = dataObject.groupId ? [UserGroup.findById(dataObject.groupId)] : UserGroup.all
-            def filteredGroups =  groups
+            def filteredGroups = groups
 
             // if user is admin, then include all
             // if group has metadata with the creator or no metadata then include
@@ -89,7 +111,7 @@ class GroupController {
             if (!permissionService.isUserGlobalAdmin(currentUser)) {
                 log.debug "filtering groups"
 
-                filteredGroups = groups.findAll(){
+                filteredGroups = groups.findAll() {
                     // permissionService.currentUser is None when accessing by webservice
                     it.metadata == null || it.getMetaData(FeatureStringEnum.CREATOR.value) == (currentUser.id as String) || permissionService.isGroupAdmin(it, currentUser)
                 }
@@ -118,7 +140,7 @@ class GroupController {
                 String otherQuery = "MATCH (g:UserGroup)-[admin:ADMIN]-(u:User) where g.name = '${it.name}' return { admin: u } limit 1"
                 def admins = User.executeQuery(otherQuery)
                 println "admins ${admins}"
-                if(admins){
+                if (admins) {
                     def admin = admins.first().admin
                     println "admin ${admin.keys()}"
 //                    println "admin keys ${firstAdmin.keys()}"
@@ -126,8 +148,8 @@ class GroupController {
 //                    userObject.id = user.id
                     userObject.email = admin.get(FeatureStringEnum.USERNAME.value).asString()
                     userObject.username = admin.get(FeatureStringEnum.USERNAME.value).asString()
-                    userObject.firstName =admin.get("firstName")
-                    userObject.lastName =admin.get("lastName")
+                    userObject.firstName = admin.get("firstName")
+                    userObject.lastName = admin.get("lastName")
                     adminArray.add(userObject)
                     groupObject.admin = adminArray
                 }
@@ -185,7 +207,7 @@ class GroupController {
         }
     }
 
-    private JSONObject convertGroup(UserGroup userGroup){
+    private JSONObject convertGroup(UserGroup userGroup) {
         JSONObject jsonObject = userGroup.properties
         println "user grou pproperly ${jsonObject as JSON}"
         return jsonObject
@@ -193,9 +215,9 @@ class GroupController {
 
     @ApiOperation(value = "Create group", nickname = "/group/createGroup", httpMethod = "POST")
     @ApiImplicitParams([
-            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
-            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
-            , @ApiImplicitParam(name = "name", type = "string", paramType = "query", example = "Group name to add, or a comma-delimited list of names")
+        @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+        , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+        , @ApiImplicitParam(name = "name", type = "string", paramType = "query", example = "Group name to add, or a comma-delimited list of names")
     ]
     )
     @Transactional
@@ -211,36 +233,35 @@ class GroupController {
         // to support webservice, get current user from session or input object
         def currentUser = permissionService.getCurrentUser(dataObject)
         String[] names = dataObject.name.split(",")
-        log.info( "adding groups ${names as JSON}")
+        log.info("adding groups ${names as JSON}")
 
         List<UserGroup> groups = groupService.createGroups(dataObject?.metadata?.toString(), currentUser, names)
 
-        String groupNames = groups.name.collect {  "'${it}'" }
+        String groupNames = groups.name.collect { "'${it}'" }
         String otherQuery = "MATCH (g:UserGroup)-[admin:ADMIN]-(u:User) where g.name in ${groupNames} return { group: g, admin: u } "
         def userGroups = UserGroup.executeQuery(otherQuery)
 
         JSONArray returnArray = new JSONArray()
-        for(def userGroup in userGroups){
+        for (def userGroup in userGroups) {
             JSONObject jsonObject = new JSONObject()
             returnArray.add(jsonObject)
             def group = userGroup.group
-            def admin= userGroup.admin
+            def admin = userGroup.admin
             jsonObject.name = group.get(FeatureStringEnum.NAME.value).asString()
             JSONObject adminObject = new JSONObject()
             adminObject.firstName = admin.get("firstName")?.asString()
             adminObject.lastName = admin.get("lastName")?.asString()
-            adminObject.username= admin.get("username").asString()
+            adminObject.username = admin.get("username").asString()
             adminObject.email = admin.get("username").asString()
             jsonObject.admin = adminObject
         }
 
-        if(returnArray.size()==1){
+        if (returnArray.size() == 1) {
 //            JSONObject jsonObject = userGroups.g.properties
 //            println "group json objectd ${jsonObject as JSON}"
 //            render convertGroup(groups[0]) as JSON
             render returnArray[0] as JSON
-        }
-        else{
+        } else {
             // TODO
             render returnArray as JSON
 //            render groups as JSON
@@ -249,10 +270,10 @@ class GroupController {
 
     @ApiOperation(value = "Delete a group", nickname = "/group/deleteGroup", httpMethod = "POST")
     @ApiImplicitParams([
-            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
-            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
-            , @ApiImplicitParam(name = "id", type = "long", paramType = "query", example = "Group ID to remove (or specify the name)")
-            , @ApiImplicitParam(name = "name", type = "string", paramType = "query", example = "Group name or comma-delimited list of names to remove")
+        @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+        , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+        , @ApiImplicitParam(name = "id", type = "long", paramType = "query", example = "Group ID to remove (or specify the name)")
+        , @ApiImplicitParam(name = "name", type = "string", paramType = "query", example = "Group name or comma-delimited list of names to remove")
     ]
     )
     @Transactional
@@ -262,18 +283,16 @@ class GroupController {
         def currentUser = permissionService.getCurrentUser(dataObject)
 
         List<UserGroup> groupList
-        if(dataObject.id){
+        if (dataObject.id) {
             List<Long> ids
-            if(dataObject.id instanceof Integer){
+            if (dataObject.id instanceof Integer) {
                 ids = [dataObject.id as Integer]
             }
-            if(dataObject.id instanceof String){
+            if (dataObject.id instanceof String) {
                 ids = dataObject.id.split(',').collect() as Long
             }
             groupList = UserGroup.findAllByIdInList(ids)
-        }
-        else
-        if(dataObject.name){
+        } else if (dataObject.name) {
             List<String> splitGroups = dataObject.name.split(",") as List<String>
             println splitGroups
             println splitGroups.size()
@@ -286,17 +305,17 @@ class GroupController {
             return
         }
 
-        groupService.deleteGroups(dataObject,currentUser,groupList)
+        groupService.deleteGroups(dataObject, currentUser, groupList)
 
         render new JSONObject() as JSON
     }
 
     @ApiOperation(value = "Update group", nickname = "/group/updateGroup", httpMethod = "POST")
     @ApiImplicitParams([
-            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
-            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
-            , @ApiImplicitParam(name = "id", type = "long", paramType = "query", example = "Group ID to update")
-            , @ApiImplicitParam(name = "name", type = "string", paramType = "query", example = "Group name to change to (the only editable optoin)")
+        @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+        , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+        , @ApiImplicitParam(name = "id", type = "long", paramType = "query", example = "Group ID to update")
+        , @ApiImplicitParam(name = "name", type = "string", paramType = "query", example = "Group name to change to (the only editable optoin)")
     ]
     )
     @Transactional
@@ -326,7 +345,7 @@ class GroupController {
         log.info "Updated group ${group.name} to use name ${dataObject.name}"
         group.name = dataObject.name
         // also allow update metadata
-        group.metadata = dataObject.metadata?dataObject.metadata.toString():group.metadata
+        group.metadata = dataObject.metadata ? dataObject.metadata.toString() : group.metadata
         group.save(flush: true)
     }
 
@@ -336,16 +355,16 @@ class GroupController {
      */
     @ApiOperation(value = "Update organism permission", nickname = "/group/updateOrganismPermission", httpMethod = "POST")
     @ApiImplicitParams([
-            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
-            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
-            , @ApiImplicitParam(name = "groupId", type = "long", paramType = "query", example = "Group ID to modify permissions for (must provide this or 'name')")
-            , @ApiImplicitParam(name = "name", type = "string", paramType = "query", example = "Group name to modify permissions for (must provide this or 'groupId')")
-            , @ApiImplicitParam(name = "organism", type = "string", paramType = "query", example = "Organism common name")
+        @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+        , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+        , @ApiImplicitParam(name = "groupId", type = "long", paramType = "query", example = "Group ID to modify permissions for (must provide this or 'name')")
+        , @ApiImplicitParam(name = "name", type = "string", paramType = "query", example = "Group name to modify permissions for (must provide this or 'groupId')")
+        , @ApiImplicitParam(name = "organism", type = "string", paramType = "query", example = "Organism common name")
 
-            , @ApiImplicitParam(name = "ADMINISTRATE", type = "boolean", paramType = "query", example = "Indicate if user has administrative and all lesser (including user/group) privileges for the organism")
-            , @ApiImplicitParam(name = "WRITE", type = "boolean", paramType = "query", example = "Indicate if user has write and all lesser privileges for the organism")
-            , @ApiImplicitParam(name = "EXPORT", type = "boolean", paramType = "query", example = "Indicate if user has export and all lesser privileges for the organism")
-            , @ApiImplicitParam(name = "READ", type = "boolean", paramType = "query", example = "Indicate if user has read and all lesser privileges for the organism")
+        , @ApiImplicitParam(name = "ADMINISTRATE", type = "boolean", paramType = "query", example = "Indicate if user has administrative and all lesser (including user/group) privileges for the organism")
+        , @ApiImplicitParam(name = "WRITE", type = "boolean", paramType = "query", example = "Indicate if user has write and all lesser privileges for the organism")
+        , @ApiImplicitParam(name = "EXPORT", type = "boolean", paramType = "query", example = "Indicate if user has export and all lesser privileges for the organism")
+        , @ApiImplicitParam(name = "READ", type = "boolean", paramType = "query", example = "Indicate if user has read and all lesser privileges for the organism")
     ]
     )
     @Transactional
@@ -384,19 +403,6 @@ class GroupController {
             groupOrganismPermission = GroupOrganismPermission.findByGroupAndOrganism(group, organism)
         }
 
-        if (!groupOrganismPermission) {
-            log.debug "creating new permissions! "
-            groupOrganismPermission = new GroupOrganismPermission(
-                    group: group
-                    , organism: organism
-                    , permissions: "[]"
-                    , permissionArray: new JSONArray()
-            ).save(insert: true)
-            log.debug "created new permissions! "
-        }
-
-
-
         JSONArray permissionsArray = new JSONArray()
         if (dataObject.getBoolean(PermissionEnum.ADMINISTRATE.name())) {
             permissionsArray.add(PermissionEnum.ADMINISTRATE.name())
@@ -411,30 +417,67 @@ class GroupController {
             permissionsArray.add(PermissionEnum.READ.name())
         }
 
-        if(permissionsArray.size()==0){
+        if (!groupOrganismPermission && permissionsArray) {
+            println "creating new permissions! "
+            groupOrganismPermission = new GroupOrganismPermission(
+                group: group
+                , organism: organism
+                , permissions: permissionsArray.toString()
+            ).save(insert: true, flush: true)
+            log.debug "created new permissions! ${groupOrganismPermission} "
+        } else
+//        groupOrganismPermission.group = group
+        if (permissionsArray.size() == 0) {
+            println "deleting ${permissionsArray}"
             groupOrganismPermission.delete(flush: true)
             render groupOrganismPermission as JSON
             return
+        } else {
+            groupOrganismPermission.permissions = permissionsArray
+//            groupOrganismPermission.permissionsArray = permissionsArray
         }
 
         println "input data object ${dataObject} -> ${permissionsArray}"
 
-        groupOrganismPermission.permissions = permissionsArray.toString()
-        groupOrganismPermission.save(flush: true)
+//        groupOrganismPermission.permissions = permissionsArray
+//        groupOrganismPermission.save(flush: true)
 
         log.info "Updated permissions for group ${group.name} and organism ${organism?.commonName} and permissions ${permissionsArray?.toString()}"
 
-        render groupOrganismPermission as JSON
+        println "group organism permissions: ${groupOrganismPermission.permissions} rendering ${groupOrganismPermission as JSON}"
+
+        String query = "MATCH (p:GroupOrganismPermission)--(g:UserGroup) where g.name = '${group.name}' create (p)<-[ug:GROUP]-(g) return { permission: p }"
+//        String query = "MATCH (p:GroupOrganismPermission)--(g:UserGroup)  return p"
+//        String query = "MATCH (p:GroupOrganismPermission) return { permission: p }"
+        def groupOrganismPermissions = GroupOrganismPermission.executeQuery(query)
+        if (groupOrganismPermissions) {
+//        List<GroupOrganismPermission> groupOrganismPermissions = GroupOrganismPermission.findAllByGroup(group)
+            println "post-save found permissions ${groupOrganismPermissions} ... ${groupOrganismPermissions as JSON}"
+//        JSONArray permissionsArray =
+            JSONObject permissionsJSONObject = new JSONObject()
+            def permissionObject = groupOrganismPermissions.first().permission
+            println "keys ${permissionObject.keys()}"
+            permissionsJSONObject.permissions = permissionObject.get(FeatureStringEnum.PERMISSIONS.value).asString()
+
+            println "keys ${permissionsJSONObject as JSON}"
+
+//            permissionObject.permissions = groupOrganismPermissions
+            render permissionsJSONObject as JSON
+        } else {
+//
+            render groupOrganismPermission as JSON
+        }
+
 
     }
 
     @ApiOperation(value = "Update group membership", nickname = "/group/updateMembership", httpMethod = "POST")
     @ApiImplicitParams([
-            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
-            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
-            , @ApiImplicitParam(name = "groupId", type = "long", paramType = "query", example = "Group ID to alter membership of")
-            , @ApiImplicitParam(name = "users", type = "JSONArray", paramType = "query", example = "A JSON array of strings of emails of users the now belong to the group")
-            , @ApiImplicitParam(name = "memberships", type = "JSONArray", paramType = "query", example = "Bulk memberships (instead of users and groupId) to update of the form: [ {groupId: <groupId>,users: [\"user1\", \"user2\", \"user3\"]}, {groupId:<another-groupId>, users: [\"user2\", \"user8\"]}]")
+        @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+        , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+        , @ApiImplicitParam(name = "groupId", type = "long", paramType = "query", example = "Group ID to alter membership of")
+        , @ApiImplicitParam(name = "users", type = "JSONArray", paramType = "query", example = "A JSON array of strings of emails of users the now belong to the group")
+        , @ApiImplicitParam(name = "memberships", type = "JSONArray", paramType = "query", example = "Bulk memberships (instead of users and groupId) to update of the form: [ {groupId: <groupId>,users: [\"user1\", \"user2\", \"user3\"]}, {groupId:<another-groupId>, users: [\"user2\", \"user8\"]}]")
     ]
     )
     @Transactional
@@ -443,26 +486,25 @@ class GroupController {
 
         def currentUser = permissionService.getCurrentUser(dataObject)
 
-        if(dataObject.memberships) {
+        if (dataObject.memberships) {
 
             def memberships = dataObject.memberships
 
             memberships.each { membership ->
-                groupService.updateMembership(dataObject,currentUser,membership.groupId,membership.users)
+                groupService.updateMembership(dataObject, currentUser, membership.groupId, membership.users)
             }
-        }
-        else{
-            groupService.updateMembership(dataObject,currentUser,dataObject.groupId,dataObject.users)
+        } else {
+            groupService.updateMembership(dataObject, currentUser, dataObject.groupId, dataObject.users)
         }
         loadGroups()
     }
 
     @ApiOperation(value = "Update group admin", nickname = "/group/updateGroupAdmin", httpMethod = "POST")
     @ApiImplicitParams([
-            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
-            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
-            , @ApiImplicitParam(name = "groupId", type = "long", paramType = "query", example = "Group ID to alter membership of")
-            , @ApiImplicitParam(name = "users", type = "JSONArray", paramType = "query", example = "A JSON array of strings of emails of users the now belong to the group")
+        @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+        , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+        , @ApiImplicitParam(name = "groupId", type = "long", paramType = "query", example = "Group ID to alter membership of")
+        , @ApiImplicitParam(name = "users", type = "JSONArray", paramType = "query", example = "A JSON array of strings of emails of users the now belong to the group")
     ]
     )
     @Transactional
@@ -479,12 +521,12 @@ class GroupController {
             return
         }
         log.info "Trying to update group admin"
-        
+
         List<User> oldUsers = groupInstance.admin as List
         //Fixed bug on passing array through web services: cannot cast String to List
         JSONArray arr = new JSONArray(dataObject.users)
         List<String> usernames = new ArrayList<String>()
-        for (int i = 0; i < arr.length(); i++){
+        for (int i = 0; i < arr.length(); i++) {
             usernames.add(arr.getString(i))
         }
         List<User> newUsers = User.findAllByUsernameInList(usernames)
@@ -511,9 +553,9 @@ class GroupController {
 
     @ApiOperation(value = "Get group admins, returns group admins as JSONArray", nickname = "/group/getGroupAdmin", httpMethod = "POST")
     @ApiImplicitParams([
-            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
-            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
-            , @ApiImplicitParam(name = "name", type = "string", paramType = "query", example = "Group name")
+        @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+        , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+        , @ApiImplicitParam(name = "name", type = "string", paramType = "query", example = "Group name")
     ])
     def getGroupAdmin() {
         JSONObject dataObject = permissionService.handleInput(request, params)
@@ -548,7 +590,7 @@ class GroupController {
         String otherQuery = "MATCH (g:UserGroup)-[admin:ADMIN]-(u:User) where g.name = '${dataObject.name}' return { admin: u } limit 1"
         def admins = User.executeQuery(otherQuery)
         println "admins ${admins}"
-        if(admins){
+        if (admins) {
             def admin = admins.first().admin
             println "admin ${admin.keys()}"
 //                    println "admin keys ${firstAdmin.keys()}"
@@ -556,13 +598,12 @@ class GroupController {
 //                    userObject.id = user.id
             userObject.email = admin.get(FeatureStringEnum.USERNAME.value).asString()
             userObject.username = admin.get(FeatureStringEnum.USERNAME.value).asString()
-            userObject.firstName =admin.get("firstName")
-            userObject.lastName =admin.get("lastName")
+            userObject.firstName = admin.get("firstName")
+            userObject.lastName = admin.get("lastName")
 //            adminList.add(userObject)
             returnArray.add(userObject)
 //            groupObject.admin = adminList
         }
-
 
 
         render returnArray as JSON
@@ -571,9 +612,9 @@ class GroupController {
 
     @ApiOperation(value = "Get creator metadata for group, returns userId as JSONObject", nickname = "/group/getGroupCreator", httpMethod = "POST")
     @ApiImplicitParams([
-            @ApiImplicitParam(name = "username", type = "email", paramType = "query")
-            , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
-            , @ApiImplicitParam(name = "name", type = "string", paramType = "query", example = "Group name")
+        @ApiImplicitParam(name = "username", type = "email", paramType = "query")
+        , @ApiImplicitParam(name = "password", type = "password", paramType = "query")
+        , @ApiImplicitParam(name = "name", type = "string", paramType = "query", example = "Group name")
     ])
     def getGroupCreator() {
         JSONObject dataObject = permissionService.handleInput(request, params)
