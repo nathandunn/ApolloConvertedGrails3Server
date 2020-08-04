@@ -134,7 +134,7 @@ class Gff3HandlerService {
 //            println "neo4j feature ${neo4jFeature}"
 //            println "feature keys ${feature.keys()}"
             Sequence sourceFeature = result.sequence as Sequence
-            println "source feature ${sourceFeature}"
+//            println "source feature ${sourceFeature}"
             Collection<Feature> featureList = featuresBySource.get(sourceFeature);
             if (!featureList) {
                 featureList = new ArrayList<Feature>();
@@ -143,11 +143,11 @@ class Gff3HandlerService {
             featureList.add(result);
         }
         featuresBySource.sort{ it.key }
-        for (Map.Entry<Sequence, Collection<?>> entry : featuresBySource.entrySet()) {
-            writeGroupDirectives(writeObject, entry.getKey());
+        for (Map.Entry<Sequence, Collection> entry : featuresBySource.entrySet()) {
+            writeGroupDirectives(writeObject, entry.getKey())
             for (def result : entry.getValue()) {
-                writeNeo4jFeature(writeObject, result, source);
-                writeFeatureGroupEnd(writeObject.out);
+                writeNeo4jFeature(writeObject, result, source)
+                writeFeatureGroupEnd(writeObject.out)
             }
         }
     }
@@ -208,6 +208,7 @@ class Gff3HandlerService {
 
     private void writeNeo4jFeature(WriteObject writeObject, def result, String source) {
         for (GFF3Entry entry : convertNeo4jToEntry(writeObject, result, source)) {
+            println "writing out ${entry.toString()}"
             writeObject.out.println(entry.toString());
         }
     }
@@ -305,14 +306,14 @@ class Gff3HandlerService {
 
     private Collection<GFF3Entry> convertNeo4jToEntry(WriteObject writeObject, def result , String source) {
         List<GFF3Entry> gffEntries = new ArrayList<GFF3Entry>();
-        convertNeo4jToEntry(writeObject, result, source, gffEntries);
+        convertNeo4jToEntry(writeObject, result, source, gffEntries)
         return gffEntries;
     }
 
     private void convertNeo4jToEntry(WriteObject writeObject, def result, String source, Collection<GFF3Entry> gffEntries) {
 
         //log.debug "converting feature to ${feature.name} entry of # of entries ${gffEntries.size()}"
-        println "input result ${result}"
+        println "input result ${result}, ${gffEntries.size()}"
         Sequence seq = result.sequence as Sequence
         FeatureLocation featureLocation = result.location as FeatureLocation
         def children = result.children
@@ -335,11 +336,46 @@ class Gff3HandlerService {
         } else {
             strand = "."
         }
-        String phase = ".";
-        GFF3Entry entry = new GFF3Entry(seqId, source, type, start, end, score, strand, phase);
+        if(type=="CDS"){
+//            CDS cds = (CDS) feature
+//            Transcript transcript = transcriptService.getParentTranscriptForFeature(feature)
+//            List<Exon> exons = transcriptService.getSortedExons(transcript,true)
+//            int length = 0;
+//            for (Exon exon : exons) {
+//                if (!overlapperService.overlaps(exon, cds)) {
+//                    continue;
+//                }
+//                int fmin = exon.getFmin() < cds.getFmin() ? cds.getFmin() : exon.getFmin();
+//                int fmax = exon.getFmax() > cds.getFmax() ? cds.getFmax() : exon.getFmax();
+//                String phase;
+//                if (length % 3 == 0) {
+//                    phase = "0";
+//                } else if (length % 3 == 1) {
+//                    phase = "2";
+//                } else {
+//                    phase = "1";
+//                }
+//                length += fmax - fmin;
+//                GFF3Entry entry = new GFF3Entry(seqId, source, type, fmin + 1, fmax, score, strand, phase);
+//                entry.setAttributes(extractAttributes(writeObject, cds));
+//                gffEntries.add(entry);
+//            }
+            String phase = "0";
+            GFF3Entry entry = new GFF3Entry(seqId, source, type, start, end, score, strand, phase);
 //        entry.setAttributes(extractAttributes(writeObject, feature));
-        entry.setAttributes(extractNeo4jAttributes(writeObject, feature));
-        gffEntries.add(entry);
+            entry.setAttributes(extractNeo4jAttributes(writeObject, feature));
+//            println "adding entry with type ${entry.type}"
+            gffEntries.add(entry);
+
+        }
+        else{
+            String phase = ".";
+            GFF3Entry entry = new GFF3Entry(seqId, source, type, start, end, score, strand, phase);
+//        entry.setAttributes(extractAttributes(writeObject, feature));
+            entry.setAttributes(extractNeo4jAttributes(writeObject, feature));
+//            println "adding entry with type ${entry.type}"
+            gffEntries.add(entry);
+        }
 //        if(featureService.typeHasChildren(feature)){
 //            for (Feature child : featureRelationshipService.getChildren(feature)) {
 //                if (child instanceof CDS) {
@@ -355,14 +391,16 @@ class Gff3HandlerService {
                 println "child thype ${childNode.feature.labels()}"
                 println "child feature id ${childNode.feature.id()}"
 //                println "child id ${child.id()}"
-                Feature child = childNode.feature as Feature
+//                Feature child = childNode.feature as Feature
 //                if (child instanceof CDS) {
 //                    convertNeo4jToEntry(writeObject, childNode, source, gffEntries);
 //                } else {
-                    convertNeo4jToEntry(writeObject, childNode, source, gffEntries);
+                    convertNeo4jToEntry(writeObject, childNode, source, gffEntries)
 //                }
             }
         }
+
+        println "output entries ${gffEntries.size()} -> ${gffEntries.toString()}"
     }
 
     private void convertToEntry(WriteObject writeObject, Feature feature, String source, Collection<GFF3Entry> gffEntries) {
@@ -413,7 +451,6 @@ class Gff3HandlerService {
             strand = ".";
         }
         Transcript transcript = transcriptService.getParentTranscriptForFeature(cds)
-
         List<Exon> exons = transcriptService.getSortedExons(transcript,true)
         int length = 0;
         for (Exon exon : exons) {
