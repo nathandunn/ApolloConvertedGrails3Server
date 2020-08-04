@@ -1740,6 +1740,47 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
         return gsolFeature;
     }
 
+    String findMostSpecificLabel(ArrayList labels){
+        def filteredLabels = labels.findAll{  it!="Feature" && !it.contains("Region")}
+        println "filtered labels ${labels} -> ${filteredLabels}"
+        if(filteredLabels.indexOf("Transcript")>=0){
+            println "A"
+            if(filteredLabels.size()>1){
+                println "B"
+                return filteredLabels.findAll{  it!="Transcript"}.first()
+            }
+            else{
+                println "C"
+                return filteredLabels.first()
+            }
+        }
+        println "D"
+        return filteredLabels.last()
+
+    }
+
+    String getCvTermFromNeo4jFeature(def feature) {
+        println "cv term ${feature}"
+//        def labels = feature.labels()
+        String specificType = findMostSpecificLabel(feature.labels())
+//        println "input labels ${labels}"
+//
+//        if(labels.last()!="Feature"){
+//            println "assigning label last ${labels.last()}"
+//            specificType = labels.last()
+//        }
+//        else{
+//            println "assigning label first ${labels.first()}"
+//            specificType = labels.first()
+//        }
+        println "specific type ${specificType}"
+//        println "specific type class ${Class.forName("org.bbop.apollo.feature.${specificType}")}"
+        return  Class.forName("org.bbop.apollo.feature.${specificType}")?.cvTerm
+//        println "specific type ${specificType} ${ontologyId} "
+////        String cvTerm = feature.cvTerm
+////        return cvTerm
+//        return specificType
+    }
 
     String getCvTermFromFeature(Feature feature) {
         String cvTerm = feature.cvTerm

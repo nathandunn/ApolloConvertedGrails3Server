@@ -320,7 +320,9 @@ class Gff3HandlerService {
         String seqId = seq.name
 
         Feature feature = result.feature as Feature
-        String type = featureService.getCvTermFromFeature(feature)
+        println "feature type ${result.feature.labels()}"
+//        String type = featureService.getCvTermFromFeature(feature)
+        String type = featureService.getCvTermFromNeo4jFeature(result.feature)
         println "type ${type}"
         int start = featureLocation.getFmin() + 1;
         int end = featureLocation.fmax.equals(featureLocation.fmin) ? featureLocation.fmax + 1 : featureLocation.fmax
