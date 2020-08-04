@@ -34,6 +34,7 @@ class IOServiceController extends AbstractApolloController {
     def fileService
     def gpad2HandlerService
     def gpiHandlerService
+    def featureService
 
   // fileMap of uuid / filename
     // see #464
@@ -130,7 +131,7 @@ class IOServiceController extends AbstractApolloController {
                 // request nonCoding transcripts that can lack an exon
 //                def genesNoExon = Gene.executeQuery("select distinct f from Gene f join fetch f.featureLocations fl join fetch f.parentFeatureRelationships pr join fetch pr.childFeature child join fetch child.featureLocations where fl.sequence.organism = :organism and child.class in (:viewableAnnotationList)" + (sequences ? " and fl.sequence.name in (:sequences) " : ""),queryParams)
                 String genesNoExonQuery = "MATCH (g:Gene)--(t:Transcript)--(f:Feature),(g)--(s:Sequence)--(o:Organism) where (o.commonName = '${organism.commonName}' or o.id = ${organism.id}) and NOT (t:MRNA) " + (sequences ? "and s.name in ${sequences}" :"") + " RETURN distinct g"
-                println "query: [${genesNoExonQuery}]"
+//                println "query: [${genesNoExonQuery}]"
                 def genesNoExon = Gene.executeQuery(genesNoExonQuery) as List<Feature>
                 if(genesNoExon.id){
                     queryParams['geneIds'] = genesNoExon.id
@@ -143,7 +144,7 @@ class IOServiceController extends AbstractApolloController {
                 def genes = Gene.executeQuery(genesQuery)  as List<Feature>
 //                 captures rest of feats
                 def otherFeatsQuery = "MATCH (f:Feature),(f)--(s:Sequence)--(o:Organism) where (o.commonName = ${organism.commonName} or o.id = ${organism.id}) and NOT (f:gene) " + (sequences ? "and s.name in ${sequences}" :"") + " RETURN distinct f"
-                print otherFeatsQuery
+//                println otherFeatsQuery
                 def otherFeats = Feature.executeQuery(otherFeatsQuery)  as List<Feature>
 //                def otherFeats = Feature.createCriteria().list() {
 //                    featureLocations {
@@ -158,7 +159,35 @@ class IOServiceController extends AbstractApolloController {
 //                }
                 log.debug "${otherFeats}"
                 features = (genes + otherFeats + genesNoExon ) as List<Feature>
-                println "final features \n${features as JSON}"
+
+
+//                String fullGenesQuery = "MATCH (g:Gene)--(t:Transcript)--(f:Feature),(g)--(s:Sequence)--(o:Organism) where (o.commonName = '${organism.commonName}' or o.id = ${organism.id}) " + (genesNoExon.id ? " and g.id not in ${queryParams.geneIds}" : "")   +  (sequences ? "and s.name in ${sequences}" :"")  + " RETURN distinct g"
+//                String fullGenesQuery = "MATCH (g:Gene)--(t:Transcript)--(f:Feature),(g)--(s:Sequence)--(o:Organism) where (o.commonName = '${organism.commonName}' or o.id = ${organism.id}) " + (genesNoExon.id ? " and g.id not in ${queryParams.geneIds}" : "")   +  (sequences ? "and s.name in ${sequences}" :"")  + " RETURN distinct g"
+                String fullGenesQuery = "MATCH (o:Organism)-[r:SEQUENCES]-(s:Sequence)-[fl:FEATURELOCATION]-(f:Feature)," +
+                    "(f)-[owner:OWNERS]-(u)\n" +
+                    "WHERE (o.id=${organism.id} or o.commonName='${organism.commonName}')" +  (sequences ? "and s.name in ${sequences}" :"")  + (genesNoExon.id ? " and g.id not in ${queryParams.geneIds}" : "") +
+                    "OPTIONAL MATCH (o)--(s)-[cl:FEATURELOCATION]-(parent:Feature)<-[gfr]-(f) " +
+                    "WHERE (o.id=${organism.id} or o.commonName='${organism.commonName}')" +  (sequences ? "and s.name in ${sequences}" :"") + (genesNoExon.id ? " and g.id not in ${queryParams.geneIds}" : "")+
+                    "OPTIONAL MATCH (o)--(s)-[pl:FEATURELOCATION]-(f)-[fr]->(child:Feature) " +
+                    "WHERE (o.id=${organism.id} or o.commonName='${organism.commonName}')"+  (sequences ? "and s.name in ${sequences}" :"") + (genesNoExon.id ? " and g.id not in ${queryParams.geneIds}" : "")+
+                    "RETURN {sequence: s,feature: f,location: fl,children: collect(DISTINCT {location: cl,r1: fr,feature: child}), " +
+                    "owners: collect(u),parent: { location: collect(pl),r2:gfr,feature:parent }}"
+
+                println "full genes query ${fullGenesQuery}"
+
+                def neo4jFeatureNodes = Feature.executeQuery(fullGenesQuery).unique()
+
+                List<Feature> myFeatureList = []
+                neo4jFeatureNodes.each {
+                    Feature feature = featureService.convertNeo4jFeatureToFeature(it, false)
+                    myFeatureList.push(feature)
+                }
+
+                println "output myfeature list ${myFeatureList}"
+
+                features = myFeatureList
+
+                println "final features: ${features}"
 
                 log.debug "IOService query: ${System.currentTimeMillis() - st}ms"
             }

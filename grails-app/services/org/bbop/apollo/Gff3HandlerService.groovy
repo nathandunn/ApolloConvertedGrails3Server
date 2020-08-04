@@ -82,12 +82,16 @@ class Gff3HandlerService {
 
 
 
-    void writeFeatures(WriteObject writeObject, Collection<? extends Feature> features, String source) throws IOException {
+    void writeFeatures(WriteObject writeObject, Collection<Feature> features, String source) throws IOException {
         Map<Sequence, Collection<Feature>> featuresBySource = new HashMap<Sequence, Collection<Feature>>();
         println("writing features "+features)
         for (Feature feature : features) {
-            println "a feature ${feature.properties}"
+//            Feature feature = neo4jFeature as Feature
+////            println "a feature ${feature.properties}"
+//            println "neo4j feature ${neo4jFeature}"
+//            println "feature ${feature}"
             Sequence sourceFeature = feature.featureLocation.to
+            println "source feature ${sourceFeature}"
             Collection<Feature> featureList = featuresBySource.get(sourceFeature);
             if (!featureList) {
                 featureList = new ArrayList<Feature>();
