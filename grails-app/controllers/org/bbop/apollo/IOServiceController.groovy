@@ -130,49 +130,50 @@ class IOServiceController extends AbstractApolloController {
 
                 log.debug "IOService query: ${System.currentTimeMillis() - st}ms"
             } else {
-                queryParams['viewableAnnotationList'] = requestHandlingService.nonCodingAnnotationTranscriptList
-                // request nonCoding transcripts that can lack an exon
-//                def genesNoExon = Gene.executeQuery("select distinct f from Gene f join fetch f.featureLocations fl join fetch f.parentFeatureRelationships pr join fetch pr.childFeature child join fetch child.featureLocations where fl.sequence.organism = :organism and child.class in (:viewableAnnotationList)" + (sequences ? " and fl.sequence.name in (:sequences) " : ""),queryParams)
-                String genesNoExonQuery = "MATCH (g:Gene)--(t:Transcript)--(f:Feature),(g)--(s:Sequence)--(o:Organism) where (o.commonName = '${organism.commonName}' or o.id = ${organism.id}) and NOT (t:MRNA) " + (sequences ? "and s.name in ${sequences}" : "") + " RETURN distinct g"
-//                println "query: [${genesNoExonQuery}]"
-                def genesNoExon = Gene.executeQuery(genesNoExonQuery) as List<Feature>
-                if (genesNoExon.id) {
-                    queryParams['geneIds'] = genesNoExon.id
-                }
-
-                // captures 3 level indirection, joins feature locations only. joining other things slows it down
-                queryParams['viewableAnnotationList'] = requestHandlingService.viewableAnnotationList
-//                def genes = Gene.executeQuery("select distinct f from Gene f join fetch f.featureLocations fl join fetch f.parentFeatureRelationships pr join fetch pr.childFeature child join fetch child.featureLocations join fetch child.childFeatureRelationships join fetch child.parentFeatureRelationships cpr join fetch cpr.childFeature subchild join fetch subchild.featureLocations join fetch subchild.childFeatureRelationships left join fetch subchild.parentFeatureRelationships where fl.sequence.organism = :organism  ${genesNoExon.id ? " and f.id not in (:geneIds)": ""}  and f.class in (:viewableAnnotationList)" + (sequences ? " and fl.sequence.name in (:sequences)" : ""), queryParams)
-                String genesQuery = "MATCH (g:Gene)--(t:Transcript)--(f:Feature),(g)--(s:Sequence)--(o:Organism) where (o.commonName = '${organism.commonName}' or o.id = ${organism.id}) " + (genesNoExon.id!=null ? " and not g.id in ${genesNoExon.id}" : "") + (sequences ? "and s.name in ${sequences}" : "") + " RETURN distinct g"
-                def genes = Gene.executeQuery(genesQuery) as List<Feature>
-//                 captures rest of feats
-                def otherFeatsQuery = "MATCH (f:Feature),(f)--(s:Sequence)--(o:Organism) where (o.commonName = ${organism.commonName} or o.id = ${organism.id}) and NOT (f:gene) " + (sequences ? "and s.name in ${sequences}" : "") + " RETURN distinct f"
-//                println otherFeatsQuery
-                def otherFeats = Feature.executeQuery(otherFeatsQuery) as List<Feature>
-//                def otherFeats = Feature.createCriteria().list() {
-//                    featureLocations {
-//                        sequence {
-//                            eq('organism', organism)
-//                            if (sequences) {
-//                                'in'('name', sequences)
-//                            }
-//                        }
-//                    }
-//                    'in'('class', requestHandlingService.viewableAlterations + requestHandlingService.viewableAnnotationFeatureList)
+//                queryParams['viewableAnnotationList'] = requestHandlingService.nonCodingAnnotationTranscriptList
+//                // request nonCoding transcripts that can lack an exon
+////                def genesNoExon = Gene.executeQuery("select distinct f from Gene f join fetch f.featureLocations fl join fetch f.parentFeatureRelationships pr join fetch pr.childFeature child join fetch child.featureLocations where fl.sequence.organism = :organism and child.class in (:viewableAnnotationList)" + (sequences ? " and fl.sequence.name in (:sequences) " : ""),queryParams)
+//                String genesNoExonQuery = "MATCH (g:Gene)--(t:Transcript)--(f:Feature),(g)--(s:Sequence)--(o:Organism) where (o.commonName = '${organism.commonName}' or o.id = ${organism.id}) and NOT (t:MRNA) " + (sequences ? "and s.name in ${sequences}" : "") + " RETURN distinct g"
+////                println "query: [${genesNoExonQuery}]"
+//                def genesNoExon = Gene.executeQuery(genesNoExonQuery) as List<Feature>
+                def genesNoExon = null
+//                if (genesNoExon.id) {
+//                    queryParams['geneIds'] = genesNoExon.id
 //                }
-                log.debug "${otherFeats}"
-//                features = (genes + otherFeats + genesNoExon ) as List<Feature>
-
+//
+//                // captures 3 level indirection, joins feature locations only. joining other things slows it down
+//                queryParams['viewableAnnotationList'] = requestHandlingService.viewableAnnotationList
+////                def genes = Gene.executeQuery("select distinct f from Gene f join fetch f.featureLocations fl join fetch f.parentFeatureRelationships pr join fetch pr.childFeature child join fetch child.featureLocations join fetch child.childFeatureRelationships join fetch child.parentFeatureRelationships cpr join fetch cpr.childFeature subchild join fetch subchild.featureLocations join fetch subchild.childFeatureRelationships left join fetch subchild.parentFeatureRelationships where fl.sequence.organism = :organism  ${genesNoExon.id ? " and f.id not in (:geneIds)": ""}  and f.class in (:viewableAnnotationList)" + (sequences ? " and fl.sequence.name in (:sequences)" : ""), queryParams)
+//                String genesQuery = "MATCH (g:Gene)--(t:Transcript)--(f:Feature),(g)--(s:Sequence)--(o:Organism) where (o.commonName = '${organism.commonName}' or o.id = ${organism.id}) " + (genesNoExon.id!=null ? " and not g.id in ${genesNoExon.id}" : "") + (sequences ? "and s.name in ${sequences}" : "") + " RETURN distinct g"
+//                def genes = Gene.executeQuery(genesQuery) as List<Feature>
+////                 captures rest of feats
+//                def otherFeatsQuery = "MATCH (f:Feature),(f)--(s:Sequence)--(o:Organism) where (o.commonName = ${organism.commonName} or o.id = ${organism.id}) and NOT (f:gene) " + (sequences ? "and s.name in ${sequences}" : "") + " RETURN distinct f"
+////                println otherFeatsQuery
+//                def otherFeats = Feature.executeQuery(otherFeatsQuery) as List<Feature>
+////                def otherFeats = Feature.createCriteria().list() {
+////                    featureLocations {
+////                        sequence {
+////                            eq('organism', organism)
+////                            if (sequences) {
+////                                'in'('name', sequences)
+////                            }
+////                        }
+////                    }
+////                    'in'('class', requestHandlingService.viewableAlterations + requestHandlingService.viewableAnnotationFeatureList)
+////                }
+//                log.debug "${otherFeats}"
+////                features = (genes + otherFeats + genesNoExon ) as List<Feature>
+//
 
 //                String fullGenesQuery = "MATCH (g:Gene)--(t:Transcript)--(f:Feature),(g)--(s:Sequence)--(o:Organism) where (o.commonName = '${organism.commonName}' or o.id = ${organism.id}) " + (genesNoExon.id ? " and g.id not in ${queryParams.geneIds}" : "")   +  (sequences ? "and s.name in ${sequences}" :"")  + " RETURN distinct g"
 //                String fullGenesQuery = "MATCH (g:Gene)--(t:Transcript)--(f:Feature),(g)--(s:Sequence)--(o:Organism) where (o.commonName = '${organism.commonName}' or o.id = ${organism.id}) " + (genesNoExon.id ? " and g.id not in ${queryParams.geneIds}" : "")   +  (sequences ? "and s.name in ${sequences}" :"")  + " RETURN distinct g"
                 String fullGenesQuery = "MATCH (o:Organism)-[r:SEQUENCES]-(s:Sequence)-[fl:FEATURELOCATION]-(f:Feature)," +
                     "(f)-[owner:OWNERS]-(u)\n" +
-                    "WHERE (o.id=${organism.id} or o.commonName='${organism.commonName}')" + (sequences ? "and s.name in ${sequences}" : "") + (genesNoExon.id ? " and not f.id in ${genesNoExon.id}" : "") +
+                    "WHERE (o.id=${organism.id} or o.commonName='${organism.commonName}')" + (sequences ? "and s.name in ${sequences}" : "")  +
                     "OPTIONAL MATCH (o)--(s)-[cl:FEATURELOCATION]-(parent:Feature)<-[gfr]-(f) " +
-                    "WHERE (o.id=${organism.id} or o.commonName='${organism.commonName}')" + (sequences ? "and s.name in ${sequences}" : "") + (genesNoExon.id ? " and not parent.id in ${genesNoExon.id}" : "") +
+                    "WHERE (o.id=${organism.id} or o.commonName='${organism.commonName}')" + (sequences ? "and s.name in ${sequences}" : "")  +
                     "OPTIONAL MATCH (o)--(s)-[pl:FEATURELOCATION]-(f)-[fr]->(child:Feature) " +
-                    "WHERE (o.id=${organism.id} or o.commonName='${organism.commonName}')" + (sequences ? "and s.name in ${sequences}" : "") + (genesNoExon.id ? " and not child.id in ${genesNoExon.id}" : "") +
+                    "WHERE (o.id=${organism.id} or o.commonName='${organism.commonName}')" + (sequences ? "and s.name in ${sequences}" : "")  +
                     "RETURN {sequence: s,feature: f,location: fl,children: collect(DISTINCT {location: cl,r1: fr,feature: child,sequence: s}), " +
                     "owners: collect(u),parent: { location: collect(pl),r2:gfr,feature:parent }}"
 //
