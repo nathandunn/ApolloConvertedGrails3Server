@@ -1741,7 +1741,7 @@ public void setTranslationEnd(Transcript transcript, int translationEnd) {
     }
 
     String findMostSpecificLabel(ArrayList labels){
-        def filteredLabels = labels.findAll{  it!="Feature" && !it.contains("Region") && it!="SpliceSite"}
+        def filteredLabels = labels.findAll{  it!="Feature" && !it.contains("TranscriptRegion") && it!="SpliceSite"}
         println "filtered labels ${labels} -> ${filteredLabels}"
         if(filteredLabels.indexOf("Transcript")>=0){
             println "A"

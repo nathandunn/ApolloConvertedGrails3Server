@@ -337,6 +337,7 @@ class Gff3HandlerService {
             strand = "."
         }
         if(type=="CDS"){
+            // TODO: sort exons
 //            CDS cds = (CDS) feature
 //            Transcript transcript = transcriptService.getParentTranscriptForFeature(feature)
 //            List<Exon> exons = transcriptService.getSortedExons(transcript,true)
@@ -388,14 +389,16 @@ class Gff3HandlerService {
         if(children){
             for (def childNode : children) {
                 println "child ${childNode}"
-                println "child thype ${childNode.feature.labels()}"
-                println "child feature id ${childNode.feature.id()}"
+                println "child thype ${childNode.feature?.labels()}"
+                println "child feature id ${childNode.feature?.id()}"
 //                println "child id ${child.id()}"
 //                Feature child = childNode.feature as Feature
 //                if (child instanceof CDS) {
 //                    convertNeo4jToEntry(writeObject, childNode, source, gffEntries);
 //                } else {
+                if(childNode.feature){
                     convertNeo4jToEntry(writeObject, childNode, source, gffEntries)
+                }
 //                }
             }
         }
