@@ -38,13 +38,17 @@ repositories {
 
 }
 
+//configurations.all { Configuration c ->
+//    c.exclude(group:'org.grails',module:'grails-datastore-simple')
+//}
+
 // In this section you declare the dependencies for your production and test code
 dependencies {
     // START added dependencies
     compile 'org.grails.plugins:swagger:1.0.1'
 
-    runtime 'mysql:mysql-connector-java:5.1.49'
-    runtime 'org.postgresql:postgresql:9.4.1212'
+//    runtime 'mysql:mysql-connector-java:5.1.49'
+//    runtime 'org.postgresql:postgresql:9.4.1212'
 
 
     // HTSJDK
