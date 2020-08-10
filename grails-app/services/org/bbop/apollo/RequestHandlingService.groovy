@@ -711,7 +711,7 @@ class RequestHandlingService {
     JSONObject getFeatures(JSONObject inputObject) {
         long start = System.currentTimeMillis()
 
-        println "input json object ${inputObject as JSON}"
+        log.debug "input json object ${inputObject as JSON}"
 
 
         String sequenceName = permissionService.getSequenceNameFromInput(inputObject)
@@ -720,7 +720,7 @@ class RequestHandlingService {
             sequence = Sequence.findByNameAndOrganism(sequenceName, sequence.organism)
 //            preferenceService.setCurrentSequence(permissionService.getCurrentUser(inputObject), sequence, inputObject.getString(FeatureStringEnum.CLIENT_TOKEN.value))
         }
-        println "getFeatures for organism -> ${sequence.organism.commonName} ${sequence.organism.id} and ${sequence.name}"
+        log.debug "getFeatures for organism -> ${sequence.organism.commonName} ${sequence.organism.id} and ${sequence.name}"
 
         // TODO: rewrite this bad boy
 //        def features = []
@@ -802,15 +802,15 @@ class RequestHandlingService {
             "owners: collect(u),parent: { location: collect(pl),r2:gfr,feature:parent }}"
 
 
-        println "query output: ${query}"
+        log.debug "query output: ${query}"
         def nodes = Feature.executeQuery(query).unique()
-        println "actual returned nodes ${nodes} ${nodes.size()}"
+        log.debug "actual returned nodes ${nodes} ${nodes.size()}"
 
 
         JSONArray jsonFeatures = new JSONArray()
         nodes.each{
-            println "forist node ${it} "
-            println "class of it ${it.getClass()}"
+            log.debug "forist node ${it} "
+            log.debug "class of it ${it.getClass()}"
 //            JSONObject jsonObject = featureService.convertFeatureToJSON(feature, false)
 //        features.each { feature ->
 //            JSONObject jsonObject = featureService.convertFeatureToJSON(feature, false)
@@ -818,11 +818,11 @@ class RequestHandlingService {
             jsonFeatures.put(jsonObject)
         }
 
-        println "outputs ${nodes}"
-        println "lazy returned features ${nodes as JSON}"
+        log.debug "outputs ${nodes}"
+        log.debug "lazy returned features ${nodes as JSON}"
 
         inputObject.put(AnnotationEditorController.REST_FEATURES, jsonFeatures)
-        println "getFeatures ${System.currentTimeMillis() - start}ms"
+        log.debug "getFeatures ${System.currentTimeMillis() - start}ms"
         return inputObject
 
     }
